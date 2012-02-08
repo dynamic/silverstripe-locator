@@ -2,7 +2,7 @@
 	<h2>$Title</h2>
 	<% if Content %><div class="typography">$Content</div><% end_if %>
 	
-	Address: <input type="text" id="addressInput" size="50" /> &nbsp;&nbsp;
+	Address: <input type="text" id="addressInput" size="80" /> &nbsp;&nbsp;
 	Find Me: <input type="checkbox" id="currentLocation" onclick="findMe()"> &nbsp;&nbsp;
     Radius: <select id="radiusSelect">
 

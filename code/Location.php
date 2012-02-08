@@ -23,6 +23,10 @@ class Location extends DataObject {
 		'distance' => 'Int'
 	);
 	
+	/*static $extensions = array( 
+		"Versioned('Stage', 'Live')" 
+	);*/
+	
 	static $summary_fields = array(
 		'Name',
 		'Address',
@@ -120,9 +124,8 @@ class Location extends DataObject {
  
 	public function getCMSFields_forPopup() {
 		
-		
-	
 		return new FieldSet(
+			//new TextField('ID', 'ID', $this->ID),
 			new TextField('Name'),
 			new TextField('Address'),
 			new TextField('Address2'),
@@ -134,10 +137,60 @@ class Location extends DataObject {
 			new TextField('Phone'),
 			new CheckboxField('ShowInLocator'),
 			new TextField('Lat'),
-			new TextField('Long')
+			new TextField('Long')//,
+			//new FormAction('publish', 'Publish')
 		);
 	}
 	
+	/*function getCMSActions(){
+     
+	    $actions = parent::getCMSActions();
+	     
+	    $Action = new FormAction(
+	           "doPublish",
+	           "Publish"
+	        );
+	    $actions->push($Action);
+	     
+	    return $actions;
+	}*/
+	
+	public function publish($data, $form) { 
+		
+		//debug::show($data);
+	
+	   	$company = false;
+		if(isset($data['ID']) && $data['ID']) {
+			$company = DataObject::get_by_id("Location", $data['ID']);
+		}
+
+		if(!$company) {
+			$company = new Company();
+		}
+		
+		//$company = new Download();
+		$form->saveInto($company);
+		//$company->DownloadHolderID = $this->dataRecord->ID;
+		//$company->write();
+		//debug::show($company);
+		
+		$company->Status = "Published";
+		$company->writeToStage("Stage");
+		$company->publish("Stage", "Live");
+		
+		if(isset($data['ID']) && $data['ID']) {
+			$form->sessionMessage(
+				'Company saved',
+				'good'
+			);
+		} else {
+			$form->sessionMessage(
+				'Company added',
+				'good'
+			);
+		}
+	}
+		
 	function onBeforeWrite() {
 		//if (!$this->ID) {
 			$MAPS_HOST = "maps.google.com";
