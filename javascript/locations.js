@@ -50,79 +50,83 @@ function showAllLocations() {
 }
 
 function searchLocations() {
- document.getElementById('largeMap').style.display = 'none';
-	 document.getElementById('map').style.display = 'block';
-	 document.getElementById('sidebar').style.display = 'block';
-	 
-	 map = new GMap2(document.getElementById('map'));
-	 map.addControl(new GSmallMapControl());
- map.addControl(new GMapTypeControl());
- //map.setCenter(new GLatLng(40, -100), 4);
- var address = document.getElementById('addressInput').value;
- if (!address) {
- 	alert('Please enter an address');
- 	return false;
- }
- 
- geocoder.getLatLng(address, function(latlng) {
-   if (!latlng) {
-     alert(address + ' not found');
-   } else {
-     searchLocationsNear(latlng,address);
-     //searchLocationsNear(address);
-   }
- });
+	
+	// hide/show elements
+	document.getElementById('largeMap').style.display = 'none';
+	document.getElementById('map').style.display = 'block';
+	document.getElementById('sidebar').style.display = 'block';
+	
+	// set map options
+	map = new GMap2(document.getElementById('map'));
+	map.addControl(new GSmallMapControl());
+	map.addControl(new GMapTypeControl());
+	
+	// check that address was entered
+	var address = document.getElementById('addressInput').value;
+	if (!address) {
+		alert('Please enter an address');
+		return false;
+	}
+	
+	geocoder.getLatLng(address, function(latlng) {
+		if (!latlng) {
+			alert(address + ' not found');
+		} else {
+			searchLocationsNear(latlng,address);
+		}
+	});
+	
 }
 
 function searchLocationsNear(center,address) {
-	//alert(address);
- var radius = document.getElementById('radiusSelect').value;
- //var searchUrl = 'phpsqlsearch_genxml.php?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius;
- var searchUrl = 'LocationController/MapXML/?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius + '&address=' + address;
- //alert(searchUrl);
- //var searchUrl = 'dealer-locator/MapXML/'+center;
 
- GDownloadUrl(searchUrl, function(data) {
-   var xml = GXml.parse(data);
-   var markers = xml.documentElement.getElementsByTagName('marker');
-   map.clearOverlays();
+ 	var radius = document.getElementById('radiusSelect').value;
+	var searchUrl = 'LocationController/MapXML/?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius + '&address=' + address;
 
-   var sidebar = document.getElementById('sidebar');
-   sidebar.innerHTML = '';
-   if (markers.length == 0) {
-     sidebar.innerHTML = '<div class="typography"><p>Sorry! There are no dealers in this area. Please select a larger search radius.</p><p>If you would like more information on our products, please give us a call at 800.832.8914 or <a href="/contact-us/">email us</a>.</div>';
-     map.setCenter(new GLatLng(40, -100), 4);
-     return;
-   }
+	GDownloadUrl(searchUrl, function(data) {
+   		var xml = GXml.parse(data);
+   		var markers = xml.documentElement.getElementsByTagName('marker');
+   		map.clearOverlays();
 
-   var bounds = new GLatLngBounds();
-   for (var i = 0; i < markers.length; i++) {
-     var name = markers[i].getAttribute('name');
-     var address = markers[i].getAttribute('address');
-     var address2 = markers[i].getAttribute('address2');
-     var city = markers[i].getAttribute('city');
-     var state = markers[i].getAttribute('state');
-     var zip = markers[i].getAttribute('zipcode');
-     var country = markers[i].getAttribute('country');
-     var website = markers[i].getAttribute('website');
-     var phone = markers[i].getAttribute('phone');
-     var distance = parseFloat(markers[i].getAttribute('distance'));
-     var point = new GLatLng(parseFloat(markers[i].getAttribute('lat')),
-                             parseFloat(markers[i].getAttribute('lng')));
-     
-     var marker = createMarker(point, name, address, address2, city, state, zip, country, website, phone);
-     map.addOverlay(marker);
-     var sidebarEntry = createSidebarEntry(marker, name, address, address2, city, state, zip, country, website, phone, distance);
-     sidebar.appendChild(sidebarEntry);
-     bounds.extend(point);
-   }
-   //alert(markers.length);
-   if (markers.length < 2) {
-   	map.setCenter(bounds.getCenter(), 14);
-   } else {
-   	map.setCenter(bounds.getCenter(), map.getBoundsZoomLevel(bounds));
-   }
- });
+   		var sidebar = document.getElementById('sidebar');
+   		sidebar.innerHTML = '';
+   		if (markers.length == 0) {
+     		sidebar.innerHTML = '<div class="typography"><p>Sorry! There are no locations in this area. Please select a larger search radius.</p></div>';
+     		map.setCenter(new GLatLng(40, -100), 4);
+     		return;
+   		}
+
+   		var bounds = new GLatLngBounds();
+   		for (var i = 0; i < markers.length; i++) {
+			var name = markers[i].getAttribute('name');
+			var address = markers[i].getAttribute('address');
+			var address2 = markers[i].getAttribute('address2');
+			var city = markers[i].getAttribute('city');
+			var state = markers[i].getAttribute('state');
+			var zip = markers[i].getAttribute('zipcode');
+			var country = markers[i].getAttribute('country');
+			var website = markers[i].getAttribute('website');
+			var phone = markers[i].getAttribute('phone');
+			var distance = parseFloat(markers[i].getAttribute('distance'));
+			var point = new GLatLng(parseFloat(markers[i].getAttribute('lat')),
+			                     parseFloat(markers[i].getAttribute('lng')));
+			
+			// map markers
+			var marker = createMarker(point, name, address, address2, city, state, zip, country, website, phone);
+			map.addOverlay(marker);
+			
+			// populate sidebar
+			var sidebarEntry = createSidebarEntry(marker, name, address, address2, city, state, zip, country, website, phone, distance);
+			sidebar.appendChild(sidebarEntry);
+			bounds.extend(point);
+   		}
+   		//alert(markers.length);
+   		if (markers.length < 2) {
+   			map.setCenter(bounds.getCenter(), 14);
+   		} else {
+   			map.setCenter(bounds.getCenter(), map.getBoundsZoomLevel(bounds));
+   		}
+ 	});
 }
 
 function getDirections(toAddress, name) {
@@ -262,4 +266,3 @@ function showAddress(response) {
 	
 	}
 }
-    
