@@ -19,13 +19,13 @@ class Location extends DataObject {
 		'Long' => 'Float(10,6)'
 	);
 	
+	static $belongs_many_many = array(
+		'LocationPages' => 'LocationPage'
+	);
+	
 	static $casting = array(
 		'distance' => 'Int'
 	);
-	
-	/*static $extensions = array( 
-		"Versioned('Stage', 'Live')" 
-	);*/
 	
 	static $summary_fields = array(
 		'Name',
@@ -43,6 +43,30 @@ class Location extends DataObject {
 	static function set_map_key($mapKey) {
 		self::$map_key = $mapKey;
 	}
+	
+	
+	static $extensions = array( 
+		"Versioned('Stage', 'Live')" 
+	);
+	
+	/**
+	 * Publish this Location to the live site
+	 * 
+	 * Wrapper for the {@link Versioned} publish function
+	 */
+	public function doPublish($fromStage, $toStage, $createNewVersion = false) {
+		$this->publish($fromStage, $toStage, $createNewVersion);
+	}
+
+	/**
+	 * Delete this location from a given stage
+	 *
+	 * Wrapper for the {@link Versioned} deleteFromStage function
+	 */
+	public function doDeleteFromStage($stage) {
+		$this->deleteFromStage($stage);
+	}
+	
 	
 	function CountryList() {
 		return array(
@@ -135,64 +159,13 @@ class Location extends DataObject {
 			new DropdownField('Country', 'Country', $this->CountryList()),
 			new TextField('Website'),
 			new TextField('Phone'),
-			new CheckboxField('ShowInLocator'),
-			new TextField('Lat'),
-			new TextField('Long')//,
-			//new FormAction('publish', 'Publish')
+			new TextField('Fax'),
+			new TextField('EmailAddress')
 		);
 	}
-	
-	/*function getCMSActions(){
-     
-	    $actions = parent::getCMSActions();
-	     
-	    $Action = new FormAction(
-	           "doPublish",
-	           "Publish"
-	        );
-	    $actions->push($Action);
-	     
-	    return $actions;
-	}*/
-	
-	public function publish($data, $form) { 
-		
-		//debug::show($data);
-	
-	   	$company = false;
-		if(isset($data['ID']) && $data['ID']) {
-			$company = DataObject::get_by_id("Location", $data['ID']);
-		}
-
-		if(!$company) {
-			$company = new Company();
-		}
-		
-		//$company = new Download();
-		$form->saveInto($company);
-		//$company->DownloadHolderID = $this->dataRecord->ID;
-		//$company->write();
-		//debug::show($company);
-		
-		$company->Status = "Published";
-		$company->writeToStage("Stage");
-		$company->publish("Stage", "Live");
-		
-		if(isset($data['ID']) && $data['ID']) {
-			$form->sessionMessage(
-				'Company saved',
-				'good'
-			);
-		} else {
-			$form->sessionMessage(
-				'Company added',
-				'good'
-			);
-		}
-	}
-		
+			
 	function onBeforeWrite() {
-		//if (!$this->ID) {
+		if (!$this->Lat || !$this->Long) {
 			$MAPS_HOST = "maps.google.com";
 			$KEY = self::$map_key;
 			$base_url = "http://" . $MAPS_HOST . "/maps/geo?output=xml" . "&key=" . $KEY;
@@ -217,7 +190,7 @@ class Location extends DataObject {
 		      $this->City = stripslashes($this->City);
 		      
 		    }
-		//}
+		}
 		parent::onBeforeWrite();
 	}
 

@@ -11,6 +11,7 @@ function load() {
 	}
 }
 
+// page load - show all locations on map
 function showAllLocations() {
 
 	document.getElementById('largeMap').style.display = 'block';
@@ -19,7 +20,7 @@ function showAllLocations() {
 	map2.addControl(new GSmallMapControl());
 	map2.addControl(new GMapTypeControl());
 
-	var searchUrl = 'LocationController/MapXML/?all=1';
+	var searchUrl = window.location.pathname + 'MapXML/?all=1';
 	GDownloadUrl(searchUrl, function(data) {
 		var xml = GXml.parse(data);
 		var markers = xml.documentElement.getElementsByTagName('marker');
@@ -33,12 +34,29 @@ function showAllLocations() {
 			var city = markers[i].getAttribute('city');
 			var state = markers[i].getAttribute('state');
 			var zip = markers[i].getAttribute('zipcode');
+			var country = markers[i].getAttribute('country');
 			var website = markers[i].getAttribute('website');
 			var phone = markers[i].getAttribute('phone');
 			var point = new GLatLng(parseFloat(markers[i].getAttribute('lat')),
 				parseFloat(markers[i].getAttribute('lng')));
+				
+			var formatted = '';
+			if (address) formatted += address + '<br>';
+			if (address2) formatted += address2 + '<br>';
+			if (city) formatted += city + ', ';
+			if (state) formatted += state + ' ';
+			if (zip) formatted += zip;
+			if (country) formatted += '<br>' + country;
 			
-			var marker = createMarker(point, name, address, address2, city, state, zip, website, phone);
+			var long = '';
+			if (address) long += address + ', ';
+			if (address2) long += address2 + ', ';
+			if (city) long += city + ', ';
+			if (state) long += state + ' ';
+			if (zip) long += zip;
+			if (country) long += ' ' + country;
+			
+			var marker = createMarker(point, name, formatted, long, website, phone, false, false);
 			map2.addOverlay(marker);
 			bounds2.extend(point);
 		}
@@ -49,7 +67,8 @@ function showAllLocations() {
 
 }
 
-function searchLocations() {
+// search based on address - address field or geolocator
+function searchLocations(start) {
 	
 	// hide/show elements
 	document.getElementById('largeMap').style.display = 'none';
@@ -63,6 +82,7 @@ function searchLocations() {
 	
 	// check that address was entered
 	var address = document.getElementById('addressInput').value;
+	if (start) address = start;
 	if (!address) {
 		alert('Please enter an address');
 		return false;
@@ -72,6 +92,7 @@ function searchLocations() {
 		if (!latlng) {
 			alert(address + ' not found');
 		} else {
+			//alert(latlng);
 			searchLocationsNear(latlng,address);
 		}
 	});
@@ -80,9 +101,12 @@ function searchLocations() {
 
 function searchLocationsNear(center,address) {
 
- 	var radius = document.getElementById('radiusSelect').value;
-	var searchUrl = 'LocationController/MapXML/?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius + '&address=' + address;
+	userAddress = address;
 
+ 	var radius = document.getElementById('radiusSelect').value;
+	var searchUrl = window.location.pathname + 'MapXML/?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius + '&address=' + address;
+	//alert(searchUrl);
+	
 	GDownloadUrl(searchUrl, function(data) {
    		var xml = GXml.parse(data);
    		var markers = xml.documentElement.getElementsByTagName('marker');
@@ -91,10 +115,17 @@ function searchLocationsNear(center,address) {
    		var sidebar = document.getElementById('sidebar');
    		sidebar.innerHTML = '';
    		if (markers.length == 0) {
-     		sidebar.innerHTML = '<div class="typography"><p>Sorry! There are no locations in this area. Please select a larger search radius.</p></div>';
+     		sidebar.innerHTML = '<div class="typography"><p>Sorry! There are no locations in this area. Please try again with a larger search radius.</p></div>';
      		map.setCenter(new GLatLng(40, -100), 4);
      		return;
    		}
+   		
+   		// marker for current location of user   		
+		var userMarker = createMarker(center, 'You', userAddress, false, false, false, true);
+		map.addOverlay(userMarker);
+		var userSidebarEntry = createSidebarEntry(userMarker, 'You', userAddress, false, false, false, false);
+		sidebar.appendChild(userSidebarEntry);
+		
 
    		var bounds = new GLatLngBounds();
    		for (var i = 0; i < markers.length; i++) {
@@ -110,16 +141,36 @@ function searchLocationsNear(center,address) {
 			var distance = parseFloat(markers[i].getAttribute('distance'));
 			var point = new GLatLng(parseFloat(markers[i].getAttribute('lat')),
 			                     parseFloat(markers[i].getAttribute('lng')));
+			                     
+			var formatted = '';
+			if (address) formatted += address + '<br>';
+			if (address2) formatted += address2 + '<br>';
+			if (city) formatted += city + ', ';
+			if (state) formatted += state + ' ';
+			if (zip) formatted += zip;
+			if (country) formatted += '<br>' + country;
+			
+			var long = '';
+			if (address) long += address + ', ';
+			if (address2) long += address2 + ', ';
+			if (city) long += city + ', ';
+			if (state) long += state + ' ';
+			if (zip) long += zip;
+			if (country) long += ' ' + country;
 			
 			// map markers
-			var marker = createMarker(point, name, address, address2, city, state, zip, country, website, phone);
+			var marker = createMarker(point, name, formatted, long, website, phone, false, true);
 			map.addOverlay(marker);
 			
 			// populate sidebar
-			var sidebarEntry = createSidebarEntry(marker, name, address, address2, city, state, zip, country, website, phone, distance);
+			var sidebarEntry = createSidebarEntry(marker, name, formatted, long, website, phone, distance);
 			sidebar.appendChild(sidebarEntry);
 			bounds.extend(point);
    		}
+   		
+   		// expand map to include user location
+   		bounds.extend(center);
+   		
    		//alert(markers.length);
    		if (markers.length < 2) {
    			map.setCenter(bounds.getCenter(), 14);
@@ -131,13 +182,18 @@ function searchLocationsNear(center,address) {
 
 function getDirections(toAddress, name) {
 	
+	// hide/show elements
+	document.getElementById('largeMap').style.display = 'none';
+	document.getElementById('map').style.display = 'block';
+	document.getElementById('sidebar').style.display = 'block';
+	
 	var map;
 	var directionsPanel;
 	var directions;
 	var fromAddress = document.getElementById('addressInput').value;
 	
 	var sidebar = document.getElementById('sidebar');
-	sidebar.innerHTML = '<a href="#" onclick="searchLocations();return false"><< back to results</a><h3>' + name + '</h3>';
+	sidebar.innerHTML = '<a href="#" onclick="searchLocations();return false">x close</a>';
  
  	// create new directions map
 	map = new GMap2(document.getElementById('map'));
@@ -149,25 +205,25 @@ function getDirections(toAddress, name) {
 	directions = new GDirections(map, directionsPanel);
 	directions.load("from: "+fromAddress+" to: "+toAddress);
 	 
-	//sidebar.innerHTML .= '<p><a href="#" onclick="searchLocations();return false">Back to results</a></p>';
-	 
 }
 
-function createMarker(point, name, address, address2, city, state, zip, country, website, phone) {
+function createMarker(point, name, address, long, website, phone, color, directions) {
 	
-	var marker = new GMarker(point);
-	var longAddress = address + ', ';
-	if (address2) longAddress += address2 + ', ';
-	longAddress += city + ', ' + state + ' ' + zip + ' ' + country + ' (' + name + ')';
+	if (color) {
+		var greenIcon = new GIcon(G_DEFAULT_ICON);
+		greenIcon.image = "locations/images/dd-start.png";
+		var markerOptions = { icon:greenIcon };
+	} else {
+		var markerOptions = null;
+	}
+	
+	var marker = new GMarker(point, markerOptions);
 	
 	// set html for map marker
-	var html = '<h4>' + name + '</h4>' + address + '<br>';
-	if (address2) html += address2 + '<br>';
-	html += city + ', ' + state + ' ' + zip;
-	if (country) html += '<br>' + country;
-	if (website) html += '<br><a href="' + website + '" target="_blank">' + website + '</a>';
-	if (phone) html += '<br>' + phone;
-	html += '<br><a href="#"  onclick="getDirections(\''+longAddress+'\', \'' + name + '\');return false">Driving Directions</a>';
+	var html = '';
+	if (name) html += '<h4>' + name + '</h4>';
+	if (address) html += address;
+	if (directions) html += '<br><a href="#"  onclick="getDirections(\''+long+'\', \'' + name + '\');return false">Driving Directions</a>';
 	
 	// mouse events
 	GEvent.addListener(marker, 'click', function() {
@@ -177,22 +233,17 @@ function createMarker(point, name, address, address2, city, state, zip, country,
 	return marker;
 }
 
-function createSidebarEntry(marker, name, address, address2, city, state, zip, country, website, phone, distance) {
+function createSidebarEntry(marker, name, address, longAddress, website, phone, distance) {
 	
 	var div = document.createElement('div');
 	
-	var longAddress = address + ', ';
-	if (address2) longAddress += address2 + ', ';
-	longAddress += city + ', ' + state + ' ' + zip + ' ' + country + ' (' + name + ')';
-	
 	// set html for each result
-	var html = '<div class="DealerItem"><h4>' + name + '</h4>' + address;
-	if (address2) html += '<br>' + address2;
-	html += '<br>' + city + ', ' + state + ' ' + zip;
-	if (country) html += '<br>' + country + '<br>';
-	if (website) html += '<a href="' + website + '" target="_blank">' + website + '</a><br>';
-	if (phone) html += phone + '<br>';
-	html += distance.toFixed(1) + ' mi | <a href="#"  onclick="getDirections(\''+longAddress+'\', \'' + name + '\');return false">Driving Directions</a></div>';
+	var html = '<div class="locationItem">';
+	if (name) html += '<h4>' + name + '</h4>';
+	if (address) html += address;
+	if (website) html += '<br><a href="' + website + '" target="_blank">' + website + '</a>';
+	if (phone) html += '<br>' + phone;
+	if (distance) html += '<br>' + distance.toFixed(1) + ' mi | <a href="#"  onclick="getDirections(\''+longAddress+'\', \'' + name + '\');return false">Driving Directions</a></div>';
 	
 	// insert html into sidebar
 	div.innerHTML = html;
@@ -236,6 +287,8 @@ function findMe() {
 				var latlng = position.coords.latitude + ',' + position.coords.longitude;
 				
 				var location = geocoder.getLocations(latlng, showAddress);
+				
+				//
 				 
 			},
 			function( error ){
@@ -249,20 +302,25 @@ function findMe() {
 		);
 		
 	} else {
-		alert("Your browser does not have location services");
-		document.getElementById('currentLocation').checked = false;
+		alert("Your browser does not support location services");
 	}
 }
 	
 function showAddress(response) {
 
 	if (!response || response.Status.code != 200) {
+	
 		alert("Status Code:" + response.Status.code);
+		
 	} else {
 		
 		place = response.Placemark[0];
-		//alert(place.address);
+
 		document.getElementById('addressInput').value = place.address;
+		
+		var coordinates = '(' + place.Point.coordinates[1] + ', ' + place.Point.coordinates[0] + ')';
+		
+		searchLocations(place.address);
 	
 	}
 }

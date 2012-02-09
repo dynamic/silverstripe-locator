@@ -3,7 +3,7 @@
 	<% if Content %><div class="typography">$Content</div><% end_if %>
 	
 	Address: <input type="text" id="addressInput" size="80" /> &nbsp;&nbsp;
-	Find Me: <input type="checkbox" id="currentLocation" onclick="findMe()"> &nbsp;&nbsp;
+	<input type="button" class="action" onclick="findMe()" value="Find Me"> &nbsp;&nbsp;
     Radius: <select id="radiusSelect">
 
       <option value="25" selected>25 miles</option>
