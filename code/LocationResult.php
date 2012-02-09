@@ -15,7 +15,6 @@ class LocationResult extends DataObject {
 		'Location.ID' => array(
 			'title' => 'Location',
 		),
-		/*'Company.Name',*/
 		'LocationQuery.Name' => array(
 			'title' => 'Query'
 		),

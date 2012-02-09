@@ -17,7 +17,7 @@
 		<table cellpadding="4">
 			<tr>
 				<th>Query</th>
-				<th>Number</th>
+				<th>Total</th>
 			</tr>
 		<% control Queries.GroupedBy(Name) %>
 			<tr>
@@ -29,15 +29,15 @@
 	</div>
 
 	<div class="reportRight">
-		<h3>$Dealers.TotalItems Results</h3>
+		<h3>$Locations.TotalItems Results</h3>
 		<table cellpadding="4">
 			<tr>
-				<th>Company</th>
-				<th>Results</th>
+				<th>Location</th>
+				<th>Total</th>
 			</tr>
-		<% control Dealers.GroupedBy(CompanyID) %>
+		<% control Locations.GroupedBy(LocationID) %>
 			<tr>
-				<td>$Company.Title</td>
+				<td>$Location.Title</td>
 				<td>$Children.TotalItems</td>
 			</tr>
 		<% end_control %>

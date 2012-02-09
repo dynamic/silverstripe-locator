@@ -28,15 +28,6 @@ class LocationPage extends Page {
         return $f;
 	} 
 	
-	/**
-	 * Publishing Versioning support.
-	 *
-	 * When publishing copy the editable form fields to the live database
-	 * Not going to version emails and submissions as they are likely to 
-	 * persist over multiple versions
-	 *
-	 * @return void
-	 */
 	public function doPublish() {
 
 		// publish the draft pages
@@ -49,14 +40,6 @@ class LocationPage extends Page {
 		parent::doPublish();
 	}
 
-	/**
-	 * Unpublishing Versioning support
-	 * 
-	 * When unpublishing the page it has to remove all the fields from 
-	 * the live database table
-	 *
-	 * @return void
-	 */
 	public function doUnpublish() {
 		if($this->Locations()) {
 			foreach($this->Locations() as $location) {
@@ -116,20 +99,16 @@ class LocationPage_Controller extends Page_Controller {
 		
 		// Search the rows in the markers table
 		if (isset($all)) {
-			//$LocationList = DataObject::get('Location', 'ShowInLocator = 1');
 			$LocationList = $this->Locations();
 		} else {
 			$LocationList = $this->GetLocationList($center_lat, $center_lng, $radius);
 		}
-		
-		//debug::show($this->getRequest()->getVar('stage'));
-		
+				
 		//debug::show($LocationList);
 		header("Content-type: text/xml");
 		
 		// Iterate through the rows, adding XML nodes for each
-		//while ($row = @mysql_fetch_assoc($result)){
-		//debug::show($LocationList);
+
 		if ($LocationList) {
 			foreach ($LocationList as $Location) {
 			
@@ -174,27 +153,27 @@ class LocationPage_Controller extends Page_Controller {
 				
 		$sqlQuery = new SQLQuery();
 		
-		//debug::show($this->baseForumTable());
+		//debug::show($this->baseTable());
 	
 		$sqlQuery->select = array(
 		  '( 3959 * acos( cos( radians('.$Lat.') ) * cos( radians( `Lat` ) ) * cos( radians( `Long` ) - radians('.$Lng.') ) + sin( radians('.$Lat.') ) * sin( radians( `Lat` ) ) ) ) AS distance',
-		  $this->baseForumTable() . '.Name AS Name',
-		  $this->baseForumTable() . '.Address AS Address',
-		  $this->baseForumTable() . '.Address2 AS Address2',
-		  $this->baseForumTable() . '.City AS City',
-		  $this->baseForumTable() . '.State AS State',
-		  $this->baseForumTable() . '.ZipCode AS Zip',
-		  $this->baseForumTable() . '.Country AS Country',
-		  $this->baseForumTable() . '.Website AS Website',
-		  $this->baseForumTable() . '.Phone AS Phone',
-		  $this->baseForumTable() . '.Lat AS Lat',
-		  $this->baseForumTable() . '.Long AS Lng',
-		  $this->baseForumTable() . '.ClassName AS ClassName',
-		  $this->baseForumTable() . '.ClassName AS RecordClassName',
-		  $this->baseForumTable() . '.ID AS ID',
+		  $this->baseTable() . '.Name AS Name',
+		  $this->baseTable() . '.Address AS Address',
+		  $this->baseTable() . '.Address2 AS Address2',
+		  $this->baseTable() . '.City AS City',
+		  $this->baseTable() . '.State AS State',
+		  $this->baseTable() . '.ZipCode AS Zip',
+		  $this->baseTable() . '.Country AS Country',
+		  $this->baseTable() . '.Website AS Website',
+		  $this->baseTable() . '.Phone AS Phone',
+		  $this->baseTable() . '.Lat AS Lat',
+		  $this->baseTable() . '.Long AS Lng',
+		  $this->baseTable() . '.ClassName AS ClassName',
+		  $this->baseTable() . '.ClassName AS RecordClassName',
+		  $this->baseTable() . '.ID AS ID',
 		);
 		$sqlQuery->from = array(
-		  $this->baseForumTable() . ' LEFT JOIN LocationPage_Locations ON ' . $this->baseForumTable() . '.ID = LocationPage_Locations.LocationID'
+		  $this->baseTable() . ' LEFT JOIN LocationPage_Locations ON ' . $this->baseTable() . '.ID = LocationPage_Locations.LocationID'
 		);
 		
 		$sqlQuery->where = array(
@@ -213,7 +192,7 @@ class LocationPage_Controller extends Page_Controller {
 	}
 	
 	// live or stage? return correct DB table for custom query
-	static function baseForumTable() {
+	static function baseTable() {
 		$stage = (Versioned::current_stage()) == "Live" ? false : true;
 		
 		//debug::show($stage);
