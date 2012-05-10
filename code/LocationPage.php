@@ -18,7 +18,7 @@ class LocationPage extends Page {
 	
 	public function getCMSFields() {	
 		$f = parent::getCMSFields();
-		$f->addFieldToTab("Root.Content.Locations", new ManyManyDataObjectManager(
+		$f->addFieldToTab("Root.Content.Locations", new LocationDataObjectManager(
 			$this,
 			'Locations',
 			'Location',
@@ -69,6 +69,7 @@ class LocationPage_Controller extends Page_Controller {
 		parent::init();
 		Requirements::css('locations/css/locations.css');
 		Requirements::javascript('http://maps.google.com/maps?file=api&v=2&key='.Location::$map_key);
+		//Requirements::javascript('http://maps.google.com/maps/api/js?sensor=false');
 		Requirements::javascript('locations/javascript/locations.js');
 		Requirements::javascript('locations/javascript/map_init.js');
 	}	

@@ -149,7 +149,7 @@ class Location extends DataObject {
 	public function getCMSFields_forPopup() {
 		
 		return new FieldSet(
-			//new TextField('ID', 'ID', $this->ID),
+
 			new TextField('Name'),
 			new TextField('Address'),
 			new TextField('Address2'),
@@ -160,11 +160,21 @@ class Location extends DataObject {
 			new TextField('Website'),
 			new TextField('Phone'),
 			new TextField('Fax'),
-			new TextField('EmailAddress')
+			new TextField('EmailAddress'),
+			new LiteralField('CalcCoords', 
+				'<p><a href="#" id="CalcCoords" onClick="return false">Click to calculate coordinates</a></p>'),
+			new TextField('Lat', 'Latitude'),
+			new TextField('Long', 'Longitude'),
+			new CheckboxField('ShowInLocator')
 		);
 	}
 			
-	function onBeforeWrite() {
+	/**
+	 * onBeforeWrite function to get coordinates via PHP
+	 *
+	 * removed in favor of javascript due to IP blacklists and shared web servers
+	**/
+	/*function onBeforeWrite() {
 		if (!$this->Lat || !$this->Long) {
 			$MAPS_HOST = "maps.google.com";
 			$KEY = self::$map_key;
@@ -192,7 +202,7 @@ class Location extends DataObject {
 		    }
 		}
 		parent::onBeforeWrite();
-	}
+	}*/
 
 }
 
