@@ -23,13 +23,19 @@ class LocationPage_Controller extends Page_Controller {
 		
 		Requirements::css('locations/javascript/jQuery-Store-Locator-Plugin/css/map.css');
 		
-		/*
+		
 		Requirements::customScript("
 			$(function() {
-	          $('#map-container').storeLocator({'slideMap' : false, 'defaultLoc': true, 'defaultLat': '44.9207462', 'defaultLng' : '-93.3935366' });
-	        });
+		      $('#map-container').storeLocator({
+		      	autoGeocode: true,
+		      	dataLocation: '" . $this->Link() . "xml.xml',
+		      	//dataLocation: '/locations/javascript/jQuery-Store-Locator-Plugin/locations.xml',
+		      	listTemplatePath: '/locations/javascript/jQuery-Store-Locator-Plugin/templates/location-list-description.html',
+		      	infowindowTemplatePath: '/locations/javascript/jQuery-Store-Locator-Plugin/templates/infowindow-description.html'
+		      });
+		    });
 		");
-		*/
+		
 	}	
 	
 	// Return all locations, render in XML file 
