@@ -6,6 +6,10 @@
 	width: 100%;
 }
 
+form#user-location {
+	width: 100%;
+}
+
 #map-container
 {
 	clear: left;
@@ -46,7 +50,7 @@
 {
 	float: left; 
 	height: 530px;
-	width: 100%;
+	width: 25%;
 	overflow: auto;
 }
 
@@ -160,8 +164,8 @@
 
 #map
 {
-	float: left; 
-	width: 100%; 
+	float: right; 
+	width: 75%; 
 	height: 530px; 
 }
 
@@ -222,3 +226,60 @@
 	margin-top: 30px;
 	width: 100%;
 }
+
+
+
+/* responsive for Simple theme */
+
+/* BREAKPOINT 960px */
+
+@media only screen and (max-width: 960px) {
+
+	#loc-list {
+		
+	}
+	
+	#map {
+		
+	}
+
+}
+
+/* BREAKPOINT 640px */
+
+@media only screen and (max-width: 640px) { 
+
+	#loc-list {
+		width: 100%;
+		height: auto;
+	}
+	
+	#map {
+		width: 100%;
+		float: left;
+	}
+	
+	input.text, label {
+		display: block;
+		
+	}
+	
+	#form-input {
+		float: none;
+		
+	}
+	
+	#address {
+		margin-left: 0;
+		width: 100%;
+	}
+	
+	#submit-btn {
+		margin-left: 0;
+		margin-top: 5px;
+		float: none;
+	}
+
+}
+
+

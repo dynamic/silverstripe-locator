@@ -14,16 +14,15 @@
 	         </div>
 	    </form>
 	</div>
-</div>
-
-<div id="map-container">
-	<aside class="sidebar unit size1of4">
+	
+	<div id="map-container">
+		<div id="map"></div>
 		<div id="loc-list">
 	        <ul id="list"></ul>
 	    </div>
-  	</aside>
-  	<div class="content-container unit size3of4 lastUnit">
-  		<div id="map"></div>
-  	</div>
-  </div>
+	  </div>
+	</div>
+	
 </div>
+
+

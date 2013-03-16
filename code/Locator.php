@@ -27,7 +27,9 @@ class Locator_Controller extends Page_Controller {
 		      	autoGeocode: true,
 		      	dataLocation: '" . $this->Link() . "xml.xml',
 		      	listTemplatePath: '/locator/templates/Includes/location-list-description.html',
-		      	infowindowTemplatePath: '/locator/templates/Includes/infowindow-description.html'
+		      	infowindowTemplatePath: '/locator/templates/Includes/infowindow-description.html',
+		      	originMarker: true,
+		      	fullMapStart: false
 		      });
 		    });
 		");
