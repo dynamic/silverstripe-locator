@@ -2,8 +2,6 @@
 
 class LocationPage extends Page {
 	
-	
-
 }
 
 class LocationPage_Controller extends Page_Controller {
