@@ -29,5 +29,3 @@ class LocationQuery extends DataObject {
 	);
 
 }
-
-?>

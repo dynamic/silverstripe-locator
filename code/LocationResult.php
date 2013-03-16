@@ -35,5 +35,3 @@ class LocationResult extends DataObject {
 	);
 
 }
-
-?>

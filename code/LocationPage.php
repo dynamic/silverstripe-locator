@@ -2,64 +2,7 @@
 
 class LocationPage extends Page {
 	
-	static $many_many = array(
-		'Locations' => 'Location'
-	);
 	
-	static $extensions = array(
-		"Versioned('Stage', 'Live')"
-	);
-	
-	static $map_key = '';
-	
-	static function set_map_key($mapKey) {
-		self::$map_key = $mapKey;
-	}
-	
-	public function getCMSFields() {	
-		$f = parent::getCMSFields();
-		$f->addFieldToTab("Root.Content.Locations", new LocationDataObjectManager(
-			$this,
-			'Locations',
-			'Location',
-			array('Name' => 'Name','City'=>'City','State' => 'State'),
-			'getCMSFields_forPopup'
-		));
-        return $f;
-	} 
-	
-	public function doPublish() {
-
-		// publish the draft pages
-		if($this->Locations()) {
-			foreach($this->Locations() as $location) {
-				$location->doPublish('Stage', 'Live');
-			}
-		}
-
-		parent::doPublish();
-	}
-
-	public function doUnpublish() {
-		if($this->Locations()) {
-			foreach($this->Locations() as $location) {
-				$location->doDeleteFromStage('Live');
-			}
-		}
-
-		parent::doUnpublish();
-	}
-	
-	public function doRevertToLive() {
-		if($this->Locations()) {
-			foreach($this->Locations() as $location) {
-				$location->publish("Live", "Stage", false);
-				$location->writeWithoutVersion();
-			}
-		}
-
-		parent::doRevertToLive();
-	}
 
 }
 
@@ -67,12 +10,35 @@ class LocationPage_Controller extends Page_Controller {
 	
 	public function init() {
 		parent::init();
-		Requirements::css('locations/css/locations.css');
-		Requirements::javascript('http://maps.google.com/maps?file=api&v=2&key='.Location::$map_key);
-		//Requirements::javascript('http://maps.google.com/maps/api/js?sensor=false');
-		Requirements::javascript('locations/javascript/locations.js');
-		Requirements::javascript('locations/javascript/map_init.js');
+		//Requirements::css('locations/css/locations.css');
+		//Requirements::javascript('http://maps.google.com/maps?file=api&v=2&key='.Location::$map_key);
+		
+		//Requirements::javascript('locations/javascript/locations.js');
+		//Requirements::javascript('locations/javascript/map_init.js');
+		
+		Requirements::javascript('framework/thirdparty/jquery/jquery.js');
+		Requirements::javascript('http://maps.google.com/maps/api/js?sensor=false');
+		Requirements::javascript('locations/javascript/jQuery-Store-Locator-Plugin/js/handlebars-1.0.rc.1.min.js');
+		Requirements::javascript('locations/javascript/jQuery-Store-Locator-Plugin/js/jquery.storelocator.js');
+		
+		Requirements::css('locations/javascript/jQuery-Store-Locator-Plugin/css/map.css');
+		
+		/*
+		Requirements::customScript("
+			$(function() {
+	          $('#map-container').storeLocator({'slideMap' : false, 'defaultLoc': true, 'defaultLat': '44.9207462', 'defaultLng' : '-93.3935366' });
+	        });
+		");
+		*/
 	}	
+	
+	// Return all locations, render in XML file 
+	public function xml() {
+		return $this->customise(array(
+			'Locations' => Location::get()
+		))->renderWith('LocationXML');
+
+	}
 	
 	
 	function MapXML($radius = 25) {
@@ -280,5 +246,3 @@ class LocationPage_Controller extends Page_Controller {
 	}
 	
 }
-
-?>

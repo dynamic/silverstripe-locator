@@ -36,4 +36,3 @@ class LocationImportController extends Controller {
 		return $this->redirectBack();
 	}
 }
-?>

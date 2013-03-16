@@ -11,5 +11,3 @@ class LocationController extends Controller {
 	
 
 }
-
-?>

@@ -10,4 +10,3 @@ class LocationAdmin extends ModelAdmin {
    );
    static $url_segment = 'locations';
 }
-?>

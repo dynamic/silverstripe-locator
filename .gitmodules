@@ -1,0 +1,3 @@
+[submodule "javascript/jQuery-Store-Locator-Plugin"]
+	path = javascript/jQuery-Store-Locator-Plugin
+	url = git@github.com:bjorn2404/jQuery-Store-Locator-Plugin.git

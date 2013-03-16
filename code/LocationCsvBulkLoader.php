@@ -15,4 +15,3 @@ class LocationCsvBulkLoader extends CsvBulkLoader {
       //'Address' => 'Address'
    );
 }
-?>
