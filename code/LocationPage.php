@@ -19,7 +19,7 @@ class LocationPage_Controller extends Page_Controller {
 		Requirements::javascript('locations/javascript/jQuery-Store-Locator-Plugin/js/handlebars-1.0.rc.1.min.js');
 		Requirements::javascript('locations/javascript/jQuery-Store-Locator-Plugin/js/jquery.storelocator.js');
 		
-		Requirements::css('locations/javascript/jQuery-Store-Locator-Plugin/css/map.css');
+		Requirements::css('locations/css/map.css');
 		
 		
 		Requirements::customScript("

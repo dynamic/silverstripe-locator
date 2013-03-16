@@ -1,8 +1,7 @@
 <h2>$Title</h2>
 <% if Content %><div class="typography">$Content</div><% end_if %>
 
-<div id="store-locator-container">
-  <div id="form-container">
+<div id="form-container">
     <form id="user-location" method="post" action="#">
         <div id="form-input">
           <label for="address">Enter Address or Zip Code:</label>
@@ -18,5 +17,4 @@
         <ul id="list"></ul>
     </div>
     <div id="map"></div>
-  </div>
 </div>
