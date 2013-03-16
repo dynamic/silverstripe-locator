@@ -1,6 +1,6 @@
 ## Overview
 
-	The Locator module displays a searchable map of locations. You can choose whether to show all locations on load, or enable auto geocoding to filter the initial list based on the visitor's location. Uses the jQuery Store Locator plugin for map display.
+ The Locator module displays a searchable map of locations. You can choose whether to show all locations on load, or enable auto geocoding to filter the initial list based on the visitor's location. Uses the jQuery Store Locator plugin for map display.
 
 ## Installation ##
 
@@ -15,7 +15,7 @@
  
 ## Use ##
 
-	Create a Locator page in the CMS. Locations are managed under the Locations tab in the CMS via Model Admin. Simply enter the name and address of each location, and they will appear on the map.
+ Create a Locator page in the CMS. Locations are managed under the Locations tab in the CMS via Model Admin. Simply enter the name and address of each location, and they will appear on the map.
 
 ## Maintainer Contact ##
 
