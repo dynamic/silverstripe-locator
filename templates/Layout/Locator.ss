@@ -10,7 +10,7 @@
 	         </div>
 	        
 	         <div id="submit-btn">
-	         	<input type="image" id="submit" name="submit" src="/locator/javascript/jQuery-Store-Locator-Plugin/images/submit.jpg" alt="Submit" />
+	         	<input type="image" id="submit" name="submit" src="/locator/images/submit.jpg" alt="Submit" />
 	         </div>
 	    </form>
 	</div>

@@ -10,6 +10,7 @@ form#user-location {
 	width: 100%;
 }
 
+#loading-map,
 #map-container
 {
 	clear: left;
