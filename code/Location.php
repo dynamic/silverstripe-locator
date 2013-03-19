@@ -15,6 +15,8 @@ class Location extends DataObject {
 		'distance' => 'Int'
 	);
 	
+	static $default_sort = 'Title';
+	
 	static $summary_fields = array(
 		'Title',
 		'Address',
@@ -28,50 +30,18 @@ class Location extends DataObject {
  
 	public function getCMSFields() {
 		
-		return new FieldList(
-
-			new TextField('Title'),
-			new TextField('Website'),
-			new TextField('Phone'),
-			new TextField('Fax'),
-			new TextField('EmailAddress'),
-			new CheckboxField('ShowInLocator')
-		);
+		$fields = parent::getCMSFields();
+		
+		$fields->addFieldsToTab('Root.Main', array(
+			TextField::create('Title'),
+			TextField::create('Website'),
+			TextField::create('Phone'),
+			TextField::create('Fax'),
+			TextField::create('EmailAddress'),
+			CheckboxField::create('ShowInLocator')
+		));
+		
+		return $fields;
 	}
 			
-	/**
-	 * onBeforeWrite function to get coordinates via PHP
-	 *
-	 * removed in favor of javascript due to IP blacklists and shared web servers
-	**/
-	/*function onBeforeWrite() {
-		if (!$this->Lat || !$this->Long) {
-			$MAPS_HOST = "maps.google.com";
-			$KEY = self::$map_key;
-			$base_url = "http://" . $MAPS_HOST . "/maps/geo?output=xml" . "&key=" . $KEY;
-			
-			$address = $this->Address . ", ".$this->City . " " . $this->State . " " . $this->ZipCode;
-		    $request_url = $base_url . "&q=" . urlencode($address);
-		    $xml = simplexml_load_file($request_url) or die("url not loading");
-		    
-			$status = $xml->Response->Status->code;
-		    if (strcmp($status, "200") == 0) {
-		      // Successful geocode
-		      //$geocode_pending = false;
-		      $coordinates = $xml->Response->Placemark->Point->coordinates;
-		      $coordinatesSplit = split(",", $coordinates);
-		      // Format: Longitude, Latitude, Altitude
-		      $this->Lat = $coordinatesSplit[1];
-		      $this->Long = $coordinatesSplit[0];
-		      
-		      // strip slashes from spreadsheet import
-		      $this->Name = stripslashes($this->Name);
-		      $this->Address = stripslashes($this->Address);
-		      $this->City = stripslashes($this->City);
-		      
-		    }
-		}
-		parent::onBeforeWrite();
-	}*/
-
 }

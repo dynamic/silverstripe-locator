@@ -5,6 +5,20 @@ class Locator extends Page {
 	public static $singular_name = "Locator";
     public static $plural_name = "Locators";
     static $description = 'Find locations on a map';
+    
+    public function getCMSFields() {
+	    $fields = parent::getCMSFields();
+	    
+	    // Locations
+		$config = GridFieldConfig_RecordEditor::create();	
+		//$config->addComponent(new GridFieldBulkEditingTools());
+	    
+		$LocationField = GridField::create("Locations", "Locations", Location::get(), $config);
+	    
+	    $fields->addFieldToTab("Root.Locations", $LocationField);
+	    
+	    return $fields;
+    }
 	
 }
 
