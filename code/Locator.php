@@ -43,7 +43,9 @@ class Locator_Controller extends Page_Controller {
 		      	listTemplatePath: '/locator/templates/location-list-description.html',
 		      	infowindowTemplatePath: '/locator/templates/infowindow-description.html',
 		      	originMarker: true,
-		      	fullMapStart: false
+		      	fullMapStart: false,
+		      	slideMap: true,
+		      	modalWindow: false
 		      });
 		    });
 		");
