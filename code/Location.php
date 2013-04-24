@@ -16,6 +16,13 @@ class Location extends DataObject {
 	);
 	
 	static $default_sort = 'Title';
+
+	static $defaults = array(
+		'ShowInLocator' => true
+	);
+
+	// api access
+	//static $api_access = true;
 	
 	static $summary_fields = array(
 		'Title',
@@ -23,10 +30,19 @@ class Location extends DataObject {
 		'Suburb',
 		'State',
 		'Postcode',
-		'Country',
-		'Lat',
-		'Lng'
+		'Country'
 	);	
+
+	function fieldLabels($includerelations = true) {
+     	$labels = parent::fieldLabels();
+
+     	$labels['Title'] = 'Name';
+     	$labels['Suburb'] = "City";
+     	$labels['Postcode'] = 'Postal Code';
+     	$labels['ShowInLocator'] = 'Show';
+
+     	return $labels;
+   	}
  
 	public function getCMSFields() {
 		
