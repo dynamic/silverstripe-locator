@@ -48,7 +48,6 @@ class Location extends DataObject {
      	return $labels;
    	}
  
-	/*
 	public function getCMSFields() {
 		
 		$fields = parent::getCMSFields();
@@ -58,16 +57,13 @@ class Location extends DataObject {
 			TextField::create('Website'),
 			TextField::create('Phone'),
 			TextField::create('Fax'),
-			TextField::create('EmailAddress'),
-			CheckboxField::create('ShowInLocator')
+			TextField::create('EmailAddress')//,
+			//CheckboxField::create('ShowInLocator', 'Show in Map results')
 		));
 		
-		$fields->addFieldsToTab('Root.Category', array(
-			GridField::create('Categories', 'Category', $this->Categories(), GridFieldConfig_RelationEditor::create())
-		));
+		$fields->removeByName('ShowInLocator');
 		
 		return $fields;
 	}
-	*/
 			
 }

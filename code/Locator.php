@@ -34,9 +34,11 @@ class Locator extends Page {
 	    $fields = parent::getCMSFields();
 	    
 	    // Locations Grid Field
-		$config = GridFieldConfig_RecordEditor::create();	
-		//$config->addComponent(new GridFieldBulkEditingTools());
-	    $fields->addFieldToTab("Root.Locations", GridField::create("Locations", "Locations", Location::get(), $config));
+	    if (!self::get_datasource()) {
+			$config = GridFieldConfig_RecordEditor::create();	
+			//$config->addComponent(new GridFieldBulkEditingTools());
+		    $fields->addFieldToTab("Root.Locations", GridField::create("Locations", "Locations", Location::get(), $config));
+		}
 
 	    // Settings
 	    $fields->addFieldsToTab('Root.Settings', array(
