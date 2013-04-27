@@ -19,6 +19,10 @@ class Locator extends Page {
 	    
 	    return $fields;
     }
+    
+    public function getAllCategories() {
+	    return LocationCategory::get();
+    }
 	
 }
 
@@ -29,8 +33,8 @@ class Locator_Controller extends Page_Controller {
 		
 		Requirements::javascript('framework/thirdparty/jquery/jquery.js');
 		Requirements::javascript('http://maps.google.com/maps/api/js?sensor=false');
-		Requirements::javascript('locator/javascript/jquery.locator/js/handlebars-1.0.rc.1.min.js');
-		Requirements::javascript('locator/javascript/jquery.locator/js/jquery.storelocator.js');
+		Requirements::javascript('locator/thirdparty/jquery-store-locator/js/handlebars-1.0.rc.1.min.js');
+		Requirements::javascript('locator/thirdparty/jquery-store-locator/js/jquery.storelocator.js');
 		
 		Requirements::css('locator/css/map.css');
 

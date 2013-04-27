@@ -10,6 +10,10 @@ class Location extends DataObject {
 		'EmailAddress' => 'Varchar(255)',
 		'ShowInLocator' => 'Boolean',
 	);
+	
+	static $has_one = array(
+		'Category' => 'LocationCategory'
+	);
 		
 	static $casting = array(
 		'distance' => 'Int'
@@ -44,6 +48,7 @@ class Location extends DataObject {
      	return $labels;
    	}
  
+	/*
 	public function getCMSFields() {
 		
 		$fields = parent::getCMSFields();
@@ -57,7 +62,12 @@ class Location extends DataObject {
 			CheckboxField::create('ShowInLocator')
 		));
 		
+		$fields->addFieldsToTab('Root.Category', array(
+			GridField::create('Categories', 'Category', $this->Categories(), GridFieldConfig_RelationEditor::create())
+		));
+		
 		return $fields;
 	}
+	*/
 			
 }

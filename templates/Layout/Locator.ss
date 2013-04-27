@@ -7,6 +7,12 @@
 	        <div id="form-input">
 	          	<label for="address">Enter Address or Zip Code:</label>
 	          	<input type="text" id="address" name="address" />
+	          	<select id="category" name="category">
+	          		<option value="">All</option>
+	          		<% loop AllCategories %>
+	          			<option value="$ID">$Name.XML</option>
+	          		<% end_loop %>
+	          	</select>	
 	         </div>
 	        
 	         <div id="submit-btn">
