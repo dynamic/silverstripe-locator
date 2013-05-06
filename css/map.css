@@ -255,7 +255,26 @@ form#user-location {
 	}
 
 }
+/* #Tablet (Portrait)
+================================================== */
 
+    /* Note: Design for a width of 768px */
+
+@media only screen and (min-width: 641px) and (max-width: 959px) {
+	
+	#loc-list .list-label{
+		margin-left: 0px;
+	}
+	
+	#loc-list .list-content {
+		padding: 10px 0px;
+	}
+	
+	#loc-list .list-details {
+		width: 140px;
+	}
+
+}
 /* BREAKPOINT 640px */
 
 @media only screen and (max-width: 640px) { 
