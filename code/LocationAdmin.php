@@ -1,7 +1,8 @@
 <?php
 class LocationAdmin extends ModelAdmin {
    	static $managed_models = array(
-   		'Location'
+   		'Location',
+   		'LocationCategory'
    	);
    	
    	static $model_importers = array(

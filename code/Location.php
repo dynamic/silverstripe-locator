@@ -6,9 +6,9 @@ class Location extends DataObject {
 		'Title' => 'Varchar(255)',
 		'Website' => 'Varchar(255)',
 		'Phone' => 'Varchar(40)',
-		'Fax' => 'Varchar(40)',
+		//'Fax' => 'Varchar(40)',
 		'EmailAddress' => 'Varchar(255)',
-		'ShowInLocator' => 'Boolean',
+		//'ShowInLocator' => 'Boolean',
 	);
 	
 	static $has_one = array(
@@ -34,7 +34,11 @@ class Location extends DataObject {
 		'Suburb',
 		'State',
 		'Postcode',
-		'Country'
+		'Country',
+		'Category.Name',
+		//'Website',
+		//'EmailAddress',
+		//'Phone'
 	);	
 
 	function fieldLabels($includerelations = true) {
@@ -44,6 +48,8 @@ class Location extends DataObject {
      	$labels['Suburb'] = "City";
      	$labels['Postcode'] = 'Postal Code';
      	$labels['ShowInLocator'] = 'Show';
+     	$labels['Category.Name'] = 'Category';
+     	$labels['EmailAddress'] = 'Email';
 
      	return $labels;
    	}
