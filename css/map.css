@@ -110,6 +110,9 @@ form#user-location {
 	border: 1px solid #fff; /* Adding this to prevent moving li elements when adding the list-focus class*/
 }
 
+#loc-list li:first-child {margin-top: 0px;}
+
+
 #loc-list .list-focus
 {
 	border: 1px solid rgba(82,168,236,0.9);
@@ -155,6 +158,7 @@ form#user-location {
 #address
 {
 	margin: 0 0 0 10px;
+	width: 330px !important;
 }
 
 #submit-btn
@@ -176,7 +180,7 @@ form#user-location {
 #map
 {
 	float: right; 
-	width: 75%; 
+	width: 74%; 
 	height: 530px; 
 }
 
