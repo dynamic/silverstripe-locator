@@ -155,6 +155,10 @@ form#user-location {
 	margin-right: 20px;
 }
 
+.field {margin-bottom: 10px;}
+#form-input {margin-bottom: 10px;}
+#category {width: 100px !important;}
+label {width: 165px !important;}
 #address
 {
 	margin: 0 0 0 10px;
@@ -165,7 +169,6 @@ form#user-location {
 {
 	float: left;
 	cursor: pointer;
-	margin-left: 10px;
 }
 
 #loading-map
