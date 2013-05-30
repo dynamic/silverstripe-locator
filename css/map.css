@@ -157,8 +157,21 @@ form#user-location {
 
 .field {margin-bottom: 10px;}
 #form-input {margin-bottom: 10px;}
-#category {width: 100px !important;}
-label {width: 165px !important;}
+#category {width: 100px !important; margin-left: 10px;}
+label {width: 165px !important; display: inline-block;}
+#main-column .disclaimer{
+	background: url(/themes/3sheeps/images/nav-bg.png) top left repeat;
+	padding: 10px 10px 5px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	position: relative;
+	color: #eee;
+	margin-bottom: 20px;
+}
+
+
+
 #address
 {
 	margin: 0 0 0 10px;
