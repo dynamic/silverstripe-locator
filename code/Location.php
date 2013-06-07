@@ -26,7 +26,7 @@ class Location extends DataObject {
 	);
 
 	// api access
-	//static $api_access = true;
+	static $api_access = true;
 	
 	static $summary_fields = array(
 		'Title',
@@ -70,6 +70,10 @@ class Location extends DataObject {
 		$fields->removeByName('ShowInLocator');
 		
 		return $fields;
+	}
+	
+	public function canView($member = null) {
+		return true;
 	}
 			
 }
