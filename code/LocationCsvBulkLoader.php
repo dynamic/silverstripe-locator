@@ -11,7 +11,7 @@ class LocationCsvBulkLoader extends CsvBulkLoader {
    );
    
    public $duplicateChecks = array(
-      //'Address' => 'Address',
+      'Address' => 'Address',
       //'Website' => 'Website'
    );
    
@@ -23,6 +23,7 @@ class LocationCsvBulkLoader extends CsvBulkLoader {
    );
    
    public static function getCatByName(&$obj, $val, $record) {
+   	  $val = Convert::raw2sql($val);
       return LocationCategory::get()->filter('Name', $val)->First();
       //);
    }
