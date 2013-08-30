@@ -1,5 +1,6 @@
 <?php
 class LocationAdmin extends ModelAdmin {
+   	
    	static $managed_models = array(
    		'Location',
    		'LocationCategory'
@@ -9,6 +10,7 @@ class LocationAdmin extends ModelAdmin {
       	'Location' => 'LocationCsvBulkLoader', 
     );
    
+	static $menu_title = 'Locations';
     static $url_segment = 'locations';
 
     public function getExportFields() {
