@@ -86,7 +86,8 @@ class Locator_Controller extends Page_Controller {
 			fullMapStart: false,';
 		} else {
 			$load = 'autoGeocode: false,
-			fullMapStart: true,';
+			fullMapStart: true,
+			storeLimit: 1000,';
 		}
 		
 		// in page or modal
