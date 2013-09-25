@@ -110,7 +110,9 @@ class Locator_Controller extends Page_Controller {
 		      	infowindowTemplatePath: '/locator/templates/infowindow-description.html',
 		      	originMarker: true,
 		      	" . $modal . ",
-		      	slideMap: false
+		      	slideMap: false,
+		      	zoomLevel: 0,
+			  	distanceAlert: 120
 		      });
 		    });
 		");
