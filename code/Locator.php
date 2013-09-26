@@ -129,7 +129,8 @@ class Locator_Controller extends Page_Controller {
 			
 		} else {
 		
-			$Locations = Location::get();
+			// grab all locations with coordinates
+			$Locations = Location::get()->exclude('Lat', 0);
 			
 			return $this->customise(array(
 				'Locations' => $Locations
