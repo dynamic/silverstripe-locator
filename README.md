@@ -1,33 +1,49 @@
-## Overview
+Overview
+=================================
 
  The Locator module displays a searchable map of locations. You can choose whether to show all locations on load, or enable auto geocoding to filter the initial list based on the visitor's location. Uses the jQuery Store Locator plugin for map display.
 
-## Installation ##
+Composer Installation
+=================================
 
- * cd ~/Sites/yourSilverStripeProject/
- * git clone git@github.com:dynamic/SilverStripe-Locator-Module.git locator
- * Run `/dev/build`
+`"require": { "dynamic/silverstripe-locator": "dev-master }`
 
-## Requirements ##
+Add `locator` to your `.gitignore`
 
- *  SilverStripe 3.0+
+Git Installation
+=================================
+
+`git clone git@github.com:dynamic/SilverStripe-Locator-Module.git locator`
+
+`git clone git@github.com:ajshort/silverstripe-addressable.git addressable`
+
+`rm -rf .git` (optional, to remove existing git repo)
+
+Requirements
+=================================
+
+ *  SilverStripe 3.0.x
  *  Addressable Module by ajshort for Location geocoding - https://github.com/ajshort/silverstripe-addressable
  
-## Use ##
+Use
+=================================
 
  Create a Locator page in the CMS. Locations are managed under the Locations tab in the CMS via Model Admin. Simply enter the name and address of each location, and they will appear on the map.
 
-## Maintainer Contact ##
+Maintainer Contact
+=================================
 
  *  Dynamic (<info@dynamicdoes.com>)
 
-## Links ##
+Links
+=================================
 
  * [SilverStripe Addressable](https://github.com/ajshort/silverstripe-addressable) by Andrew Short
- * [jQuery Store Locator Plugin] (http://www.bjornblog.com/web/jquery-store-locator-plugin)
+ * [jQuery Store Locator Plugin](http://www.bjornblog.com/web/jquery-store-locator-plugin)
  * [SilverStripe CMS](http://www.silverstripe.org/)
 
-## License ##
+License
+=================================
 
 	Copyright (c) 2013, Dynamic Inc
 	All rights reserved.

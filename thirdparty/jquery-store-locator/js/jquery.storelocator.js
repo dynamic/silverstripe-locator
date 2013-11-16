@@ -14,6 +14,7 @@ $.fn.storeLocator = function(options) {
       'formContainerDiv': 'form-container',
       'formID': 'user-location',
       'inputID': 'address',
+      'categoryID': 'category',
       'zoomLevel': 12,
       'pinColor': 'fe7569',
       'pinTextColor': '000000',
@@ -242,7 +243,7 @@ $.fn.storeLocator = function(options) {
           var originAddress = data.address;
           mapping(position.coords.latitude, position.coords.longitude, originAddress);
           // Dynamic - set value of address input
-          $("#address").val(originAddress);
+          $('#' + settings.inputID).val(originAddress);
         } else {
           //Unable to geocode
           alert(settings.addressErrorAlert);
@@ -263,8 +264,9 @@ $.fn.storeLocator = function(options) {
     var userinput = $('#' + settings.inputID).val();
     
     // Dynamic - Get the user input for category filter
-    var selectedCategory = $('#category').val();
-
+    var selectedCategory = $('#' + settings.categoryID).val();
+    console.log(selectedCategory);
+    
     if (userinput === "")
       {
         //Show alert and stop processing

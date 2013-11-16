@@ -1,16 +1,37 @@
-#form-container
-{
-	clear: left;
+/* === 
+ Search Form 
+=== */
+#form-container form {
+	width: 100%;
+	max-width: 100%;
+	margin-bottom: 20px;
 	float: left;
-	margin: 0 0 15px;
+}
+
+#form-container fieldset,
+#form-container div.Actions {
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+	#form-container fieldset { width: 80%;}
+	#form-container div.Actions { width: 20%;}
+
+#form-container div.field {
+	width: 45%;
+	margin-right: 5%;
+	float: left;
+	vertical-align: middle;
+}
+#form-container input,
+#form-container select {
 	width: 100%;
 }
 
-form#user-location {
-	width: 100%;
-	max-width: 960px;
-}
 
+/* === 
+ Map 
+=== */
 #loading-map,
 #map-container
 {
@@ -48,6 +69,26 @@ form#user-location {
 	width: 75%;
 }
 
+#loading-map
+{
+	float: left;
+	margin: 4px 0 0 10px;
+	width: 16px;
+	height: 16px;
+	background: url(../images/ajax-loader.gif) no-repeat;
+}
+
+#map
+{
+	float: right; 
+	width: 74%; 
+	height: 530px; 
+}
+
+
+/* === 
+ Results List 
+=== */
 #loc-list
 {
 	float: left; 
@@ -128,79 +169,11 @@ form#user-location {
 	font-weight: bold;
 }
 
-#search-form
-{
-	clear: left;
-	float: left;
-	height: 60px;
-}
-
-#form-input
-{
-	float: left;
-	margin-top: 3px;
-}
-
-#form-input label
-{
-	font-weight: bold;
-}
-
-#form-input select {
-	width: 100px;
-}
-
-#form-input .field {
-	float: left;
-	margin-right: 20px;
-}
-
-.field {margin-bottom: 10px;}
-#form-input {margin-bottom: 10px;}
-#category {width: 100px !important; margin-left: 10px;}
-label {width: 165px !important; display: inline-block;}
-#main-column .disclaimer{
-	background: url(/themes/3sheeps/images/nav-bg.png) top left repeat;
-	padding: 10px 10px 5px;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	position: relative;
-	color: #eee;
-	margin-bottom: 20px;
-}
-#main-column ul.columns li.li-content {width: 445px !important;}
 
 
-#address
-{
-	margin: 0 0 0 10px;
-	width: 330px !important;
-}
-
-#submit-btn
-{
-	float: left;
-	cursor: pointer;
-}
-
-#loading-map
-{
-	float: left;
-	margin: 4px 0 0 10px;
-	width: 16px;
-	height: 16px;
-	background: url(../images/ajax-loader.gif) no-repeat;
-}
-
-#map
-{
-	float: right; 
-	width: 74%; 
-	height: 530px; 
-}
-
-/* Modal window */
+/* === 
+ Modal window 
+=== */
 
 #overlay
 {
@@ -248,19 +221,12 @@ label {width: 165px !important; display: inline-block;}
 }
 
 
-/* The following is for the geocode page and not the store locator */
-
-#geocode-result
-{
-	clear: left;
-	float: left;
-	margin-top: 30px;
-	width: 100%;
-}
 
 
 
-/* responsive for Simple theme */
+/* === 
+ responsive for Simple theme 
+=== */
 
 /* BREAKPOINT 960px */
 
@@ -309,27 +275,16 @@ label {width: 165px !important; display: inline-block;}
 		float: left;
 	}
 	
-	input.text, label {
-		display: block;
-		
-	}
-	
-	#form-input {
-		float: none;
-		
-	}
-	
-	#address {
-		margin-left: 0;
+	#form-container fieldset { width: 100%;}
+	#form-container div.field {
 		width: 100%;
+		margin-right: 0;
+		float: none;
 	}
-	
-	#submit-btn {
-		margin-left: 0;
-		margin-top: 5px;
+	#form-container div.Actions { 
+		width: 100%;
+		max-width: 400px;
 		float: none;
 	}
 
 }
-
-

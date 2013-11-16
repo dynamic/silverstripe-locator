@@ -3,28 +3,13 @@
 class Locator extends Page {
 	
 	static $db = array(
-		'FilterByCategory' => 'Boolean',
 		'AutoGeocode' => 'Boolean',
 		'ModalWindow' => 'Boolean'
 	);
 	
 	static $defaults = array(
-		'FilterByCategory' => true,
 		'AutoGeocode' => true
 	);
-	
-	// variable holder for custom data source url
-	public static $datasource = null;
-	
-	// get custom data source url
-	public static function get_datasource() {
-		return self::$datasource;
-	}
-	
-	// allow custom data source url to be set via _config.php
-	static public function set_datasource($datasource) {
-		self::$datasource = $datasource;
-	}
 	
 	public static $singular_name = "Locator";
     public static $plural_name = "Locators";
@@ -34,35 +19,23 @@ class Locator extends Page {
 	    $fields = parent::getCMSFields();
 	    
 	    // Locations Grid Field
-	    if (!self::get_datasource()) {
-			$config = GridFieldConfig_RecordEditor::create();	
-			//$config->addComponent(new GridFieldBulkEditingTools());
-		    $fields->addFieldToTab("Root.Locations", GridField::create("Locations", "Locations", Location::get(), $config));
-		}
+		$config = GridFieldConfig_RecordEditor::create();	
+	    $fields->addFieldToTab("Root.Locations", GridField::create("Locations", "Locations", Location::get(), $config));
+	    
+	    // Location categories
+	    $gridField = new GridField('Categories', 'Categories', LocationCategory::get(), GridFieldConfig_RecordEditor::create());
+	    $fields->addFieldToTab('Root.Categories', $gridField);
 
 	    // Settings
 	    $fields->addFieldsToTab('Root.Settings', array(
 	    	HeaderField::create('DisplayOptions', 'Display Options', 3),
 	    	CheckboxField::create('AutoGeocode', 'Auto Geocode - Automatically filter map results based on user location'),
-	    	CheckboxField::create('FilterByCategory', 'Filter by Category - allow user to filter map results by category'),
+	    	//CheckboxField::create('FilterByCategory', 'Filter by Category - allow user to filter map results by category'),
 	    	CheckboxField::create('ModalWindow', 'Modal Window - Show Map results in a modal window'),
-	    	HeaderField::create('DataOptions', 'Data Options', 3),
+	    	//HeaderField::create('DataOptions', 'Data Options', 3),
 	    ));
 	    
 	    return $fields;
-    }
-    
-    public function getAllCategories() {
-	    return LocationCategory::get();
-    }
-    
-    public function getDataLocation() {
-	    if (self::get_datasource()) {
-			$dataLocation = self::get_datasource();
-		} else {
-			$dataLocation = getDataLocation();
-		}
-		return $dataLocation;
     }
 	
 }
@@ -113,30 +86,63 @@ class Locator_Controller extends Page_Controller {
 		      	" . $modal . ",
 		      	slideMap: false,
 		      	zoomLevel: 0,
-			  	distanceAlert: 120
+			  	distanceAlert: 120,
+			  	formID: 'Form_LocationSearch',
+			  	inputID: 'Form_LocationSearch_address',
+			  	categoryID: 'Form_LocationSearch_category'
 		      });
 		    });
 		");
 		
 	}	
 	
-	// Return all locations, render in XML file 
+	
+	/**
+	 * Find all locations for map.
+	 * 
+	 * By default, will return a XML feed of all locations marked "show in locator".
+	 * 
+	 * If Locator::set_datasource('http:www.example.com') is set in _config.php, Locator will look 
+	 * for a JSON feed and return the results.
+	 * 
+	 * @access public
+	 * @return XML file
+	 */
 	public function xml() {
-		if (self::get_datasource()) {
-			
-		    $service = new RestfulService(self::get_datasource()); 
-			
-			return $service->request()->getBody();
-			
-		} else {
 		
-			// grab all locations with coordinates
-			$Locations = Location::get()->exclude('Lat', 0);
+		$Locations = Location::get()->filter(array('ShowInLocator' => true))->exclude('Lat', 0);
 			
-			return $this->customise(array(
-				'Locations' => $Locations
-			))->renderWith('LocationXML');
-		}
+		return $this->customise(array(
+			'Locations' => $Locations
+		))->renderWith('LocationXML');
 		
 	}	
+	
+	
+	/**
+	 * LocationSearch function.
+	 *
+	 * Search form for locations, updates map and results list via AJAX
+	 * 
+	 * @access public
+	 * @return Form
+	 */
+	public function LocationSearch() {
+		$fields = FieldList::create(
+			$address = TextField::create('address', '')
+		);
+		$address->setAttribute('placeholder', 'address or zip code');
+		
+		if (LocationCategory::get()->Count() > 0) {
+			$fields->push(DropdownField::create('category', '', LocationCategory::get()->map('Title', 'Title'))->setEmptyString('Select Category'));
+		}
+		
+		$actions = FieldList::create(
+			FormAction::create('', 'Search')
+		);
+		
+		return Form::create($this, 'LocationSearch', $fields, $actions);
+		
+	}
+	
 }

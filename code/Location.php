@@ -6,9 +6,8 @@ class Location extends DataObject {
 		'Title' => 'Varchar(255)',
 		'Website' => 'Varchar(255)',
 		'Phone' => 'Varchar(40)',
-		//'Fax' => 'Varchar(40)',
 		'EmailAddress' => 'Varchar(255)',
-		//'ShowInLocator' => 'Boolean',
+		'ShowInLocator' => 'Boolean',
 	);
 	
 	static $has_one = array(
@@ -58,17 +57,23 @@ class Location extends DataObject {
 		
 		$fields = parent::getCMSFields();
 		
-		$fields->addFieldsToTab('Root.Main', array(
-			TextField::create('Title'),
+		// remove Main tab
+     	$fields->removeByName('Main');
+		
+		$fields->addFieldsToTab('Root.Info', array(
+			HeaderField::create('InfoHeader', 'Contact Information'),
 			TextField::create('Website'),
-			TextField::create('Phone'),
-			TextField::create('Fax'),
-			TextField::create('EmailAddress')//,
-			//CheckboxField::create('ShowInLocator', 'Show in Map results')
+			TextField::create('EmailAddress'),
+			TextField::create('Phone')
 		));
 		
-		$fields->removeByName('ShowInLocator');
+		if (LocationCategory::get()->Count() > 0) {
+			$fields->insertAfter(DropDownField::create('CategoryID', 'Category', LocationCategory::get()->map('ID', 'Title'))->setEmptyString('-- select --'), 'Phone');
+		}
 		
+		$fields->insertAfter(TextField::create('Title'), 'AddressHeader');
+		$fields->insertAfter(CheckboxField::create('ShowInLocator', 'Show on Map'), 'Country');
+				
 		return $fields;
 	}
 	
