@@ -23,6 +23,9 @@ class Location extends DataObject {
 	static $defaults = array(
 		'ShowInLocator' => true
 	);
+	
+	public static $singular_name = "Location";
+	public static $plural_name = "Locations";
 
 	// api access
 	static $api_access = true;
@@ -35,9 +38,6 @@ class Location extends DataObject {
 		'Postcode',
 		'Country',
 		'Category.Name',
-		//'Website',
-		//'EmailAddress',
-		//'Phone'
 	);	
 
 	function fieldLabels($includerelations = true) {

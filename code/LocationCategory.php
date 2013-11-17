@@ -10,4 +10,7 @@ class LocationCategory extends DataObject {
 		'Locations' => 'Location'
 	);
 	
+	public static $singular_name = "Category";
+	public static $plural_name = "Categories";
+	
 }

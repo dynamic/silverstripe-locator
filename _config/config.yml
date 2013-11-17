@@ -1,0 +1,7 @@
+---
+Name: locator
+---
+Location:
+  extensions:
+    - Addressable
+    - Geocodable

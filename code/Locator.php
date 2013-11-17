@@ -23,16 +23,14 @@ class Locator extends Page {
 	    $fields->addFieldToTab("Root.Locations", GridField::create("Locations", "Locations", Location::get(), $config));
 	    
 	    // Location categories
-	    $gridField = new GridField('Categories', 'Categories', LocationCategory::get(), GridFieldConfig_RecordEditor::create());
-	    $fields->addFieldToTab('Root.Categories', $gridField);
+	    $config = GridFieldConfig_RecordEditor::create();
+	    $fields->addFieldToTab("Root.Categories", GridField::create("Categories", "Categories", LocationCategory::get(), $config));
 
 	    // Settings
 	    $fields->addFieldsToTab('Root.Settings', array(
 	    	HeaderField::create('DisplayOptions', 'Display Options', 3),
 	    	CheckboxField::create('AutoGeocode', 'Auto Geocode - Automatically filter map results based on user location'),
-	    	//CheckboxField::create('FilterByCategory', 'Filter by Category - allow user to filter map results by category'),
-	    	CheckboxField::create('ModalWindow', 'Modal Window - Show Map results in a modal window'),
-	    	//HeaderField::create('DataOptions', 'Data Options', 3),
+	    	CheckboxField::create('ModalWindow', 'Modal Window - Show Map results in a modal window')
 	    ));
 	    
 	    return $fields;
@@ -41,6 +39,8 @@ class Locator extends Page {
 }
 
 class Locator_Controller extends Page_Controller {
+
+	private static $allowed_actions = array('xml');
 	
 	public function init() {
 		parent::init();
@@ -69,10 +69,7 @@ class Locator_Controller extends Page_Controller {
 			$modal = 'modalWindow: true';
 		} else {
 			$modal = 'modalWindow: false';
-		}
-		
-		// data source
-		
+		}		
 
 		// init map		
 		Requirements::customScript("
@@ -94,11 +91,10 @@ class Locator_Controller extends Page_Controller {
 		    });
 		");
 		
-	}	
-	
+	}		
 	
 	/**
-	 * Find all locations for map.
+	 * Find all locations for map
 	 * 
 	 * By default, will return a XML feed of all locations marked "show in locator".
 	 * 
@@ -120,7 +116,7 @@ class Locator_Controller extends Page_Controller {
 	
 	
 	/**
-	 * LocationSearch function.
+	 * LocationSearch form.
 	 *
 	 * Search form for locations, updates map and results list via AJAX
 	 * 

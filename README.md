@@ -8,7 +8,7 @@ Composer Installation
 
 `"require": { "dynamic/silverstripe-locator": "dev-master }`
 
-Add `locator` to your `.gitignore`
+Add `locator` and `addressable` to your `.gitignore`
 
 Git Installation
 =================================
@@ -22,7 +22,7 @@ Git Installation
 Requirements
 =================================
 
- *  SilverStripe 3.0.x
+ *  SilverStripe 3.0+
  *  Addressable Module by ajshort for Location geocoding - https://github.com/ajshort/silverstripe-addressable
  
 Use
