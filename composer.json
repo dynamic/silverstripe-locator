@@ -16,7 +16,7 @@
     },
     "suggest": {
     	"unclecheese/betterbuttons": "Adds new form actions and buttons to GridField detail form for usability enhancements."
-    }
+    },
 	"extra": {
 		"installer-name": "locator"
 	}
