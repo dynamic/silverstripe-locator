@@ -1,7 +1,7 @@
 {
     "name": "dynamic/silverstripe-locator",
-    "description": "SilverStripe Locator Module",
-    "keywords": ["silverstripe", "module", "locator", "dynamic"],
+    "description": "SilverStripe Locator Module. Show locations on a map. Search by geoposition.",
+    "keywords": ["silverstripe", "map", "locator", "dynamic", "geocode"],
     "type": "silverstripe-module",
     "license": "BSD-3-Clause",
 	"authors": [
@@ -14,6 +14,9 @@
     	"silverstripe/framework": ">=3.0",
     	"ajshort/silverstripe-addressable": "*"
     },
+    "suggest": {
+    	"unclecheese/betterbuttons": "Adds new form actions and buttons to GridField detail form for usability enhancements."
+    }
 	"extra": {
 		"installer-name": "locator"
 	}

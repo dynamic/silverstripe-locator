@@ -9,7 +9,9 @@
 	<div id="map-container">
 		<div id="map"></div>
 		<div id="loc-list">
-	        <ul id="list"></ul>
+	        <ul id="list">
+		        <li><img src="locator/images/ajax-loader.gif" class="loading"></li>
+	        </ul>
 	    </div>
 	  </div>
 	</div>

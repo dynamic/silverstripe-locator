@@ -2,18 +2,18 @@
 
 class Locator extends Page {
 	
-	static $db = array(
+	private static $db = array(
 		'AutoGeocode' => 'Boolean',
 		'ModalWindow' => 'Boolean'
 	);
 	
-	static $defaults = array(
+	private static $defaults = array(
 		'AutoGeocode' => true
 	);
 	
-	public static $singular_name = "Locator";
-    public static $plural_name = "Locators";
-    static $description = 'Find locations on a map';
+	private static $singular_name = "Locator";
+    private static $plural_name = "Locators";
+    private static $description = 'Find locations on a map';
     
     public function getCMSFields() {
 	    $fields = parent::getCMSFields();
@@ -40,8 +40,10 @@ class Locator extends Page {
 
 class Locator_Controller extends Page_Controller {
 
+	// allowed actions
 	private static $allowed_actions = array('xml');
 	
+	// Set Requirements based on input from CMS
 	public function init() {
 		parent::init();
 		
