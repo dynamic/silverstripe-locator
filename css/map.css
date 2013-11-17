@@ -202,7 +202,6 @@
 
 #modal-content
 {
-	float: left;
 	padding: 0 22px; /* there's already a margin on the top of the map-container div */
 }
 

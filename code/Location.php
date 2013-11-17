@@ -38,7 +38,14 @@ class Location extends DataObject {
 		'Postcode',
 		'Country',
 		'Category.Name',
+		'Status'
 	);	
+	
+	// LocatorStatus for $summary_fields
+	public function getStatus() {
+		if ($this->ShowInLocator) return 'show';
+		return 'hide';
+	}
 
 	function fieldLabels($includerelations = true) {
      	$labels = parent::fieldLabels();

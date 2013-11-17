@@ -13,4 +13,6 @@ class LocationCategory extends DataObject {
 	public static $singular_name = "Category";
 	public static $plural_name = "Categories";
 	
+	private static $default_sort = 'Name';
+	
 }
