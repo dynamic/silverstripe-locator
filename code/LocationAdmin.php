@@ -7,11 +7,12 @@ class LocationAdmin extends ModelAdmin {
    	);
    	
    	static $model_importers = array(
-      	'Location' => 'LocationCsvBulkLoader', 
+      	'Location' => 'LocationCsvBulkLoader',
+      	'LocationCategory' => 'CsvBulkLoader'
     );
    
-	static $menu_title = 'Locations';
-    static $url_segment = 'locations';
+	static $menu_title = 'Locator';
+    static $url_segment = 'locator';
 
     public function getExportFields() {
         return array(

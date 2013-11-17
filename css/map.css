@@ -14,8 +14,9 @@
 	margin: 0;
 	padding: 0;
 }
-	#form-container fieldset { width: 80%;}
-	#form-container div.Actions { width: 20%;}
+
+#form-container fieldset { width: 80%;}
+#form-container div.Actions { width: 20%;}
 
 #form-container div.field {
 	width: 45%;
@@ -32,27 +33,22 @@
 /* === 
  Map 
 === */
-#loading-map,
-#map-container
-{
+#map-container {
 	clear: left;
 	margin-top: 27px;
 	height: 530px;
 }
 
-#map-container a
-{
+#map-container a {
 	color: #e76737;
 	text-decoration: none;
 }
 
-#map-container a:hover, #map-container a:active
-{
+#map-container a:hover, #map-container a:active {
 	text-decoration: underline;
 }
 
-#map-container .custom-marker
-{
+#map-container .custom-marker {
 	width: 32px;
 	height: 37px;
 	color: #fff;
@@ -61,25 +57,7 @@
     cursor: pointer;
 }
 
-#map-container .sidebar {
-	display: block;
-	margin-top: 0;
-}
-#map-container .content-container {
-	width: 75%;
-}
-
-#loading-map
-{
-	float: left;
-	margin: 4px 0 0 10px;
-	width: 16px;
-	height: 16px;
-	background: url(../images/ajax-loader.gif) no-repeat;
-}
-
-#map
-{
+#map {
 	float: right; 
 	width: 74%; 
 	height: 530px; 
@@ -145,7 +123,6 @@
 	clear: left;
 	float: left;
 	margin: 6px 0;
-	/*margin: 6px 10px;*/
 	cursor: pointer;
 	width: 99%;
 	border: 1px solid #fff; /* Adding this to prevent moving li elements when adding the list-focus class*/
@@ -169,6 +146,13 @@
 	font-weight: bold;
 }
 
+
+/* ===
+ Loading
+=== */
+.typography img.loading { 
+	border: none; 
+}
 
 
 /* === 

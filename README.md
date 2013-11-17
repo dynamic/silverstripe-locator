@@ -1,7 +1,7 @@
 Overview
 =================================
 
- The Locator module displays a searchable map of locations. You can choose whether to show all locations on load, or enable auto geocoding to filter the initial list based on the visitor's location. Uses the jQuery Store Locator plugin for map display.
+ The Locator module displays a searchable map of locations. You can choose whether to show all locations on load, or enable auto geocoding to filter the initial list based on the visitor's location. 
 
 Composer Installation
 =================================
@@ -22,7 +22,7 @@ Git Installation
 Requirements
 =================================
 
- *  SilverStripe 3.0+
+ *  SilverStripe 3.1.x
  *  Addressable Module by ajshort for Location geocoding - https://github.com/ajshort/silverstripe-addressable
  
 Use
