@@ -79,8 +79,8 @@ class Locator_Controller extends Page_Controller {
 		      $('#map-container').storeLocator({
 		      	" . $load . "
 		      	dataLocation: '" . $this->Link() . "xml.xml',
-		      	listTemplatePath: '/locator/templates/location-list-description.html',
-		      	infowindowTemplatePath: '/locator/templates/infowindow-description.html',
+		      	listTemplatePath: 'locator/templates/location-list-description.html',
+		      	infowindowTemplatePath: 'locator/templates/infowindow-description.html',
 		      	originMarker: true,
 		      	" . $modal . ",
 		      	slideMap: false,
