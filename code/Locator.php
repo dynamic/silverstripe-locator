@@ -32,6 +32,8 @@ class Locator extends Page {
 	    	CheckboxField::create('AutoGeocode', 'Auto Geocode - Automatically filter map results based on user location'),
 	    	CheckboxField::create('ModalWindow', 'Modal Window - Show Map results in a modal window')
 	    ));
+
+		$this->extend('updateCMSFields', $fields);
 	    
 	    return $fields;
     }
