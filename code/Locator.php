@@ -33,6 +33,8 @@ class Locator extends Page {
 	    	CheckboxField::create('ModalWindow', 'Modal Window - Show Map results in a modal window')
 	    ));
 	    
+	    $this->extend('updateCMSFields', $fields);
+	    
 	    return $fields;
     }
 	
