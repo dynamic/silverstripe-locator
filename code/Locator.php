@@ -70,12 +70,14 @@ class Locator_Controller extends Page_Controller {
 			maxDistance: true,';
 		}
 
-		$base = $_SERVER['DOCUMENT_ROOT']."/".$themeDir;
+		$absoluteBase = getcwd();//get current working dir
+		$base = str_replace('/framework','',$absoluteBase);//remove framework if .htaccess is working
+		$themePath = $base."/".$themeDir;
 
-		$listTemplatePath = (file_exists($base . '/templates/location-list-description.html')) ?
+		$listTemplatePath = (file_exists($themePath . '/templates/location-list-description.html')) ?
 			$themeDir . '/templates/location-list-description.html' :
 			'locator/templates/location-list-description.html';
-		$infowindowTemplatePath = (file_exists($base . '/templates/infowindow-description.html')) ?
+		$infowindowTemplatePath = (file_exists($themePath . '/templates/infowindow-description.html')) ?
 			$themeDir . '/templates/infowindow-description.html' :
 			'locator/templates/infowindow-description.html';
 
