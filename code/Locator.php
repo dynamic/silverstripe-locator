@@ -48,7 +48,9 @@ class Locator_Controller extends Page_Controller {
 	// Set Requirements based on input from CMS
 	public function init() {
 		parent::init();
-		
+
+		$themeDir = SSViewer::get_theme_folder();
+
 		Requirements::javascript('framework/thirdparty/jquery/jquery.js');
 		Requirements::javascript('http://maps.google.com/maps/api/js?sensor=false');
 		Requirements::javascript('locator/thirdparty/jquery-store-locator/js/handlebars-1.0.rc.1.min.js');
@@ -67,7 +69,18 @@ class Locator_Controller extends Page_Controller {
 			storeLimit: 1000,
 			maxDistance: true,';
 		}
-		
+
+		$absoluteBase = getcwd();//get current working dir
+		$base = str_replace('/framework','',$absoluteBase);//remove framework if .htaccess is working
+		$themePath = $base."/".$themeDir;
+
+		$listTemplatePath = (file_exists($themePath . '/templates/location-list-description.html')) ?
+			$themeDir . '/templates/location-list-description.html' :
+			'locator/templates/location-list-description.html';
+		$infowindowTemplatePath = (file_exists($themePath . '/templates/infowindow-description.html')) ?
+			$themeDir . '/templates/infowindow-description.html' :
+			'locator/templates/infowindow-description.html';
+
 		// in page or modal
 		if ($this->ModalWindow) {
 			$modal = 'modalWindow: true';
@@ -81,8 +94,8 @@ class Locator_Controller extends Page_Controller {
 		      $('#map-container').storeLocator({
 		      	" . $load . "
 		      	dataLocation: '" . $this->Link() . "xml.xml',
-		      	listTemplatePath: 'locator/templates/location-list-description.html',
-		      	infowindowTemplatePath: 'locator/templates/infowindow-description.html',
+		      	listTemplatePath: '".$listTemplatePath."',
+		      	infowindowTemplatePath: '".$infowindowTemplatePath."',
 		      	originMarker: true,
 		      	" . $modal . ",
 		      	slideMap: false,
