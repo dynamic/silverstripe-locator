@@ -88,6 +88,8 @@ class Location extends DataObject {
 		// move Title and ShowInLocator fields to Address tab from Addressable
 		$fields->insertAfter(TextField::create('Title'), 'AddressHeader');
 		$fields->insertAfter(CheckboxField::create('ShowInLocator', 'Show on Map'), 'Country');
+
+		$this->extend('updateCMSFields', $fields);
 				
 		return $fields;
 	}
