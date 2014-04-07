@@ -4,6 +4,7 @@ class Location extends DataObject {
 
 	static $db = array(
 		'Title' => 'Varchar(255)',
+		'Featured' => 'Boolean',
 		'Website' => 'Varchar(255)',
 		'Phone' => 'Varchar(40)',
 		'EmailAddress' => 'Varchar(255)',
@@ -87,6 +88,7 @@ class Location extends DataObject {
 		
 		// move Title and ShowInLocator fields to Address tab from Addressable
 		$fields->insertAfter(TextField::create('Title'), 'AddressHeader');
+		$fields->insertAfter(CheckboxField::create('Featured', 'Featured'), 'Title');
 		$fields->insertAfter(CheckboxField::create('ShowInLocator', 'Show on Map'), 'Country');
 
 		$this->extend('updateCMSFields', $fields);

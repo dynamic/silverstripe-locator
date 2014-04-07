@@ -29,7 +29,8 @@ class Locator extends Page {
 	    // Settings
 	    $fields->addFieldsToTab('Root.Settings', array(
 	    	HeaderField::create('DisplayOptions', 'Display Options', 3),
-	    	CheckboxField::create('AutoGeocode', 'Auto Geocode - Automatically filter map results based on user location'),
+	    	CheckboxField::create('AutoGeocode', 'Auto Geocode - Automatically filter map results based on user location')
+				->setDescription('Note: if any locations are set as featured, the auto geocode is automatically disabled.'),
 	    	CheckboxField::create('ModalWindow', 'Modal Window - Show Map results in a modal window')
 	    ));
 
@@ -53,14 +54,22 @@ class Locator_Controller extends Page_Controller {
 
 		Requirements::javascript('framework/thirdparty/jquery/jquery.js');
 		Requirements::javascript('http://maps.google.com/maps/api/js?sensor=false');
-		Requirements::javascript('locator/thirdparty/jquery-store-locator/js/handlebars-1.0.rc.1.min.js');
+		Requirements::javascript('locator/thirdparty/handlebars/handlebars-v1.3.0.js');
 		Requirements::javascript('locator/thirdparty/jquery-store-locator/js/jquery.storelocator.js');
 		
 		Requirements::css('locator/css/map.css');
 
+		if(Location::get()->filter(array('ShowInLocator'=>1,'Featured'=>1))->count()>0){
+			$auto = false;
+			$featured = 'featuredLocations: true';
+		}else{
+			$auto = true;
+			$featured = 'featuredLocations: false';
+		}
+
 		// map config based on user input in Settings tab
 		// AutoGeocode or Full Map
-		if ($this->AutoGeocode) {
+		if ($this->AutoGeocode&&$auto==true) {
 			$load = 'autoGeocode: true,
 			fullMapStart: false,';
 		} else {
@@ -86,7 +95,8 @@ class Locator_Controller extends Page_Controller {
 			$modal = 'modalWindow: true';
 		} else {
 			$modal = 'modalWindow: false';
-		}		
+		}
+
 
 		// init map		
 		Requirements::customScript("
@@ -98,6 +108,7 @@ class Locator_Controller extends Page_Controller {
 		      	infowindowTemplatePath: '".$infowindowTemplatePath."',
 		      	originMarker: true,
 		      	" . $modal . ",
+		      	" . $featured . ",
 		      	slideMap: false,
 		      	zoomLevel: 0,
 			  	distanceAlert: 120,
