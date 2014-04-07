@@ -6,7 +6,52 @@ This jQuery plugin takes advantage of Google Maps API version 3 to create an eas
 
 A note on the distance calculation: this plugin currently uses a distance function that was originally programmed by [Chris Pietschmann](http://pietschsoft.com/post/2008/02/01/Calculate-Distance-Between-Geocodes-in-C-and-JavaScript.aspx). Google Maps API version 3 does include a distance calculation service ([Google Distance Matrix API](http://code.google.com/apis/maps/documentation/distancematrix/)) but I decided not to use it because of the current request limits, which seem somewhat low. In addition, because the plugin currently calculates each location’s distance one by one, it appeared that I would have to re-structure some things to make all the distance calculations at once (or risk making many request for one location lookup). So, the distance calculation is “as the crow flies” instead of a road distance.
 
+Handlebars is now required: It’s very important to note that the plugin now requires the Handlebars template engine. I made this change so that the data that’s displayed in the location list and the infowindows can be easily customized. I also wanted to separate the bulk of the layout additions from the main plugin file. Handlebars pretty slick, will read Mustache templates, and the built-in helpers can really come in handy. Depending on what your data source is, 2 of the 4 total templates will be used (KML vs XML or JSON) and there are options to set the paths of each template if you don’t want them in the default location. If you’re developing something for mobile devices the templates can be pre-compiled for even faster loading.
+
 ## Changelog
+
+### Version 1.4.9
+
+More contributions from [Mathieu Boillat](https://github.com/ollea) and [Jimmy Rittenborg](https://github.com/JimmyRittenborg) in addition to a few style updates:
+
+* Store the map object into the jQuery object in order to retrieve it by calling $object.data('map').
+* Possibility to add custom variables in locations
+* If 'distance' variable is set in location, do not calculate it
+* Enabling the new Google Maps [https://developers.google.com/maps/documentation/javascript/basics#VisualRefresh](visual refresh)
+* Replaced submit image button image with button tag and CSS3
+* Overrode new infowindow Roboto font for consistent style
+* Removed icon shadows because they are no longer work in the upcoming version of Google Maps: see [https://developers.google.com/maps/documentation/javascript/basics#VisualRefresh](Changes in the visual refresh section)
+* Changed "locname" to "name" for each location in the JSON file to match other location data types and to avoid renaming
+* Simplified some parts of the code
+
+### Version 1.4.8
+
+This update is made up of contributions from [Mathieu Boillat](https://github.com/ollea) and [Jimmy Rittenborg](https://github.com/JimmyRittenborg):
+
+* Added the possibility to set the 'storeLimit' option to -1, which means unlimited
+* Added the possibility to set the 'distanceAlert' option to -1, which means disable distance alert
+* Added little checks to only format 'web' variable when it is not null otherwise javascript would gives an error
+* Possibility to add custom variables in locations
+* If 'distance' variable is set in location, do not calculate it
+* Simplified some parts of the code
+* If noForm is true, only simulate the submit when the field is actually in focus
+
+### Version 1.4.7
+
+Added ability to feature locations so that they always show at the top of the location list. To use, set the featuredLocations option to true and add featured="true" to featured locations in your XML or JSON locations data.
+
+### Version 1.4.6
+
+Fixed a bug where infowindows wouldn't open if the map div was changed.
+
+### Version 1.4.5
+
+A minor update that includes the latest versions of jQuery and Handlebars, two new location variables and some clean-up. 
+
+* Added email and country variables for locations
+* Updated included Handlebars version to v1.0.0
+* Updated jQuery call to v1.10.1
+* Some bracket clean-up
 
 ### Version 1.4.4
 
