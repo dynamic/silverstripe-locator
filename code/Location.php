@@ -4,6 +4,7 @@ class Location extends DataObject {
 
 	static $db = array(
 		'Title' => 'Varchar(255)',
+		'Featured' => 'Boolean',
 		'Website' => 'Varchar(255)',
 		'Phone' => 'Varchar(40)',
 		'EmailAddress' => 'Varchar(255)',
@@ -39,13 +40,17 @@ class Location extends DataObject {
 		'Postcode',
 		'Country',
 		'Category.Name',
-		'Show'
-	);	
-	
+		'Show',
+		'Feature'
+	);
+
 	// LocatorStatus for $summary_fields
 	public function getShow() {
-		if ($this->ShowInLocator) return 'y';
-		return 'n';
+		return $this->obj('ShowInLocator')->Nice();
+	}
+
+	public function getFeature(){
+		return ($this->Featured) ? 'true' : 'false';
 	}
 
 	function fieldLabels($includerelations = true) {
@@ -57,6 +62,7 @@ class Location extends DataObject {
      	$labels['ShowInLocator'] = 'Show';
      	$labels['Category.Name'] = 'Category';
      	$labels['EmailAddress'] = 'Email';
+		$labels['Feature'] = 'Featured';
 
      	return $labels;
    	}
@@ -87,6 +93,7 @@ class Location extends DataObject {
 		
 		// move Title and ShowInLocator fields to Address tab from Addressable
 		$fields->insertAfter(TextField::create('Title'), 'AddressHeader');
+		$fields->insertAfter(CheckboxField::create('Featured', 'Featured'), 'Title');
 		$fields->insertAfter(CheckboxField::create('ShowInLocator', 'Show on Map'), 'Country');
 
 		$this->extend('updateCMSFields', $fields);

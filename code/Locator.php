@@ -29,7 +29,8 @@ class Locator extends Page {
 	    // Settings
 	    $fields->addFieldsToTab('Root.Settings', array(
 	    	HeaderField::create('DisplayOptions', 'Display Options', 3),
-	    	CheckboxField::create('AutoGeocode', 'Auto Geocode - Automatically filter map results based on user location'),
+	    	CheckboxField::create('AutoGeocode', 'Auto Geocode - Automatically filter map results based on user location')
+				->setDescription('Note: if any locations are set as featured, the auto geocode is automatically disabled.'),
 	    	CheckboxField::create('ModalWindow', 'Modal Window - Show Map results in a modal window')
 	    ));
 
@@ -37,6 +38,14 @@ class Locator extends Page {
 	    
 	    return $fields;
     }
+
+	public static function getLocations($filter = array(), $exclude = array()){
+		$filter['ShowInLocator'] = true;
+		return Location::get()
+			->exclude($exclude)
+			->exclude('Lat', 0)
+			->filter($filter);
+	}
 	
 }
 
@@ -53,22 +62,20 @@ class Locator_Controller extends Page_Controller {
 
 		Requirements::javascript('framework/thirdparty/jquery/jquery.js');
 		Requirements::javascript('http://maps.google.com/maps/api/js?sensor=false');
-		Requirements::javascript('locator/thirdparty/jquery-store-locator/js/handlebars-1.0.rc.1.min.js');
+		Requirements::javascript('locator/thirdparty/handlebars/handlebars-v1.3.0.js');
 		Requirements::javascript('locator/thirdparty/jquery-store-locator/js/jquery.storelocator.js');
 		
 		Requirements::css('locator/css/map.css');
 
+		$featured = (Locator::getLocations(array('Featured' => 1))->count() > 0) ?
+			'featuredLocations: true' :
+			'featuredLocations: false';
+
 		// map config based on user input in Settings tab
 		// AutoGeocode or Full Map
-		if ($this->AutoGeocode) {
-			$load = 'autoGeocode: true,
-			fullMapStart: false,';
-		} else {
-			$load = 'autoGeocode: false,
-			fullMapStart: true,
-			storeLimit: 1000,
-			maxDistance: true,';
-		}
+		$load = ($this->data()->AutoGeocode) ?
+			'autoGeocode: true, fullMapStart: false,' :
+			'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,';
 
 		$absoluteBase = getcwd();//get current working dir
 		$base = str_replace('/framework','',$absoluteBase);//remove framework if .htaccess is working
@@ -82,11 +89,7 @@ class Locator_Controller extends Page_Controller {
 			'locator/templates/infowindow-description.html';
 
 		// in page or modal
-		if ($this->ModalWindow) {
-			$modal = 'modalWindow: true';
-		} else {
-			$modal = 'modalWindow: false';
-		}		
+		$modal = ($this->data()->ModalWindow) ? 'modalWindow: true' : 'modalWindow: false';
 
 		// init map		
 		Requirements::customScript("
@@ -98,12 +101,14 @@ class Locator_Controller extends Page_Controller {
 		      	infowindowTemplatePath: '".$infowindowTemplatePath."',
 		      	originMarker: true,
 		      	" . $modal . ",
+		      	" . $featured . ",
 		      	slideMap: false,
 		      	zoomLevel: 0,
 			  	distanceAlert: 120,
 			  	formID: 'Form_LocationSearch',
 			  	inputID: 'Form_LocationSearch_address',
-			  	categoryID: 'Form_LocationSearch_category'
+			  	categoryID: 'Form_LocationSearch_category',
+			  	distanceAlert: -1
 		      });
 		    });
 		");
@@ -123,7 +128,7 @@ class Locator_Controller extends Page_Controller {
 	 */
 	public function xml() {
 		
-		$Locations = Location::get()->filter(array('ShowInLocator' => true))->exclude('Lat', 0);
+		$Locations = Locator::getLocations();
 			
 		return $this->customise(array(
 			'Locations' => $Locations
@@ -147,7 +152,23 @@ class Locator_Controller extends Page_Controller {
 		$address->setAttribute('placeholder', 'address or zip code');
 		
 		if (LocationCategory::get()->Count() > 0) {
-			$fields->push(DropdownField::create('category', '', LocationCategory::get()->map('Title', 'Title'))->setEmptyString('Select Category'));
+
+			$locals = Locator::getLocations($filter = array(), $exclude = array('CategoryID' => 0));
+			//debug::show($locals);
+			$categories = ArrayList::create();
+
+			foreach($locals as $local){
+				$categories->add($local->Category());
+			}
+
+			if($categories->count()>0){
+				$fields->push(
+					DropdownField::create(
+						'category',
+						'',
+						$categories->map('Title', 'Title')
+					)->setEmptyString('Select Category'));
+			}
 		}
 		
 		$actions = FieldList::create(
