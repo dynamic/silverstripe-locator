@@ -30,6 +30,22 @@ class Location extends DataObject {
 
 	// api access via Restful Server module
 	static $api_access = true;
+
+    // search fields for Model Admin
+    private static $searchable_fields = array(
+        'Title',
+        'Address',
+        'Suburb',
+        'State',
+        'Postcode',
+        'Country',
+        'Category.ID',
+        'ShowInLocator',
+        'Featured',
+        'Website',
+        'Phone',
+        'EmailAddress'
+    );
 	
 	// columns for grid field
 	static $summary_fields = array(
@@ -40,19 +56,17 @@ class Location extends DataObject {
 		'Postcode',
 		'Country',
 		'Category.Name',
-		'Show',
-		'Feature'
+		'ShowInLocator.NiceAsBoolean',
+		'Featured.NiceAsBoolean',
+        'Coords'
 	);
 
-	// LocatorStatus for $summary_fields
-	public function getShow() {
-		return $this->obj('ShowInLocator')->Nice();
+	// Coords status for $summary_fields
+	public function getCoords() {
+		return ($this->Lat != 0 && $this->Lng != 0) ? 'true' : 'false';
 	}
 
-	public function getFeature(){
-		return ($this->Featured) ? 'true' : 'false';
-	}
-
+    // custom labels for fields
 	function fieldLabels($includerelations = true) {
      	$labels = parent::fieldLabels();
 
@@ -60,9 +74,11 @@ class Location extends DataObject {
      	$labels['Suburb'] = "City";
      	$labels['Postcode'] = 'Postal Code';
      	$labels['ShowInLocator'] = 'Show';
+        $labels['ShowInLocator.NiceAsBoolean'] = 'Show';
      	$labels['Category.Name'] = 'Category';
      	$labels['EmailAddress'] = 'Email';
-		$labels['Feature'] = 'Featured';
+		$labels['Featured.NiceAsBoolean'] = 'Featured';
+        $labels['Coords'] = 'Coords';
 
      	return $labels;
    	}
@@ -96,6 +112,7 @@ class Location extends DataObject {
 		$fields->insertAfter(CheckboxField::create('Featured', 'Featured'), 'Title');
 		$fields->insertAfter(CheckboxField::create('ShowInLocator', 'Show on Map'), 'Country');
 
+        // allow to be extended via DataExtension
 		$this->extend('updateCMSFields', $fields);
 				
 		return $fields;
