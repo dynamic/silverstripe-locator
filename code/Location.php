@@ -1,6 +1,6 @@
 <?php
 
-class Location extends DataObject {
+class Location extends DataObject implements PermissionProvider{
 
 	static $db = array(
 		'Title' => 'Varchar(255)',
@@ -117,10 +117,35 @@ class Location extends DataObject {
 				
 		return $fields;
 	}
-	
-	// allow locations to be viewed by non logged in users. Useful for ModelAdmin, API
-	public function canView($member = null) {
+
+	/**
+	 * @param Member $member
+	 * @return boolean
+	 */
+	public function canView($member = false) {
+		//return Permission::check('Location_VIEW');
 		return true;
+	}
+
+	public function canEdit($member = false) {
+		return Permission::check('Location_EDIT');
+	}
+
+	public function canDelete($member = false) {
+		return Permission::check('Location_DELETE');
+	}
+
+	public function canCreate($member = false) {
+		return Permission::check('Location_CREATE');
+	}
+
+	public function providePermissions() {
+		return array(
+			//'Location_VIEW' => 'Read a Location',
+			'Location_EDIT' => 'Edit a Location',
+			'Location_DELETE' => 'Delete a Location',
+			'Location_CREATE' => 'Create a Location'
+		);
 	}
 			
 }
