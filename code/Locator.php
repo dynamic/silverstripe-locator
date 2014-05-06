@@ -48,6 +48,10 @@ class Locator extends Page {
 			->exclude('Lat', 0)
 			->filter($filter);
 	}
+
+	public function getAreLocations(){
+		return self::getLocations();
+	}
 	
 }
 
@@ -63,9 +67,11 @@ class Locator_Controller extends Page_Controller {
 		$themeDir = SSViewer::get_theme_folder();
 
 		Requirements::javascript('framework/thirdparty/jquery/jquery.js');
-		Requirements::javascript('http://maps.google.com/maps/api/js?sensor=false');
-		Requirements::javascript('locator/thirdparty/handlebars/handlebars-v1.3.0.js');
-		Requirements::javascript('locator/thirdparty/jquery-store-locator/js/jquery.storelocator.js');
+		if(Locator::getLocations()){
+			Requirements::javascript('http://maps.google.com/maps/api/js?sensor=false');
+			Requirements::javascript('locator/thirdparty/handlebars/handlebars-v1.3.0.js');
+			Requirements::javascript('locator/thirdparty/jquery-store-locator/js/jquery.storelocator.js');
+		}
 		
 		Requirements::css('locator/css/map.css');
 
@@ -95,29 +101,31 @@ class Locator_Controller extends Page_Controller {
 
         $kilometer = ($this->data()->Unit == 'km') ? 'lengthUnit: "km"' : 'lengthUnit: "m"';
 
-		// init map		
-		Requirements::customScript("
-			$(function($) {
-		      $('#map-container').storeLocator({
-		      	" . $load . "
-		      	dataLocation: '" . $this->Link() . "xml.xml',
-		      	listTemplatePath: '".$listTemplatePath."',
-		      	infowindowTemplatePath: '".$infowindowTemplatePath."',
-		      	originMarker: true,
-		      	" . $modal . ",
-		      	" . $featured . ",
-		      	slideMap: false,
-		      	zoomLevel: 0,
-			  	distanceAlert: 120,
-			  	formID: 'Form_LocationSearch',
-			  	inputID: 'Form_LocationSearch_address',
-			  	categoryID: 'Form_LocationSearch_category',
-			  	distanceAlert: -1,
-			  	" . $kilometer . "
-		      });
-		    });
-		");
-		
+		// init map
+        if(Locator::getLocations()) {
+            Requirements::customScript("
+                $(function($) {
+                  $('#map-container').storeLocator({
+                    " . $load . "
+                    dataLocation: '" . $this->Link() . "xml.xml',
+                    listTemplatePath: '" . $listTemplatePath . "',
+                    infowindowTemplatePath: '" . $infowindowTemplatePath . "',
+                    originMarker: true,
+                    " . $modal . ",
+                    " . $featured . ",
+                    slideMap: false,
+                    zoomLevel: 0,
+                    distanceAlert: 120,
+                    formID: 'Form_LocationSearch',
+                    inputID: 'Form_LocationSearch_address',
+                    categoryID: 'Form_LocationSearch_category',
+                    distanceAlert: -1,
+                    " . $kilometer . "
+                  });
+                });
+            ");
+        }
+
 	}		
 	
 	/**
