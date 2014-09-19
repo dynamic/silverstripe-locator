@@ -270,6 +270,9 @@ $.fn.storeLocator = function(options) {
         if(data !== null) {
           olat = data.latitude;
           olng = data.longitude;
+          if(settings.autoGeocode === false){
+              settings.storeLimit = 26;
+          }
           mapping(olat, olng, userinput, distance);
         } else {
           //Unable to geocode
