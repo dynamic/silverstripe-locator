@@ -30,8 +30,8 @@ Use
 
  Create a Locator page in the CMS. Locations are managed under the Locations tab in the CMS via Model Admin. Simply enter the name and address of each location, and they will appear on the map.
 
- To customise locations with custom fields, do as you normally would using a DataExtension. Then copy LocationXML.ss, infowindow-description.html and location-list-description.html into your theme's template folder.
- You can add new fields from the DataExtension to the LocationXML.ss to access them in the two .html templates. (i.e. `<marker newField="$newField.XML">` and in the html templates `{{newField}}`)
+ ~~To customise locations with custom fields, do as you normally would using a DataExtension. Then copy LocationXML.ss, infowindow-description.html and location-list-description.html into your theme's template folder.
+ You can add new fields from the DataExtension to the LocationXML.ss to access them in the two .html templates. (i.e. `<marker newField="$newField.XML">` and in the html templates `{{newField}}`)~~
 
 Maintainer Contact
 =================================
