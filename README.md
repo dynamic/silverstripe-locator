@@ -42,7 +42,7 @@ Links
 =================================
 
  * [SilverStripe Addressable](https://github.com/ajshort/silverstripe-addressable) by Andrew Short
- * [jQuery Store Locator Plugin](http://www.bjornblog.com/web/jquery-store-locator-plugin)
+ * [jQuery Store Locator Plugin](https://github.com/bjorn2404/jQuery-Store-Locator-Plugin)
  * [SilverStripe CMS](http://www.silverstripe.org/)
 
 License
