@@ -4,7 +4,8 @@ class Locator extends Page {
 	
 	private static $db = array(
 		'AutoGeocode' => 'Boolean',
-		'ModalWindow' => 'Boolean'
+		'ModalWindow' => 'Boolean',
+        'Unit' => 'Enum("km,m","m")'
 	);
 	
 	private static $defaults = array(
@@ -29,6 +30,7 @@ class Locator extends Page {
 	    // Settings
 	    $fields->addFieldsToTab('Root.Settings', array(
 	    	HeaderField::create('DisplayOptions', 'Display Options', 3),
+            OptionsetField::create('Unit', 'Unit of measure', array('km' => 'Kilometers', 'm' => 'Miles')),
 	    	CheckboxField::create('AutoGeocode', 'Auto Geocode - Automatically filter map results based on user location')
 				->setDescription('Note: if any locations are set as featured, the auto geocode is automatically disabled.'),
 	    	CheckboxField::create('ModalWindow', 'Modal Window - Show Map results in a modal window')
@@ -91,6 +93,8 @@ class Locator_Controller extends Page_Controller {
 		// in page or modal
 		$modal = ($this->data()->ModalWindow) ? 'modalWindow: true' : 'modalWindow: false';
 
+        $kilometer = ($this->data()->Unit == 'km') ? 'lengthUnit: "km"' : 'lengthUnit: "m"';
+
 		// init map		
 		Requirements::customScript("
 			$(function($) {
@@ -108,7 +112,8 @@ class Locator_Controller extends Page_Controller {
 			  	formID: 'Form_LocationSearch',
 			  	inputID: 'Form_LocationSearch_address',
 			  	categoryID: 'Form_LocationSearch_category',
-			  	distanceAlert: -1
+			  	distanceAlert: -1,
+			  	" . $kilometer . "
 		      });
 		    });
 		");
