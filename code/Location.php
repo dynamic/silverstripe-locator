@@ -12,7 +12,8 @@ class Location extends DataObject implements PermissionProvider{
 	);
 	
 	static $has_one = array(
-		'Category' => 'LocationCategory'
+		'Category' => 'LocationCategory',
+        'Locator' => 'Locator'
 	);
 		
 	static $casting = array(
