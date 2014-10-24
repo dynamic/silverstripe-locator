@@ -7,6 +7,10 @@ class Locator extends Page {
 		'ModalWindow' => 'Boolean',
         'Unit' => 'Enum("km,m","m")'
 	);
+
+    private static $has_many = array(
+        'Locations' => 'Location'
+    );
 	
 	private static $defaults = array(
 		'AutoGeocode' => true
@@ -20,8 +24,10 @@ class Locator extends Page {
 	    $fields = parent::getCMSFields();
 	    
 	    // Locations Grid Field
-		$config = GridFieldConfig_RecordEditor::create();	
-	    $fields->addFieldToTab("Root.Locations", GridField::create("Locations", "Locations", Location::get(), $config));
+		$config = (self::getMultipleLocators())
+            ? GridFieldConfig_RelationEditor::create() : GridFieldConfig_RecordEditor::create();
+        $locations = (self::getMultipleLocators()) ? $this->Locations() : Location::get();
+	    $fields->addFieldToTab("Root.Locations", GridField::create("Locations", "Locations", $locations, $config));
 	    
 	    // Location categories
 	    $config = GridFieldConfig_RecordEditor::create();
@@ -52,7 +58,11 @@ class Locator extends Page {
 	public function getAreLocations(){
 		return self::getLocations();
 	}
-	
+
+    public static function getMultipleLocators(){
+        return (Locator::get()->count() > 1) ? true : false;
+    }
+
 }
 
 class Locator_Controller extends Page_Controller {
@@ -101,13 +111,16 @@ class Locator_Controller extends Page_Controller {
 
         $kilometer = ($this->data()->Unit == 'km') ? 'lengthUnit: "km"' : 'lengthUnit: "m"';
 
+        $link = $this->Link() . "xml.xml";
+        $link .= (Locator::getMultipleLocators()) ? "?locatorID=" . $this->data()->ID : "" ;
+
 		// init map
         if(Locator::getLocations()) {
             Requirements::customScript("
                 $(function($) {
                   $('#map-container').storeLocator({
                     " . $load . "
-                    dataLocation: '" . $this->Link() . "xml.xml',
+                    dataLocation: '" . $link . "',
                     listTemplatePath: '" . $listTemplatePath . "',
                     infowindowTemplatePath: '" . $infowindowTemplatePath . "',
                     originMarker: true,
@@ -131,17 +144,20 @@ class Locator_Controller extends Page_Controller {
 	/**
 	 * Find all locations for map
 	 * 
-	 * By default, will return a XML feed of all locations marked "show in locator".
-	 * 
-	 * If Locator::set_datasource('http:www.example.com') is set in _config.php, Locator will look 
-	 * for a JSON feed and return the results.
+	 * Will return a XML feed of all locations marked "show in locator".
 	 * 
 	 * @access public
 	 * @return XML file
+     * @todo rename/refactor to allow for json/xml
 	 */
-	public function xml() {
-		
-		$Locations = Locator::getLocations();
+	public function xml(SS_HTTPRequest $request) {
+        $filter = array();
+        if(Locator::getMultipleLocators()){//only checks published locators
+            if($request->getVar('locatorID')){
+                $filter['LocatorID'] = $request->getVar('locatorID');
+            }
+        }
+		$Locations = Locator::getLocations($filter);
 			
 		return $this->customise(array(
 			'Locations' => $Locations
@@ -166,7 +182,8 @@ class Locator_Controller extends Page_Controller {
 		
 		if (LocationCategory::get()->Count() > 0) {
 
-			$locals = Locator::getLocations($filter = array(), $exclude = array('CategoryID' => 0));
+            $filter = ($this->data()->getMultipleLocators()) ? array('LocatorID' => $this->data()->ID) : array();
+			$locals = Locator::getLocations($filter, $exclude = array('CategoryID' => 0));
 			//debug::show($locals);
 			$categories = ArrayList::create();
 
