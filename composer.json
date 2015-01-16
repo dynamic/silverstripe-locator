@@ -12,7 +12,8 @@
 	],
     "require": {
     	"silverstripe/framework": "3.1.*",
-    	"ajshort/silverstripe-addressable": "*"
+	    "silverstripe/cms": "3.1.*",
+    	"silverstripe-australia/addressable": "*"
     },
     "suggest": {
     	"unclecheese/betterbuttons": "Adds new form actions and buttons to GridField detail form for usability enhancements."
