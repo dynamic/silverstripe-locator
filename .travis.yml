@@ -1,0 +1,32 @@
+language: php
+php:
+ - 5.3
+
+env:
+  matrix:
+   #- DB=MYSQL CORE_RELEASE=3.0
+   - DB=MYSQL CORE_RELEASE=3.1
+   #- DB=MYSQL CORE_RELEASE=master
+   - DB=PGSQL CORE_RELEASE=3.1
+
+matrix:
+  include:
+    - php: 5.4
+      env: DB=MYSQL CORE_RELEASE=3.1
+    - php: 5.5
+      env: DB=MYSQL CORE_RELEASE=3.1
+    - php: 5.6
+      env: DB=MYSQL CORE_RELEASE=3.1
+      #env: DB=MYSQL CORE_RELEASE=master
+
+before_script:
+ - phpenv rehash
+ - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
+ - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
+ - cd ~/builds/ss
+
+script:
+ - vendor/bin/phpunit locator/tests/
+notifications:
+  slack:
+    secure: EsA1gihJJ+/q7LWH+C5ipRx4Izi49e9ekGf4/0HL0bD4np/BGSRsh8/bBwOhYOLSi2RJTZzl62ALO0J2gjkwMyvrT41jmpVFYYFBEer5D3f5KEa8otq+Z0yHNxUwIMVbqg48fQU8L0TAPBUHSiABjMyTJAbEfemy7Q2oRmCtFiU=
