@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/dynamic/SilverStripe-Locator-Module.svg?branch=master)](https://travis-ci.org/dynamic/SilverStripe-Locator-Module)
+[![Code Climate](https://codeclimate.com/github/dynamic/SilverStripe-Locator-Module/badges/gpa.svg)](https://codeclimate.com/github/dynamic/SilverStripe-Locator-Module)
+
 Overview
 =================================
 
