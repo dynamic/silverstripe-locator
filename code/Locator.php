@@ -63,6 +63,10 @@ class Locator extends Page {
         return (Locator::get()->count() > 1) ? true : false;
     }
 
+	public function getAllCategories(){
+		return LocationCategory::get();
+	}
+
 }
 
 class Locator_Controller extends Page_Controller {
