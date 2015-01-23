@@ -12,8 +12,7 @@ class Location extends DataObject implements PermissionProvider{
 	);
 	
 	static $has_one = array(
-		'Category' => 'LocationCategory',
-        'Locator' => 'Locator'
+		'Category' => 'LocationCategory'
 	);
 		
 	static $casting = array(
@@ -121,9 +120,7 @@ class Location extends DataObject implements PermissionProvider{
 
     public function validate() {
         $result = parent::validate();
-        if(Locator::getMultipleLocators() && $this->LocatorID == 0) {
-            $result->error('You must associate this location with a locator page. Add the location from the desired locator page.');
-        }
+
         return $result;
     }
 
@@ -158,10 +155,6 @@ class Location extends DataObject implements PermissionProvider{
 	}
 
     public function onBeforeWrite(){
-
-        if(Locator::get()->count() == 1){
-            $this->LocatorID = Locator::get()->first()->ID;
-        }
 
         parent::onBeforeWrite();
     }

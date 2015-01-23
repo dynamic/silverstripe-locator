@@ -8,9 +8,7 @@ class Locator extends Page {
         'Unit' => 'Enum("km,m","m")'
 	);
 
-    private static $has_many = array(
-        'Locations' => 'Location'
-    );
+    private static $has_many = array();
 	
 	private static $defaults = array(
 		'AutoGeocode' => true
@@ -24,9 +22,8 @@ class Locator extends Page {
 	    $fields = parent::getCMSFields();
 	    
 	    // Locations Grid Field
-		$config = (self::getMultipleLocators())
-            ? GridFieldConfig_RelationEditor::create() : GridFieldConfig_RecordEditor::create();
-        $locations = (self::getMultipleLocators()) ? $this->Locations() : Location::get();
+		$config = GridFieldConfig_RecordEditor::create();
+        $locations = Location::get();
 	    $fields->addFieldToTab("Root.Locations", GridField::create("Locations", "Locations", $locations, $config));
 	    
 	    // Location categories
@@ -58,10 +55,6 @@ class Locator extends Page {
 	public function getAreLocations(){
 		return self::getLocations();
 	}
-
-    public static function getMultipleLocators(){
-        return (Locator::get()->count() > 1) ? true : false;
-    }
 
 	public function getAllCategories(){
 		return LocationCategory::get();
@@ -116,7 +109,6 @@ class Locator_Controller extends Page_Controller {
         $kilometer = ($this->data()->Unit == 'km') ? 'lengthUnit: "km"' : 'lengthUnit: "m"';
 
         $link = $this->Link() . "xml.xml";
-        $link .= (Locator::getMultipleLocators()) ? "?locatorID=" . $this->data()->ID : "" ;
 
 		// init map
         if(Locator::getLocations()) {
@@ -153,14 +145,10 @@ class Locator_Controller extends Page_Controller {
 	 * @access public
 	 * @return XML file
      * @todo rename/refactor to allow for json/xml
+	 * @todo allow $filter to run off of getVars key/val pair
 	 */
 	public function xml(SS_HTTPRequest $request) {
         $filter = array();
-        if(Locator::getMultipleLocators()){//only checks published locators
-            if($request->getVar('locatorID')){
-                $filter['LocatorID'] = $request->getVar('locatorID');
-            }
-        }
 		$Locations = Locator::getLocations($filter);
 			
 		return $this->customise(array(
@@ -186,7 +174,7 @@ class Locator_Controller extends Page_Controller {
 		
 		if (LocationCategory::get()->Count() > 0) {
 
-            $filter = ($this->data()->getMultipleLocators()) ? array('LocatorID' => $this->data()->ID) : array();
+            $filter = array();
 			$locals = Locator::getLocations($filter, $exclude = array('CategoryID' => 0));
 			//debug::show($locals);
 			$categories = ArrayList::create();
