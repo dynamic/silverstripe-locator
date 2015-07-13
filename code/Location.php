@@ -8,45 +8,45 @@ class Location extends DataObject implements PermissionProvider{
 		'Website' => 'Varchar(255)',
 		'Phone' => 'Varchar(40)',
 		'EmailAddress' => 'Varchar(255)',
-		'ShowInLocator' => 'Boolean',
+		'ShowInLocator' => 'Boolean'
 	);
-	
+
 	static $has_one = array(
 		'Category' => 'LocationCategory'
 	);
-		
+
 	static $casting = array(
 		'distance' => 'Int'
 	);
-	
+
 	static $default_sort = 'Title';
 
 	static $defaults = array(
 		'ShowInLocator' => true
 	);
-	
+
 	public static $singular_name = "Location";
 	public static $plural_name = "Locations";
 
 	// api access via Restful Server module
 	static $api_access = true;
 
-    // search fields for Model Admin
-    private static $searchable_fields = array(
-        'Title',
-        'Address',
-        'Suburb',
-        'State',
-        'Postcode',
-        'Country',
-        'Category.ID',
-        'ShowInLocator',
-        'Featured',
-        'Website',
-        'Phone',
-        'EmailAddress'
-    );
-	
+	// search fields for Model Admin
+	private static $searchable_fields = array(
+		'Title',
+		'Address',
+		'Suburb',
+		'State',
+		'Postcode',
+		'Country',
+		'Website',
+		'Phone',
+		'EmailAddress',
+		'Category.ID',
+		'ShowInLocator',
+		'Featured'
+	);
+
 	// columns for grid field
 	static $summary_fields = array(
 		'Title',
@@ -58,7 +58,7 @@ class Location extends DataObject implements PermissionProvider{
 		'Category.Name',
 		'ShowInLocator.NiceAsBoolean',
 		'Featured.NiceAsBoolean',
-        'Coords'
+		'Coords'
 	);
 
 	// Coords status for $summary_fields
@@ -66,63 +66,54 @@ class Location extends DataObject implements PermissionProvider{
 		return ($this->Lat != 0 && $this->Lng != 0) ? 'true' : 'false';
 	}
 
-    // custom labels for fields
+	// custom labels for fields
 	function fieldLabels($includerelations = true) {
-     	$labels = parent::fieldLabels();
+		$labels = parent::fieldLabels();
 
-     	$labels['Title'] = 'Name';
-     	$labels['Suburb'] = "City";
-     	$labels['Postcode'] = 'Postal Code';
-     	$labels['ShowInLocator'] = 'Show';
-        $labels['ShowInLocator.NiceAsBoolean'] = 'Show';
-     	$labels['Category.Name'] = 'Category';
-     	$labels['EmailAddress'] = 'Email';
+		$labels['Title'] = 'Name';
+		$labels['Suburb'] = "City";
+		$labels['Postcode'] = 'Postal Code';
+		$labels['ShowInLocator'] = 'Show';
+		$labels['ShowInLocator.NiceAsBoolean'] = 'Show';
+		$labels['Category.Name'] = 'Category';
+		$labels['EmailAddress'] = 'Email';
 		$labels['Featured.NiceAsBoolean'] = 'Featured';
-        $labels['Coords'] = 'Coords';
+		$labels['Coords'] = 'Coords';
 
-     	return $labels;
-   	}
- 
+		return $labels;
+	}
+
 	public function getCMSFields() {
-		
+
 		$fields = parent::getCMSFields();
-		
-		// remove Main tab
-     	$fields->removeByName('Main');
-		
-		// create and populate Info tab
-		$fields->addFieldsToTab('Root.Info', array(
-			HeaderField::create('InfoHeader', 'Contact Information'),
-			TextField::create('Website'),
-			TextField::create('EmailAddress'),
-			TextField::create('Phone')
-		));
-		
-		// change label of Suburb from Addressable to City
-		$fields->removeByName('Suburb');
-		$fields->insertBefore(TextField::create('Suburb', 'City'), 'State');
-		
+
+		$fields->insertBefore(HeaderField::create('InfoHeader', 'Contact Information'), 'Title');
+		$fields->insertAfter($featuredField = CheckboxField::create('Featured'), 'EmailAddress');
+		$fields->insertAfter(TextField::create('Website'), 'EmailAddress');
+
+		$featuredField->setDescription('Location will show at/near the top of the results list');
+		$showField = $fields->dataFieldByName('ShowInLocator');
+		$showField
+			->setTitle('Show in results')
+			->setDescription('Location will be included in results list');
+
 		// If categories have been created, show category drop down
 		if (LocationCategory::get()->Count() > 0) {
-			$fields->insertAfter(DropDownField::create('CategoryID', 'Category', LocationCategory::get()->map('ID', 'Title'))->setEmptyString('-- select --'), 'Phone');
+			$fields->insertAfter($categoryField = DropDownField::create('CategoryID', 'Category', LocationCategory::get()->map('ID', 'Title')), 'Website');
 		}
-		
-		// move Title and ShowInLocator fields to Address tab from Addressable
-		$fields->insertAfter(TextField::create('Title'), 'AddressHeader');
-		$fields->insertAfter(CheckboxField::create('Featured', 'Featured'), 'Title');
-		$fields->insertAfter(CheckboxField::create('ShowInLocator', 'Show on Map'), 'Country');
+		$categoryField->setEmptyString('-- select --');
 
-        // allow to be extended via DataExtension
+		// allow to be extended via DataExtension
 		$this->extend('updateCMSFields', $fields);
-				
+
 		return $fields;
 	}
 
-    public function validate() {
-        $result = parent::validate();
+	public function validate() {
+		$result = parent::validate();
 
-        return $result;
-    }
+		return $result;
+	}
 
 	/**
 	 * @param Member $member
@@ -154,9 +145,8 @@ class Location extends DataObject implements PermissionProvider{
 		);
 	}
 
-    public function onBeforeWrite(){
+  public function onBeforeWrite(){
+    parent::onBeforeWrite();
+  }
 
-        parent::onBeforeWrite();
-    }
-			
 }
