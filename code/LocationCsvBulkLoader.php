@@ -4,30 +4,27 @@ class LocationCsvBulkLoader extends CsvBulkLoader
 {
     public $columnMap = array(
         'Name' => 'Title',
-        //'Address' => 'Address',
         'City' => 'Suburb',
-        //'State' => 'State',
-        'Zip' => 'Postcode',
         'Category' => 'Category.Name',
-        'Email' => 'EmailAddress'
-    );
-
-    public $duplicateChecks = array(
-        'Address' => 'Address',
-        //'Website' => 'Website'
     );
 
     public $relationCallbacks = array(
-        'Category.Name' => array(
-            'relationname' => 'Category',
-            'callback' => 'getCatByName'
-        )
+       'Category.Name' => array(
+           'relationname' => 'Category',
+           'callback' => 'getCategoryByName',
+        ),
     );
 
-    public static function getCatByName(&$obj, $val, $record)
+    public static function getCategoryByName(&$obj, $val, $record)
     {
         $val = Convert::raw2sql($val);
-        return LocationCategory::get()->filter('Name', $val)->First();
-        //);
+        $category = LocationCategory::get()->filter(array('Name' => $val))->First();
+        if (!$category) {
+            $category = LocationCategory::create();
+            $category->Name = $val;
+            $category->write();
+        }
+
+        return $category;
     }
 }

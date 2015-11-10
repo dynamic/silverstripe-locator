@@ -2,15 +2,14 @@
 
 class LocationAdmin extends ModelAdmin
 {
-
     private static $managed_models = array(
         'Location',
-        'LocationCategory'
+        'LocationCategory',
     );
 
     private static $model_importers = array(
         'Location' => 'LocationCsvBulkLoader',
-        'LocationCategory' => 'CsvBulkLoader'
+        'LocationCategory' => 'CsvBulkLoader',
     );
 
     private static $menu_title = 'Locator';
@@ -18,20 +17,26 @@ class LocationAdmin extends ModelAdmin
 
     public function getExportFields()
     {
-        return array(
-            'Title' => 'Name',
-            'Address' => 'Address',
-            'Suburb' => 'City',
-            'State' => 'State',
-            'Postcode' => 'Postal Code',
-            'Country' => 'Country',
-            'Website' => 'Website',
-            'Phone' => 'Phone',
-            'Fax' => 'Fax',
-            'EmailAddress' => 'Email Address',
-            'ShowInLocator' => 'Show',
-            'Lat' => 'Lat',
-            'Lng' => 'Lng'
-        );
+        if ($this->modelClass == 'Location') {
+            return array(
+                'Title' => 'Name',
+                'Address' => 'Address',
+                'Suburb' => 'City',
+                'State' => 'State',
+                'Postcode' => 'Postcode',
+                'Country' => 'Country',
+                'Website' => 'Website',
+                'Phone' => 'Phone',
+                'Fax' => 'Fax',
+                'EmailAddress' => 'EmailAddress',
+                'Category.Name' => 'Category',
+                'ShowInLocator' => 'ShowInLocator',
+                'Featured' => 'Featured',
+                'Lat' => 'Lat',
+                'Lng' => 'Lng',
+            );
+        }
+
+        return parent::getExportFields();
     }
 }
