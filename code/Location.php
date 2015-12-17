@@ -2,32 +2,32 @@
 
 class Location extends DataObject implements PermissionProvider
 {
-
     private static $db = array(
         'Title' => 'Varchar(255)',
         'Featured' => 'Boolean',
         'Website' => 'Varchar(255)',
         'Phone' => 'Varchar(40)',
+        'Email' => 'Varchar(255)',
         'EmailAddress' => 'Varchar(255)',
         'ShowInLocator' => 'Boolean',
     );
 
     private static $has_one = array(
-        'Category' => 'LocationCategory'
+        'Category' => 'LocationCategory',
     );
 
     private static $casting = array(
-        'distance' => 'Int'
+        'distance' => 'Int',
     );
 
     private static $default_sort = 'Title';
 
     private static $defaults = array(
-        'ShowInLocator' => true
+        'ShowInLocator' => true,
     );
 
-    private static $singular_name = "Location";
-    private static $plural_name = "Locations";
+    private static $singular_name = 'Location';
+    private static $plural_name = 'Locations';
 
     // api access via Restful Server module
     private static $api_access = true;
@@ -40,12 +40,12 @@ class Location extends DataObject implements PermissionProvider
         'State',
         'Postcode',
         'Country',
+        'Website',
+        'Phone',
+        'Email',
         'Category.ID',
         'ShowInLocator',
         'Featured',
-        'Website',
-        'Phone',
-        'EmailAddress'
     );
 
     // columns for grid field
@@ -59,7 +59,7 @@ class Location extends DataObject implements PermissionProvider
         'Category.Name',
         'ShowInLocator.NiceAsBoolean',
         'Featured.NiceAsBoolean',
-        'Coords'
+        'Coords',
     );
 
     // Coords status for $summary_fields
@@ -69,17 +69,17 @@ class Location extends DataObject implements PermissionProvider
     }
 
     // custom labels for fields
-    function fieldLabels($includerelations = true)
+    public function fieldLabels($includerelations = true)
     {
         $labels = parent::fieldLabels();
 
         $labels['Title'] = 'Name';
-        $labels['Suburb'] = "City";
+        $labels['Suburb'] = 'City';
         $labels['Postcode'] = 'Postal Code';
         $labels['ShowInLocator'] = 'Show';
         $labels['ShowInLocator.NiceAsBoolean'] = 'Show';
         $labels['Category.Name'] = 'Category';
-        $labels['EmailAddress'] = 'Email';
+        $labels['Email'] = 'Email';
         $labels['Featured.NiceAsBoolean'] = 'Featured';
         $labels['Coords'] = 'Coords';
 
@@ -88,37 +88,32 @@ class Location extends DataObject implements PermissionProvider
 
     public function getCMSFields()
     {
-
-        $fields = parent::getCMSFields();
-
-        // remove Main tab
-        $fields->removeByName('Main');
-
-        // create and populate Info tab
-        $fields->addFieldsToTab('Root.Info', array(
-            HeaderField::create('InfoHeader', 'Contact Information'),
-            TextField::create('Website'),
-            TextField::create('EmailAddress'),
-            TextField::create('Phone')
-        ));
-
-        // change label of Suburb from Addressable to City
-        $fields->removeByName('Suburb');
-        $fields->insertBefore(TextField::create('Suburb', 'City'), 'State');
-
-        // If categories have been created, show category drop down
-        if (LocationCategory::get()->Count() > 0) {
-            $fields->insertAfter(DropDownField::create('CategoryID', 'Category',
-                LocationCategory::get()->map('ID', 'Title'))->setEmptyString('-- select --'), 'Phone');
-        }
-
-        // move Title and ShowInLocator fields to Address tab from Addressable
-        $fields->insertAfter(TextField::create('Title'), 'AddressHeader');
-        $fields->insertAfter(CheckboxField::create('Featured', 'Featured'), 'Title');
-        $fields->insertAfter(CheckboxField::create('ShowInLocator', 'Show on Map'), 'Country');
+        $fields = FieldList::create(
+            new TabSet(
+                $name = 'Root',
+                new Tab(
+                    $title = 'Main',
+                    HeaderField::create('ContactHD', 'Contact Information'),
+                    TextField::create('Title', 'Name'),
+                    TextField::create('Phone'),
+                    EmailField::create('Email', 'Email'),
+                    TextField::create('Website')
+                        ->setAttribute('placeholder', 'http://'),
+                    DropDownField::create('CategoryID', 'Category', LocationCategory::get()->map('ID', 'Title'))
+                        ->setEmptyString('-- select --'),
+                    CheckboxField::create('ShowInLocator', 'Show in results')
+                        ->setDescription('Location will be included in results list'),
+                    CheckboxField::create('Featured')
+                        ->setDescription('Location will show at/near the top of the results list')
+                )
+            )
+        );
 
         // allow to be extended via DataExtension
         $this->extend('updateCMSFields', $fields);
+
+        // override Suburb field name
+        $fields->dataFieldByName('Suburb')->setTitle('City');
 
         return $fields;
     }
@@ -130,9 +125,22 @@ class Location extends DataObject implements PermissionProvider
         return $result;
     }
 
+    public function EmailAddress()
+    {
+        Deprecation::notice('3.0', 'Use "$Email" instead.');
+        if ($this->Email) {
+            return $this->Email;
+        } elseif ($this->EmailAddress) {
+            return $this->EmailAddress;
+        }
+
+        return false;
+    }
+
     /**
      * @param Member $member
-     * @return true
+     *
+     * @return bool
      */
     public function canView($member = false)
     {
@@ -159,14 +167,12 @@ class Location extends DataObject implements PermissionProvider
         return array(
             'Location_EDIT' => 'Edit a Location',
             'Location_DELETE' => 'Delete a Location',
-            'Location_CREATE' => 'Create a Location'
+            'Location_CREATE' => 'Create a Location',
         );
     }
 
     public function onBeforeWrite()
     {
-
         parent::onBeforeWrite();
     }
-
 }
