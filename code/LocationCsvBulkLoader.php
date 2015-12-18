@@ -5,6 +5,7 @@ class LocationCsvBulkLoader extends CsvBulkLoader
     public $columnMap = array(
         'Name' => 'Title',
         'City' => 'Suburb',
+        'EmailAddress' => 'Email',
         'Category' => 'Category.Name',
     );
 
