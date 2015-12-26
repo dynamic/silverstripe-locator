@@ -1,7 +1,7 @@
 {
     "name": "dynamic/silverstripe-locator",
     "description": "SilverStripe Locator Module. Show locations on a map. Search by geoposition.",
-    "keywords": ["silverstripe", "map", "locator", "dynamic", "geocode"],
+    "keywords": ["silverstripe", "map", "locator", "dynamic", "geocode", "google maps", "location"],
     "type": "silverstripe-module",
     "license": "BSD-3-Clause",
 	"authors": [
