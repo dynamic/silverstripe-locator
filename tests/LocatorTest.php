@@ -2,7 +2,9 @@
 
 class LocatorTest extends LocatorModule_Test {
 	public function testGetCMSFields() {
-		$this->markTestSkipped('TODO');
+		$object = new Locator();
+		$fieldset = $object->getCMSFields();
+		$this->assertTrue(is_a($fieldset, "FieldList"));
 	}
 
 	public function testGetAreLocations() {
