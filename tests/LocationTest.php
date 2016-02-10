@@ -1,15 +1,17 @@
 <?php
 
-class LocationTest extends LocatorTest{
+class LocationTest extends LocatorTest
+{
 
     protected static $use_draft_site = true;
 
-    function setUp(){
+    public function setUp()
+    {
         parent::setUp();
     }
 
-    function testLocationCreation(){
-
+    public function testLocationCreation()
+    {
         $this->logInWithPermission('Location_CREATE');
         $location = $this->objFromFixture('Location', 'dynamic');
 
@@ -21,11 +23,10 @@ class LocationTest extends LocatorTest{
 
         $getLocal = Location::get()->byID($locationID);
         $this->assertTrue($getLocal->ID == $locationID);
-
     }
 
-    function testLocationDeletion(){
-
+    public function testLocationDeletion()
+    {
         $this->logInWithPermission('ADMIN');
         $location = $this->objFromFixture('Location', 'silverstripe');
         $locationID = $location->ID;
@@ -39,8 +40,5 @@ class LocationTest extends LocatorTest{
 
         $locations = Location::get()->column('ID');
         $this->assertFalse(in_array($locationID, $locations));
-
     }
-
-
 }
