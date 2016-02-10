@@ -1,46 +1,90 @@
 <?php
 
-class LocationTest extends LocatorTest{
+class LocationTest extends LocatorModule_Test {
+	public function testGetCoords() {
+		$this->markTestSkipped('TODO');
+	}
 
-    protected static $use_draft_site = true;
+	public function testFieldLabels() {
+		$this->markTestSkipped('TODO');
+	}
 
-    function setUp(){
-        parent::setUp();
-    }
+	public function testGetCMSFields() {
+		$object = new Location();
+		$fieldset = $object->getCMSFields();
+		$this->assertTrue(is_a($fieldset, "FieldList"));
+	}
 
-    function testLocationCreation(){
+	public function testValidate() {
+		$this->markTestSkipped('TODO');
+	}
 
-        $this->logInWithPermission('Location_CREATE');
-        $location = $this->objFromFixture('Location', 'dynamic');
+	public function testEmailAddress() {
+		$this->markTestSkipped('TODO');
+	}
 
-        $this->assertTrue($location->canCreate());
+	public function testCanView() {
+		$object = singleton('Location');
+		$this->logInWithPermission('ADMIN');
+		$this->assertTrue($object->canView());
+		$this->logOut();
+		$nullMember = Member::create();
+		$nullMember->write();
+		$this->assertTrue($object->canView($nullMember));
+		$nullMember->delete();
+	}
 
-        $locationID = $location->ID;
+	public function testCanEdit() {
+		$object = Location::create(array(
+			'Title' => 'Test Location',
+		));
+		$object->write();
+		$this->logInWithPermission('Location_EDIT');
+		$toEdit = Location::get()->byID($object->ID);
+		$originalTitle = $toEdit->Title;
+		$this->assertEquals($originalTitle, 'Test Location');
+		$this->assertTrue($toEdit->canEdit());
+		$toEdit->Title = 'Changed Title';
+		$toEdit->write();
+		$testEdit = Location::get()->byID($object->ID);
+		$this->assertEquals($testEdit->Title, 'Changed Title');
+		$this->logOut();
+	}
 
-        $this->assertTrue($locationID > 0);
+	public function testCanDelete() {
+		$this->logInWithPermission('Location_DELETE');
+		$location = $this->objFromFixture('Location', 'silverstripe');
+		$locationID = $location->ID;
+		$this->logOut();
 
-        $getLocal = Location::get()->byID($locationID);
-        $this->assertTrue($getLocal->ID == $locationID);
+		$this->logInWithPermission('Location_DELETE');
+		$this->assertTrue($location->canDelete());
+		$location->delete();
 
-    }
+		$locations = Location::get()->column('ID');
+		$this->assertFalse(in_array($locationID, $locations));
+	}
 
-    function testLocationDeletion(){
+	public function testCanCreate() {
+		$this->logInWithPermission('Location_CREATE');
+		$location = $this->objFromFixture('Location', 'dynamic');
 
-        $this->logInWithPermission('ADMIN');
-        $location = $this->objFromFixture('Location', 'silverstripe');
-        $locationID = $location->ID;
+		$this->assertTrue($location->canCreate());
 
-        $this->logOut();
+		$locationID = $location->ID;
 
-        $this->logInWithPermission('Location_DELETE');
+		$this->assertTrue($locationID > 0);
 
-        $this->assertTrue($location->canDelete());
-        $location->delete();
+		$getLocal = Location::get()->byID($locationID);
+		$this->assertTrue($getLocal->ID == $locationID);
+	}
 
-        $locations = Location::get()->column('ID');
-        $this->assertFalse(in_array($locationID, $locations));
+	public function testProvidePermissions() {
+		$this->markTestSkipped('TODO');
+	}
 
-    }
-
+	public function testOnBeforeWrite() {
+		$this->markTestSkipped('TODO');
+	}
 
 }

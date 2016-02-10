@@ -1,32 +1,74 @@
+
 language: php
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - tidy
+
 php:
- - 5.4
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm-nightly
+  - 7.0
+
+before_install:
+  - pip install --user codecov
 
 env:
-  matrix:
-   #- DB=MYSQL CORE_RELEASE=3.0
-   - DB=MYSQL CORE_RELEASE=3.1
-   #- DB=MYSQL CORE_RELEASE=master
-   - DB=PGSQL CORE_RELEASE=3.1
-   - DB=SQLITE CORE_RELEASE=3.1
+  global:
+    - DB=MYSQL CORE_RELEASE=3.2
+    - MODULE_PATH=locator
+    - COVERAGE=1
 
 matrix:
+  allow_failures:
+    - php: hhvm-nightly
+    - php: 7.0
   include:
-    - php: 5.5
-      env: DB=MYSQL CORE_RELEASE=3.1
     - php: 5.6
-      env: DB=MYSQL CORE_RELEASE=3.1
-      #env: DB=MYSQL CORE_RELEASE=master
+      env: DB=PGSQL
+    - php: 5.6
+      env: DB=SQLITE
+    - php: hhvm
+      env: DB=MYSQL
+    - php: 5.6
+      env: DB=MYSQL CORE_RELEASE=3.2 COVERAGE=1
+    - php: 5.6
+      env: DB=PGSQL CORE_RELEASE=3.2
+    - php: 5.6
+      env: DB=SQLITE CORE_RELEASE=3.2
+    - php: 5.5
+      env: DB=MYSQL CORE_RELEASE=3.2
+    - php: 5.4
+      env: DB=MYSQL CORE_RELEASE=3.2
+    - php: 5.3
+      env: DB=MYSQL CORE_RELEASE=3.2
+    - php: hhvm
+      env: DB=MYSQL CORE_RELEASE=3.2
+
 
 before_script:
- - composer self-update
- - phpenv rehash
- - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
- - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
- - cd ~/builds/ss
+  - phpenv rehash
+  - composer self-update || true
+  - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
+  - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
+  - cd ~/builds/ss
 
 script:
- - vendor/bin/phpunit locator/tests/
-notifications:
-  slack:
-    secure: EsA1gihJJ+/q7LWH+C5ipRx4Izi49e9ekGf4/0HL0bD4np/BGSRsh8/bBwOhYOLSi2RJTZzl62ALO0J2gjkwMyvrT41jmpVFYYFBEer5D3f5KEa8otq+Z0yHNxUwIMVbqg48fQU8L0TAPBUHSiABjMyTJAbEfemy7Q2oRmCtFiU=
+  # Execute tests with no coverage.  This is the fastest option
+  - "if [ \"$COVERAGE\" = \"0\" ]; then vendor/bin/phpunit $MODULE_PATH/tests/; fi"
+
+  # Execute tests with coverage.  Do this for a small
+  - "if [ \"$COVERAGE\" = \"1\" ]; then vendor/bin/phpunit --coverage-clover=coverage.clover $MODULE_PATH/tests/; fi"
+
+after_script:
+  - "if [ \"$COVERAGE\" = \"1\" ]; then mv coverage.clover ~/build/$TRAVIS_REPO_SLUG/; fi"
+  - cd ~/build/$TRAVIS_REPO_SLUG
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - "if [ \"$COVERAGE\" = \"1\" ]; then travis_retry codecov && travis_retry php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi"
+

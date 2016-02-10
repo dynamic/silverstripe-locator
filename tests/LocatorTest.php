@@ -1,24 +1,30 @@
 <?php
 
-class LocatorTest extends FunctionalTest{
+class LocatorTest extends LocatorModule_Test {
+	public function testGetCMSFields() {
+		$object = new Locator();
+		$fieldset = $object->getCMSFields();
+		$this->assertTrue(is_a($fieldset, "FieldList"));
+	}
 
-    protected static $fixture_file = 'locator/tests/LocatorTest.yml';
-    protected static $disable_themes = true;
-    protected static $use_draft_site = false;
+	public function testGetAreLocations() {
+		$this->markTestSkipped('TODO');
+	}
 
-    public function setUp(){
-        parent::setUp();
+	public function testGetAllCategories() {
+		$this->markTestSkipped('TODO');
+	}
 
-        ini_set('display_errors', 1);
-        ini_set("log_errors", 1);
-        error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-    }
+	public function testInit() {
+		$this->markTestSkipped('TODO');
+	}
 
-    public function logOut(){
-        $this->session()->clear('loggedInAs');
-        $this->session()->clear('logInWithPermission');
-    }
+	public function testXml() {
+		$this->markTestSkipped('TODO');
+	}
 
-    public function testLocator(){}
+	public function testLocationSearch() {
+		$this->markTestSkipped('TODO');
+	}
 
 }
