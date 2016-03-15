@@ -1,24 +1,66 @@
 <?php
 
-class LocatorTest extends FunctionalTest{
-
-    protected static $fixture_file = 'locator/tests/LocatorTest.yml';
-    protected static $disable_themes = true;
-    protected static $use_draft_site = false;
-
-    public function setUp(){
-        parent::setUp();
-
-        ini_set('display_errors', 1);
-        ini_set("log_errors", 1);
-        error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+class LocatorTest extends Locator_Test
+{
+    public function testGetCMSFields()
+    {
+        $object = new Locator();
+        $fieldset = $object->getCMSFields();
+        $this->assertTrue(is_a($fieldset, 'FieldList'));
     }
 
-    public function logOut(){
-        $this->session()->clear('loggedInAs');
-        $this->session()->clear('logInWithPermission');
+    public function testGetLocations()
+    {
+        $object = $this->objFromFixture('Location', 'dynamic');
+        $object->write();
+
+        $object2 = $this->objFromFixture('Location', 'silverstripe');
+        $object2->write();
+
+        $object3 = $this->objFromFixture('Location', '3sheeps');
+        $object3->write();
+
+        $locator = singleton('Locator');
+        $count = Location::get()->filter('ShowInLocator', 1)->exclude('Lat', 0)->Count();
+
+        $this->assertEquals($locator->getLocations()->Count(), $count);
     }
 
-    public function testLocator(){}
+    public function testGetAreLocations()
+    {
+        $locator = singleton('Locator');
+        $this->assertEquals($locator->getLocations(), $locator->getAreLocations());
+    }
 
+    public function testGetAllCategories()
+    {
+        $locator = singleton('Locator');
+
+        $object = $this->objFromFixture('LocationCategory', 'service');
+        $object->write();
+
+        $object2 = $this->objFromFixture('LocationCategory', 'manufacturing');
+        $object2->write();
+
+        $count = LocationCategory::get();
+
+        $this->assertEquals($locator->getAllCategories(), $count);
+    }
+
+    public function testInit()
+    {
+        $this->markTestSkipped('TODO');
+    }
+
+    public function testXml()
+    {
+        $this->markTestSkipped('TODO');
+    }
+
+    public function testLocationSearch()
+    {
+        $object = Locator_Controller::create();
+        $form = $object->LocationSearch();
+        $this->assertTrue(is_a($form, 'Form'));
+    }
 }
