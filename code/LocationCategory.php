@@ -10,8 +10,12 @@ class LocationCategory extends DataObject
         'Locations' => 'Location',
     );
 
-    private static $singular_name = 'Category';
-    private static $plural_name = 'Categories';
+    private static $belogs_many_many = array(
+        'Locators' => 'Locator'
+    );
+
+    private static $singular_name = "Category";
+    Private static $plural_name = "Categories";
 
     private static $default_sort = 'Name';
 }
