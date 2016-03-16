@@ -1,5 +1,10 @@
-[![Build Status](https://travis-ci.org/dynamic/SilverStripe-Locator-Module.svg?branch=master)](https://travis-ci.org/dynamic/SilverStripe-Locator-Module)[![Latest Stable Version](https://poser.pugx.org/dynamic/silverstripe-locator/v/stable.svg)](https://packagist.org/packages/dynamic/silverstripe-locator) [![Total Downloads](https://poser.pugx.org/dynamic/silverstripe-locator/downloads.svg)](https://packagist.org/packages/dynamic/silverstripe-locator) [![Latest Unstable Version](https://poser.pugx.org/dynamic/silverstripe-locator/v/unstable.svg)](https://packagist.org/packages/dynamic/silverstripe-locator) [![License](https://poser.pugx.org/dynamic/silverstripe-locator/license.svg)](https://packagist.org/packages/dynamic/silverstripe-locator)
-[![Code Climate](https://codeclimate.com/github/dynamic/SilverStripe-Locator-Module/badges/gpa.svg)](https://codeclimate.com/github/dynamic/SilverStripe-Locator-Module)
+[![Build Status](https://travis-ci.org/dynamic/SilverStripe-Locator-Module.svg?branch=master)](https://travis-ci.org/dynamic/SilverStripe-Locator-Module)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/quality-score.png?b=1.1)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/?branch=1.1)
+[![Code Coverage](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/coverage.png?b=1.1)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/?branch=1.1)
+[![Build Status](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/build.png?b=1.1)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/build-status/1.1)
+[![codecov.io](https://codecov.io/github/dynamic/silverstripe-locator/coverage.svg?branch=master)](https://codecov.io/github/dynamic/silverstripe-locator?branch=master)
+
+![codecov.io](https://codecov.io/github/dynamic/silverstripe-locator/branch.svg?branch=master)
 
 Overview
 =================================
