@@ -29,8 +29,6 @@ matrix:
         env: DB=SQLITE
       - php: hhvm
         env: DB=MYSQL
-      - php: 5.5
-        env: DB=MYSQL
   allow_failures:
       - php: 7.0
 
