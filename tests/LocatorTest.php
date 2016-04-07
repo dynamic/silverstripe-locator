@@ -56,7 +56,7 @@ class LocatorTest extends Locator_Test
         $object = Locator_Controller::create($locator);
         $form = $object->LocationSearch();
         $this->assertTrue(is_a($form, 'Form'));
-        
+
         $category = $this->objFromFixture('LocationCategory', 'service');
         $category2 = $this->objFromFixture('LocationCategory', 'manufacturing');
         $locator->Categories()->add($category);
@@ -65,6 +65,5 @@ class LocatorTest extends Locator_Test
         $form = $object->LocationSearch();
         $fields = $form->Fields();
         $this->assertNotNull($fields->fieldByName('category'));
-        
     }
 }
