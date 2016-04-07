@@ -8,26 +8,21 @@ class Locator extends Page
         'Unit' => 'Enum("m,km","m")',
     );
 
+    private static $many_many = array(
+        'Categories' => 'LocationCategory',
+    );
+
     private static $defaults = array(
         'AutoGeocode' => true,
     );
 
     private static $singular_name = 'Locator';
     private static $plural_name = 'Locators';
-    private static $description = 'Show locations on a map';
+    private static $description = 'Find locations on a map';
 
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-
-        // Locations Grid Field
-        $config = GridFieldConfig_RecordEditor::create();
-        $locations = Location::get();
-        $fields->addFieldToTab('Root.Locations', GridField::create('Locations', 'Locations', $locations, $config));
-
-        // Location categories
-        $config = GridFieldConfig_RecordEditor::create();
-        $fields->addFieldToTab('Root.Categories', GridField::create('Categories', 'Categories', LocationCategory::get(), $config));
 
         // Settings
         $fields->addFieldsToTab('Root.Settings', array(
@@ -38,19 +33,35 @@ class Locator extends Page
             CheckboxField::create('ModalWindow', 'Modal Window - Show Map results in a modal window'),
         ));
 
+        // Filter categories
+        $config = GridFieldConfig_RelationEditor::create();
+        if (class_exists('GridFieldAddExistingSearchButton')) {
+            $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
+            $config->addComponent(new GridFieldAddExistingSearchButton());
+        }
+        $categories = $this->Categories();
+        $categoriesField = GridField::create('Categories', 'Categories', $categories, $config)
+            ->setDescription('only show locations from the selected category');
+
+            // Filter
+            $fields->addFieldsToTab('Root.Filter', array(
+                HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
+                $categoriesField,
+            ));
+
         $this->extend('updateCMSFields', $fields);
 
         return $fields;
     }
 
-    public static function getLocations($filter = array(), $exclude = array())
+    public static function getLocations($filter = array(), $exclude = array(), $filterAny = array())
     {
         $filter['ShowInLocator'] = true;
+        $exclude['Lat'] = 0;
 
-        return Location::get()
-            ->exclude($exclude)
-            ->exclude('Lat', 0)
-            ->filter($filter);
+        $Locations = Location::get()->exclude($exclude)->filter($filter)->filterAny($filterAny);
+
+        return $Locations;
     }
 
     public function getAreLocations()
@@ -61,6 +72,17 @@ class Locator extends Page
     public function getAllCategories()
     {
         return LocationCategory::get();
+    }
+
+    public static function getPageCategories($id = null)
+    {
+        if ($id) {
+            if ($locator = Locator::get()->byID($id)) {
+                return $locator->Categories();
+            }
+            return false;
+        }
+        return false;
     }
 }
 
@@ -151,7 +173,18 @@ class Locator_Controller extends Page_Controller
     public function xml(SS_HTTPRequest $request)
     {
         $filter = array();
-        $Locations = Locator::getLocations($filter);
+        $exclude = array();
+        $filterAny = array();
+
+        //if a category filter selected
+        if ($this->Categories()->exists()) {
+            $categories = $this->Categories();
+            foreach ($categories as $category) {
+                $filterAny['CategoryID'] = $category->ID;
+            }
+        }
+
+        $Locations = Locator::getLocations($filter, $exclude, $filterAny);
 
         return $this->customise(array(
             'Locations' => $Locations,
@@ -172,14 +205,10 @@ class Locator_Controller extends Page_Controller
         );
         $address->setAttribute('placeholder', 'address or zip code');
 
-        if (LocationCategory::get()->Count() > 0) {
-            $filter = array();
-            $locals = Locator::getLocations($filter, $exclude = array('CategoryID' => 0));
-            $categories = ArrayList::create();
+        $locatorCategories = Locator::getPageCategories($this->ID);
 
-            foreach ($locals as $local) {
-                $categories->add($local->Category());
-            }
+        if (LocationCategory::get()->Count() > 0 && $locatorCategories && $locatorCategories->Count() != 1) {
+            $categories = LocationCategory::get();
 
             if ($categories->count() > 0) {
                 $fields->push(
