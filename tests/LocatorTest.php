@@ -11,18 +11,8 @@ class LocatorTest extends Locator_Test
 
     public function testGetLocations()
     {
-        $object = $this->objFromFixture('Location', 'dynamic');
-        $object->write();
-
-        $object2 = $this->objFromFixture('Location', 'silverstripe');
-        $object2->write();
-
-        $object3 = $this->objFromFixture('Location', '3sheeps');
-        $object3->write();
-
         $locator = singleton('Locator');
         $count = Location::get()->filter('ShowInLocator', 1)->exclude('Lat', 0)->Count();
-
         $this->assertEquals($locator->getLocations()->Count(), $count);
     }
 
@@ -35,16 +25,21 @@ class LocatorTest extends Locator_Test
     public function testGetAllCategories()
     {
         $locator = singleton('Locator');
-
-        $object = $this->objFromFixture('LocationCategory', 'service');
-        $object->write();
-
-        $object2 = $this->objFromFixture('LocationCategory', 'manufacturing');
-        $object2->write();
-
         $count = LocationCategory::get();
-
         $this->assertEquals($locator->getAllCategories(), $count);
+    }
+
+    public function testGetPageCategories()
+    {
+        $locator = Locator::create();
+        $this->assertFalse($locator->getPageCategories());
+
+        $this->assertFalse($locator->getPageCategories(500));
+
+        $locator->write();
+        $category = $this->objFromFixture('LocationCategory', 'service');
+        $locator->Categories()->add($category);
+        $this->assertEquals($locator->getPageCategories($locator->ID), $locator->Categories());
     }
 
     public function testInit()
@@ -57,8 +52,19 @@ class LocatorTest extends Locator_Test
 
     public function testLocationSearch()
     {
-        $object = Locator_Controller::create();
+        $locator = $this->objFromFixture('Locator', 'locator1');
+        $object = Locator_Controller::create($locator);
         $form = $object->LocationSearch();
         $this->assertTrue(is_a($form, 'Form'));
+        
+        $category = $this->objFromFixture('LocationCategory', 'service');
+        $category2 = $this->objFromFixture('LocationCategory', 'manufacturing');
+        $locator->Categories()->add($category);
+        $locator->Categories()->add($category2);
+
+        $form = $object->LocationSearch();
+        $fields = $form->Fields();
+        $this->assertNotNull($fields->fieldByName('category'));
+        
     }
 }
