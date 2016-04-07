@@ -1,17 +1,35 @@
-# For more information about the properties used in this file,
-# please see the EditorConfig documentation:
-# http://editorconfig.org
+# For more information about the properties used in
+# this file, please see the EditorConfig documentation:
+# http://editorconfig.org/
+
+root = true
 
 [*]
 charset = utf-8
 end_of_line = lf
 indent_size = 4
-indent_style = space
+indent_style = tab
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[{*.yml,package.json}]
-indent_size = 2
+# Docs say 80 ideally, 100 ok, no more than 120
+# http://doc.silverstripe.org/en/getting_started/coding_conventions/
+max_line_length = 100
 
-# The indent size used in the package.json file cannot be changed:
+[*.md]
+trim_trailing_whitespace = false
+
+[*.yml]
+indent_size = 2
+indent_style = space
+
+#PSR 2
+[**.php]
+indent_style = space
+indent_size = 4
+
+[{.travis.yml,package.json}]
+# The indent size used in the `package.json` file cannot be changed
 # https://github.com/npm/npm/pull/3180#issuecomment-16336516
+indent_size = 2
+indent_style = space

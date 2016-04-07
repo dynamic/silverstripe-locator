@@ -1,46 +1,118 @@
 <?php
 
-class LocationTest extends LocatorTest{
-
-    protected static $use_draft_site = true;
-
-    function setUp(){
-        parent::setUp();
-    }
-
-    function testLocationCreation(){
-
-        $this->logInWithPermission('Location_CREATE');
+class LocationTest extends Locator_Test
+{
+    public function testGetCoords()
+    {
         $location = $this->objFromFixture('Location', 'dynamic');
+        $location->write();
 
-        $this->assertTrue($location->canCreate());
+        $coords = ($location->Lat && $location->Lng) ? 'true' : 'false';
+        $geoCodable = Location::get()->byID($location->ID);
 
-        $locationID = $location->ID;
-
-        $this->assertTrue($locationID > 0);
-
-        $getLocal = Location::get()->byID($locationID);
-        $this->assertTrue($getLocal->ID == $locationID);
-
+        $this->assertEquals($coords, $geoCodable->getCoords());
     }
 
-    function testLocationDeletion(){
+    public function testFieldLabels()
+    {
+        $location = $this->objFromFixture('Location', 'dynamic');
+        $labels = $location->FieldLabels();
+        $expected = array(
+            'Title' => 'Name',
+            'Featured' => 'Featured',
+            'Website' => 'Website',
+            'Phone' => 'Phone',
+            'Email' => 'Email',
+            'EmailAddress' => 'Email Address',
+            'ShowInLocator' => 'Show',
+            'Address' => 'Address',
+            'Suburb' => 'City',
+            'State' => 'State',
+            'Postcode' => 'Postal Code',
+            'Country' => 'Country',
+            'Lat' => 'Lat',
+            'Lng' => 'Lng',
+            'Category' => 'Category',
+            'ShowInLocator.NiceAsBoolean' => 'Show',
+            'Category.Name' => 'Category',
+            'Featured.NiceAsBoolean' => 'Featured',
+            'Coords' => 'Coords',
+        );
+        $this->assertEquals($expected, $labels);
+    }
 
+    public function testGetCMSFields()
+    {
+        $object = new Location();
+        $fieldset = $object->getCMSFields();
+        $this->assertTrue(is_a($fieldset, 'FieldList'));
+    }
+
+    public function testValidate()
+    {
+    }
+
+    public function testEmailAddress()
+    {
+    }
+
+    public function testCanView()
+    {
+        $object = $this->objFromFixture('Location', 'dynamic');
+        $object->write();
         $this->logInWithPermission('ADMIN');
-        $location = $this->objFromFixture('Location', 'silverstripe');
-        $locationID = $location->ID;
-
+        $this->assertTrue($object->canView());
         $this->logOut();
-
-        $this->logInWithPermission('Location_DELETE');
-
-        $this->assertTrue($location->canDelete());
-        $location->delete();
-
-        $locations = Location::get()->column('ID');
-        $this->assertFalse(in_array($locationID, $locations));
-
+        $nullMember = Member::create();
+        $nullMember->write();
+        $this->assertTrue($object->canView($nullMember));
+        $nullMember->delete();
     }
 
+    public function testCanEdit()
+    {
+        $object = $this->objFromFixture('Location', 'dynamic');
+        $object->write();
+        $objectID = $object->ID;
+        $this->logInWithPermission('Location_EDIT');
+        $originalTitle = $object->Title;
+        $this->assertEquals($originalTitle, 'Dynamic, Inc.');
+        $this->assertTrue($object->canEdit());
+        $object->Title = 'Changed Title';
+        $object->write();
+        $testEdit = Location::get()->byID($objectID);
+        $this->assertEquals($testEdit->Title, 'Changed Title');
+        $this->logOut();
+    }
 
+    public function testCanDelete()
+    {
+        $object = $this->objFromFixture('Location', 'dynamic');
+        $object->write();
+        $this->logInWithPermission('Location_DELETE');
+        $this->assertTrue($object->canDelete());
+        $checkObject = $object;
+        $object->delete();
+        $this->assertEquals($checkObject->ID, 0);
+    }
+
+    public function testCanCreate()
+    {
+        $object = singleton('Location');
+        $this->logInWithPermission('Location_CREATE');
+        $this->assertTrue($object->canCreate());
+        $this->logOut();
+        $nullMember = Member::create();
+        $nullMember->write();
+        $this->assertFalse($object->canCreate($nullMember));
+        $nullMember->delete();
+    }
+
+    public function testProvidePermissions()
+    {
+    }
+
+    public function testOnBeforeWrite()
+    {
+    }
 }
