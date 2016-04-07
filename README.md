@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/dynamic/SilverStripe-Locator-Module.svg?branch=master)](https://travis-ci.org/dynamic/SilverStripe-Locator-Module)
+[![Build Status](https://travis-ci.org/dynamic/silverstripe-locator.svg?branch=master)](https://travis-ci.org/dynamic/silverstripe-locator)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/quality-score.png?b=1.1)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/?branch=1.1)
 [![Code Coverage](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/coverage.png?b=1.1)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/?branch=1.1)
 [![Build Status](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/build.png?b=1.1)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/build-status/1.1)
