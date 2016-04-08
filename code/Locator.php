@@ -77,11 +77,13 @@ class Locator extends Page
     public static function getPageCategories($id = null)
     {
         if ($id) {
-            if ($locator = Locator::get()->byID($id)) {
+            if ($locator = self::get()->byID($id)) {
                 return $locator->Categories();
             }
+
             return false;
         }
+
         return false;
     }
 }
