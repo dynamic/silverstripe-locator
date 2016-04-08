@@ -100,9 +100,12 @@ class Locator_Controller extends Page_Controller
 
         $themeDir = SSViewer::get_theme_folder();
 
+        // google maps api key
+        $key = Config::inst()->get('GoogleGeocoding', 'google_api_key');
+
         Requirements::javascript('framework/thirdparty/jquery/jquery.js');
         if (Locator::getLocations()) {
-            Requirements::javascript('http://maps.google.com/maps/api/js?sensor=false');
+            Requirements::javascript('http://maps.google.com/maps/api/js?key='.$key);
             Requirements::javascript('locator/thirdparty/handlebars/handlebars-v1.3.0.js');
             Requirements::javascript('locator/thirdparty/jquery-store-locator/js/jquery.storelocator.js');
         }
