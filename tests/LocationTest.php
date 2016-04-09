@@ -35,6 +35,7 @@ class LocationTest extends Locator_Test
             'Category' => 'Category',
             'ShowInLocator.NiceAsBoolean' => 'Show',
             'Category.Name' => 'Category',
+            'Category.ID' => 'Category',
             'Featured.NiceAsBoolean' => 'Featured',
             'Coords' => 'Coords',
         );
@@ -110,9 +111,12 @@ class LocationTest extends Locator_Test
 
     public function testProvidePermissions()
     {
-    }
-
-    public function testOnBeforeWrite()
-    {
+        $object = Location::create();
+        $expected = array(
+            'Location_EDIT' => 'Edit a Location',
+            'Location_DELETE' => 'Delete a Location',
+            'Location_CREATE' => 'Create a Location',
+        );
+        $this->assertEquals($expected, $object->providePermissions());
     }
 }

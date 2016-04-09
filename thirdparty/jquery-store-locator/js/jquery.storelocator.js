@@ -305,11 +305,14 @@ $.fn.storeLocator = function(options) {
       $(document).on('click.'+prefix, '#' + settings.formContainerDiv + ' #submit', function(e){
         get_form_values(e);
       });
+        /*
+        //trying to prevent js from filtering when Address field changes
       $(document).on('keyup.'+prefix, function(e){
         if (e.keyCode === 13 && $('#' + settings.inputID).is(':focus')) { 
           get_form_values(e);
         }
       });
+      */
     }
     else{
       $(document).on('submit.'+prefix, '#' + settings.formID, function(e){

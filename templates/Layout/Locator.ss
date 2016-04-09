@@ -1,7 +1,8 @@
 <div class="content-container unit size3of4 lastUnit">
 	<h1>$Title</h1>
 	<% if $Content %><div class="typography">$Content</div><% end_if %>
-	<% if $AreLocations %>
+	<% if $Locations %>
+        <p>$Locations.Count locations</p>
 		<div id="form-container">
 			$LocationSearch
 		</div>
@@ -16,7 +17,7 @@
 		</div>
 	<% else %>
         <div id="no-locals">
-            <h3>Sorry, there are no locations at this time. Please check back later.</h3>
+            <p>No locations match your search criteria. Please refine your search and try again.</p>
         </div>
 	<% end_if %>
 </div>

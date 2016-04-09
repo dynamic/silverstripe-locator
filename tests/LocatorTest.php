@@ -9,17 +9,14 @@ class LocatorTest extends Locator_Test
         $this->assertTrue(is_a($fieldset, 'FieldList'));
     }
 
-    public function testGetLocations()
+    public function testLocations()
     {
-        $locator = singleton('Locator');
-        $count = Location::get()->filter('ShowInLocator', 1)->exclude('Lat', 0)->Count();
-        $this->assertEquals($locator->getLocations()->Count(), $count);
-    }
-
-    public function testGetAreLocations()
-    {
-        $locator = singleton('Locator');
-        $this->assertEquals($locator->getLocations(), $locator->getAreLocations());
+        $filter = array('ShowInLocator' => 1);
+        $filterAny = array('Suburb' => 'Sheboygan');
+        $exclude = array('Suburb' => 'Milwaukee');
+        $locations = Locator::locations($filter, $filterAny, $exclude);
+        $locations2 = Location::get()->filter($filter)->filterAny($filterAny)->exclude($exclude);
+        $this->assertEquals($locations->Count(), $locations2->Count());
     }
 
     public function testGetAllCategories()
@@ -46,8 +43,30 @@ class LocatorTest extends Locator_Test
     {
     }
 
+    public function testIndex()
+    {
+        $locator = $this->objFromFixture('Locator', 'locator1');
+        $controller = Locator_Controller::create($locator);
+        $this->assertInstanceOf('ViewableData', $controller->index($controller->request));
+    }
+
     public function testXml()
     {
+        $locator = $this->objFromFixture('Locator', 'locator1');
+        $controller = Locator_Controller::create($locator);
+        $this->assertInstanceOf('HTMLText', $controller->xml($controller->request));
+    }
+
+    public function testItems()
+    {
+        $locator = $this->objFromFixture('Locator', 'locator1');
+        $controller = Locator_Controller::create($locator);
+
+        $filter = array('ShowInLocator' => 1);
+
+        $locations = $controller->Items($controller->request);
+        $locations2 = Location::get()->filter($filter);
+        $this->assertEquals($locations->Count(), $locations2->Count());
     }
 
     public function testLocationSearch()
@@ -64,6 +83,6 @@ class LocatorTest extends Locator_Test
 
         $form = $object->LocationSearch();
         $fields = $form->Fields();
-        $this->assertNotNull($fields->fieldByName('category'));
+        $this->assertNotNull($fields->fieldByName('CategoryID'));
     }
 }

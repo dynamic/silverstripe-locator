@@ -20,6 +20,9 @@ class Locator extends Page
     private static $plural_name = 'Locators';
     private static $description = 'Find locations on a map';
 
+    /**
+     * @return FieldList
+     */
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -54,26 +57,56 @@ class Locator extends Page
         return $fields;
     }
 
-    public static function getLocations($filter = array(), $exclude = array(), $filterAny = array())
-    {
-        $filter['ShowInLocator'] = true;
-        $exclude['Lat'] = 0;
+    /**
+     * @param array $filter
+     * @param array $filterAny
+     * @param array $exclude
+     * @param null $filterByCallback
+     * @return ArrayList
+     */
+    public static function locations(
+        $filter = array(),
+        $filterAny = array(),
+        $exclude = array(),
+        $filterByCallback = null
+    ) {
+        $locationsList = ArrayList::create();
 
-        $Locations = Location::get()->exclude($exclude)->filter($filter)->filterAny($filterAny);
+        // filter by ShowInLocator
+        $filter['ShowInLocator'] = 1;
 
-        return $Locations;
+        $locations = Location::get()->filter($filter);
+
+        if (!empty($filterAny)) {
+            $locations = $locations->filterAny($filterAny);
+        }
+        if (!empty($exclude)) {
+            $locations = $locations->exclude($exclude);
+        }
+
+        if ($filterByCallback !== null && is_callable($filterByCallback)) {
+            $locations = $locations->filterByCallback($filterByCallback);
+        }
+
+        if ($locations->exists()) {
+            $locationsList->merge($locations);
+        }
+
+        return $locationsList;
     }
 
-    public function getAreLocations()
-    {
-        return self::getLocations();
-    }
-
-    public function getAllCategories()
+    /**
+     * @return DataList
+     */
+    public static function getAllCategories()
     {
         return LocationCategory::get();
     }
 
+    /**
+     * @param null $id
+     * @return bool
+     */
     public static function getPageCategories($id = null)
     {
         if ($id) {
@@ -86,14 +119,22 @@ class Locator extends Page
 
         return false;
     }
+
+
 }
 
 class Locator_Controller extends Page_Controller
 {
-    // allowed actions
-    private static $allowed_actions = array('xml');
+    /**
+     * @var array
+     */
+    private static $allowed_actions = array(
+        'xml',
+    );
 
-    // Set Requirements based on input from CMS
+    /**
+     * Set Requirements based on input from CMS
+     */
     public function init()
     {
         parent::init();
@@ -103,8 +144,10 @@ class Locator_Controller extends Page_Controller
         // google maps api key
         $key = Config::inst()->get('GoogleGeocoding', 'google_api_key');
 
+        $locations = $this->Items($this->request);
+
         Requirements::javascript('framework/thirdparty/jquery/jquery.js');
-        if (Locator::getLocations()) {
+        if ($locations) {
             Requirements::javascript('http://maps.google.com/maps/api/js?key='.$key);
             Requirements::javascript('locator/thirdparty/handlebars/handlebars-v1.3.0.js');
             Requirements::javascript('locator/thirdparty/jquery-store-locator/js/jquery.storelocator.js');
@@ -112,7 +155,7 @@ class Locator_Controller extends Page_Controller
 
         Requirements::css('locator/css/map.css');
 
-        $featured = (Locator::getLocations(array('Featured' => 1))->count() > 0) ?
+        $featured = ($locations->filter(array('Featured' => 1))->count() > 0) ?
             'featuredLocations: true' :
             'featuredLocations: false';
 
@@ -137,10 +180,18 @@ class Locator_Controller extends Page_Controller
 
         $kilometer = ($this->data()->Unit == 'km') ? 'lengthUnit: "km"' : 'lengthUnit: "m"';
 
-        $link = $this->Link().'xml.xml';
+        // pass GET variables to xml action
+        $vars = $this->request->getVars();
+        unset($vars['url']);
+        unset($vars['action_index']);
+        $url = '';
+        if (count($vars)) {
+            $url .= '?'.http_build_query($vars);
+        }
+        $link = $this->Link().'xml.xml'.$url;
 
         // init map
-        if (Locator::getLocations()) {
+        if ($locations) {
             Requirements::customScript("
                 $(function($) {
                     $('#map-container').storeLocator({
@@ -153,9 +204,9 @@ class Locator_Controller extends Page_Controller
                         '.$featured.",
                         slideMap: false,
                         zoomLevel: 0,
-                        distanceAlert: 120,
+                        noForm: true,
                         formID: 'Form_LocationSearch',
-                        inputID: 'Form_LocationSearch_address',
+                        inputID: 'Form_LocationSearch_Address',
                         categoryID: 'Form_LocationSearch_category',
                         distanceAlert: -1,
                         ".$kilometer.'
@@ -166,34 +217,78 @@ class Locator_Controller extends Page_Controller
     }
 
     /**
-     * Find all locations for map.
+     * @param SS_HTTPRequest $request
      *
-     * Will return a XML feed of all locations marked "show in locator".
+     * @return ViewableData_Customised
+     */
+    public function index(SS_HTTPRequest $request)
+    {
+        $locations = $this->Items($request);
+
+        return $this->customise(array(
+            'Locations' => $locations,
+        ));
+    }
+
+    /**
+     * Return a XML feed of all locations marked "show in locator"
      *
-     * @return XML file
-     *
-     * @todo rename/refactor to allow for json/xml
-     * @todo allow $filter to run off of getVars key/val pair
+     * @param SS_HTTPRequest $request
+     * @return HTMLText
      */
     public function xml(SS_HTTPRequest $request)
     {
-        $filter = array();
-        $exclude = array();
-        $filterAny = array();
-
-        //if a category filter selected
-        if ($this->Categories()->exists()) {
-            $categories = $this->Categories();
-            foreach ($categories as $category) {
-                $filterAny['CategoryID'] = $category->ID;
-            }
-        }
-
-        $Locations = Locator::getLocations($filter, $exclude, $filterAny);
+        $locations = $this->Items($request);
 
         return $this->customise(array(
-            'Locations' => $Locations,
+            'Locations' => $locations,
         ))->renderWith('LocationXML');
+    }
+
+    /**
+     * @param array $searchCriteria
+     *
+     * @return ArrayList
+     */
+    public function Items(SS_HTTPRequest $request)
+    {
+        $request = ($request) ? $request : $this->request;
+
+        $filter = array();
+        $filterAny = array();
+        $exclude = array();
+
+        // only show locations marked as ShowInLocator
+        $filter['ShowInLocator'] = 1;
+
+        // search across all address related fields
+        $address = ($request->getVar('Address')) ? $request->getVar('Address') : false;
+        if ($address && $this->data()->AutoGeocode == 0) {
+            $filterAny['Address:PartialMatch'] = $address;
+            $filterAny['Suburb:PartialMatch'] = $address;
+            $filterAny['State:PartialMatch'] = $address;
+            $filterAny['Postcode:PartialMatch'] = $address;
+            $filterAny['Country:PartialMatch'] = $address;
+        } else {
+            unset($filter['Address']);
+        }
+
+        // search for category from form, else categories from Locator
+        $category = ($request->getVar('CategoryID')) ? $request->getVar('CategoryID') : false;
+        if ($category) {
+            $filter['CategoryID:ExactMatch'] = $category;
+        } elseif ($this->Categories()->exists()) {
+            $categories = $this->Categories();
+            $categoryArray = array();
+            foreach ($categories as $category) {
+                array_push($categoryArray, $category->ID);
+            }
+            $filter['CategoryID'] = $categoryArray;
+        }
+
+        $locations = Locator::locations($filter, $filterAny, $exclude);
+
+        return $locations;
     }
 
     /**
@@ -206,29 +301,48 @@ class Locator_Controller extends Page_Controller
     public function LocationSearch()
     {
         $fields = FieldList::create(
-            $address = TextField::create('address', '')
+            $address = TextField::create('Address', '')
+                ->setAttribute('placeholder', 'address or zip code')
         );
-        $address->setAttribute('placeholder', 'address or zip code');
 
-        $locatorCategories = Locator::getPageCategories($this->ID);
+        $filterCategories = Locator::getPageCategories($this->ID);
+        $allCategories = Locator::getAllCategories();
 
-        if (LocationCategory::get()->Count() > 0 && $locatorCategories && $locatorCategories->Count() != 1) {
-            $categories = LocationCategory::get();
+        if ($allCategories->Count() > 0) {
+            $categories = ArrayList::create();
+            if ($filterCategories->Count() > 0) {
+                if ($filterCategories->Count() != 1) {
+                    $categories = $filterCategories;
+                }
+            } else {
+                $categories = $allCategories;
+            }
 
             if ($categories->count() > 0) {
                 $fields->push(
                     DropdownField::create(
-                        'category',
+                        'CategoryID',
                         '',
-                        $categories->map('Title', 'Title')
-                    )->setEmptyString('Select Category'));
+                        $categories->map()
+                    )->setEmptyString('All Categories'));
             }
         }
 
         $actions = FieldList::create(
-            FormAction::create('', 'Search')
+            FormAction::create('index', 'Search')
         );
 
-        return Form::create($this, 'LocationSearch', $fields, $actions);
+        if (class_exists('BootstrapForm')) {
+            $form = BootstrapForm::create($this, 'LocationSearch', $fields, $actions);
+        } else {
+            $form = Form::create($this, 'LocationSearch', $fields, $actions);
+        }
+
+        return $form
+            ->setFormMethod('GET')
+            ->setFormAction($this->Link())
+            ->disableSecurityToken()
+            ->loadDataFrom($this->request->getVars())
+        ;
     }
 }
