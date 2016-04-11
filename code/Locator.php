@@ -44,7 +44,7 @@ class Locator extends Page
             ->setDescription('only show locations from the selected category');
 
             // Filter
-            $fields->addFieldsToTab('Root.Filter', array(
+            $fields->addFieldsToTab('Root.Settings', array(
                 HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
                 $categoriesField,
             ));
