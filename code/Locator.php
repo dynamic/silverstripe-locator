@@ -212,7 +212,7 @@ class Locator_Controller extends Page_Controller
 
         $locatorCategories = Locator::getPageCategories($this->ID);
 
-        if (LocationCategory::get()->Count() > 0 && $locatorCategories && $locatorCategories->Count() != 1) {
+        if (LocationCategory::get()->count() > 0 && $locatorCategories && $locatorCategories->count() != 1) {
             $categories = LocationCategory::get();
 
             if ($categories->count() > 0) {

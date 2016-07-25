@@ -71,7 +71,7 @@ class Location extends DataObject implements PermissionProvider
     // custom labels for fields
     public function fieldLabels($includerelations = true)
     {
-        $labels = parent::fieldLabels();
+        $labels = parent::fieldLabels($includerelations);
 
         $labels['Title'] = 'Name';
         $labels['Suburb'] = 'City';
@@ -99,7 +99,7 @@ class Location extends DataObject implements PermissionProvider
                     EmailField::create('Email', 'Email'),
                     TextField::create('Website')
                         ->setAttribute('placeholder', 'http://'),
-                    DropDownField::create('CategoryID', 'Category', LocationCategory::get()->map('ID', 'Title'))
+                    DropdownField::create('CategoryID', 'Category', LocationCategory::get()->map('ID', 'Title'))
                         ->setEmptyString('-- select --'),
                     CheckboxField::create('ShowInLocator', 'Show in results')
                         ->setDescription('Location will be included in results list'),
@@ -142,22 +142,22 @@ class Location extends DataObject implements PermissionProvider
      *
      * @return bool
      */
-    public function canView($member = false)
+    public function canView($member = null)
     {
         return true;
     }
 
-    public function canEdit($member = false)
+    public function canEdit($member = null)
     {
         return Permission::check('Location_EDIT');
     }
 
-    public function canDelete($member = false)
+    public function canDelete($member = null)
     {
         return Permission::check('Location_DELETE');
     }
 
-    public function canCreate($member = false)
+    public function canCreate($member = null)
     {
         return Permission::check('Location_CREATE');
     }
