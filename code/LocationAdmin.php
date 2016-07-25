@@ -1,20 +1,39 @@
 <?php
 
+/**
+ * Class LocationAdmin
+ */
 class LocationAdmin extends ModelAdmin
 {
+
+    /**
+     * @var array
+     */
     private static $managed_models = array(
         'Location',
         'LocationCategory',
     );
 
+    /**
+     * @var array
+     */
     private static $model_importers = array(
         'Location' => 'LocationCsvBulkLoader',
         'LocationCategory' => 'CsvBulkLoader',
     );
 
+    /**
+     * @var string
+     */
     private static $menu_title = 'Locator';
+    /**
+     * @var string
+     */
     private static $url_segment = 'locator';
 
+    /**
+     * @return array
+     */
     public function getExportFields()
     {
         if ($this->modelClass == 'Location') {
