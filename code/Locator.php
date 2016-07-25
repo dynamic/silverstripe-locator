@@ -1,25 +1,55 @@
 <?php
 
+/**
+ * Class Locator
+ *
+ * @property bool $AutoGeocode
+ * @property bool $ModalWindow
+ * @property string $Unit
+ * @method Categories|ManyManyList $Categories
+ */
 class Locator extends Page
 {
+
+    /**
+     * @var array
+     */
     private static $db = array(
         'AutoGeocode' => 'Boolean',
         'ModalWindow' => 'Boolean',
         'Unit' => 'Enum("m,km","m")',
     );
 
+    /**
+     * @var array
+     */
     private static $many_many = array(
         'Categories' => 'LocationCategory',
     );
 
+    /**
+     * @var array
+     */
     private static $defaults = array(
         'AutoGeocode' => true,
     );
 
+    /**
+     * @var string
+     */
     private static $singular_name = 'Locator';
+    /**
+     * @var string
+     */
     private static $plural_name = 'Locators';
+    /**
+     * @var string
+     */
     private static $description = 'Find locations on a map';
 
+    /**
+     * @return FieldList
+     */
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -43,17 +73,23 @@ class Locator extends Page
         $categoriesField = GridField::create('Categories', 'Categories', $categories, $config)
             ->setDescription('only show locations from the selected category');
 
-            // Filter
-            $fields->addFieldsToTab('Root.Settings', array(
-                HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
-                $categoriesField,
-            ));
+        // Filter
+        $fields->addFieldsToTab('Root.Settings', array(
+            HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
+            $categoriesField,
+        ));
 
         $this->extend('updateCMSFields', $fields);
 
         return $fields;
     }
 
+    /**
+     * @param array $filter
+     * @param array $exclude
+     * @param array $filterAny
+     * @return DataList
+     */
     public static function getLocations($filter = array(), $exclude = array(), $filterAny = array())
     {
         $filter['ShowInLocator'] = true;
@@ -64,16 +100,26 @@ class Locator extends Page
         return $Locations;
     }
 
+    /**
+     * @return DataList
+     */
     public function getAreLocations()
     {
         return self::getLocations();
     }
 
+    /**
+     * @return DataList
+     */
     public function getAllCategories()
     {
         return LocationCategory::get();
     }
 
+    /**
+     * @param null $id
+     * @return bool
+     */
     public static function getPageCategories($id = null)
     {
         if ($id) {
@@ -88,12 +134,22 @@ class Locator extends Page
     }
 }
 
+/**
+ * Class Locator_Controller
+ */
 class Locator_Controller extends Page_Controller
 {
-    // allowed actions
+
+    /**
+     * allowed actions
+     *
+     * @var array
+     */
     private static $allowed_actions = array('xml');
 
-    // Set Requirements based on input from CMS
+    /**
+     * Set Requirements based on input from CMS
+     */
     public function init()
     {
         parent::init();
@@ -105,7 +161,7 @@ class Locator_Controller extends Page_Controller
 
         Requirements::javascript('framework/thirdparty/jquery/jquery.js');
         if (Locator::getLocations()) {
-            Requirements::javascript('http://maps.google.com/maps/api/js?key='.$key);
+            Requirements::javascript('http://maps.google.com/maps/api/js?key=' . $key);
             Requirements::javascript('locator/thirdparty/handlebars/handlebars-v1.3.0.js');
             Requirements::javascript('locator/thirdparty/jquery-store-locator/js/jquery.storelocator.js');
         }
@@ -123,13 +179,13 @@ class Locator_Controller extends Page_Controller
             'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,';
 
         $base = Director::baseFolder();
-        $themePath = $base.'/'.$themeDir;
+        $themePath = $base . '/' . $themeDir;
 
-        $listTemplatePath = (file_exists($themePath.'/templates/location-list-description.html')) ?
-            $themeDir.'/templates/location-list-description.html' :
+        $listTemplatePath = (file_exists($themePath . '/templates/location-list-description.html')) ?
+            $themeDir . '/templates/location-list-description.html' :
             'locator/templates/location-list-description.html';
-        $infowindowTemplatePath = (file_exists($themePath.'/templates/infowindow-description.html')) ?
-            $themeDir.'/templates/infowindow-description.html' :
+        $infowindowTemplatePath = (file_exists($themePath . '/templates/infowindow-description.html')) ?
+            $themeDir . '/templates/infowindow-description.html' :
             'locator/templates/infowindow-description.html';
 
         // in page or modal
@@ -137,20 +193,20 @@ class Locator_Controller extends Page_Controller
 
         $kilometer = ($this->data()->Unit == 'km') ? 'lengthUnit: "km"' : 'lengthUnit: "m"';
 
-        $link = $this->Link().'xml.xml';
+        $link = $this->Link() . 'xml.xml';
 
         // init map
         if (Locator::getLocations()) {
             Requirements::customScript("
                 $(function($) {
                     $('#map-container').storeLocator({
-                        ".$load."
-                        dataLocation: '".$link."',
-                        listTemplatePath: '".$listTemplatePath."',
-                        infowindowTemplatePath: '".$infowindowTemplatePath."',
+                        " . $load . "
+                        dataLocation: '" . $link . "',
+                        listTemplatePath: '" . $listTemplatePath . "',
+                        infowindowTemplatePath: '" . $infowindowTemplatePath . "',
                         originMarker: true,
-                        ".$modal.',
-                        '.$featured.",
+                        " . $modal . ',
+                        ' . $featured . ",
                         slideMap: false,
                         zoomLevel: 0,
                         distanceAlert: 120,
@@ -158,7 +214,7 @@ class Locator_Controller extends Page_Controller
                         inputID: 'Form_LocationSearch_address',
                         categoryID: 'Form_LocationSearch_category',
                         distanceAlert: -1,
-                        ".$kilometer.'
+                        " . $kilometer . '
                     });
                 });
             ');
@@ -170,10 +226,8 @@ class Locator_Controller extends Page_Controller
      *
      * Will return a XML feed of all locations marked "show in locator".
      *
-     * @return XML file
-     *
-     * @todo rename/refactor to allow for json/xml
-     * @todo allow $filter to run off of getVars key/val pair
+     * @param SS_HTTPRequest $request
+     * @return HTMLText
      */
     public function xml(SS_HTTPRequest $request)
     {
@@ -231,4 +285,5 @@ class Locator_Controller extends Page_Controller
 
         return Form::create($this, 'LocationSearch', $fields, $actions);
     }
+
 }
