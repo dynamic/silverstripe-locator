@@ -218,7 +218,7 @@ class Location extends DataObject implements PermissionProvider
      */
     public function canEdit($member = null)
     {
-        return Permission::check('Location_EDIT');
+        return Permission::check('Location_EDIT', 'any', $member);
     }
 
     /**
@@ -227,7 +227,7 @@ class Location extends DataObject implements PermissionProvider
      */
     public function canDelete($member = null)
     {
-        return Permission::check('Location_DELETE');
+        return Permission::check('Location_DELETE', 'any', $member);
     }
 
     /**
@@ -236,7 +236,7 @@ class Location extends DataObject implements PermissionProvider
      */
     public function canCreate($member = null)
     {
-        return Permission::check('Location_CREATE');
+        return Permission::check('Location_CREATE', 'any', $member);
     }
 
     /**
