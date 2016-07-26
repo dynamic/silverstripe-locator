@@ -1,3 +1,39 @@
+Group:
+  locationcreate:
+    Title: Create Locations
+  locationedit:
+    Title: Edit Locations
+  locationdelete:
+    Title: Location Delete
+Permission:
+  locationcreate:
+    Code: Location_CREATE
+    Type: 1
+    Group: =>Group.locationcreate
+  locationedit:
+    Code: Location_EDIT
+    Type: 1
+    Group: =>Permission.locationedit
+  locationdelete:
+    Code: Location_DELETE
+    Type: 1
+    Group: =>Permission.locationdelete
+Member:
+  locationcreate:
+    FirstName: Create
+    Surname: Location
+    Email: create@test.com
+    Groups: =>Group.locationcreate
+  locationedit:
+    FirstName: Edit
+    Surname: Location
+    Email: edit@test.com
+    Groups: =>Group.locationedit
+  locationdelete:
+    FirstName: Delete
+    Surname: Location
+    Email: delete@test.com
+    Groups: =>Group.locationdelete
 Locator:
   locator1:
     Title: Locator

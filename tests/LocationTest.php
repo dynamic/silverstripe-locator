@@ -1,7 +1,10 @@
 <?php
 
-class LocationTest extends Locator_Test
+class LocationTest extends SapphireTest
 {
+
+    protected static $fixture_file = 'locator/tests/Locator_Test.yml';
+
     public function testGetCoords()
     {
         $location = $this->objFromFixture('Location', 'dynamic');
@@ -60,12 +63,14 @@ class LocationTest extends Locator_Test
     {
         $object = $this->objFromFixture('Location', 'dynamic');
         $object->write();
-        $this->logInWithPermission('ADMIN');
+
         $this->assertTrue($object->canView());
-        $this->logOut();
+
         $nullMember = Member::create();
         $nullMember->write();
+
         $this->assertTrue($object->canView($nullMember));
+
         $nullMember->delete();
     }
 
@@ -73,38 +78,65 @@ class LocationTest extends Locator_Test
     {
         $object = $this->objFromFixture('Location', 'dynamic');
         $object->write();
+
         $objectID = $object->ID;
-        $this->logInWithPermission('Location_EDIT');
+
+        //test permissions per permission setting
+        $create = $this->objFromFixture('Member', 'locationcreate');
+        $edit = $this->objFromFixture('Member', 'locationedit');
+        $delete = $this->objFromFixture('Member', 'locationdelete');
+
         $originalTitle = $object->Title;
         $this->assertEquals($originalTitle, 'Dynamic, Inc.');
-        $this->assertTrue($object->canEdit());
+
+        $this->assertTrue($object->canEdit($edit));
+        $this->assertFalse($object->canEdit($create));
+        $this->assertFalse($object->canEdit($delete));
+
         $object->Title = 'Changed Title';
         $object->write();
+
         $testEdit = Location::get()->byID($objectID);
         $this->assertEquals($testEdit->Title, 'Changed Title');
-        $this->logOut();
     }
 
     public function testCanDelete()
     {
         $object = $this->objFromFixture('Location', 'dynamic');
         $object->write();
-        $this->logInWithPermission('Location_DELETE');
-        $this->assertTrue($object->canDelete());
+
+        //test permissions per permission setting
+        $create = $this->objFromFixture('Member', 'locationcreate');
+        $edit = $this->objFromFixture('Member', 'locationedit');
+        $delete = $this->objFromFixture('Member', 'locationdelete');
+
+        $this->assertTrue($object->canDelete($delete));
+        $this->assertFalse($object->canDelete($create));
+        $this->assertFalse($object->canDelete($edit));
+
         $checkObject = $object;
         $object->delete();
+
         $this->assertEquals($checkObject->ID, 0);
     }
 
     public function testCanCreate()
     {
         $object = singleton('Location');
-        $this->logInWithPermission('Location_CREATE');
-        $this->assertTrue($object->canCreate());
-        $this->logOut();
+
+        //test permissions per permission setting
+        $create = $this->objFromFixture('Member', 'locationcreate');
+        $edit = $this->objFromFixture('Member', 'locationedit');
+        $delete = $this->objFromFixture('Member', 'locationdelete');
+
+        $this->assertTrue($object->canCreate($create));
+        $this->assertFalse($object->canCreate($edit));
+        $this->assertFalse($object->canCreate($delete));
+
         $nullMember = Member::create();
         $nullMember->write();
         $this->assertFalse($object->canCreate($nullMember));
+
         $nullMember->delete();
     }
 
