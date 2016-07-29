@@ -1,7 +1,24 @@
 <?php
 
+/**
+ * Class Location
+ *
+ * @property string $Title
+ * @property bool $Featured
+ * @property string $Website
+ * @property string $Phone
+ * @property string $Email
+ * @property string $EmailAddress
+ * @property bool $ShowInLocator
+ * @property int $CategoryID
+ * @method LocationCategory $Category
+ */
 class Location extends DataObject implements PermissionProvider
 {
+
+    /**
+     * @var array
+     */
     private static $db = array(
         'Title' => 'Varchar(255)',
         'Featured' => 'Boolean',
@@ -12,27 +29,53 @@ class Location extends DataObject implements PermissionProvider
         'ShowInLocator' => 'Boolean',
     );
 
+    /**
+     * @var array
+     */
     private static $has_one = array(
         'Category' => 'LocationCategory',
     );
 
+    /**
+     * @var array
+     */
     private static $casting = array(
         'distance' => 'Int',
     );
 
+    /**
+     * @var string
+     */
     private static $default_sort = 'Title';
 
+    /**
+     * @var array
+     */
     private static $defaults = array(
         'ShowInLocator' => true,
     );
 
+    /**
+     * @var string
+     */
     private static $singular_name = 'Location';
+    /**
+     * @var string
+     */
     private static $plural_name = 'Locations';
 
-    // api access via Restful Server module
+    /**
+     * api access via Restful Server module
+     *
+     * @var bool
+     */
     private static $api_access = true;
 
-    // search fields for Model Admin
+    /**
+     * search fields for Model Admin
+     *
+     * @var array
+     */
     private static $searchable_fields = array(
         'Title',
         'Address',
@@ -48,7 +91,11 @@ class Location extends DataObject implements PermissionProvider
         'Featured',
     );
 
-    // columns for grid field
+    /**
+     * columns for grid field
+     *
+     * @var array
+     */
     private static $summary_fields = array(
         'Title',
         'Address',
@@ -62,13 +109,22 @@ class Location extends DataObject implements PermissionProvider
         'Coords',
     );
 
-    // Coords status for $summary_fields
+    /**
+     * Coords status for $summary_fields
+     *
+     * @return string
+     */
     public function getCoords()
     {
         return ($this->Lat != 0 && $this->Lng != 0) ? 'true' : 'false';
     }
 
-    // custom labels for fields
+    /**
+     * custom labels for fields
+     *
+     * @param bool $includerelations
+     * @return array|string
+     */
     public function fieldLabels($includerelations = true)
     {
         $labels = parent::fieldLabels();
@@ -87,6 +143,9 @@ class Location extends DataObject implements PermissionProvider
         return $labels;
     }
 
+    /**
+     * @return FieldList
+     */
     public function getCMSFields()
     {
         $fields = FieldList::create(
@@ -119,6 +178,9 @@ class Location extends DataObject implements PermissionProvider
         return $fields;
     }
 
+    /**
+     * @return ValidationResult
+     */
     public function validate()
     {
         $result = parent::validate();
@@ -126,6 +188,9 @@ class Location extends DataObject implements PermissionProvider
         return $result;
     }
 
+    /**
+     * @return bool|string
+     */
     public function EmailAddress()
     {
         Deprecation::notice('3.0', 'Use "$Email" instead.');
@@ -175,6 +240,9 @@ class Location extends DataObject implements PermissionProvider
         return Permission::check('Location_CREATE', 'any', $member);
     }
 
+    /**
+     * @return array
+     */
     public function providePermissions()
     {
         return array(
@@ -183,4 +251,5 @@ class Location extends DataObject implements PermissionProvider
             'Location_CREATE' => 'Create a Location',
         );
     }
+
 }

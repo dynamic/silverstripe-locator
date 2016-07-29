@@ -1,7 +1,14 @@
 <?php
 
+/**
+ * Class LocationCsvBulkLoader
+ */
 class LocationCsvBulkLoader extends CsvBulkLoader
 {
+
+    /**
+     * @var array
+     */
     public $columnMap = array(
         'Name' => 'Title',
         'City' => 'Suburb',
@@ -9,6 +16,9 @@ class LocationCsvBulkLoader extends CsvBulkLoader
         'Category' => 'Category.Name',
     );
 
+    /**
+     * @var array
+     */
     public $relationCallbacks = array(
        'Category.Name' => array(
            'relationname' => 'Category',
@@ -16,6 +26,12 @@ class LocationCsvBulkLoader extends CsvBulkLoader
         ),
     );
 
+    /**
+     * @param $obj
+     * @param $val
+     * @param $record
+     * @return DataObject|static
+     */
     public static function getCategoryByName(&$obj, $val, $record)
     {
         $val = Convert::raw2sql($val);
@@ -28,4 +44,5 @@ class LocationCsvBulkLoader extends CsvBulkLoader
 
         return $category;
     }
+
 }
