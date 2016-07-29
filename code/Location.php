@@ -139,28 +139,40 @@ class Location extends DataObject implements PermissionProvider
     }
 
     /**
-     * @param Member $member
+     * @param null|Member $member
      *
      * @return bool
      */
-    public function canView($member = false)
+    public function canView($member = null)
     {
         return true;
     }
 
-    public function canEdit($member = false)
+    /**
+     * @param null|Member $member
+     * @return bool|int
+     */
+    public function canEdit($member = null)
     {
-        return Permission::check('Location_EDIT');
+        return Permission::check('Location_EDIT', 'any', $member);
     }
 
-    public function canDelete($member = false)
+    /**
+     * @param null|Member $member
+     * @return bool|int
+     */
+    public function canDelete($member = null)
     {
-        return Permission::check('Location_DELETE');
+        return Permission::check('Location_DELETE', 'any', $member);
     }
 
-    public function canCreate($member = false)
+    /**
+     * @param null|Member $member
+     * @return bool|int
+     */
+    public function canCreate($member = null)
     {
-        return Permission::check('Location_CREATE');
+        return Permission::check('Location_CREATE', 'any', $member);
     }
 
     public function providePermissions()
