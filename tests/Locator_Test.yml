@@ -32,8 +32,42 @@ Location:
     State: WI
     Postcode: 53081
     Country: US
+  Google:
+    Title: Google
+    Featured: false
+    ShowInLocator: true
+    Website: http://google.com
+    Address: 1600 Amphitheatre Parkway
+    Suburb: Mountain View
+    State: CA
+    Postcode: 94043
+    Country: US
+  Facebook:
+    Title: Facebook
+    Featured: false
+    ShowInLocator: true
+    Website: http://facebook.com
+    Address: 1600 Amphitheatre Parkway
+    Suburb: Menlo Park
+    State: CA
+    Postcode: 94025
+    Country: US
+  Lambeau:
+    Title: Lambeau Field
+    Featured: true
+    ShowInLocator: true
+    Website: https://en.wikipedia.org/wiki/Lambeau_Field
+    Address: 1265 Lombardi Avenue
+    Suburb: Green Bay
+    State: WI
+    Postcode: 54304
+    Country: US
 LocationCategory:
   service:
     Name: Service
   manufacturing:
     Name: Manufacturing
+  entertainment:
+    Name: Entertainment
+  technology:
+    Name: Technology

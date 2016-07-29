@@ -46,11 +46,11 @@ class Locator extends Page
         $categoriesField = GridField::create('Categories', 'Categories', $categories, $config)
             ->setDescription('only show locations from the selected category');
 
-            // Filter
-            $fields->addFieldsToTab('Root.Settings', array(
-                HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
-                $categoriesField,
-            ));
+        // Filter
+        $fields->addFieldsToTab('Root.Filter', array(
+            HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
+            $categoriesField,
+        ));
 
         $this->extend('updateCMSFields', $fields);
 
@@ -69,7 +69,8 @@ class Locator extends Page
         $filterAny = array(),
         $exclude = array(),
         $filterByCallback = null
-    ) {
+    )
+    {
         $locationsList = ArrayList::create();
 
         // filter by ShowInLocator
@@ -148,31 +149,41 @@ class Locator_Controller extends Page_Controller
 
         Requirements::javascript('framework/thirdparty/jquery/jquery.js');
         if ($locations) {
-            Requirements::javascript('http://maps.google.com/maps/api/js?key='.$key);
+            Requirements::javascript('http://maps.google.com/maps/api/js?key=' . $key);
             Requirements::javascript('locator/thirdparty/handlebars/handlebars-v1.3.0.js');
             Requirements::javascript('locator/thirdparty/jquery-store-locator/js/jquery.storelocator.js');
         }
 
         Requirements::css('locator/css/map.css');
 
-        $featured = ($locations->filter(array('Featured' => 1))->count() > 0) ?
-            'featuredLocations: true' :
-            'featuredLocations: false';
+        $featuredInList = ($locations->filter('Featured', true)->count() > 0);
+
+        $featured = $featuredInList
+            ? 'featuredLocations: true'
+            : 'featuredLocations: false';
 
         // map config based on user input in Settings tab
         // AutoGeocode or Full Map
-        $load = ($this->data()->AutoGeocode) ?
+        if ($this->data()->AutoGeocode) {
+            $load = $featuredInList
+                ? 'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,'
+                : 'autoGeocode: true, fullMapStart: false,';
+        } else {
+            $load = 'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,';
+        }
+
+        /*$load = ($this->data()->AutoGeocode) ?
             'autoGeocode: true, fullMapStart: false,' :
-            'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,';
+            'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,';*/
 
         $base = Director::baseFolder();
-        $themePath = $base.'/'.$themeDir;
+        $themePath = $base . '/' . $themeDir;
 
-        $listTemplatePath = (file_exists($themePath.'/templates/location-list-description.html')) ?
-            $themeDir.'/templates/location-list-description.html' :
+        $listTemplatePath = (file_exists($themePath . '/templates/location-list-description.html')) ?
+            $themeDir . '/templates/location-list-description.html' :
             'locator/templates/location-list-description.html';
-        $infowindowTemplatePath = (file_exists($themePath.'/templates/infowindow-description.html')) ?
-            $themeDir.'/templates/infowindow-description.html' :
+        $infowindowTemplatePath = (file_exists($themePath . '/templates/infowindow-description.html')) ?
+            $themeDir . '/templates/infowindow-description.html' :
             'locator/templates/infowindow-description.html';
 
         // in page or modal
@@ -186,22 +197,22 @@ class Locator_Controller extends Page_Controller
         unset($vars['action_index']);
         $url = '';
         if (count($vars)) {
-            $url .= '?'.http_build_query($vars);
+            $url .= '?' . http_build_query($vars);
         }
-        $link = $this->Link().'xml.xml'.$url;
+        $link = $this->Link() . 'xml.xml' . $url;
 
         // init map
         if ($locations) {
             Requirements::customScript("
                 $(function($) {
                     $('#map-container').storeLocator({
-                        ".$load."
-                        dataLocation: '".$link."',
-                        listTemplatePath: '".$listTemplatePath."',
-                        infowindowTemplatePath: '".$infowindowTemplatePath."',
+                        " . $load . "
+                        dataLocation: '" . $link . "',
+                        listTemplatePath: '" . $listTemplatePath . "',
+                        infowindowTemplatePath: '" . $infowindowTemplatePath . "',
                         originMarker: true,
-                        ".$modal.',
-                        '.$featured.",
+                        " . $modal . ',
+                        ' . $featured . ",
                         slideMap: false,
                         zoomLevel: 0,
                         noForm: true,
@@ -209,7 +220,7 @@ class Locator_Controller extends Page_Controller
                         inputID: 'Form_LocationSearch_Address',
                         categoryID: 'Form_LocationSearch_category',
                         distanceAlert: -1,
-                        ".$kilometer.'
+                        " . $kilometer . '
                     });
                 });
             ');
@@ -246,7 +257,7 @@ class Locator_Controller extends Page_Controller
     }
 
     /**
-     * @param array $searchCriteria
+     * @param SS_HTTPRequest $request
      *
      * @return ArrayList
      */
@@ -256,7 +267,7 @@ class Locator_Controller extends Page_Controller
 
         $filter = array();
         $filterAny = array();
-        $exclude = array();
+        $exclude = ['Lat' => 0.00000, 'Lng' => 0.00000];
 
         // only show locations marked as ShowInLocator
         $filter['ShowInLocator'] = 1;
@@ -342,7 +353,6 @@ class Locator_Controller extends Page_Controller
             ->setFormMethod('GET')
             ->setFormAction($this->Link())
             ->disableSecurityToken()
-            ->loadDataFrom($this->request->getVars())
-        ;
+            ->loadDataFrom($this->request->getVars());
     }
 }

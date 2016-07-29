@@ -63,10 +63,11 @@ class LocatorTest extends Locator_Test
         $controller = Locator_Controller::create($locator);
 
         $filter = array('ShowInLocator' => 1);
+        $exclude = ['Lat' => 0.00000, 'Lng' => 0.00000];
 
         $locations = $controller->Items($controller->request);
-        $locations2 = Location::get()->filter($filter);
-        $this->assertEquals($locations->Count(), $locations2->Count());
+        $locations2 = Location::get()->filter($filter)->exclude($exclude);
+        $this->assertEquals($locations->count(), $locations2->count());
     }
 
     public function testLocationSearch()

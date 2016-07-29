@@ -5,12 +5,10 @@ class LocationTest extends Locator_Test
     public function testGetCoords()
     {
         $location = $this->objFromFixture('Location', 'dynamic');
-        $location->write();
 
-        $coords = ($location->Lat && $location->Lng) ? 'true' : 'false';
-        $geoCodable = Location::get()->byID($location->ID);
+        $coords = ((int)$location->Lat != 0 && (int)$location->Lng != 0) ? 'true' : 'false';
 
-        $this->assertEquals($coords, $geoCodable->getCoords());
+        $this->assertEquals($coords, $location->getCoords());
     }
 
     public function testFieldLabels()
