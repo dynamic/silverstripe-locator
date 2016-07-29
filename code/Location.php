@@ -79,6 +79,7 @@ class Location extends DataObject implements PermissionProvider
         $labels['ShowInLocator'] = 'Show';
         $labels['ShowInLocator.NiceAsBoolean'] = 'Show';
         $labels['Category.Name'] = 'Category';
+        $labels['Category.ID'] = 'Category';
         $labels['Email'] = 'Email';
         $labels['Featured.NiceAsBoolean'] = 'Featured';
         $labels['Coords'] = 'Coords';
@@ -169,10 +170,5 @@ class Location extends DataObject implements PermissionProvider
             'Location_DELETE' => 'Delete a Location',
             'Location_CREATE' => 'Create a Location',
         );
-    }
-
-    public function onBeforeWrite()
-    {
-        parent::onBeforeWrite();
     }
 }

@@ -10,12 +10,10 @@
 			{{#if phone}}<div class="loc-phone">{{phone}}</div>{{/if}}
 			{{#if web}}<div class="loc-web"><a href="http://{{web}}" target="_blank">Website</a></div>{{/if}}
 			{{#if email}}<div class="loc-email"><a href="mailto:{{email}}">Email</a></div>{{/if}}
-			{{#if distance}}
-				<div class="loc-dist">
-					{{distance}} {{length}} |
-					<a href="http://maps.google.com/maps?saddr={{origin}}&amp;daddr={{address}} {{address2}} {{city}}, {{state}} {{postal}}" target="_blank">Directions</a>
-				</div>
-			{{/if}}
+			<div class="loc-dist">
+				{{#if distance}}{{distance}} {{length}} |{{/if}}
+				<a href="http://maps.google.com/maps?saddr={{origin}}&amp;daddr={{address}} {{address2}} {{city}}, {{state}} {{postal}}" target="_blank">Directions</a>
+			</div>
 		</div>
 	</div>
 </li>
