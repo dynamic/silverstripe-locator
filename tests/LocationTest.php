@@ -1,10 +1,19 @@
 <?php
 
+/**
+ * Class LocationTest
+ */
 class LocationTest extends SapphireTest
 {
 
+    /**
+     * @var string
+     */
     protected static $fixture_file = 'locator/tests/Locator_Test.yml';
 
+    /**
+     *
+     */
     public function testGetCoords()
     {
         $location = $this->objFromFixture('Location', 'dynamic');
@@ -14,6 +23,9 @@ class LocationTest extends SapphireTest
         $this->assertEquals($coords, $location->getCoords());
     }
 
+    /**
+     *
+     */
     public function testFieldLabels()
     {
         $location = $this->objFromFixture('Location', 'dynamic');
@@ -43,6 +55,9 @@ class LocationTest extends SapphireTest
         $this->assertEquals($expected, $labels);
     }
 
+    /**
+     *
+     */
     public function testGetCMSFields()
     {
         $object = new Location();
@@ -50,14 +65,23 @@ class LocationTest extends SapphireTest
         $this->assertTrue(is_a($fieldset, 'FieldList'));
     }
 
+    /**
+     *
+     */
     public function testValidate()
     {
     }
 
+    /**
+     *
+     */
     public function testEmailAddress()
     {
     }
 
+    /**
+     *
+     */
     public function testCanView()
     {
         $object = $this->objFromFixture('Location', 'dynamic');
@@ -73,6 +97,9 @@ class LocationTest extends SapphireTest
         $nullMember->delete();
     }
 
+    /**
+     *
+     */
     public function testCanEdit()
     {
         $object = $this->objFromFixture('Location', 'dynamic');
@@ -99,6 +126,9 @@ class LocationTest extends SapphireTest
         $this->assertEquals($testEdit->Title, 'Changed Title');
     }
 
+    /**
+     *
+     */
     public function testCanDelete()
     {
         $object = $this->objFromFixture('Location', 'dynamic');
@@ -119,6 +149,9 @@ class LocationTest extends SapphireTest
         $this->assertEquals($checkObject->ID, 0);
     }
 
+    /**
+     *
+     */
     public function testCanCreate()
     {
         $object = singleton('Location');
@@ -139,6 +172,9 @@ class LocationTest extends SapphireTest
         $nullMember->delete();
     }
 
+    /**
+     *
+     */
     public function testProvidePermissions()
     {
         $object = Location::create();

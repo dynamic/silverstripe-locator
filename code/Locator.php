@@ -1,23 +1,50 @@
 <?php
 
+/**
+ * Class Locator
+ *
+ * @property bool $AutoGeocode
+ * @property bool $ModalWindow
+ * @property string $Unit
+ * @method Categories|ManyManyList $Categories
+ */
 class Locator extends Page
 {
+
+    /**
+     * @var array
+     */
     private static $db = array(
         'AutoGeocode' => 'Boolean',
         'ModalWindow' => 'Boolean',
         'Unit' => 'Enum("m,km","m")',
     );
 
+    /**
+     * @var array
+     */
     private static $many_many = array(
         'Categories' => 'LocationCategory',
     );
 
+    /**
+     * @var array
+     */
     private static $defaults = array(
         'AutoGeocode' => true,
     );
 
+    /**
+     * @var string
+     */
     private static $singular_name = 'Locator';
+    /**
+     * @var string
+     */
     private static $plural_name = 'Locators';
+    /**
+     * @var string
+     */
     private static $description = 'Find locations on a map';
 
     /**
@@ -124,6 +151,9 @@ class Locator extends Page
 
 }
 
+/**
+ * Class Locator_Controller
+ */
 class Locator_Controller extends Page_Controller
 {
     /**
@@ -355,4 +385,5 @@ class Locator_Controller extends Page_Controller
             ->disableSecurityToken()
             ->loadDataFrom($this->request->getVars());
     }
+
 }
