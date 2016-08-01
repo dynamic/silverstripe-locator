@@ -85,33 +85,57 @@ class Locator extends Page
     }
 
     /**
+     * @param SS_HTTPRequest|null $request
+     * @param int $locatorID
      * @param array $filter
      * @param array $filterAny
      * @param array $exclude
-     * @param null $filterByCallback
      * @param string $locationClass
+     * @param null $filterByCallback
      * @return ArrayList
      */
     public static function get_locations(
+        SS_HTTPRequest $request = null,
+        $locatorID,
         $filter = [],
         $filterAny = [],
         $exclude = [],
-        $filterByCallback = null,
-        $locationClass = 'Location'
+        $locationClass = 'Location',
+        $filterByCallback = null
     )
     {
+
+        $request = ($request != null) ? $request : Controller::curr()->getRequest();
+
+        // search across all address related fields
+        $address = ($request->getVar('Address')) ? $request->getVar('Address') : false;
+        if ($address && !Locator::get()->byID($locatorID)->AutoGeocode) {
+            $filterAny['Address:PartialMatch'] = $address;
+            $filterAny['Suburb:PartialMatch'] = $address;
+            $filterAny['State:PartialMatch'] = $address;
+            $filterAny['Postcode:PartialMatch'] = $address;
+            $filterAny['Country:PartialMatch'] = $address;
+        }
+
+        // search for category from form, else categories from Locator
+        $category = ($request->getVar('CategoryID')) ? $request->getVar('CategoryID') : false;
+        if ($category) {
+            $filter['CategoryID:ExactMatch'] = $category;
+        } elseif (Locator::get()->byID($locatorID)->Categories()->exists()) {
+            $categories = Locator::get()->byID($locatorID)->Categories();
+            $categoryArray = array();
+            foreach ($categories as $category) {
+                array_push($categoryArray, $category->ID);
+            }
+            $filter['CategoryID'] = $categoryArray;
+        }
+
         $locationsList = ArrayList::create();
 
-        // filter by ShowInLocator
-        $filter['ShowInLocator'] = 1;
-
-        $locations = $locationClass::get()->filter($filter);
+        $locations = $locationClass::get()->filter($filter)->exclude($exclude);
 
         if (!empty($filterAny)) {
             $locations = $locations->filterAny($filterAny);
-        }
-        if (!empty($exclude)) {
-            $locations = $locations->exclude($exclude);
         }
 
         if ($filterByCallback !== null && is_callable($filterByCallback)) {
@@ -229,10 +253,6 @@ class Locator_Controller extends Page_Controller
             $load = 'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,';
         }
 
-        /*$load = ($this->data()->AutoGeocode) ?
-            'autoGeocode: true, fullMapStart: false,' :
-            'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,';*/
-
         $base = Director::baseFolder();
         $themePath = $base . '/' . $themeDir;
 
@@ -291,7 +311,7 @@ class Locator_Controller extends Page_Controller
      */
     public function index(SS_HTTPRequest $request)
     {
-        $locations = $this->Items($request);
+        $locations = $this->getLocations();
 
         return $this->customise(array(
             'Locations' => $locations,
@@ -331,7 +351,7 @@ class Locator_Controller extends Page_Controller
      */
     public function setLocations(SS_HTTPRequest $request = null)
     {
-        if($request === null){
+        if ($request === null) {
             $request = $this->request;
         }
         $filter = $this->config()->get('base_filter');
@@ -343,54 +363,8 @@ class Locator_Controller extends Page_Controller
         $exclude = $this->config()->get('base_exclude');
         $this->extend('updateLocatorExclude', $exclude, $request);
 
-        $this->locations = Locator::get_locations($filter, $filterAny, $exclude);
+        $this->locations = Locator::get_locations($request, $this->data()->ID, $filter, $filterAny, $exclude);
         return $this;
-    }
-
-    /**
-     * @param SS_HTTPRequest $request
-     *
-     * @return ArrayList
-     */
-    public function Items(SS_HTTPRequest $request)
-    {
-        $request = ($request) ? $request : $this->request;
-
-        $filter = $this->config()->get('base_filter');
-        $filterAny = [];
-        $exclude = $this->config()->get('base_exclude');
-
-        // only show locations marked as ShowInLocator
-        $filter['ShowInLocator'] = 1;
-
-        // search across all address related fields
-        $address = ($request->getVar('Address')) ? $request->getVar('Address') : false;
-        if ($address && $this->data()->AutoGeocode == 0) {
-            $filterAny['Address:PartialMatch'] = $address;
-            $filterAny['Suburb:PartialMatch'] = $address;
-            $filterAny['State:PartialMatch'] = $address;
-            $filterAny['Postcode:PartialMatch'] = $address;
-            $filterAny['Country:PartialMatch'] = $address;
-        } else {
-            unset($filter['Address']);
-        }
-
-        // search for category from form, else categories from Locator
-        $category = ($request->getVar('CategoryID')) ? $request->getVar('CategoryID') : false;
-        if ($category) {
-            $filter['CategoryID:ExactMatch'] = $category;
-        } elseif ($this->Categories()->exists()) {
-            $categories = $this->Categories();
-            $categoryArray = array();
-            foreach ($categories as $category) {
-                array_push($categoryArray, $category->ID);
-            }
-            $filter['CategoryID'] = $categoryArray;
-        }
-
-        $locations = Locator::get_locations($filter, $filterAny, $exclude);
-
-        return $locations;
     }
 
     /**
