@@ -89,13 +89,15 @@ class Locator extends Page
      * @param array $filterAny
      * @param array $exclude
      * @param null $filterByCallback
+     * @param string $locationClass
      * @return ArrayList
      */
-    public static function locations(
-        $filter = array(),
-        $filterAny = array(),
-        $exclude = array(),
-        $filterByCallback = null
+    public static function get_locations(
+        $filter = [],
+        $filterAny = [],
+        $exclude = [],
+        $filterByCallback = null,
+        $locationClass = 'Location'
     )
     {
         $locationsList = ArrayList::create();
@@ -103,7 +105,7 @@ class Locator extends Page
         // filter by ShowInLocator
         $filter['ShowInLocator'] = 1;
 
-        $locations = Location::get()->filter($filter);
+        $locations = $locationClass::get()->filter($filter);
 
         if (!empty($filterAny)) {
             $locations = $locations->filterAny($filterAny);
@@ -159,9 +161,34 @@ class Locator_Controller extends Page_Controller
     /**
      * @var array
      */
-    private static $allowed_actions = array(
+    private static $allowed_actions = [
         'xml',
-    );
+    ];
+
+    /**
+     * @var array
+     */
+    private static $base_filter = [
+        'ShowInLocator' => true,
+    ];
+
+    /**
+     * @var array
+     */
+    private static $base_filter_any = [];
+
+    /**
+     * @var array
+     */
+    private static $base_exclude = [
+        'Lat' => 0.00000,
+        'Lng' => 0.00000,
+    ];
+
+    /**
+     * @var
+     */
+    private $locations;
 
     /**
      * Set Requirements based on input from CMS
@@ -175,7 +202,7 @@ class Locator_Controller extends Page_Controller
         // google maps api key
         $key = Config::inst()->get('GoogleGeocoding', 'google_api_key');
 
-        $locations = $this->Items($this->request);
+        $locations = $this->getLocations();
 
         Requirements::javascript('framework/thirdparty/jquery/jquery.js');
         if ($locations) {
@@ -279,11 +306,45 @@ class Locator_Controller extends Page_Controller
      */
     public function xml(SS_HTTPRequest $request)
     {
-        $locations = $this->Items($request);
+        $this->setLocations($request);
+        $locations = $this->getLocations();
 
         return $this->customise(array(
             'Locations' => $locations,
         ))->renderWith('LocationXML');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLocations()
+    {
+        if (!$this->locations) {
+            $this->setLocations($this->request);
+        }
+        return $this->locations;
+    }
+
+    /**
+     * @param SS_HTTPRequest|null $request
+     * @return $this
+     */
+    public function setLocations(SS_HTTPRequest $request = null)
+    {
+        if($request === null){
+            $request = $this->request;
+        }
+        $filter = $this->config()->get('base_filter');
+        $this->extend('updateLocatorFilter', $filter, $request);
+
+        $filterAny = $this->config()->get('base_filter_any');
+        $this->extend('updateLocatorFilterAny', $filterAny, $request);
+
+        $exclude = $this->config()->get('base_exclude');
+        $this->extend('updateLocatorExclude', $exclude, $request);
+
+        $this->locations = Locator::get_locations($filter, $filterAny, $exclude);
+        return $this;
     }
 
     /**
@@ -295,9 +356,9 @@ class Locator_Controller extends Page_Controller
     {
         $request = ($request) ? $request : $this->request;
 
-        $filter = array();
-        $filterAny = array();
-        $exclude = ['Lat' => 0.00000, 'Lng' => 0.00000];
+        $filter = $this->config()->get('base_filter');
+        $filterAny = [];
+        $exclude = $this->config()->get('base_exclude');
 
         // only show locations marked as ShowInLocator
         $filter['ShowInLocator'] = 1;
@@ -327,7 +388,7 @@ class Locator_Controller extends Page_Controller
             $filter['CategoryID'] = $categoryArray;
         }
 
-        $locations = Locator::locations($filter, $filterAny, $exclude);
+        $locations = Locator::get_locations($filter, $filterAny, $exclude);
 
         return $locations;
     }
@@ -341,42 +402,11 @@ class Locator_Controller extends Page_Controller
      */
     public function LocationSearch()
     {
-        $fields = FieldList::create(
-            $address = TextField::create('Address', '')
-                ->setAttribute('placeholder', 'address or zip code')
-        );
-
-        $filterCategories = Locator::getPageCategories($this->ID);
-        $allCategories = Locator::getAllCategories();
-
-        if ($allCategories->Count() > 0) {
-            $categories = ArrayList::create();
-            if ($filterCategories->Count() > 0) {
-                if ($filterCategories->Count() != 1) {
-                    $categories = $filterCategories;
-                }
-            } else {
-                $categories = $allCategories;
-            }
-
-            if ($categories->count() > 0) {
-                $fields->push(
-                    DropdownField::create(
-                        'CategoryID',
-                        '',
-                        $categories->map()
-                    )->setEmptyString('All Categories'));
-            }
-        }
-
-        $actions = FieldList::create(
-            FormAction::create('index', 'Search')
-        );
 
         if (class_exists('BootstrapForm')) {
-            $form = BootstrapForm::create($this, 'LocationSearch', $fields, $actions);
+            $form = LocatorBootstrapForm::create($this, 'LocationSearch');
         } else {
-            $form = Form::create($this, 'LocationSearch', $fields, $actions);
+            $form = LocatorForm::create($this, 'LocationSearch');
         }
 
         return $form
