@@ -85,31 +85,57 @@ class Locator extends Page
     }
 
     /**
+     * @param SS_HTTPRequest|null $request
+     * @param int $locatorID
      * @param array $filter
      * @param array $filterAny
      * @param array $exclude
+     * @param string $locationClass
      * @param null $filterByCallback
      * @return ArrayList
      */
-    public static function locations(
-        $filter = array(),
-        $filterAny = array(),
-        $exclude = array(),
+    public static function get_locations(
+        SS_HTTPRequest $request = null,
+        $locatorID,
+        $filter = [],
+        $filterAny = [],
+        $exclude = [],
+        $locationClass = 'Location',
         $filterByCallback = null
     )
     {
+
+        $request = ($request != null) ? $request : Controller::curr()->getRequest();
+
+        // search across all address related fields
+        $address = ($request->getVar('Address')) ? $request->getVar('Address') : false;
+        if ($address && !Locator::get()->byID($locatorID)->AutoGeocode) {
+            $filterAny['Address:PartialMatch'] = $address;
+            $filterAny['Suburb:PartialMatch'] = $address;
+            $filterAny['State:PartialMatch'] = $address;
+            $filterAny['Postcode:PartialMatch'] = $address;
+            $filterAny['Country:PartialMatch'] = $address;
+        }
+
+        // search for category from form, else categories from Locator
+        $category = ($request->getVar('CategoryID')) ? $request->getVar('CategoryID') : false;
+        if ($category) {
+            $filter['CategoryID:ExactMatch'] = $category;
+        } elseif (Locator::get()->byID($locatorID)->Categories()->exists()) {
+            $categories = Locator::get()->byID($locatorID)->Categories();
+            $categoryArray = array();
+            foreach ($categories as $category) {
+                array_push($categoryArray, $category->ID);
+            }
+            $filter['CategoryID'] = $categoryArray;
+        }
+
         $locationsList = ArrayList::create();
 
-        // filter by ShowInLocator
-        $filter['ShowInLocator'] = 1;
-
-        $locations = Location::get()->filter($filter);
+        $locations = $locationClass::get()->filter($filter)->exclude($exclude);
 
         if (!empty($filterAny)) {
             $locations = $locations->filterAny($filterAny);
-        }
-        if (!empty($exclude)) {
-            $locations = $locations->exclude($exclude);
         }
 
         if ($filterByCallback !== null && is_callable($filterByCallback)) {
@@ -159,9 +185,34 @@ class Locator_Controller extends Page_Controller
     /**
      * @var array
      */
-    private static $allowed_actions = array(
+    private static $allowed_actions = [
         'xml',
-    );
+    ];
+
+    /**
+     * @var array
+     */
+    private static $base_filter = [
+        'ShowInLocator' => true,
+    ];
+
+    /**
+     * @var array
+     */
+    private static $base_filter_any = [];
+
+    /**
+     * @var array
+     */
+    private static $base_exclude = [
+        'Lat' => 0.00000,
+        'Lng' => 0.00000,
+    ];
+
+    /**
+     * @var
+     */
+    private $locations;
 
     /**
      * Set Requirements based on input from CMS
@@ -175,7 +226,7 @@ class Locator_Controller extends Page_Controller
         // google maps api key
         $key = Config::inst()->get('GoogleGeocoding', 'google_api_key');
 
-        $locations = $this->Items($this->request);
+        $locations = $this->getLocations();
 
         Requirements::javascript('framework/thirdparty/jquery/jquery.js');
         if ($locations) {
@@ -201,10 +252,6 @@ class Locator_Controller extends Page_Controller
         } else {
             $load = 'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,';
         }
-
-        /*$load = ($this->data()->AutoGeocode) ?
-            'autoGeocode: true, fullMapStart: false,' :
-            'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,';*/
 
         $base = Director::baseFolder();
         $themePath = $base . '/' . $themeDir;
@@ -264,7 +311,7 @@ class Locator_Controller extends Page_Controller
      */
     public function index(SS_HTTPRequest $request)
     {
-        $locations = $this->Items($request);
+        $locations = $this->getLocations();
 
         return $this->customise(array(
             'Locations' => $locations,
@@ -279,7 +326,8 @@ class Locator_Controller extends Page_Controller
      */
     public function xml(SS_HTTPRequest $request)
     {
-        $locations = $this->Items($request);
+        $this->setLocations($request);
+        $locations = $this->getLocations();
 
         return $this->customise(array(
             'Locations' => $locations,
@@ -287,49 +335,36 @@ class Locator_Controller extends Page_Controller
     }
 
     /**
-     * @param SS_HTTPRequest $request
-     *
-     * @return ArrayList
+     * @return mixed
      */
-    public function Items(SS_HTTPRequest $request)
+    public function getLocations()
     {
-        $request = ($request) ? $request : $this->request;
-
-        $filter = array();
-        $filterAny = array();
-        $exclude = ['Lat' => 0.00000, 'Lng' => 0.00000];
-
-        // only show locations marked as ShowInLocator
-        $filter['ShowInLocator'] = 1;
-
-        // search across all address related fields
-        $address = ($request->getVar('Address')) ? $request->getVar('Address') : false;
-        if ($address && $this->data()->AutoGeocode == 0) {
-            $filterAny['Address:PartialMatch'] = $address;
-            $filterAny['Suburb:PartialMatch'] = $address;
-            $filterAny['State:PartialMatch'] = $address;
-            $filterAny['Postcode:PartialMatch'] = $address;
-            $filterAny['Country:PartialMatch'] = $address;
-        } else {
-            unset($filter['Address']);
+        if (!$this->locations) {
+            $this->setLocations($this->request);
         }
+        return $this->locations;
+    }
 
-        // search for category from form, else categories from Locator
-        $category = ($request->getVar('CategoryID')) ? $request->getVar('CategoryID') : false;
-        if ($category) {
-            $filter['CategoryID:ExactMatch'] = $category;
-        } elseif ($this->Categories()->exists()) {
-            $categories = $this->Categories();
-            $categoryArray = array();
-            foreach ($categories as $category) {
-                array_push($categoryArray, $category->ID);
-            }
-            $filter['CategoryID'] = $categoryArray;
+    /**
+     * @param SS_HTTPRequest|null $request
+     * @return $this
+     */
+    public function setLocations(SS_HTTPRequest $request = null)
+    {
+        if ($request === null) {
+            $request = $this->request;
         }
+        $filter = $this->config()->get('base_filter');
+        $this->extend('updateLocatorFilter', $filter, $request);
 
-        $locations = Locator::locations($filter, $filterAny, $exclude);
+        $filterAny = $this->config()->get('base_filter_any');
+        $this->extend('updateLocatorFilterAny', $filterAny, $request);
 
-        return $locations;
+        $exclude = $this->config()->get('base_exclude');
+        $this->extend('updateLocatorExclude', $exclude, $request);
+
+        $this->locations = Locator::get_locations($request, $this->data()->ID, $filter, $filterAny, $exclude);
+        return $this;
     }
 
     /**
@@ -341,42 +376,11 @@ class Locator_Controller extends Page_Controller
      */
     public function LocationSearch()
     {
-        $fields = FieldList::create(
-            $address = TextField::create('Address', '')
-                ->setAttribute('placeholder', 'address or zip code')
-        );
-
-        $filterCategories = Locator::getPageCategories($this->ID);
-        $allCategories = Locator::getAllCategories();
-
-        if ($allCategories->Count() > 0) {
-            $categories = ArrayList::create();
-            if ($filterCategories->Count() > 0) {
-                if ($filterCategories->Count() != 1) {
-                    $categories = $filterCategories;
-                }
-            } else {
-                $categories = $allCategories;
-            }
-
-            if ($categories->count() > 0) {
-                $fields->push(
-                    DropdownField::create(
-                        'CategoryID',
-                        '',
-                        $categories->map()
-                    )->setEmptyString('All Categories'));
-            }
-        }
-
-        $actions = FieldList::create(
-            FormAction::create('index', 'Search')
-        );
 
         if (class_exists('BootstrapForm')) {
-            $form = BootstrapForm::create($this, 'LocationSearch', $fields, $actions);
+            $form = LocatorBootstrapForm::create($this, 'LocationSearch');
         } else {
-            $form = Form::create($this, 'LocationSearch', $fields, $actions);
+            $form = LocatorForm::create($this, 'LocationSearch');
         }
 
         return $form
