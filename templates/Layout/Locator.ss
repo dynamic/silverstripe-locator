@@ -7,12 +7,14 @@
 			$LocationSearch
 		</div>
 
-		<div id="map-container">
-			<div id="map"></div>
-			<div id="loc-list">
-				<ul id="list">
-					<li><img src="locator/images/ajax-loader.gif" class="loading"></li>
-				</ul>
+		<div id="bh-sl-map-container" class="bh-sl-map-container">
+			<div class="row">
+				<div id="map-results-container" class="container">
+					<div id="bh-sl-map" class="bh-sl-map col-md-9"></div>
+					<div class="bh-sl-loc-list col-md-3">
+						<ul class="list list-unstyled"></ul>
+					</div>
+				</div>
 			</div>
 		</div>
 	<% else %>
@@ -21,28 +23,3 @@
         </div>
 	<% end_if %>
 </div>
-<% require javascript('locator/thirdparty/jQuery-Store-Locator-Plugin-2.6.2/dist/assets/js/libs/handlebars.min.js') %>
-<% require javascript("locator/thirdparty/jQuery-Store-Locator-Plugin-2.6.2/dist/assets/js/plugins/storeLocator/jquery.storelocator.min.js") %>
-<% require javascript("https://maps.google.com/maps/api/js?key=AIzaSyDIQEXXYYK3-lKNubgT3m7HjHsyahp_Xz4") %>
-<script type="text/javascript">
-$(function(){
-    $('#map-container').storeLocator({
-        autoGeocode: false,
-		fullMapStart: true,
-		storeLimit: 1000,
-		maxDistance: true,
-        dataLocation: '/locator/xml.xml',
-        listTemplatePath: 'locator/templates/location-list-description.html',
-        infowindowTemplatePath: 'locator/templates/infowindow-description.html',
-        originMarker: true,
-        modalWindow: false,
-        featuredLocations: true,
-        slideMap: false,
-        zoomLevel: 0,
-        noForm: true,
-        formID: 'LocatorForm_LocationSearch',
-        distanceAlert: -1,
-        lengthUnit: "m"
-    });
-});
-</script>

@@ -33,22 +33,22 @@
 /* === 
  Map 
 === */
-#map-container {
+#bh-sl-map-container {
 	clear: left;
 	margin-top: 27px;
 	height: 530px;
 }
 
-#map-container a {
+#bh-sl-map-container a {
 	color: #e76737;
 	text-decoration: none;
 }
 
-#map-container a:hover, #map-container a:active {
+#bh-sl-map-container a:hover, #bh-sl-map-container a:active {
 	text-decoration: underline;
 }
 
-#map-container .custom-marker {
+#bh-sl-map-container .custom-marker {
 	width: 32px;
 	height: 37px;
 	color: #fff;
@@ -57,7 +57,7 @@
     cursor: pointer;
 }
 
-#map {
+#bh-sl-map {
 	float: right; 
 	width: 74%; 
 	height: 530px; 
@@ -67,7 +67,7 @@
 /* === 
  Results List 
 === */
-#loc-list
+.bh-sl-loc-list
 {
 	float: left; 
 	height: 530px;
@@ -75,7 +75,7 @@
 	overflow: auto;
 }
 
-#loc-list ul
+.bh-sl-loc-list ul
 {
 	display: block;
 	clear: left;
@@ -86,7 +86,7 @@
 	width: 100%;
 }
 
-#loc-list .list-label
+.bh-sl-loc-list .list-label
 {
 	float: left;
 	margin: 10px 0 0 6px;
@@ -98,26 +98,26 @@
 	font-weight: bold;
 }
 
-#loc-list .list-details
+.bh-sl-loc-list .list-details
 {
 	float: left;
 	margin-left: 6px;
 	width: 165px;
 }
 
-#loc-list .list-content
+.bh-sl-loc-list .list-content
 {
 	padding: 10px;
 }
 
-#loc-list .loc-dist
+.bh-sl-loc-list .loc-dist
 {
 	font-weight: bold;
 	font-style: italic;
 	color: #8e8e8e;
 }
 
-#loc-list li
+.bh-sl-loc-list li
 {
 	display: block;
 	clear: left;
@@ -128,10 +128,10 @@
 	border: 1px solid #fff; /* Adding this to prevent moving li elements when adding the list-focus class*/
 }
 
-#loc-list li:first-child {margin-top: 0px;}
+.bh-sl-loc-list li:first-child {margin-top: 0px;}
 
 
-#loc-list .list-focus
+.bh-sl-loc-list .list-focus
 {
 	border: 1px solid rgba(82,168,236,0.9);
 	-moz-box-shadow: 0 0 8px rgba(82,168,236,0.7);
@@ -140,7 +140,7 @@
 	transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
 }
 
-#map-container .loc-name
+#bh-sl-map-container .loc-name
 {
 	color: #AD2118;
 	font-weight: bold;
@@ -215,11 +215,11 @@
 
 @media only screen and (max-width: 960px) {
 
-	#loc-list {
+	.bh-sl-loc-list {
 		
 	}
 	
-	#map {
+	#bh-sl-map {
 		
 	}
 
@@ -231,15 +231,15 @@
 
 @media only screen and (min-width: 641px) and (max-width: 959px) {
 	
-	#loc-list .list-label{
+	.bh-sl-loc-list .list-label{
 		margin-left: 0px;
 	}
 	
-	#loc-list .list-content {
+	.bh-sl-loc-list .list-content {
 		padding: 10px 0px;
 	}
 	
-	#loc-list .list-details {
+	.bh-sl-loc-list .list-details {
 		width: 140px;
 	}
 
@@ -253,7 +253,7 @@
 		height: auto;
 	}
 	
-	#map {
+	#bh-sl-map {
 		width: 100%;
 		float: left;
 	}
