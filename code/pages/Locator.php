@@ -247,13 +247,13 @@ class Locator_Controller extends Page_Controller
             $link = $this->Link() . 'xml.xml' . $url;
 
             Requirements::css('locator/css/map.css');
-            Requirements::javascript('locator/thirdparty/jQuery-Store-Locator-Plugin-2.6.2/libs/handlebars/handlebars-v4.0.5.js');
+            /*Requirements::javascript('locator/thirdparty/jQuery-Store-Locator-Plugin-2.6.2/libs/handlebars/handlebars-v4.0.5.js');
             Requirements::javascript('locator/thirdparty/jQuery-Store-Locator-Plugin-2.6.2/src/js/jquery.storelocator.js');
             Requirements::javascript("//maps.google.com/maps/api/js?key={$key}");
 
             // init map
             Requirements::customScript("
-                ;$(function(){
+                $(function(){
                     $('#map-container').storeLocator({
                         " . $load . "
                         dataLocation: '" . $link . "',
@@ -271,7 +271,7 @@ class Locator_Controller extends Page_Controller
                         ' . $defaultCoords . '
                     });
                 });
-            ');
+            ');*/
         }
     }
 

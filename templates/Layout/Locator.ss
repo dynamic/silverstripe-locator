@@ -21,3 +21,28 @@
         </div>
 	<% end_if %>
 </div>
+<% require javascript('locator/thirdparty/jQuery-Store-Locator-Plugin-2.6.2/dist/assets/js/libs/handlebars.min.js') %>
+<% require javascript("locator/thirdparty/jQuery-Store-Locator-Plugin-2.6.2/dist/assets/js/plugins/storeLocator/jquery.storelocator.min.js") %>
+<% require javascript("https://maps.google.com/maps/api/js?key=AIzaSyDIQEXXYYK3-lKNubgT3m7HjHsyahp_Xz4") %>
+<script type="text/javascript">
+$(function(){
+    $('#map-container').storeLocator({
+        autoGeocode: false,
+		fullMapStart: true,
+		storeLimit: 1000,
+		maxDistance: true,
+        dataLocation: '/locator/xml.xml',
+        listTemplatePath: 'locator/templates/location-list-description.html',
+        infowindowTemplatePath: 'locator/templates/infowindow-description.html',
+        originMarker: true,
+        modalWindow: false,
+        featuredLocations: true,
+        slideMap: false,
+        zoomLevel: 0,
+        noForm: true,
+        formID: 'LocatorForm_LocationSearch',
+        distanceAlert: -1,
+        lengthUnit: "m"
+    });
+});
+</script>
