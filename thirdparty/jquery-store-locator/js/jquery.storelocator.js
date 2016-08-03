@@ -472,12 +472,13 @@ $.fn.storeLocator = function(options) {
                   'hours2': $(this).attr('hours2'),
                   'hours3': $(this).attr('hours3'),
                   'category': $(this).attr('category'),
-                  'featured': $(this).attr('featured')
+                  'featured': $(this).attr('featured'),
+                  'distance': $(this).attr('distance')
                 };
 
                 if(locationData['web']) locationData['web'] = locationData['web'].replace("http://",""); // Remove scheme (todo: should NOT be done)
 
-                locationData['distance'] = GeoCodeCalc.CalcDistance(orig_lat,orig_lng,locationData['lat'],locationData['lng'], GeoCodeCalc.EarthRadius);
+                //locationData['distance'] = GeoCodeCalc.CalcDistance(orig_lat,orig_lng,locationData['lat'],locationData['lng'], GeoCodeCalc.EarthRadius);
 
                 //Create the array
                   var selectedCat = $('#' + settings.categoryID).val();
@@ -686,7 +687,7 @@ $.fn.storeLocator = function(options) {
                 var marker = new google.maps.Marker({
                     position: originPoint,
                     map: map,
-                    icon: 'http://maps.google.com/mapfiles/ms/icons/'+ settings.originpinColor +'-dot.png',
+                    icon: 'https://maps.google.com/mapfiles/ms/icons/'+ settings.originpinColor +'-dot.png',
                     draggable: false
                   });
               }

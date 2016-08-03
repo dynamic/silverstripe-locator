@@ -34,9 +34,19 @@ Member:
     Surname: Location
     Email: delete@test.com
     Groups: =>Group.locationdelete
+LocationCategory:
+  service:
+    Name: Service
+  manufacturing:
+    Name: Manufacturing
+  entertainment:
+    Name: Entertainment
+  technology:
+    Name: Technology
 Locator:
   locator1:
     Title: Locator
+    Categories: =>LocationCategory.service,=>LocationCategory.technology
 Location:
   dynamic:
     Title: Dynamic, Inc.
@@ -50,6 +60,7 @@ Location:
     State: WI
     Postcode: 53081
     Country: US
+    Category: =>LocationCategory.service
   silverstripe:
     Title: Silverstripe
     Featured: true
@@ -57,6 +68,7 @@ Location:
     Phone: 555-555-5555
     Email: solutions@silverstripe.com
     ShowInLocator: true
+    Category: =>LocationCategory.service
   3sheeps:
     Title: 3 Sheeps Brewing
     Featured: false
@@ -68,6 +80,7 @@ Location:
     State: WI
     Postcode: 53081
     Country: US
+    Category: =>LocationCategory.entertainment
   Google:
     Title: Google
     Featured: false
@@ -78,6 +91,7 @@ Location:
     State: CA
     Postcode: 94043
     Country: US
+    Category: =>LocationCategory.technology
   Facebook:
     Title: Facebook
     Featured: false
@@ -88,6 +102,7 @@ Location:
     State: CA
     Postcode: 94025
     Country: US
+    Category: =>LocationCategory.technology
   Lambeau:
     Title: Lambeau Field
     Featured: true
@@ -98,12 +113,4 @@ Location:
     State: WI
     Postcode: 54304
     Country: US
-LocationCategory:
-  service:
-    Name: Service
-  manufacturing:
-    Name: Manufacturing
-  entertainment:
-    Name: Entertainment
-  technology:
-    Name: Technology
+    Category: =>LocationCategory.entertainment
