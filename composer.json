@@ -12,9 +12,10 @@
 		}
 	],
     "require": {
-    	"silverstripe/framework": "^3.1",
-	    "silverstripe/cms": "^3.1",
-    	"silverstripe-australia/addressable": "^1.1"
+    	"silverstripe/framework": "^3.4",
+	    "silverstripe/cms": "^3.4",
+    	"silverstripe-australia/addressable": "^1.1",
+		"muskie9/data-to-arraylist": "dev-master"
     },
     "suggest": {
     	"unclecheese/betterbuttons": "Adds new form actions and buttons to GridField detail form for usability enhancements.",

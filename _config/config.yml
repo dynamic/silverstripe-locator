@@ -5,3 +5,4 @@ Location:
   extensions:
     - Addressable
     - Geocodable
+    - DistanceDataExtension
