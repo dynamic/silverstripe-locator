@@ -200,22 +200,19 @@ class Locator_Controller extends Page_Controller
     {
         parent::init();
 
+        $themeDir = SSViewer::get_theme_folder();
+
         // google maps api key
         $key = Config::inst()->get('GoogleGeocoding', 'google_api_key');
 
         $locations = $this->getLocations();
 
+        Requirements::block('framework/thirdparty/jquery/jquery.js');
+        Requirements::javascript('https://code.jquery.com/jquery-3.0.0.min.js');
         if ($locations) {
-
-            Requirements::javascript('framework/thirdparty/jquery/jquery.js');
-            Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
-            Requirements::javascript('locator/thirdparty/handlebars/handlebars-v1.3.0.js');
-            Requirements::javascript('locator/thirdparty/jquery-store-locator/js/jquery.storelocator.js');
-            Requirements::css('locator/css/map.css');
 
             $featuredInList = ($locations->filter('Featured', true)->count() > 0);
             $defaultCoords = $this->getAddressSearchCoords() ? $this->getAddressSearchCoords() : '';
-            $isChrome = (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== FALSE);
 
             $featured = $featuredInList
                 ? 'featuredLocations: true'
@@ -224,7 +221,7 @@ class Locator_Controller extends Page_Controller
             // map config based on user input in Settings tab
             // AutoGeocode or Full Map
             if ($this->data()->AutoGeocode) {
-                $load = $featuredInList || $defaultCoords || $isChrome != ''
+                $load = $featuredInList || $defaultCoords != ''
                     ? 'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,'
                     : 'autoGeocode: true, fullMapStart: false,';
             } else {
@@ -249,9 +246,14 @@ class Locator_Controller extends Page_Controller
             }
             $link = $this->Link() . 'xml.xml' . $url;
 
+            Requirements::css('locator/css/map.css');
+            Requirements::javascript('locator/thirdparty/jQuery-Store-Locator-Plugin-2.6.2/libs/handlebars/handlebars-v4.0.5.js');
+            Requirements::javascript('locator/thirdparty/jQuery-Store-Locator-Plugin-2.6.2/src/js/jquery.storelocator.js');
+            Requirements::javascript("//maps.google.com/maps/api/js?key={$key}");
+
             // init map
             Requirements::customScript("
-                $(function(){
+                ;$(function(){
                     $('#map-container').storeLocator({
                         " . $load . "
                         dataLocation: '" . $link . "',
@@ -263,6 +265,7 @@ class Locator_Controller extends Page_Controller
                         slideMap: false,
                         zoomLevel: 0,
                         noForm: true,
+                        formID: 'LocatorForm_LocationSearch',
                         distanceAlert: -1,
                         " . $kilometer . ',
                         ' . $defaultCoords . '
