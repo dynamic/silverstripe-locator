@@ -224,7 +224,7 @@ class Locator_Controller extends Page_Controller
             // map config based on user input in Settings tab
             // AutoGeocode or Full Map
             if ($this->data()->AutoGeocode) {
-                $load = $featuredInList || $defaultCoords || $isChrome != ''
+                $load = $featuredInList || $defaultCoords != '' || $isChrome
                     ? 'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,'
                     : 'autoGeocode: true, fullMapStart: false,';
             } else {
