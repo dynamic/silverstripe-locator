@@ -15,7 +15,6 @@ if (class_exists('BootstrapForm')) {
          */
         public function __construct(Controller $controller, $name)
         {
-
             $fields = FieldList::create(
                 TextField::create('Address')
                     ->setTitle('')
@@ -33,18 +32,12 @@ if (class_exists('BootstrapForm')) {
 
             $fields->push($categoriesField);
 
-            $this->extend('updateLocatorFormFields', $fields);
-
             $actions = FieldList::create(
                 FormAction::create('doFilterLocations')
                     ->setTitle('Search')
             );
 
-            $this->extend('updateLocatorFormActions', $actions);
-
             $validator = RequiredFields::create();
-
-            $this->extend('updateLocatorFormRequiredFields', $validator);
 
             parent::__construct($controller, $name, $fields, $actions, $validator);
         }

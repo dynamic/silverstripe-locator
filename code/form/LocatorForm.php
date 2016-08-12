@@ -31,18 +31,12 @@ class LocatorForm extends Form
 
         $fields->push($categoriesField);
 
-        $this->extend('updateLocatorFormFields', $fields);
-
         $actions = FieldList::create(
             FormAction::create('doFilterLocations')
                 ->setTitle('Search')
         );
 
-        $this->extend('updateLocatorFormActions', $actions);
-
         $validator = RequiredFields::create();
-
-        $this->extend('updateLocatorFormRequiredFields', $validator);
 
         parent::__construct($controller, $name, $fields, $actions, $validator);
     }
