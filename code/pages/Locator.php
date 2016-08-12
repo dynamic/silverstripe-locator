@@ -189,6 +189,11 @@ class Locator_Controller extends Page_Controller
     private static $info_window_template_path = 'locator/templates/infowindow-description.html';
 
     /**
+     * @var bool
+     */
+    private static $bootstrapify = true;
+
+    /**
      * @var DataList|ArrayList
      */
     private $locations;
@@ -207,11 +212,11 @@ class Locator_Controller extends Page_Controller
 
         if ($locations) {
 
+            Requirements::css('locator/css/map.css');
             Requirements::javascript('framework/thirdparty/jquery/jquery.js');
             Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
             Requirements::javascript('locator/thirdparty/handlebars/handlebars-v1.3.0.js');
             Requirements::javascript('locator/thirdparty/jquery-store-locator/js/jquery.storelocator.js');
-            Requirements::css('locator/css/map.css');
 
             $featuredInList = ($locations->filter('Featured', true)->count() > 0);
             $defaultCoords = $this->getAddressSearchCoords() ? $this->getAddressSearchCoords() : '';
@@ -330,25 +335,30 @@ class Locator_Controller extends Page_Controller
         if ($request === null) {
             $request = $this->request;
         }
-        $filter = $this->config()->get('base_filter');
+        $filter = ArrayData::create($this->config()->get('base_filter'));
 
         if ($request->getVar('CategoryID')) {
-            $filter['CategoryID'] = $request->getVar('CategoryID');
+            $filter->CategoryID = $request->getVar('CategoryID');
         }
 
         $this->extend('updateLocatorFilter', $filter, $request);
+        $filter = $filter->toMap();
 
-        $filterAny = $this->config()->get('base_filter_any');
+        $filterAny = ArrayData::create($this->config()->get('base_filter_any'));
         $this->extend('updateLocatorFilterAny', $filterAny, $request);
+        $filterAny = $filterAny->toMap();
 
-        $exclude = $this->config()->get('base_exclude');
+        $exclude = ArrayData::create($this->config()->get('base_exclude'));
         $this->extend('updateLocatorExclude', $exclude, $request);
+        $exclude = $exclude->toMap();
 
         $callback = null;
         $this->extend('updateLocatorCallback', $callback, $request);
 
         $locations = Locator::get_locations($filter, $filterAny, $exclude, $callback);
         $locations = DataToArrayListHelper::to_array_list($locations);
+
+        $this->extend('alterListType', $locations);//allow for setting as grouped list
 
         $this->locations = $locations;
         return $this;
@@ -380,10 +390,11 @@ class Locator_Controller extends Page_Controller
      */
     public function LocationSearch()
     {
-        if (class_exists('BootstrapForm')) {
-            $form = LocatorBootstrapForm::create($this, 'LocationSearch');
-        } else {
-            $form = LocatorForm::create($this, 'LocationSearch');
+
+        $form = LocatorForm::create($this, 'LocationSearch');
+        if (class_exists('BootstrapForm') && $this->config()->get('bootstrapify')) {
+            $form->Fields()->bootstrapify();
+            $form->Actions()->bootstrapify();
         }
 
         return $form
