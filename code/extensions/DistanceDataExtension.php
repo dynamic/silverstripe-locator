@@ -7,15 +7,19 @@ class DistanceDataExtension extends DataExtension
      */
     public function augmentSQL(SQLQuery &$query)
     {
-        if (Controller::curr()->getRequest()->getVar('Address')) { // on frontend
-            $coords = GoogleGeocoding::address_to_point(Controller::curr()->getRequest()->getVar('Address'));
+        $address = Controller::curr()->getRequest()->getVar('Address');
+        if ($this->owner->hasMethod('updateAddressValue')) {
+            $address = $this->owner->updateAddressValue($address);
+        }
+        if ($address) { // on frontend
+            $coords = GoogleGeocoding::address_to_point($address);
 
             $Lat = $coords['lat'];
             $Lng = $coords['lng'];
 
             $query
                 ->addSelect(array(
-                    '( 3959 * acos( cos( radians('.$Lat.') ) * cos( radians( `Lat` ) ) * cos( radians( `Lng` ) - radians('.$Lng.') ) + sin( radians('.$Lat.') ) * sin( radians( `Lat` ) ) ) ) AS distance',
+                    '( 3959 * acos( cos( radians(' . $Lat . ') ) * cos( radians( `Lat` ) ) * cos( radians( `Lng` ) - radians(' . $Lng . ') ) + sin( radians(' . $Lat . ') ) * sin( radians( `Lat` ) ) ) ) AS distance',
                 ));
         }
     }

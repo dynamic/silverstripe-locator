@@ -286,10 +286,6 @@ class Locator_Controller extends Page_Controller
     {
         $locations = $this->getLocations();
 
-        if ($locations->canSortBy('distance')) {
-            $locations = $locations->sort('distance');
-        }
-
         return $this->customise(array(
             'Locations' => $locations,
         ));
@@ -304,10 +300,6 @@ class Locator_Controller extends Page_Controller
     public function xml(SS_HTTPRequest $request)
     {
         $locations = $this->getLocations();
-
-        if ($locations->canSortBy('distance')) {
-            $locations = $locations->sort('distance');
-        }
 
         return $this->customise(array(
             'Locations' => $locations,
@@ -335,30 +327,32 @@ class Locator_Controller extends Page_Controller
         if ($request === null) {
             $request = $this->request;
         }
-        $filter = ArrayData::create($this->config()->get('base_filter'));
+        $filter = $this->config()->get('base_filter');
 
         if ($request->getVar('CategoryID')) {
-            $filter->CategoryID = $request->getVar('CategoryID');
+            $filter['CategoryID'] = $request->getVar('CategoryID');
         }
 
         $this->extend('updateLocatorFilter', $filter, $request);
-        $filter = $filter->toMap();
 
-        $filterAny = ArrayData::create($this->config()->get('base_filter_any'));
+        $filterAny = $this->config()->get('base_filter_any');
         $this->extend('updateLocatorFilterAny', $filterAny, $request);
-        $filterAny = $filterAny->toMap();
 
-        $exclude = ArrayData::create($this->config()->get('base_exclude'));
+        $exclude = $this->config()->get('base_exclude');
         $this->extend('updateLocatorExclude', $exclude, $request);
-        $exclude = $exclude->toMap();
 
-        $callback = null;
-        $this->extend('updateLocatorCallback', $callback, $request);
-
-        $locations = Locator::get_locations($filter, $filterAny, $exclude, $callback);
+        $locations = Locator::get_locations($filter, $filterAny, $exclude);
         $locations = DataToArrayListHelper::to_array_list($locations);
 
-        $this->extend('alterListType', $locations);//allow for setting as grouped list
+        //allow for adjusting list post possible distance calculation
+        $this->extend('updateLocationList', $locations);
+
+        if ($locations->canSortBy('distance')) {
+            $locations = $locations->sort('distance');
+        }
+
+        //allow for returning list to be set as
+        $this->extend('updateListType', $locations);
 
         $this->locations = $locations;
         return $this;
