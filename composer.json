@@ -1,27 +1,38 @@
 {
-    "name": "dynamic/silverstripe-locator",
-    "description": "SilverStripe Locator Module. Show locations on a map. Search by geoposition.",
-    "keywords": ["silverstripe", "map", "locator", "dynamic", "geocode", "google maps", "location"],
-    "type": "silverstripe-module",
-    "license": "BSD-3-Clause",
-	"authors": [
-		{
-			"name": "Dynamic Inc",
-			"email": "dev@dynamicagency.com",
-			"homepage": "http://www.dynamicagency.com"
-		}
-	],
-    "require": {
-    	"silverstripe/framework": "^3.4",
-	    "silverstripe/cms": "^3.4",
-    	"silverstripe-australia/addressable": "^1.1",
-		"muskie9/data-to-arraylist": "dev-master"
-    },
-    "suggest": {
-    	"unclecheese/betterbuttons": "Adds new form actions and buttons to GridField detail form for usability enhancements.",
-		"unclecheese/bootstrap-forms": "Allows the creation of forms compatible with the Twitter Bootstrap CSS framework in SilverStripe."
-    },
-	"extra": {
-		"installer-name": "locator"
-	}
+  "name": "dynamic/silverstripe-locator",
+  "description": "SilverStripe Locator Module. Show locations on a map. Search by geoposition.",
+  "keywords": [
+    "silverstripe",
+    "map",
+    "locator",
+    "dynamic",
+    "geocode",
+    "google maps",
+    "location"
+  ],
+  "type": "silverstripe-module",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Dynamic Inc",
+      "email": "dev@dynamicagency.com",
+      "homepage": "http://www.dynamicagency.com"
+    }
+  ],
+  "require": {
+    "silverstripe/framework": "^3.4",
+    "silverstripe/cms": "^3.4",
+    "silverstripe-australia/addressable": "^1.1",
+    "muskie9/data-to-arraylist": "dev-master"
+  },
+  "suggest": {
+    "unclecheese/betterbuttons": "Adds new form actions and buttons to GridField detail form for usability enhancements.",
+    "unclecheese/bootstrap-forms": "Allows the creation of forms compatible with the Twitter Bootstrap CSS framework in SilverStripe."
+  },
+  "extra": {
+    "installer-name": "locator",
+    "branch-alias": {
+      "dev-master": "2.0.x-dev"
+    }
+  }
 }
