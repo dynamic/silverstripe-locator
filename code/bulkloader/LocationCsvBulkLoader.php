@@ -14,6 +14,14 @@ class LocationCsvBulkLoader extends CsvBulkLoader
         'City' => 'Suburb',
         'EmailAddress' => 'Email',
         'Category' => 'Category.Name',
+        'Import_ID' => 'Import_ID',
+    );
+
+    /**
+     * @var array
+     */
+    public $duplicateChecks = array(
+        'Import_ID' => 'Import_ID'
     );
 
     /**
