@@ -51,6 +51,7 @@ class LocationTest extends SapphireTest
             'Category.ID' => 'Category',
             'Featured.NiceAsBoolean' => 'Featured',
             'Coords' => 'Coords',
+            'Import_ID' => 'Import_ID',
         );
         $this->assertEquals($expected, $labels);
     }

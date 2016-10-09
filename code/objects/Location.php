@@ -10,6 +10,7 @@
  * @property string $Email
  * @property string $EmailAddress
  * @property bool $ShowInLocator
+ * @property int $Import_ID
  * @property int $CategoryID
  * @method LocationCategory $Category
  */
@@ -27,6 +28,7 @@ class Location extends DataObject implements PermissionProvider
         'Email' => 'Varchar(255)',
         'EmailAddress' => 'Varchar(255)',
         'ShowInLocator' => 'Boolean',
+        'Import_ID' => 'Int',
     );
 
     /**
@@ -174,6 +176,10 @@ class Location extends DataObject implements PermissionProvider
 
         // override Suburb field name
         $fields->dataFieldByName('Suburb')->setTitle('City');
+
+        $fields->removeByName(array(
+            'Import_ID',
+        ));
 
         return $fields;
     }
