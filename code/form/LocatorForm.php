@@ -20,16 +20,20 @@ class LocatorForm extends Form
                 ->setAttribute('placeholder', 'address or zip code')
         );
 
-        $categories = (Locator::locator_categories_by_locator($controller->data()->ID)->count() > 0)
-            ? Locator::locator_categories_by_locator($controller->data()->ID)
-            : Locator::get_all_categories();
+        $pageCategories = Locator::locator_categories_by_locator($controller->data()->ID);
+        if ($pageCategories && $pageCategories->count() > 0) {
+            $categories = false;
+        } else {
+            $categories = Locator::get_all_categories();
+        }
 
-        $categoriesField = DropdownField::create('CategoryID')
-            ->setTitle('')
-            ->setEmptyString('All Categories')
-            ->setSource($categories->map());
-
-        $fields->push($categoriesField);
+        if ($categories) {
+            $categoriesField = DropdownField::create('CategoryID')
+                ->setTitle('')
+                ->setEmptyString('All Categories')
+                ->setSource($categories->map());
+            $fields->push($categoriesField);
+        }
 
         $actions = FieldList::create(
             FormAction::create('doFilterLocations')
