@@ -107,7 +107,7 @@ class LocatorTest extends Locator_Test
 
         $form = $object->LocationSearch();
         $fields = $form->Fields();
-        $this->assertNotNull($fields->fieldByName('CategoryID'));
+        $this->assertInstanceOf('FieldList', $fields);
     }
 
 }
