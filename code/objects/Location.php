@@ -42,7 +42,7 @@ class Location extends DataObject implements PermissionProvider
      * @var array
      */
     private static $casting = array(
-        'distance' => 'Int',
+        'distance' => 'Decimal(9,3)',
     );
 
     /**

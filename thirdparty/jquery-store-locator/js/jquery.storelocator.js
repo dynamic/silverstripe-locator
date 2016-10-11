@@ -473,7 +473,7 @@ $.fn.storeLocator = function(options) {
                   'hours3': $(this).attr('hours3'),
                   'category': $(this).attr('category'),
                   'featured': $(this).attr('featured'),
-                  'distance': $(this).attr('distance')
+                  'distance': parseFloat($(this).attr('distance'))
                 };
 
                 if(locationData['web']) locationData['web'] = locationData['web'].replace("http://",""); // Remove scheme (todo: should NOT be done)
