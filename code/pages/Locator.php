@@ -48,6 +48,11 @@ class Locator extends Page
     private static $description = 'Find locations on a map';
 
     /**
+     * @var string
+     */
+    private static $location_class = 'Location';
+
+    /**
      * @return FieldList
      */
     public function getCMSFields()
@@ -98,7 +103,8 @@ class Locator extends Page
         $callback = null
     )
     {
-        $locations = Location::get()->filter($filter)->exclude($exclude);
+        $locationClass = Config::inst()->get('Locator', 'location_class');
+        $locations = $locationClass::get()->filter($filter)->exclude($exclude);
 
         if (!empty($filterAny)) {
             $locations = $locations->filterAny($filterAny);
@@ -196,7 +202,7 @@ class Locator_Controller extends Page_Controller
     /**
      * @var DataList|ArrayList
      */
-    private $locations;
+    protected $locations;
 
     /**
      * Set Requirements based on input from CMS
