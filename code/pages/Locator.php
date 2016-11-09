@@ -242,8 +242,8 @@ class Locator_Controller extends Page_Controller
                 $load = 'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,';
             }
 
-            $listTemplatePath = $this->config()->get('list_template_path');
-            $infowindowTemplatePath = $this->config()->get('info_window_template_path');
+            $listTemplatePath = Config::inst()->get('Locator', 'list_template_path');
+            $infowindowTemplatePath = Config::inst()->get('Locator', 'info_window_template_path');
 
             // in page or modal
             $modal = ($this->data()->ModalWindow) ? 'modalWindow: true' : 'modalWindow: false';
