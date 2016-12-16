@@ -52,6 +52,7 @@ class LocationTest extends SapphireTest
             'Featured.NiceAsBoolean' => 'Featured',
             'Coords' => 'Coords',
             'Import_ID' => 'Import_ID',
+            'LatLngOverride' => 'Lat Lng Override',
         );
         $this->assertEquals($expected, $labels);
     }

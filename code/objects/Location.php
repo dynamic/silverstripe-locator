@@ -141,6 +141,7 @@ class Location extends DataObject implements PermissionProvider
         $labels['Email'] = 'Email';
         $labels['Featured.NiceAsBoolean'] = 'Featured';
         $labels['Coords'] = 'Coords';
+        $labels['Import_ID'] = 'Import_ID';
 
         return $labels;
     }

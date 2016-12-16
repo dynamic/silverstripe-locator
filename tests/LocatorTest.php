@@ -110,4 +110,13 @@ class LocatorTest extends Locator_Test
         $this->assertInstanceOf('FieldList', $fields);
     }
 
+    /**
+     *
+     */
+    public function testLocationInfoTemplates()
+    {
+        $this->assertEquals('locator/templates/location-list-description.html', Config::inst()->get('Locator_Controller', 'list_template_path'));
+        $this->assertEquals('locator/templates/infowindow-description.html', Config::inst()->get('Locator_Controller', 'info_window_template_path'));
+    }
+
 }
