@@ -1,5 +1,9 @@
 <?php
 
+namespace Dynamic\Locator\Tests;
+
+use SilverStripe\Dev\FunctionalTest;
+
 /**
  * Class Locator_Test
  */
