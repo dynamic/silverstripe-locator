@@ -1,5 +1,9 @@
 <?php
 
+namespace Dynamic\Locator;
+
+use SilverStripe\ORM\DataObject;
+
 /**
  * Class LocationCategory
  *
@@ -20,14 +24,14 @@ class LocationCategory extends DataObject
      * @var array
      */
     private static $has_many = array(
-        'Locations' => 'Location',
+        'Locations' => 'Dynamic\\Locator\\LocationLocation',
     );
 
     /**
      * @var array
      */
     private static $belogs_many_many = array(
-        'Locators' => 'Locator',
+        'Locators' => 'Dynamic\\Locator\\Locator',
     );
 
     /**

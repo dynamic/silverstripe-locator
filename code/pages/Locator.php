@@ -1,5 +1,22 @@
 <?php
 
+namespace Dynamic\Locator;
+
+use SilverStripe\Forms\Form,
+    SilverStripe\Forms\FieldList,
+    SilverStripe\Forms\HeaderField,
+    SilverStripe\Forms\OptionsetField,
+    SilverStripe\Forms\CheckboxField,
+    SilverStripe\Forms\GridField\GridField,
+    SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor,
+    SilverStripe\ORM\DataList,
+    SilverStripe\ORM\ArrayList,
+    SilverStripe\Core\Config\Config,
+    SilverStripe\Control\Controller,
+    SilverStripe\View\Requirements,
+    SilverStripe\Control\HTTPRequest,
+    muskie9\DataToArrayList\ORM\DataToArrayListHelper;
+
 /**
  * Class Locator
  *
@@ -8,7 +25,7 @@
  * @property string $Unit
  * @method Categories|ManyManyList $Categories
  */
-class Locator extends Page
+class Locator extends \Page
 {
 
     /**
@@ -22,7 +39,7 @@ class Locator extends Page
      * @var array
      */
     private static $many_many = array(
-        'Categories' => 'LocationCategory',
+        'Categories' => 'Dynamic\\Locator\\LocationCategory',
     );
 
     /**
@@ -41,7 +58,7 @@ class Locator extends Page
     /**
      * @var string
      */
-    private static $location_class = 'Location';
+    private static $location_class = 'Dynamic\\Locator\\Location';
 
     /**
      * @return FieldList
@@ -91,7 +108,7 @@ class Locator extends Page
         $callback = null
     )
     {
-        $locationClass = Config::inst()->get('Locator', 'location_class');
+        $locationClass = Config::inst()->get('Dynamic\\Locator\\Locator', 'location_class');
         $locations = $locationClass::get()->filter($filter)->exclude($exclude);
 
         if (!empty($filterAny)) {
@@ -143,7 +160,7 @@ class Locator extends Page
 /**
  * Class Locator_Controller
  */
-class Locator_Controller extends Page_Controller
+class Locator_Controller extends \Page_Controller
 {
     /**
      * @var array
@@ -301,11 +318,10 @@ class Locator_Controller extends Page_Controller
     }
 
     /**
-     * @param SS_HTTPRequest $request
-     *
-     * @return ViewableData_Customised
+     * @param HTTPRequest $request
+     * @return \SilverStripe\View\ViewableData_Customised
      */
-    public function index(SS_HTTPRequest $request)
+    public function index(HTTPRequest $request)
     {
         if ($this->getTrigger($request)) {
             $locations = $this->getLocations();
@@ -319,12 +335,10 @@ class Locator_Controller extends Page_Controller
     }
 
     /**
-     * Return a XML feed of all locations marked "show in locator"
-     *
-     * @param SS_HTTPRequest $request
-     * @return HTMLText
+     * @param HTTPRequest $request
+     * @return \SilverStripe\ORM\FieldType\DBHTMLText
      */
-    public function xml(SS_HTTPRequest $request)
+    public function xml(HTTPRequest $request)
     {
         if ($this->getTrigger($request)) {
             $locations = $this->getLocations();
@@ -349,10 +363,10 @@ class Locator_Controller extends Page_Controller
     }
 
     /**
-     * @param SS_HTTPRequest|null $request
+     * @param HTTPRequest|null $request
      * @return $this
      */
-    public function setLocations(SS_HTTPRequest $request = null)
+    public function setLocations(HTTPRequest $request = null)
     {
 
         if ($request === null) {
@@ -430,12 +444,15 @@ class Locator_Controller extends Page_Controller
         if (!$this->request->getVar('Address')) {
             return false;
         }
-        $coords = GoogleGeocoding::address_to_point(Controller::curr()->getRequest()->getVar('Address'));
+        if (class_exists('GoogleGeocoding')) {
+            $coords = GoogleGeocoding::address_to_point(Controller::curr()->getRequest()->getVar('Address'));
 
-        $lat = $coords['lat'];
-        $lng = $coords['lng'];
+            $lat = $coords['lat'];
+            $lng = $coords['lng'];
 
-        return "defaultLat: {$lat}, defaultLng: {$lng},";
+            return "defaultLat: {$lat}, defaultLng: {$lng},";
+        }
+
     }
 
     /**
@@ -460,5 +477,4 @@ class Locator_Controller extends Page_Controller
             ->disableSecurityToken()
             ->loadDataFrom($this->request->getVars());
     }
-
 }

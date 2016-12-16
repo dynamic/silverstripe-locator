@@ -1,44 +1,40 @@
-Group:
+SilverStripe\Security\Group:
   locationcreate:
     Title: Create Locations
   locationedit:
     Title: Edit Locations
   locationdelete:
     Title: Location Delete
-Permission:
+SilverStripe\Security\Permission:
   locationcreate:
     Code: Location_CREATE
     Type: 1
-    Group: =>Group.locationcreate
+    GroupID: =>SilverStripe\Security\Group.locationcreate
   locationedit:
     Code: Location_EDIT
     Type: 1
-    Group: =>Permission.locationedit
+    GroupID: =>SilverStripe\Security\Group.locationedit
   locationdelete:
     Code: Location_DELETE
     Type: 1
-    Group: =>Permission.locationdelete
-Member:
+    GroupID: =>SilverStripe\Security\Group.locationdelete
+SilverStripe\Security\Member:
   locationcreate:
     FirstName: Create
     Surname: Location
     Email: create@test.com
-    Groups: =>Group.locationcreate
+    Groups: =>SilverStripe\Security\Group.locationcreate
   locationedit:
     FirstName: Edit
     Surname: Location
     Email: edit@test.com
-    Groups: =>Group.locationedit
+    Groups: =>SilverStripe\Security\Group.locationedit
   locationdelete:
     FirstName: Delete
     Surname: Location
     Email: delete@test.com
-    Groups: =>Group.locationdelete
-  default:
-    FirstName: 'Default'
-    Surname: 'Member'
-    Email: 'member@test.com'
-LocationCategory:
+    Groups: =>SilverStripe\Security\Group.locationdelete
+Dynamic\Locator\LocationCategory:
   service:
     Name: Service
   manufacturing:
@@ -47,15 +43,15 @@ LocationCategory:
     Name: Entertainment
   technology:
     Name: Technology
-Locator:
+Dynamic\Locator\Locator:
   locator1:
     Title: Locator
-    Categories: =>LocationCategory.service,=>LocationCategory.technology
-Location:
+    Categories: =>Dynamic\Locator\LocationCategory.service,=>Dynamic\Locator\LocationCategory.technology
+Dynamic\Locator\Location:
   dynamic:
     Title: Dynamic, Inc.
     Featured: true
-    Website: http://www.dynamicagency.com
+    Website: "http://www.dynamicagency.com"
     Phone: 920-459-8889
     Email: dev@dy.ag
     ShowInLocator: true
@@ -64,7 +60,7 @@ Location:
     State: WI
     Postcode: 53081
     Country: US
-    Category: =>LocationCategory.service
+    Category: =>Dynamic\Locator\LocationCategory.service
   silverstripe:
     Title: Silverstripe
     Featured: true
@@ -72,7 +68,7 @@ Location:
     Phone: 555-555-5555
     Email: solutions@silverstripe.com
     ShowInLocator: true
-    Category: =>LocationCategory.service
+    Category: =>Dynamic\Locator\LocationCategory.service
   3sheeps:
     Title: 3 Sheeps Brewing
     Featured: false
@@ -84,7 +80,7 @@ Location:
     State: WI
     Postcode: 53081
     Country: US
-    Category: =>LocationCategory.entertainment
+    Category: =>Dynamic\Locator\LocationCategory.entertainment
   Google:
     Title: Google
     Featured: false
@@ -95,7 +91,7 @@ Location:
     State: CA
     Postcode: 94043
     Country: US
-    Category: =>LocationCategory.technology
+    Category: =>Dynamic\Locator\LocationCategory.technology
   Facebook:
     Title: Facebook
     Featured: false
@@ -106,7 +102,7 @@ Location:
     State: CA
     Postcode: 94025
     Country: US
-    Category: =>LocationCategory.technology
+    Category: =>Dynamic\Locator\LocationCategory.technology
   Lambeau:
     Title: Lambeau Field
     Featured: true
@@ -117,4 +113,4 @@ Location:
     State: WI
     Postcode: 54304
     Country: US
-    Category: =>LocationCategory.entertainment
+    Category: =>Dynamic\Locator\LocationCategory.entertainment

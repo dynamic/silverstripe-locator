@@ -1,5 +1,10 @@
 <?php
 
+namespace Dynamic\Locator;
+
+use SilverStripe\Dev\CsvBulkLoader,
+    SilverStripe\Core\Convert;
+
 /**
  * Class LocationCsvBulkLoader
  */
@@ -38,7 +43,7 @@ class LocationCsvBulkLoader extends CsvBulkLoader
      * @param $obj
      * @param $val
      * @param $record
-     * @return DataObject|static
+     * @return \SilverStripe\ORM\DataObject|static
      */
     public static function getCategoryByName(&$obj, $val, $record)
     {

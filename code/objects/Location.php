@@ -1,5 +1,20 @@
 <?php
 
+namespace Dynamic\Locator;
+
+use SilverStripe\ORM\DataObject,
+    SilverStripe\Security\PermissionProvider,
+    SilverStripe\Forms\FieldList,
+    SilverStripe\Forms\Tab,
+    SilverStripe\Forms\TabSet,
+    SilverStripe\Forms\HeaderField,
+    SilverStripe\Forms\TextField,
+    SilverStripe\Forms\EmailField,
+    SilverStripe\Forms\DropdownField,
+    SilverStripe\Forms\CheckboxField,
+    SilverStripe\Security\Permission,
+    SilverStripe\Dev\Deprecation;
+
 /**
  * Class Location
  *
@@ -29,13 +44,21 @@ class Location extends DataObject implements PermissionProvider
         'EmailAddress' => 'Varchar(255)',
         'ShowInLocator' => 'Boolean',
         'Import_ID' => 'Int',
+        'Address'  => 'Varchar(255)',
+        'Suburb'   => 'Varchar(64)',
+        'State'    => 'Varchar(64)',
+        'Postcode' => 'Varchar(10)',
+        'Country'  => 'Varchar(2)',
+        'LatLngOverride' => 'Boolean',
+        'Lat' => 'Decimal(10,7)',
+        'Lng' => 'Decimal(10,7)',
     );
 
     /**
      * @var array
      */
     private static $has_one = array(
-        'Category' => 'LocationCategory',
+        'Category' => 'Dynamic\\Locator\\LocationCategory',
     );
 
     /**
@@ -184,13 +207,13 @@ class Location extends DataObject implements PermissionProvider
         ]);
 
         // override Suburb field name
-        $fields->dataFieldByName('Suburb')->setTitle('City');
+        //$fields->dataFieldByName('Suburb')->setTitle('City');
 
         return $fields;
     }
 
     /**
-     * @return ValidationResult
+     * @return \SilverStripe\ORM\ValidationResult
      */
     public function validate()
     {
@@ -215,8 +238,7 @@ class Location extends DataObject implements PermissionProvider
     }
 
     /**
-     * @param null|Member $member
-     *
+     * @param null $member
      * @return bool
      */
     public function canView($member = null)
@@ -225,7 +247,7 @@ class Location extends DataObject implements PermissionProvider
     }
 
     /**
-     * @param null|Member $member
+     * @param null $member
      * @return bool|int
      */
     public function canEdit($member = null)
@@ -234,7 +256,7 @@ class Location extends DataObject implements PermissionProvider
     }
 
     /**
-     * @param null|Member $member
+     * @param null $member
      * @return bool|int
      */
     public function canDelete($member = null)
@@ -243,10 +265,11 @@ class Location extends DataObject implements PermissionProvider
     }
 
     /**
-     * @param null|Member $member
+     * @param null $member
+     * @param array $context
      * @return bool|int
      */
-    public function canCreate($member = null)
+    public function canCreate($member = null, $context = [])
     {
         return Permission::check('Location_CREATE', 'any', $member);
     }

@@ -1,5 +1,15 @@
 <?php
 
+namespace Dynamic\Locator;
+
+use SilverStripe\Forms\Form,
+    SilverStripe\Forms\FieldList,
+    SilverStripe\Forms\TextField,
+    SilverStripe\Forms\DropdownField,
+    SilverStripe\Forms\FormAction,
+    SilverStripe\Forms\RequiredFields,
+    SilverStripe\Control\Controller;
+
 /**
  * Class LocatorForm
  */
