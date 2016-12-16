@@ -30,9 +30,7 @@
     "unclecheese/bootstrap-forms": "Allows the creation of forms compatible with the Twitter Bootstrap CSS framework in SilverStripe."
   },
   "extra": {
-    "installer-name": "locator",
-    "branch-alias": {
-      "dev-master": "2.0.x-dev"
+    "installer-name": "locator"
     }
   }
 }
