@@ -20,12 +20,12 @@
     }
   ],
   "require": {
-    "silverstripe/framework": "^3.4",
-    "silverstripe/cms": "^3.4",
-    "silverstripe-australia/addressable": "^1.1",
-    "muskie9/data-to-arraylist": "dev-master"
+    "silverstripe/framework": "^4.0",
+    "silverstripe/cms": "^4.0",
+    "muskie9/data-to-arraylist": "^2.0"
   },
   "suggest": {
+    "silverstripe-australia/addressable": "^1.1",
     "unclecheese/betterbuttons": "Adds new form actions and buttons to GridField detail form for usability enhancements.",
     "unclecheese/bootstrap-forms": "Allows the creation of forms compatible with the Twitter Bootstrap CSS framework in SilverStripe."
   },

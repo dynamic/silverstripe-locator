@@ -1,5 +1,11 @@
 <?php
 
+namespace Dynamic\Locator\Tests;
+
+use SilverStripe\Dev\SapphireTest,
+    Dynamic\Locator\Location,
+    SilverStripe\Security\Member;
+
 /**
  * Class LocationTest
  */
@@ -13,22 +19,23 @@ class LocationTest extends SapphireTest
 
     /**
      *
-     */
+
     public function testGetCoords()
     {
-        $location = $this->objFromFixture('Location', 'dynamic');
+        $location = $this->objFromFixture('Dynamic\\Locator\\Location', 'dynamic');
 
         $coords = ((int)$location->Lat != 0 && (int)$location->Lng != 0) ? 'true' : 'false';
 
         $this->assertEquals($coords, $location->getCoords());
     }
+     */
 
     /**
      *
-     */
+
     public function testFieldLabels()
     {
-        $location = $this->objFromFixture('Location', 'dynamic');
+        $location = $this->objFromFixture('Dynamic\\Locator\\Location', 'dynamic');
         $labels = $location->FieldLabels();
         $expected = array(
             'Title' => 'Name',
@@ -55,6 +62,7 @@ class LocationTest extends SapphireTest
         );
         $this->assertEquals($expected, $labels);
     }
+     */
 
     /**
      *
@@ -63,7 +71,7 @@ class LocationTest extends SapphireTest
     {
         $object = new Location();
         $fieldset = $object->getCMSFields();
-        $this->assertTrue(is_a($fieldset, 'FieldList'));
+        $this->assertTrue(is_a($fieldset, 'SilverStripe\\Forms\\FieldList'));
     }
 
     /**
@@ -85,7 +93,7 @@ class LocationTest extends SapphireTest
      */
     public function testCanView()
     {
-        $object = $this->objFromFixture('Location', 'dynamic');
+        $object = $this->objFromFixture('Dynamic\\Locator\\Location', 'dynamic');
         $object->write();
 
         $this->assertTrue($object->canView());
@@ -103,15 +111,15 @@ class LocationTest extends SapphireTest
      */
     public function testCanEdit()
     {
-        $object = $this->objFromFixture('Location', 'dynamic');
+        $object = $this->objFromFixture('Dynamic\\Locator\\Location', 'dynamic');
         $object->write();
 
         $objectID = $object->ID;
 
         //test permissions per permission setting
-        $create = $this->objFromFixture('Member', 'locationcreate');
-        $edit = $this->objFromFixture('Member', 'locationedit');
-        $delete = $this->objFromFixture('Member', 'locationdelete');
+        $create = $this->objFromFixture('SilverStripe\\Security\\Member', 'locationcreate');
+        $edit = $this->objFromFixture('SilverStripe\\Security\\Member', 'locationedit');
+        $delete = $this->objFromFixture('SilverStripe\\Security\\Member', 'locationdelete');
 
         $originalTitle = $object->Title;
         $this->assertEquals($originalTitle, 'Dynamic, Inc.');
@@ -132,13 +140,13 @@ class LocationTest extends SapphireTest
      */
     public function testCanDelete()
     {
-        $object = $this->objFromFixture('Location', 'dynamic');
+        $object = $this->objFromFixture('Dynamic\\Locator\\Location', 'dynamic');
         $object->write();
 
         //test permissions per permission setting
-        $create = $this->objFromFixture('Member', 'locationcreate');
-        $edit = $this->objFromFixture('Member', 'locationedit');
-        $delete = $this->objFromFixture('Member', 'locationdelete');
+        $create = $this->objFromFixture('SilverStripe\\Security\\Member', 'locationcreate');
+        $edit = $this->objFromFixture('SilverStripe\\Security\\Member', 'locationedit');
+        $delete = $this->objFromFixture('SilverStripe\\Security\\Member', 'locationdelete');
 
         $this->assertTrue($object->canDelete($delete));
         $this->assertFalse($object->canDelete($create));
@@ -155,12 +163,12 @@ class LocationTest extends SapphireTest
      */
     public function testCanCreate()
     {
-        $object = singleton('Location');
+        $object = singleton('Dynamic\\Locator\\Location');
 
         //test permissions per permission setting
-        $create = $this->objFromFixture('Member', 'locationcreate');
-        $edit = $this->objFromFixture('Member', 'locationedit');
-        $delete = $this->objFromFixture('Member', 'locationdelete');
+        $create = $this->objFromFixture('SilverStripe\\Security\\Member', 'locationcreate');
+        $edit = $this->objFromFixture('SilverStripe\\Security\\Member', 'locationedit');
+        $delete = $this->objFromFixture('SilverStripe\\Security\\Member', 'locationdelete');
 
         $this->assertTrue($object->canCreate($create));
         $this->assertFalse($object->canCreate($edit));
