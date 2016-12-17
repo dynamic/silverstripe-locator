@@ -117,4 +117,13 @@ class LocatorTest extends Locator_Test
         $this->assertInstanceOf('SilverStripe\\Forms\\FieldList', $fields);
     }
 
+    /**
+     *
+     */
+    public function testLocationInfoTemplates()
+    {
+        $this->assertEquals('locator/templates/location-list-description.html', Config::inst()->get('Dynamic\\Locator\\Locator_Controller', 'list_template_path'));
+        $this->assertEquals('locator/templates/infowindow-description.html', Config::inst()->get('Dynamic\\Locator\\Locator_Controller', 'info_window_template_path'));
+    }
+
 }

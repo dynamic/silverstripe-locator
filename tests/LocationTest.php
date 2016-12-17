@@ -2,9 +2,10 @@
 
 namespace Dynamic\Locator\Tests;
 
-use SilverStripe\Dev\SapphireTest,
-    Dynamic\Locator\Location,
-    SilverStripe\Security\Member;
+use SilverStripe\Dev\SapphireTest;
+use Dynamic\Locator\Location;
+use SilverStripe\Security\Member;
+use SilverStripe\Core\Config\Config;
 
 /**
  * Class LocationTest
@@ -16,6 +17,15 @@ class LocationTest extends SapphireTest
      * @var string
      */
     protected static $fixture_file = 'locator/tests/Locator_Test.yml';
+
+    /**
+     *
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        Config::inst()->update('SilverStripeGeocoder', 'geocoder_api_key', 'AIzaSyDtVFXiNi7OZ0_RvdumJeXlEsozTtGzY0M');
+    }
 
     /**
      *
@@ -32,7 +42,7 @@ class LocationTest extends SapphireTest
 
     /**
      *
-
+     */
     public function testFieldLabels()
     {
         $location = $this->objFromFixture('Dynamic\\Locator\\Location', 'dynamic');
@@ -43,12 +53,11 @@ class LocationTest extends SapphireTest
             'Website' => 'Website',
             'Phone' => 'Phone',
             'Email' => 'Email',
-            'EmailAddress' => 'Email Address',
             'ShowInLocator' => 'Show',
             'Address' => 'Address',
-            'Suburb' => 'City',
+            'City' => 'City',
             'State' => 'State',
-            'Postcode' => 'Postal Code',
+            'PostalCode' => 'Postal Code',
             'Country' => 'Country',
             'Lat' => 'Lat',
             'Lng' => 'Lng',
@@ -59,10 +68,10 @@ class LocationTest extends SapphireTest
             'Featured.NiceAsBoolean' => 'Featured',
             'Coords' => 'Coords',
             'Import_ID' => 'Import_ID',
+            'Address2' => 'Address2',
         );
         $this->assertEquals($expected, $labels);
     }
-     */
 
     /**
      *
@@ -193,5 +202,15 @@ class LocationTest extends SapphireTest
             'Location_CREATE' => 'Create a Location',
         );
         $this->assertEquals($expected, $object->providePermissions());
+    }
+
+    /**
+     *
+     */
+    public function testGetFullAddress()
+    {
+        $object = $this->objFromFixture('Dynamic\\Locator\\Location', 'dynamic');
+        $expected = '1526 S. 12th St, Sheboygan, WI, 53081, United States';
+        $this->assertEquals($expected, $object->getFullAddress());
     }
 }
