@@ -2,20 +2,22 @@
 
 namespace Dynamic\Locator;
 
-use SilverStripe\Forms\Form,
-    SilverStripe\Forms\FieldList,
-    SilverStripe\Forms\HeaderField,
-    SilverStripe\Forms\OptionsetField,
-    SilverStripe\Forms\CheckboxField,
-    SilverStripe\Forms\GridField\GridField,
-    SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor,
-    SilverStripe\ORM\DataList,
-    SilverStripe\ORM\ArrayList,
-    SilverStripe\Core\Config\Config,
-    SilverStripe\Control\Controller,
-    SilverStripe\View\Requirements,
-    SilverStripe\Control\HTTPRequest,
-    muskie9\DataToArrayList\ORM\DataToArrayListHelper;
+use SilverStripe\Forms\Form;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\HeaderField;
+use SilverStripe\Forms\OptionsetField;
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\ORM\DataList;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Control\Controller;
+use SilverStripe\View\Requirements;
+use SilverStripe\Control\HTTPRequest;
+use muskie9\DataToArrayList\ORM\DataToArrayListHelper;
+use SilverStripe\Dev\Debug;
+use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 
 /**
  * Class Locator
@@ -229,21 +231,20 @@ class Locator_Controller extends \Page_Controller
         parent::init();
 
         // google maps api key
-        $key = Config::inst()->get('GoogleGeocoding', 'google_api_key');
+        $key = Config::inst()->get('SilverStripeGeocoder', 'geocoder_api_key');
 
         $locations = $this->getLocations();
 
         if ($locations) {
 
             Requirements::css('locator/css/map.css');
-            Requirements::javascript('framework/thirdparty/jquery/jquery.js');
+            Requirements::javascript('https://code.jquery.com/jquery-2.2.4.min.js');
             Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
             Requirements::javascript('locator/thirdparty/handlebars/handlebars-v1.3.0.js');
             Requirements::javascript('locator/thirdparty/jquery-store-locator/js/jquery.storelocator.js');
 
             $featuredInList = ($locations->filter('Featured', true)->count() > 0);
-            //$defaultCoords = $this->getAddressSearchCoords() ? $this->getAddressSearchCoords() : '';
-            $isChrome = (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== FALSE);
+            $defaultCoords = $this->getAddressSearchCoords() ? $this->getAddressSearchCoords() : '';
 
             $featured = $featuredInList
                 ? 'featuredLocations: true'
@@ -253,6 +254,7 @@ class Locator_Controller extends \Page_Controller
             // map config based on user input in Settings tab
             // AutoGeocode or Full Map
             if ($this->data()->AutoGeocode) {
+                $isChrome = (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== FALSE);
                 $load = $featuredInList || $defaultCoords != '' || $isChrome
                     ? 'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,'
                     : 'autoGeocode: true, fullMapStart: false,';
@@ -261,11 +263,11 @@ class Locator_Controller extends \Page_Controller
             }
             */
 
-            // temporary workaround for addressable
+            // temporary workaround for autogeocode
             $load = 'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,';
 
-            $listTemplatePath = Config::inst()->get('Locator', 'list_template_path');
-            $infowindowTemplatePath = Config::inst()->get('Locator', 'info_window_template_path');
+            $listTemplatePath = Config::inst()->get('Dynamic\Locator\Locator_Controller', 'list_template_path');
+            $infowindowTemplatePath = Config::inst()->get('Dynamic\Locator\Locator_Controller', 'info_window_template_path');
 
             // in page or modal
             $modal = ($this->data()->ModalWindow) ? 'modalWindow: true' : 'modalWindow: false';
@@ -284,24 +286,24 @@ class Locator_Controller extends \Page_Controller
 
             // init map
             Requirements::customScript("
-                $(function(){
-                    $('#map-container').storeLocator({
-                        " . $load . "
-                        dataLocation: '" . $link . "',
-                        listTemplatePath: '" . $listTemplatePath . "',
-                        infowindowTemplatePath: '" . $infowindowTemplatePath . "',
-                        originMarker: true,
-                        " . $modal . ',
-                        ' . $featured . ",
-                        slideMap: false,
-                        zoomLevel: 0,
-                        noForm: true,
-                        distanceAlert: -1,
-                        " . $kilometer . ',
-                        ' . $defaultCoords . '
-                    });
+            jQuery(document).ready(function($){
+                $('#map-container').storeLocator({
+                    " . $load . "
+                    dataLocation: '" . $link . "',
+                    listTemplatePath: '" . $listTemplatePath . "',
+                    infowindowTemplatePath: '" . $infowindowTemplatePath . "',
+                    originMarker: true,
+                    " . $modal . ',
+                    ' . $featured . ",
+                    slideMap: false,
+                    zoomLevel: 0,
+                    noForm: true,
+                    distanceAlert: -1,
+                    " . $kilometer . ',
+                    defaultLoc: true,
+                    ' . $defaultCoords . '
                 });
-            ');
+            });');
         }
     }
 
@@ -398,15 +400,16 @@ class Locator_Controller extends \Page_Controller
         if (!$this->request->getVar('Address')) {
             return false;
         }
-        if (class_exists('GoogleGeocoding')) {
-            $coords = GoogleGeocoding::address_to_point(Controller::curr()->getRequest()->getVar('Address'));
 
-            $lat = $coords['lat'];
-            $lng = $coords['lng'];
-
-            return "defaultLat: {$lat}, defaultLng: {$lng},";
+        if ($address = $this->request->getVar('Address')) {
+            $geocoder = new GoogleGeocoder($address);
+            $response = $geocoder->getResult();
+            $lat = $response->getLatitude();
+            $lng = $response->getLongitude();
+            $coords = "defaultLat: {$lat}, defaultLng: {$lng},";
+            return $coords;
         }
-
+        return false;
     }
 
     /**

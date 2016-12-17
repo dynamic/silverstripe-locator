@@ -2,18 +2,23 @@
 
 namespace Dynamic\Locator;
 
-use SilverStripe\ORM\DataObject,
-    SilverStripe\Security\PermissionProvider,
-    SilverStripe\Forms\FieldList,
-    SilverStripe\Forms\Tab,
-    SilverStripe\Forms\TabSet,
-    SilverStripe\Forms\HeaderField,
-    SilverStripe\Forms\TextField,
-    SilverStripe\Forms\EmailField,
-    SilverStripe\Forms\DropdownField,
-    SilverStripe\Forms\CheckboxField,
-    SilverStripe\Security\Permission,
-    SilverStripe\Dev\Deprecation;
+use SilverStripe\Control\Email\Email;
+use SilverStripe\Forms\CountryDropdownField;
+use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Security\PermissionProvider;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\Tab;
+use SilverStripe\Forms\TabSet;
+use SilverStripe\Forms\HeaderField;
+use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\EmailField;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Security\Permission;
+use SilverStripe\Dev\Deprecation;
+use SilverStripe\i18n\i18n;
+use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 
 /**
  * Class Location
@@ -37,21 +42,20 @@ class Location extends DataObject implements PermissionProvider
      */
     private static $db = array(
         'Title' => 'Varchar(255)',
-        'Featured' => 'Boolean',
+        'Address'  => 'Varchar(255)',
+        'Address2' => 'Varchar(255)',
+        'City'   => 'Varchar(64)',
+        'State'    => 'Varchar(64)',
+        'PostalCode' => 'Varchar(10)',
+        'Country'  => 'Varchar(2)',
+        'Lat' => 'Decimal(10,7)',
+        'Lng' => 'Decimal(10,7)',
         'Website' => 'Varchar(255)',
         'Phone' => 'Varchar(40)',
         'Email' => 'Varchar(255)',
-        'EmailAddress' => 'Varchar(255)',
         'ShowInLocator' => 'Boolean',
+        'Featured' => 'Boolean',
         'Import_ID' => 'Int',
-        'Address'  => 'Varchar(255)',
-        'Suburb'   => 'Varchar(64)',
-        'State'    => 'Varchar(64)',
-        'Postcode' => 'Varchar(10)',
-        'Country'  => 'Varchar(2)',
-        'LatLngOverride' => 'Boolean',
-        'Lat' => 'Decimal(10,7)',
-        'Lng' => 'Decimal(10,7)',
     );
 
     /**
@@ -104,9 +108,9 @@ class Location extends DataObject implements PermissionProvider
     private static $searchable_fields = array(
         'Title',
         'Address',
-        'Suburb',
+        'City',
         'State',
-        'Postcode',
+        'PostalCode',
         'Country',
         'Website',
         'Phone',
@@ -124,9 +128,9 @@ class Location extends DataObject implements PermissionProvider
     private static $summary_fields = array(
         'Title',
         'Address',
-        'Suburb',
+        'City',
         'State',
-        'Postcode',
+        'PostalCode',
         'Country',
         'Category.Name',
         'ShowInLocator.NiceAsBoolean',
@@ -155,8 +159,8 @@ class Location extends DataObject implements PermissionProvider
         $labels = parent::fieldLabels($includerelations);
 
         $labels['Title'] = 'Name';
-        $labels['Suburb'] = 'City';
-        $labels['Postcode'] = 'Postal Code';
+        $labels['City'] = 'City';
+        $labels['PostalCode'] = 'Postal Code';
         $labels['ShowInLocator'] = 'Show';
         $labels['ShowInLocator.NiceAsBoolean'] = 'Show';
         $labels['Category.Name'] = 'Category';
@@ -164,6 +168,7 @@ class Location extends DataObject implements PermissionProvider
         $labels['Email'] = 'Email';
         $labels['Featured.NiceAsBoolean'] = 'Featured';
         $labels['Coords'] = 'Coords';
+        $labels['Import_ID'] = 'Import_ID';
 
         return $labels;
     }
@@ -173,36 +178,30 @@ class Location extends DataObject implements PermissionProvider
      */
     public function getCMSFields()
     {
-        $fields = FieldList::create(
-            new TabSet(
-                $name = 'Root',
-                new Tab(
-                    $title = 'Main',
-                    HeaderField::create('ContactHD', 'Contact Information'),
-                    TextField::create('Title', 'Name'),
-                    TextField::create('Phone'),
-                    EmailField::create('Email', 'Email'),
-                    TextField::create('Website')
-                        ->setAttribute('placeholder', 'http://'),
-                    DropdownField::create('CategoryID', 'Category', LocationCategory::get()->map('ID', 'Title'))
-                        ->setEmptyString('-- select --'),
-                    CheckboxField::create('ShowInLocator', 'Show in results')
-                        ->setDescription('Location will be included in results list'),
-                    CheckboxField::create('Featured')
-                        ->setDescription('Location will show at/near the top of the results list')
-                )
-            )
-        );
-
-        // allow to be extended via DataExtension
-        $this->extend('updateCMSFields', $fields);
-
-        // override Suburb field name
-        //$fields->dataFieldByName('Suburb')->setTitle('City');
+        $fields = parent::getCMSFields();
 
         $fields->removeByName(array(
             'Import_ID',
         ));
+
+        $fields->replaceField('Country', CountryDropdownField::create('Country'));
+        $fields->replaceField('Lat', ReadonlyField::create('Lat'));
+        $fields->replaceField('Lng', ReadonlyField::create('Lng'));
+        $fields->dataFieldByName('Website')
+            ->setAttribute('placeholder', 'http://');
+        $fields->replaceField('Email', EmailField::create('Email'));
+        $fields->dataFieldByName('ShowInLocator')
+            ->setTitle('Show In Locator')
+            ->setDescription('Location will be included in results list');
+        $fields->dataFieldByName('Featured')
+            ->setDescription('Location will display near the top of the results list');
+        $fields->replaceField(
+            'CategoryID',
+            DropdownField::create('CategoryID', 'Category', LocationCategory::get()->map())->setEmptyString('')
+        );
+
+        // allow to be extended via DataExtension
+        $this->extend('updateLocationFields', $fields);
 
         return $fields;
     }
@@ -225,8 +224,6 @@ class Location extends DataObject implements PermissionProvider
         Deprecation::notice('3.0', 'Use "$Email" instead.');
         if ($this->Email) {
             return $this->Email;
-        } elseif ($this->EmailAddress) {
-            return $this->EmailAddress;
         }
 
         return false;
@@ -281,4 +278,77 @@ class Location extends DataObject implements PermissionProvider
         );
     }
 
+    /**
+     * Returns the full address as a simple string.
+     *
+     * @return string
+     */
+    public function getFullAddress() {
+        $parts = array(
+            $this->Address,
+            $this->Address2,
+            $this->City,
+            $this->State,
+            $this->PostalCode,
+            $this->getCountryName()
+        );
+        return implode(', ', array_filter($parts));
+    }
+
+    /**
+     * Returns the country name (not the 2 character code).
+     *
+     * @return string
+     */
+    public function getCountryName() {
+        return \Zend_Locale::getTranslation($this->Country, 'territory',  i18n::get_locale());
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAddress() {
+        return (
+            $this->Address
+            && $this->City
+            && $this->State
+            && $this->PostalCode
+        );
+    }
+
+    /**
+     * Returns TRUE if any of the address fields have changed.
+     *
+     * @param int $level
+     * @return bool
+     */
+    public function isAddressChanged($level = 1) {
+        $fields  = array('Address', 'City', 'State', 'PostalCode', 'Country');
+        $changed = $this->getChangedFields(false, $level);
+        foreach ($fields as $field) {
+            if (array_key_exists($field, $changed)) return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     */
+    public function onBeforeWrite()
+    {
+        parent::onBeforeWrite();
+
+        if ($this->hasAddress()) {
+            if (!$this->isAddressChanged()) {
+                return;
+            }
+
+            if ($address = $this->getFullAddress()) {
+                $geocoder = new GoogleGeocoder($address);
+                $response = $geocoder->getResult();
+                $this->Lat = $response->getLatitude();
+                $this->Lng = $response->getLongitude();
+            }
+        }
+    }
 }

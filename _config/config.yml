@@ -3,6 +3,6 @@ Name: locator
 ---
 Location:
   extensions:
-    - Addressable
-    - Geocodable
     - DistanceDataExtension
+SilverStripeGeocoder:
+  google_api_key: ''

@@ -2,10 +2,12 @@
 
 namespace Dynamic\Locator;
 
-use SilverStripe\ORM\DataExtension,
-    SilverStripe\ORM\Queries\SQLSelect,
-    SilverStripe\ORM\DataQuery,
-    SilverStripe\Control\Controller;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\ORM\DataQuery;
+use SilverStripe\Control\Controller;
+use SilverStripe\Core\Config\Config;
+use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 
 class DistanceDataExtension extends DataExtension
 {
@@ -19,18 +21,18 @@ class DistanceDataExtension extends DataExtension
         if ($this->owner->hasMethod('updateAddressValue')) {
             $address = $this->owner->updateAddressValue($address);
         }
-        if (class_exists('GoogleGeocoding')) {
-            if ($address) { // on frontend
-                $coords = GoogleGeocoding::address_to_point($address);
 
-                $Lat = $coords['lat'];
-                $Lng = $coords['lng'];
+        if ($address) { // on frontend
 
-                $query
-                    ->addSelect(array(
-                        '( 3959 * acos( cos( radians(' . $Lat . ') ) * cos( radians( `Lat` ) ) * cos( radians( `Lng` ) - radians(' . $Lng . ') ) + sin( radians(' . $Lat . ') ) * sin( radians( `Lat` ) ) ) ) AS distance',
-                    ));
-            }
+            $geocoder = new GoogleGeocoder($address);
+            $response = $geocoder->getResult();
+            $Lat = $response->getLatitude();
+            $Lng = $response->getLongitude();
+
+            $query
+                ->addSelect(array(
+                    '( 3959 * acos( cos( radians(' . $Lat . ') ) * cos( radians( `Lat` ) ) * cos( radians( `Lng` ) - radians(' . $Lng . ') ) + sin( radians(' . $Lat . ') ) * sin( radians( `Lat` ) ) ) ) AS distance',
+                ));
         }
     }
 }
