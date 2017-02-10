@@ -89,7 +89,6 @@ class Location extends DataObject implements PermissionProvider
         'Phone',
         'Email',
         'Category.ID',
-        'ShowInLocator',
         'Featured',
     );
 
@@ -106,10 +105,16 @@ class Location extends DataObject implements PermissionProvider
         'Postcode',
         'Country',
         'Category.Name',
-        'ShowInLocator.NiceAsBoolean',
         'Featured.NiceAsBoolean',
         'Coords',
     );
+
+    /**
+     * @var array
+     */
+    private static $extensions = [
+        'VersionedDataObject',
+    ];
 
     /**
      * Coords status for $summary_fields
@@ -164,8 +169,6 @@ class Location extends DataObject implements PermissionProvider
                         ->setAttribute('placeholder', 'http://'),
                     DropdownField::create('CategoryID', 'Category', LocationCategory::get()->map('ID', 'Title'))
                         ->setEmptyString('-- select --'),
-                    CheckboxField::create('ShowInLocator', 'Show in results')
-                        ->setDescription('Location will be included in results list'),
                     CheckboxField::create('Featured')
                         ->setDescription('Location will show at/near the top of the results list')
                 )
@@ -175,12 +178,13 @@ class Location extends DataObject implements PermissionProvider
         // allow to be extended via DataExtension
         $this->extend('updateCMSFields', $fields);
 
+        $fields->removeByName([
+            'ShowInLocator',
+            'Import_ID',
+        ]);
+
         // override Suburb field name
         $fields->dataFieldByName('Suburb')->setTitle('City');
-
-        $fields->removeByName(array(
-            'Import_ID',
-        ));
 
         return $fields;
     }

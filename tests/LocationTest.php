@@ -53,6 +53,8 @@ class LocationTest extends SapphireTest
             'Coords' => 'Coords',
             'Import_ID' => 'Import_ID',
             'LatLngOverride' => 'Lat Lng Override',
+            'Version' => 'Version',
+            'Versions' => 'Versions'
         );
         $this->assertEquals($expected, $labels);
     }
