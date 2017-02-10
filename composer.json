@@ -23,7 +23,8 @@
     "silverstripe/framework": "^3.4",
     "silverstripe/cms": "^3.4",
     "silverstripe-australia/addressable": "^1.1",
-    "muskie9/data-to-arraylist": "^1.0"
+    "muskie9/data-to-arraylist": "^1.0",
+    "silverstripe-australia/gridfieldextensions": "^1.2"
   },
   "suggest": {
     "unclecheese/betterbuttons": "Adds new form actions and buttons to GridField detail form for usability enhancements.",
