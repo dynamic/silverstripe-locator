@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class LocationPublishTask
+ */
 class LocationPublishTask extends BuildTask
 {
     /**
@@ -14,29 +17,62 @@ class LocationPublishTask extends BuildTask
      * @var bool
      */
     protected $enabled = true;
+
     /**
      * @param $request
      */
     public function run($request)
     {
-        $this->publishLocations();
+        $class = ($request->getVar('locationclass')) ? $request->getVar('locationclass') : 'Location';
+        $this->publishLocations($class);
     }
+
+    /**
+     * @param string $class
+     * @return Generator
+     */
+    protected function iterateLocations($class)
+    {
+        foreach ($class::get()->filter('ShowInLocator', true) as $location) {
+            yield $location;
+        }
+    }
+
     /**
      * mark all ProductDetail records as ShowInMenus = 0.
+     *
+     * @param string $class
      */
-    public function publishLocations()
+    public function publishLocations($class)
     {
-        $locations = Location::get();
+        if (!isset($class) || !class_exists($class) || !$class instanceof Location) $class = 'Location';
         $ct = 0;
-        foreach ($locations as $location) {
-            if ($location->ShowInLocator == 1 && !$location->isPublished()) {
+        $publish = function ($location) use (&$ct) {
+            if (!$location->isPublished()) {
                 $title = $location->Title;
                 $location->writeToStage('Stage');
                 $location->publish('Stage', 'Live');
-                echo $title.'<br><br>';
+                static::write_message($title);
                 ++$ct;
             }
+        };
+
+        foreach ($this->iterateLocations($class) as $location) {
+            $publish($location);
         }
-        echo '<p>'.$ct.' locations updated.</p>';
+
+        static::write_message("{$ct} locations updated.");
+    }
+
+    /**
+     * @param $message
+     */
+    protected static function write_message($message)
+    {
+        if (Director::is_cli()) {
+            echo "{$message}\n";
+        } else {
+            echo "{$message}<br><br>";
+        }
     }
 }
