@@ -167,9 +167,7 @@ class Locator_Controller extends Page_Controller
     /**
      * @var array
      */
-    private static $base_filter = [
-        'ShowInLocator' => true,
-    ];
+    private static $base_filter = [];
 
     /**
      * @var array
