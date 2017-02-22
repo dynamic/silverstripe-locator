@@ -63,9 +63,9 @@ class Locator extends Page
         $fields->addFieldsToTab('Root.Settings', array(
             HeaderField::create('DisplayOptions', 'Display Options', 3),
             OptionsetField::create('Unit', 'Unit of measure', array('m' => 'Miles', 'km' => 'Kilometers')),
-            CheckboxField::create('AutoGeocode', 'Auto Geocode - Automatically filter map results based on user location')
-                ->setDescription('Note: if any locations are set as featured, the auto geocode is automatically disabled.'),
-            CheckboxField::create('ModalWindow', 'Modal Window - Show Map results in a modal window'),
+            //CheckboxField::create('AutoGeocode', 'Auto Geocode - Automatically filter map results based on user location')
+            //    ->setDescription('Note: if any locations are set as featured, the auto geocode is automatically disabled.'),
+            //CheckboxField::create('ModalWindow', 'Modal Window - Show Map results in a modal window'),
         ));
 
         // Filter categories
@@ -198,6 +198,32 @@ class Locator_Controller extends Page_Controller
     private static $bootstrapify = true;
 
     /**
+     * @var int
+     */
+    private static $limit = 50;
+
+    /**
+     * ID of map container
+     *
+     * @var string
+     */
+    private static $map_container = 'map';
+
+    /**
+     * class of location list container
+     *
+     * @var string
+     */
+    private static $list_container = 'loc-list';
+
+    /**
+     * GET variable which, if isset, will trigger storeLocator init and return XML
+     *
+     * @var string
+     */
+    private static $query_trigger = 'action_doFilterLocations';
+
+    /**
      * @var DataList|ArrayList
      */
     protected $locations;
@@ -209,57 +235,66 @@ class Locator_Controller extends Page_Controller
     {
         parent::init();
 
-        // google maps api key
-        $key = Config::inst()->get('GoogleGeocoding', 'google_api_key');
+        // prevent init of map if no query
+        $request = Controller::curr()->getRequest();
+        if ($this->getTrigger($request)) {
+            // google maps api key
+            $key = Config::inst()->get('GoogleGeocoding', 'google_api_key');
 
-        $locations = $this->getLocations();
+            $locations = $this->getLocations();
 
-        if ($locations) {
+            if ($locations) {
 
-            Requirements::css('locator/css/map.css');
-            Requirements::javascript('framework/thirdparty/jquery/jquery.js');
-            Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
-            Requirements::javascript('locator/thirdparty/handlebars/handlebars-v1.3.0.js');
-            Requirements::javascript('locator/thirdparty/jquery-store-locator/js/jquery.storelocator.js');
+                Requirements::css('locator/css/map.css');
+                Requirements::javascript('framework/thirdparty/jquery/jquery.js');
+                Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
+                Requirements::javascript('locator/thirdparty/jquery-store-locator-plugin/assets/js/libs/handlebars.min.js');
+                Requirements::javascript('locator/thirdparty/jquery-store-locator-plugin/assets/js/plugins/storeLocator/jquery.storelocator.js');
 
-            $featuredInList = ($locations->filter('Featured', true)->count() > 0);
-            $defaultCoords = $this->getAddressSearchCoords() ? $this->getAddressSearchCoords() : '';
-            $isChrome = (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== FALSE);
+                $featuredInList = ($locations->filter('Featured', true)->count() > 0);
+                $defaultCoords = $this->getAddressSearchCoords() ? $this->getAddressSearchCoords() : '';
+                $isChrome = (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== FALSE);
 
-            $featured = $featuredInList
-                ? 'featuredLocations: true'
-                : 'featuredLocations: false';
+                $featured = $featuredInList
+                    ? 'featuredLocations: true'
+                    : 'featuredLocations: false';
 
-            // map config based on user input in Settings tab
-            // AutoGeocode or Full Map
-            if ($this->data()->AutoGeocode) {
-                $load = $featuredInList || $defaultCoords != '' || $isChrome
-                    ? 'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,'
-                    : 'autoGeocode: true, fullMapStart: false,';
-            } else {
-                $load = 'autoGeocode: false, fullMapStart: true, storeLimit: 1000, maxDistance: true,';
-            }
+                // map config based on user input in Settings tab
+                // AutoGeocode or Full Map
+                $limit = Config::inst()->get('Locator_Controller', 'limit');
+                if ($limit < 1) $limit = -1;
+                if ($this->data()->AutoGeocode) {
+                    $load = $featuredInList || $defaultCoords != '' || $isChrome
+                        ? 'autoGeocode: false, fullMapStart: true, storeLimit: ' . $limit . ', maxDistance: true,'
+                        : 'autoGeocode: true, fullMapStart: false,';
+                } else {
+                    $load = 'autoGeocode: false, fullMapStart: true, storeLimit: ' . $limit . ', maxDistance: true,';
+                }
 
-            $listTemplatePath = Config::inst()->get('Locator_Controller', 'list_template_path');
-            $infowindowTemplatePath = Config::inst()->get('Locator_Controller', 'info_window_template_path');
+                $listTemplatePath = Config::inst()->get('Locator_Controller', 'list_template_path');
+                $infowindowTemplatePath = Config::inst()->get('Locator_Controller', 'info_window_template_path');
 
-            // in page or modal
-            $modal = ($this->data()->ModalWindow) ? 'modalWindow: true' : 'modalWindow: false';
+                // in page or modal
+                $modal = ($this->data()->ModalWindow) ? 'modalWindow: true' : 'modalWindow: false';
 
-            $kilometer = ($this->data()->Unit == 'km') ? 'lengthUnit: "km"' : 'lengthUnit: "m"';
+                $kilometer = ($this->data()->Unit == 'km') ? "lengthUnit: 'km'" : "lengthUnit: 'm'";
 
-            // pass GET variables to xml action
-            $vars = $this->request->getVars();
-            unset($vars['url']);
-            unset($vars['action_doFilterLocations']);
-            $url = '';
-            if (count($vars)) {
-                $url .= '?' . http_build_query($vars);
-            }
-            $link = $this->Link() . 'xml.xml' . $url;
+                // pass GET variables to xml action
+                $vars = $this->request->getVars();
+                unset($vars['url']);
+                $url = '';
+                if (count($vars)) {
+                    $url .= '?' . http_build_query($vars);
+                }
+                $link = Controller::join_links($this->AbsoluteLink(), 'xml.xml', $url);
+                $link = Controller::join_links($this->Link(), 'xml.xml', $url);
 
-            // init map
-            Requirements::customScript("
+                // containers
+                $map_id = Config::inst()->get('Locator_Controller', 'map_container');
+                $list_class = Config::inst()->get('Locator_Controller', 'list_container');
+
+                // init map
+                Requirements::customScript("
                 $(function(){
                     $('#map-container').storeLocator({
                         " . $load . "
@@ -267,17 +302,26 @@ class Locator_Controller extends Page_Controller
                         listTemplatePath: '" . $listTemplatePath . "',
                         infowindowTemplatePath: '" . $infowindowTemplatePath . "',
                         originMarker: true,
-                        " . $modal . ',
-                        ' . $featured . ",
+                        //" . $modal . ",
+                        " . $featured . ",
                         slideMap: false,
-                        zoomLevel: 0,
-                        noForm: true,
                         distanceAlert: -1,
-                        " . $kilometer . ',
-                        ' . $defaultCoords . '
+                        " . $kilometer . ",
+                        " . $defaultCoords . "
+                        mapID: '" . $map_id . "',
+                        locationList: '" . $list_class . "',
+                        mapSettings: {
+							zoom: 12,
+							mapTypeId: google.maps.MapTypeId.ROADMAP,
+							disableDoubleClickZoom: true,
+							scrollwheel: false,
+							navigationControl: false,
+							draggable: false
+						}
                     });
                 });
-            ');
+            ");
+            }
         }
     }
 
@@ -288,7 +332,11 @@ class Locator_Controller extends Page_Controller
      */
     public function index(SS_HTTPRequest $request)
     {
-        $locations = $this->getLocations();
+        if ($this->getTrigger($request)) {
+            $locations = $this->getLocations();
+        } else {
+            $locations = ArrayList::create();
+        }
 
         return $this->customise(array(
             'Locations' => $locations,
@@ -303,7 +351,11 @@ class Locator_Controller extends Page_Controller
      */
     public function xml(SS_HTTPRequest $request)
     {
-        $locations = $this->getLocations();
+        if ($this->getTrigger($request)) {
+            $locations = $this->getLocations();
+        } else {
+            $locations = ArrayList::create();
+        }
 
         return $this->customise(array(
             'Locations' => $locations,
@@ -364,9 +416,27 @@ class Locator_Controller extends Page_Controller
         //allow for returning list to be set as
         $this->extend('updateListType', $locations);
 
+        $limit = Config::inst()->get('Locator_Controller', 'limit');
+        if ($limit > 0) {
+            $locations = $locations->limit($limit);
+        }
+
         $this->locations = $locations;
         return $this;
 
+    }
+
+    /**
+     * @param SS_HTTPRequest $request
+     * @return bool
+     */
+    public function getTrigger(SS_HTTPRequest $request = null)
+    {
+        if ($request === null) {
+            $request = $this->getRequest();
+        }
+        $trigger = $request->getVar(Config::inst()->get('Locator_Controller', 'query_trigger'));
+        return isset($trigger);
     }
 
     /**

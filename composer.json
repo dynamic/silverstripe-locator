@@ -14,7 +14,7 @@
   "license": "BSD-3-Clause",
   "authors": [
     {
-      "name": "Dynamic Inc",
+      "name": "Dynamic",
       "email": "dev@dynamicagency.com",
       "homepage": "http://www.dynamicagency.com"
     }
@@ -26,9 +26,9 @@
     "heyday/silverstripe-versioneddataobjects": "^1.4",
     "unclecheese/betterbuttons": "^1.3",
     "muskie9/data-to-arraylist": "^1.0"
+    "silverstripe-australia/gridfieldextensions": "^1.2"
   },
   "suggest": {
-    "unclecheese/betterbuttons": "Adds new form actions and buttons to GridField detail form for usability enhancements.",
     "unclecheese/bootstrap-forms": "Allows the creation of forms compatible with the Twitter Bootstrap CSS framework in SilverStripe."
   },
   "extra": {

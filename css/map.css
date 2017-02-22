@@ -67,7 +67,7 @@
 /* === 
  Results List 
 === */
-#loc-list
+.loc-list
 {
 	float: left; 
 	height: 530px;
@@ -75,7 +75,7 @@
 	overflow: auto;
 }
 
-#loc-list ul
+.loc-list ul
 {
 	display: block;
 	clear: left;
@@ -86,7 +86,7 @@
 	width: 100%;
 }
 
-#loc-list .list-label
+.loc-list .list-label
 {
 	float: left;
 	margin: 10px 0 0 6px;
@@ -98,26 +98,26 @@
 	font-weight: bold;
 }
 
-#loc-list .list-details
+.loc-list .list-details
 {
 	float: left;
 	margin-left: 6px;
 	width: 165px;
 }
 
-#loc-list .list-content
+.loc-list .list-content
 {
 	padding: 10px;
 }
 
-#loc-list .loc-dist
+.loc-list .loc-dist
 {
 	font-weight: bold;
 	font-style: italic;
 	color: #8e8e8e;
 }
 
-#loc-list li
+.loc-list li
 {
 	display: block;
 	clear: left;
@@ -128,10 +128,10 @@
 	border: 1px solid #fff; /* Adding this to prevent moving li elements when adding the list-focus class*/
 }
 
-#loc-list li:first-child {margin-top: 0px;}
+.loc-list li:first-child {margin-top: 0px;}
 
 
-#loc-list .list-focus
+.loc-list .list-focus
 {
 	border: 1px solid rgba(82,168,236,0.9);
 	-moz-box-shadow: 0 0 8px rgba(82,168,236,0.7);
@@ -215,7 +215,7 @@
 
 @media only screen and (max-width: 960px) {
 
-	#loc-list {
+	.loc-list {
 		
 	}
 	
@@ -231,15 +231,15 @@
 
 @media only screen and (min-width: 641px) and (max-width: 959px) {
 	
-	#loc-list .list-label{
+	.loc-list .list-label{
 		margin-left: 0px;
 	}
 	
-	#loc-list .list-content {
+	.loc-list .list-content {
 		padding: 10px 0px;
 	}
 	
-	#loc-list .list-details {
+	.loc-list .list-details {
 		width: 140px;
 	}
 
@@ -248,7 +248,7 @@
 
 @media only screen and (max-width: 640px) { 
 
-	#loc-list {
+	.loc-list {
 		width: 100%;
 		height: auto;
 	}
