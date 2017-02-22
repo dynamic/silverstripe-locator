@@ -5,6 +5,20 @@
  */
 class LocatorForm extends Form
 {
+    /**
+     * @var bool
+     */
+    private static $show_radius = true;
+
+    /**
+     * @var array
+     */
+    private static $radius_array = [
+        '25' => '25',
+        '50' => '50',
+        '75' => '75',
+        '100' => '100',
+    ];
 
     /**
      * LocatorForm constructor.
@@ -30,9 +44,17 @@ class LocatorForm extends Form
         if ($categories) {
             $categoriesField = DropdownField::create('CategoryID')
                 ->setTitle('')
-                ->setEmptyString('All Categories')
+                ->setEmptyString('all categories')
                 ->setSource($categories->map());
             $fields->push($categoriesField);
+        }
+
+        if (Config::inst()->get('LocatorForm', 'show_radius')) {
+            $radiusArray = Config::inst()->get('LocatorForm', 'radius_array');
+            $this->extend('overrideRadiusArray', $radiusArray);
+            $fields->push(DropdownField::create('Radius', '', $radiusArray)
+                ->setEmptyString('radius')
+            );
         }
 
         $actions = FieldList::create(
