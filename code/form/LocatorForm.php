@@ -62,9 +62,23 @@ class LocatorForm extends Form
                 ->setTitle('Search')
         );
 
-        $validator = RequiredFields::create();
+        $validator = $this->getValidator();
 
         parent::__construct($controller, $name, $fields, $actions, $validator);
+    }
+
+    /**
+     * @return Validator
+     */
+    public function getValidator()
+    {
+        $validator = parent::getValidator();
+        if (empty($validator)) {
+            if (!$this->validator instanceof RequiredFields) $this->setValidator(RequiredFields::create('Address'));
+            $validator = $this->validator;
+        }
+        $this->extend('updateRequiredFields', $validator);
+        return $validator;
     }
 
 }
