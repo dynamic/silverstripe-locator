@@ -40,6 +40,7 @@ class LocationTest extends SapphireTest
             'Category.Name' => 'Category',
             'Featured.NiceAsBoolean' => 'Featured',
             'Coords' => 'Coords',
+            'LatLngOverride' => 'Lat Lng Override',
         );
         $this->assertEquals($expected, $labels);
     }

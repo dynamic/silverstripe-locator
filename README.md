@@ -1,10 +1,10 @@
 # SilverStripe Locator
 
-[![Build Status](https://travis-ci.org/dynamic/silverstripe-locator.svg?branch=master)](https://travis-ci.org/dynamic/silverstripe-locator)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/quality-score.png?b=1.1)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/?branch=1.1)
-[![Code Coverage](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/coverage.png?b=1.1)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/?branch=1.1)
-[![Build Status](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/build.png?b=1.1)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/build-status/1.1)
-[![codecov.io](https://codecov.io/github/dynamic/silverstripe-locator/coverage.svg?branch=master)](https://codecov.io/github/dynamic/silverstripe-locator?branch=master)
+[![Build Status](https://travis-ci.org/dynamic/silverstripe-locator.svg?branch=1.2)](https://travis-ci.org/dynamic/silverstripe-locator)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/quality-score.png?b=1.2)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/?branch=1.2)
+[![Code Coverage](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/coverage.png?b=1.2)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/?branch=1.2)
+[![Build Status](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/build.png?b=1.2)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/build-status/1.2)
+[![codecov.io](https://codecov.io/github/dynamic/silverstripe-locator/coverage.svg?branch=1.2)](https://codecov.io/github/dynamic/silverstripe-locator?branch=1.2)
 
 SilverStripe Locator displays a filterable map of locations. You can choose whether to show all locations on load, or enable auto geocoding to filter the initial list based on the visitor's location. 
 
@@ -15,7 +15,7 @@ SilverStripe Locator displays a filterable map of locations. You can choose whet
 
 ## Installation
 
-`composer require "dynamic/silverstripe-locator" "dev-master"`
+`composer require "dynamic/silverstripe-locator"`
 
 Add `locator` and `addressable` to your `.gitignore`
 
