@@ -15,8 +15,6 @@ class Locator extends Page
      * @var array
      */
     private static $db = array(
-        'AutoGeocode' => 'Boolean',
-        'ModalWindow' => 'Boolean',
         'Unit' => 'Enum("m,km","m")',
     );
 
@@ -25,13 +23,6 @@ class Locator extends Page
      */
     private static $many_many = array(
         'Categories' => 'LocationCategory',
-    );
-
-    /**
-     * @var array
-     */
-    private static $defaults = array(
-        'AutoGeocode' => true,
     );
 
     /**
@@ -63,9 +54,6 @@ class Locator extends Page
         $fields->addFieldsToTab('Root.Settings', array(
             HeaderField::create('DisplayOptions', 'Display Options', 3),
             OptionsetField::create('Unit', 'Unit of measure', array('m' => 'Miles', 'km' => 'Kilometers')),
-            //CheckboxField::create('AutoGeocode', 'Auto Geocode - Automatically filter map results based on user location')
-            //    ->setDescription('Note: if any locations are set as featured, the auto geocode is automatically disabled.'),
-            //CheckboxField::create('ModalWindow', 'Modal Window - Show Map results in a modal window'),
         ));
 
         // Filter categories
@@ -253,29 +241,18 @@ class Locator_Controller extends Page_Controller
 
                 $featuredInList = ($locations->filter('Featured', true)->count() > 0);
                 $defaultCoords = $this->getAddressSearchCoords() ? $this->getAddressSearchCoords() : '';
-                $isChrome = (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== FALSE);
 
                 $featured = $featuredInList
                     ? 'featuredLocations: true'
                     : 'featuredLocations: false';
 
                 // map config based on user input in Settings tab
-                // AutoGeocode or Full Map
                 $limit = Config::inst()->get('Locator_Controller', 'limit');
                 if ($limit < 1) $limit = -1;
-                if ($this->data()->AutoGeocode) {
-                    $load = $featuredInList || $defaultCoords != '' || $isChrome
-                        ? 'autoGeocode: false, fullMapStart: true, storeLimit: ' . $limit . ', maxDistance: true,'
-                        : 'autoGeocode: true, fullMapStart: false,';
-                } else {
-                    $load = 'autoGeocode: false, fullMapStart: true, storeLimit: ' . $limit . ', maxDistance: true,';
-                }
+                $load = 'fullMapStart: true, storeLimit: ' . $limit . ', maxDistance: true,';
 
                 $listTemplatePath = Config::inst()->get('Locator_Controller', 'list_template_path');
                 $infowindowTemplatePath = Config::inst()->get('Locator_Controller', 'info_window_template_path');
-
-                // in page or modal
-                $modal = ($this->data()->ModalWindow) ? 'modalWindow: true' : 'modalWindow: false';
 
                 $kilometer = ($this->data()->Unit == 'km') ? "lengthUnit: 'km'" : "lengthUnit: 'm'";
 
@@ -286,7 +263,6 @@ class Locator_Controller extends Page_Controller
                 if (count($vars)) {
                     $url .= '?' . http_build_query($vars);
                 }
-                $link = Controller::join_links($this->AbsoluteLink(), 'xml.xml', $url);
                 $link = Controller::join_links($this->Link(), 'xml.xml', $url);
 
                 // containers
@@ -302,7 +278,6 @@ class Locator_Controller extends Page_Controller
                         listTemplatePath: '" . $listTemplatePath . "',
                         infowindowTemplatePath: '" . $infowindowTemplatePath . "',
                         originMarker: true,
-                        //" . $modal . ",
                         " . $featured . ",
                         slideMap: false,
                         distanceAlert: -1,
