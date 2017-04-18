@@ -58,4 +58,21 @@ class LocationAdmin extends ModelAdmin
 
         return parent::getExportFields();
     }
+
+    /**
+     * @param null $id
+     * @param null $fields
+     * @return $this|Form
+     */
+    public function getEditForm($id = null, $fields = null)
+    {
+        $form = parent::getEditForm($id, $fields);
+        $class = $this->sanitiseClassName($this->modelClass);
+        if ($class == 'Location') {
+            $gridField = $form->Fields()->fieldByName($class);
+            $config = $gridField->getConfig();
+            $config->removeComponentsByType('GridFieldDeleteAction');
+        }
+        return $form;
+    }
 }
