@@ -2,10 +2,11 @@
 
 namespace Dynamic\Locator;
 
-use SilverStripe\ORM\DataExtension,
-    SilverStripe\ORM\Queries\SQLSelect,
-    SilverStripe\ORM\DataQuery,
-    SilverStripe\Control\Controller;
+use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\ORM\DataQuery;
+use SilverStripe\Control\Controller;
 
 class DistanceDataExtension extends DataExtension
 {
@@ -19,12 +20,12 @@ class DistanceDataExtension extends DataExtension
         if ($this->owner->hasMethod('updateAddressValue')) {
             $address = $this->owner->updateAddressValue($address);
         }
-        if (class_exists('GoogleGeocoding')) {
+        if (class_exists(GoogleGeocoder::class)) {
             if ($address) { // on frontend
-                $coords = GoogleGeocoding::address_to_point($address);
-
-                $Lat = $coords['lat'];
-                $Lng = $coords['lng'];
+                $geocoder = new GoogleGeocoder($address);
+                $response = $geocoder->getResult();
+                $Lat = $response->getLatitude();
+                $Lng = $response->getLongitude();
 
                 $query
                     ->addSelect(array(

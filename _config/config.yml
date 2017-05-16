@@ -1,8 +1,8 @@
 ---
 Name: locator
 ---
-Location:
+Dynamic\Locator\Location:
   extensions:
-    - Addressable
-    - Geocodable
-    - DistanceDataExtension
+    - Dynamic\Locator\DistanceDataExtension
+    - Dynamic\Locator\AddressDataExtension
+    - SilverStripe\Versioned\Versioned('Stage','Live')

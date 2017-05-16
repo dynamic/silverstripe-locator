@@ -2,16 +2,22 @@
 
 namespace Dynamic\Locator\Tests;
 
-use Dynamic\Locator\Location,
-    Dynamic\Locator\Locator,
-    Dynamic\Locator\Locator_Controller,
-    SilverStripe\Core\Config\Config;
+use Dynamic\Locator\Location;
+use Dynamic\Locator\Locator;
+use Dynamic\Locator\LocatorController;
+use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Dev\FunctionalTest;
 
 /**
  * Class LocatorTest
  */
-class LocatorTest extends Locator_Test
+class LocatorTest extends FunctionalTest
 {
+    /**
+     * @var string
+     */
+    protected static $fixture_file = 'locator/tests/fixtures.yml';
 
     /**
      *
@@ -27,9 +33,9 @@ class LocatorTest extends Locator_Test
      */
     public function testLocations()
     {
-        $filter = Config::inst()->get('Dynamic\\Locator\\Locator_Controller', 'base_filter');
-        $filterAny = Config::inst()->get('Dynamic\\Locator\\Locator_Controller', 'base_filter_any');
-        $exclude = Config::inst()->get('Dynamic\\Locator\\Locator_Controller', 'base_exclude');
+        $filter = Config::inst()->get(LocatorController::class, 'base_filter');
+        $filterAny = Config::inst()->get(LocatorController::class, 'base_filter_any');
+        $exclude = Config::inst()->get(LocatorController::class, 'base_exclude');
         $locations = Locator::get_locations($filter, $filterAny, $exclude);
         $locations2 = Location::get()->filter($filter)->filterAny($filterAny)->exclude($exclude);
         $this->assertEquals($locations->count(), $locations2->count());
@@ -83,7 +89,7 @@ class LocatorTest extends Locator_Test
     public function testIndex()
     {
         $locator = $this->objFromFixture('Dynamic\\Locator\\Locator', 'locator1');
-        $controller = Locator_Controller::create($locator);
+        $controller = LocatorController::create($locator);
         $this->assertInstanceOf('SilverStripe\\View\\ViewableData', $controller->index($controller->request));
     }
 
@@ -93,7 +99,7 @@ class LocatorTest extends Locator_Test
     public function testXml()
     {
         $locator = $this->objFromFixture('Dynamic\\Locator\\Locator', 'locator1');
-        $controller = Locator_Controller::create($locator);
+        $controller = LocatorController::create($locator);
         $this->assertInstanceOf('SilverStripe\\ORM\\FieldType\\DBHTMLText', $controller->xml($controller->request));
     }
 
@@ -103,7 +109,7 @@ class LocatorTest extends Locator_Test
     public function testLocationSearch()
     {
         $locator = $this->objFromFixture('Dynamic\\Locator\\Locator', 'locator1');
-        $object = Locator_Controller::create($locator);
+        $object = LocatorController::create($locator);
         $form = $object->LocationSearch();
         $this->assertTrue(is_a($form, 'SilverStripe\\Forms\\Form'));
 
@@ -122,8 +128,8 @@ class LocatorTest extends Locator_Test
      */
     public function testLocationInfoTemplates()
     {
-        $this->assertEquals('locator/templates/location-list-description.html', Config::inst()->get('Locator_Controller', 'list_template_path'));
-        $this->assertEquals('locator/templates/infowindow-description.html', Config::inst()->get('Locator_Controller', 'info_window_template_path'));
+        $this->assertEquals('locator/templates/location-list-description.html', Config::inst()->get(LocatorController::class, 'list_template_path'));
+        $this->assertEquals('locator/templates/infowindow-description.html', Config::inst()->get(LocatorController::class, 'info_window_template_path'));
     }
 
 }

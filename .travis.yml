@@ -19,13 +19,13 @@ env:
 
 matrix:
   include:
-    - php: 5.6
-      env: DB=PGSQL
-    - php: 5.6
-      env: DB=SQLITE
-    - php: 5.6
-      env: COVERAGE=1
     - php: 7.0
+      env: DB=SQLITE
+    - php: 7.0
+      env: DB=PGSQL
+    - php: 7.0
+      env: COVERAGE=1
+    - php: 5.6
 
 
 before_script:
@@ -34,7 +34,9 @@ before_script:
   - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
   - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
   - cd ~/builds/ss
+  - mv "$MODULE_PATH/phpunit.xml.dist" .
 
+#Execute tests with or without coverage
 script:
   # Execute tests with no coverage.  This is the fastest option
   - "if [ \"$COVERAGE\" = \"0\" ]; then vendor/bin/phpunit $MODULE_PATH/tests/; fi"
@@ -42,7 +44,8 @@ script:
   # Execute tests with coverage.  Do this for a small
   - "if [ \"$COVERAGE\" = \"1\" ]; then vendor/bin/phpunit --coverage-clover=coverage.clover $MODULE_PATH/tests/; fi"
 
-after_script:
+# Upload code coverage when tests pass
+after_success:
   - "if [ \"$COVERAGE\" = \"1\" ]; then mv coverage.clover ~/build/$TRAVIS_REPO_SLUG/; fi"
   - cd ~/build/$TRAVIS_REPO_SLUG
   - wget https://scrutinizer-ci.com/ocular.phar

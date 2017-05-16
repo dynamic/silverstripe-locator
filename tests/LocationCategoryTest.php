@@ -1,24 +1,32 @@
 <?php
 
+namespace Dynamic\Locator\Tests;
+
+use Dynamic\Locator\LocationCategory;
+use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Security\Member;
+
 /**
  * Class LocationTest
  */
 class LocationCategoryTest extends SapphireTest
 {
-
     /**
      * @var string
      */
-    protected static $fixture_file = 'locator/tests/Locator_Test.yml';
+    protected static $fixture_file = 'locator/tests/fixtures.yml';
 
     /**
      *
      */
     public function testGetCMSFields()
     {
-        $object = $this->objFromFixture('LocationCategory', 'service');
+        $object = $this->objFromFixture(LocationCategory::class, 'service');
         $fieldset = $object->getCMSFields();
-        $this->assertTrue(is_a($fieldset, 'FieldList'));
+        $this->assertInstanceOf(FieldList::class, $fieldset);
     }
 
     /**
@@ -26,7 +34,7 @@ class LocationCategoryTest extends SapphireTest
      */
     public function testCanView()
     {
-        $object = $this->objFromFixture('LocationCategory', 'service');
+        $object = $this->objFromFixture(LocationCategory::class, 'service');
         $this->assertTrue($object->canView());
     }
 
@@ -35,12 +43,12 @@ class LocationCategoryTest extends SapphireTest
      */
     public function testCanEdit()
     {
-        $object = $this->objFromFixture('LocationCategory', 'service');
+        $object = $this->objFromFixture(LocationCategory::class, 'service');
 
-        $admin = $this->objFromFixture('Member', 'locationedit');
+        $admin = $this->objFromFixture(Member::class, 'locationedit');
         $this->assertTrue($object->canEdit($admin));
 
-        $member = $this->objFromFixture('Member', 'default');
+        $member = $this->objFromFixture(Member::class, 'default');
         $this->assertFalse($object->canEdit($member));
     }
 
@@ -49,12 +57,12 @@ class LocationCategoryTest extends SapphireTest
      */
     public function testCanDelete()
     {
-        $object = $this->objFromFixture('LocationCategory', 'service');
+        $object = $this->objFromFixture(LocationCategory::class, 'service');
 
-        $admin = $this->objFromFixture('Member', 'locationdelete');
+        $admin = $this->objFromFixture(Member::class, 'locationdelete');
         $this->assertTrue($object->canDelete($admin));
 
-        $member = $this->objFromFixture('Member', 'default');
+        $member = $this->objFromFixture(Member::class, 'default');
         $this->assertFalse($object->canDelete($member));
     }
 
@@ -63,12 +71,12 @@ class LocationCategoryTest extends SapphireTest
      */
     public function testCanCreate()
     {
-        $object = $this->objFromFixture('LocationCategory', 'service');
+        $object = $this->objFromFixture(LocationCategory::class, 'service');
 
-        $admin = $this->objFromFixture('Member', 'locationcreate');
+        $admin = $this->objFromFixture(Member::class, 'locationcreate');
         $this->assertTrue($object->canCreate($admin));
 
-        $member = $this->objFromFixture('Member', 'default');
+        $member = $this->objFromFixture(Member::class, 'default');
         $this->assertFalse($object->canCreate($member));
     }
 }
