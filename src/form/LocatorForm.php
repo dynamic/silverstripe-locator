@@ -2,13 +2,15 @@
 
 namespace Dynamic\Locator;
 
-use SilverStripe\Forms\Form,
-    SilverStripe\Forms\FieldList,
-    SilverStripe\Forms\TextField,
-    SilverStripe\Forms\DropdownField,
-    SilverStripe\Forms\FormAction,
-    SilverStripe\Forms\RequiredFields,
-    SilverStripe\Control\Controller;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Dev\Debug;
+use SilverStripe\Forms\Form;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\RequiredFields;
+use SilverStripe\Control\Controller;
 
 /**
  * Class LocatorForm
@@ -59,8 +61,8 @@ class LocatorForm extends Form
             $fields->push($categoriesField);
         }
 
-        if (Config::inst()->get('LocatorForm', 'show_radius')) {
-            $radiusArray = Config::inst()->get('LocatorForm', 'radius_array');
+        if (Config::inst()->get(LocatorForm::class, 'show_radius')) {
+            $radiusArray = Config::inst()->get(LocatorForm::class, 'radius_array');
             $this->extend('overrideRadiusArray', $radiusArray);
             $fields->push(DropdownField::create('Radius', '', $radiusArray)
                 ->setEmptyString('radius')
@@ -78,7 +80,7 @@ class LocatorForm extends Form
     }
 
     /**
-     * @return Validator
+     * @return null|RequiredFields|\SilverStripe\Forms\Validator
      */
     public function getValidator()
     {
@@ -90,5 +92,4 @@ class LocatorForm extends Form
         $this->extend('updateRequiredFields', $validator);
         return $validator;
     }
-
 }

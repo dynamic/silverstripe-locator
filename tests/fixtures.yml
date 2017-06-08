@@ -34,6 +34,10 @@ SilverStripe\Security\Member:
     Surname: Location
     Email: delete@test.com
     Groups: =>SilverStripe\Security\Group.locationdelete
+  default:
+    FirstName: Default
+    Surname: Member
+    email: default@test.com
 Dynamic\Locator\LocationCategory:
   service:
     Name: Service
@@ -54,11 +58,10 @@ Dynamic\Locator\Location:
     Website: "http://www.dynamicagency.com"
     Phone: 920-459-8889
     Email: dev@dy.ag
-    ShowInLocator: true
     Address: 1526 S. 12th St
-    Suburb: Sheboygan
+    City: Sheboygan
     State: WI
-    Postcode: 53081
+    PostalCode:
     Country: US
     Category: =>Dynamic\Locator\LocationCategory.service
   silverstripe:
@@ -67,7 +70,6 @@ Dynamic\Locator\Location:
     Website: http://silverstripe.org
     Phone: 555-555-5555
     Email: solutions@silverstripe.com
-    ShowInLocator: true
     Category: =>Dynamic\Locator\LocationCategory.service
   3sheeps:
     Title: 3 Sheeps Brewing
@@ -76,41 +78,18 @@ Dynamic\Locator\Location:
     Phone: 555-555-5556
     ShowInLocator: false
     Address: 1327 Huron Ave
-    Suburb: Sheboygan
+    City: Sheboygan
     State: WI
-    Postcode: 53081
+    PostalCode:
     Country: US
     Category: =>Dynamic\Locator\LocationCategory.entertainment
-  Google:
-    Title: Google
-    Featured: false
-    ShowInLocator: true
-    Website: http://google.com
-    Address: 1600 Amphitheatre Parkway
-    Suburb: Mountain View
-    State: CA
-    Postcode: 94043
-    Country: US
-    Category: =>Dynamic\Locator\LocationCategory.technology
-  Facebook:
-    Title: Facebook
-    Featured: false
-    ShowInLocator: true
-    Website: http://facebook.com
-    Address: 1600 Amphitheatre Parkway
-    Suburb: Menlo Park
-    State: CA
-    Postcode: 94025
-    Country: US
-    Category: =>Dynamic\Locator\LocationCategory.technology
   Lambeau:
     Title: Lambeau Field
     Featured: true
-    ShowInLocator: true
     Website: https://en.wikipedia.org/wiki/Lambeau_Field
     Address: 1265 Lombardi Avenue
-    Suburb: Green Bay
+    City: Green Bay
     State: WI
-    Postcode: 54304
+    PostalCode:
     Country: US
     Category: =>Dynamic\Locator\LocationCategory.entertainment

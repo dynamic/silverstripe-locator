@@ -44,9 +44,9 @@ class LocationAdmin extends ModelAdmin
             return array(
                 'Title' => 'Name',
                 'Address' => 'Address',
-                'Suburb' => 'City',
+                'City' => 'City',
                 'State' => 'State',
-                'Postcode' => 'Postcode',
+                'PostalCode' => 'PostalCode',
                 'Country' => 'Country',
                 'Website' => 'Website',
                 'Phone' => 'Phone',

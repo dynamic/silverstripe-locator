@@ -2,7 +2,11 @@
 
 namespace Dynamic\Locator;
 
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Security\Permission;
 
 /**
  * Class LocationCategory
@@ -24,14 +28,14 @@ class LocationCategory extends DataObject
      * @var array
      */
     private static $has_many = array(
-        'Locations' => 'Dynamic\\Locator\\LocationLocation',
+        'Locations' => Location::class,
     );
 
     /**
      * @var array
      */
     private static $belogs_many_many = array(
-        'Locators' => 'Dynamic\\Locator\\Locator',
+        'Locators' => Locator::class,
     );
 
     /**
@@ -61,7 +65,7 @@ class LocationCategory extends DataObject
             // Locations
             $config = GridFieldConfig_RelationEditor::create();
             $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
-            $config->addComponent(new GridFieldAddExistingSearchButton());
+            $config->addComponent(new GridFieldAddExistingAutocompleter());
             $config->removeComponentsByType('GridFieldAddNewButton');
             $locations = $this->Locations();
             $locationField = GridField::create('Locations', 'Locations', $locations, $config);
@@ -78,7 +82,7 @@ class LocationCategory extends DataObject
      * @param null|Member $member
      * @return bool
      */
-    public function canView($member = null)
+    public function canView($member = null, $context = [])
     {
         return true;
     }
@@ -87,7 +91,7 @@ class LocationCategory extends DataObject
      * @param null|Member $member
      * @return bool|int
      */
-    public function canEdit($member = null)
+    public function canEdit($member = null, $context = [])
     {
         return Permission::check('Location_EDIT', 'any', $member);
     }
@@ -96,16 +100,17 @@ class LocationCategory extends DataObject
      * @param null|Member $member
      * @return bool|int
      */
-    public function canDelete($member = null)
+    public function canDelete($member = null, $context = [])
     {
         return Permission::check('Location_DELETE', 'any', $member);
     }
 
     /**
-     * @param null|Member $member
+     * @param null $member
+     * @param array $context
      * @return bool|int
      */
-    public function canCreate($member = null)
+    public function canCreate($member = null, $context = [])
     {
         return Permission::check('Location_CREATE', 'any', $member);
     }

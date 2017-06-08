@@ -1,39 +1,44 @@
 <?php
 
+namespace Dynamic\Locator\Tests;
+
+use Dynamic\Locator\Locator;
+use Dynamic\Locator\LocatorController;
+use Dynamic\Locator\LocatorForm;
+use SilverStripe\Dev\FunctionalTest;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\RequiredFields;
+
 class LocatorFormTest extends FunctionalTest
 {
+    /**
+     * @var string
+     */
+    protected static $fixture_file = 'locator/tests/fixtures.yml';
 
+    /**
+     *
+     */
     public function testLocatorFormBase()
     {
-        $form = LocatorForm::create(Locator_Controller::create(Locator::get()->first()), 'LocatorForm');
+        $form = LocatorForm::create(LocatorController::create(Locator::get()->first()), 'LocatorForm');
 
-        $this->assertInstanceOf('FieldList', $form->Fields());
-        $this->assertInstanceOf('RequiredFields', $form->getValidator());
+        $this->assertInstanceOf(FieldList::class, $form->Fields());
+        $this->assertInstanceOf(RequiredFields::class, $form->getValidator());
     }
 
+    /**
+     *
+     */
     public function testUpdateRequiredFields()
     {
-        $form = LocatorFormExtendedForm::create(Locator_Controller::create(Locator::get()->first()), 'LocatorForm');
+        $form = LocatorForm::create(LocatorController::create(Locator::get()->first()), 'LocatorForm');
+        $validator = $form->getValidator();
+
+        $validator->removeRequiredField('Address');
+        $validator->addRequiredField('Foo');
 
         $this->assertEquals(['Foo'], $form->getValidator()->getRequired());
     }
-
-}
-
-class LocatorFormTestFormExtension extends Extension implements TestOnly
-{
-    public function updateRequiredFields(RequiredFields $validator)
-    {
-        $validator->removeRequiredField('Address');
-        $validator->addRequiredField('Foo');
-    }
-}
-
-class LocatorFormExtendedForm extends LocatorForm implements TestOnly
-{
-
-    private static $extensions = [
-        'LocatorFormTestFormExtension',
-    ];
 
 }

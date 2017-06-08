@@ -1,5 +1,9 @@
 <?php
 
+namespace Dynamic\Locator\Tasks;
+
+use SilverStripe\Dev\BuildTask;
+
 class EmailAddressTask extends BuildTask
 {
     protected $title = 'Email Address Task'; // title of the script

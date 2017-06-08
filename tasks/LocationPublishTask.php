@@ -1,5 +1,11 @@
 <?php
 
+namespace Dynamic\Locator\Tasks;
+
+use Dynamic\Locator\Location;
+use SilverStripe\Control\Director;
+use SilverStripe\Dev\BuildTask;
+
 /**
  * Class LocationPublishTask
  */

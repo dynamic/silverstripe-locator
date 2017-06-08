@@ -2,165 +2,19 @@
 
 namespace Dynamic\Locator;
 
-use SilverStripe\Forms\Form,
-    SilverStripe\Forms\FieldList,
-    SilverStripe\Forms\HeaderField,
-    SilverStripe\Forms\OptionsetField,
-    SilverStripe\Forms\CheckboxField,
-    SilverStripe\Forms\GridField\GridField,
-    SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor,
-    SilverStripe\ORM\DataList,
-    SilverStripe\ORM\ArrayList,
-    SilverStripe\Core\Config\Config,
-    SilverStripe\Control\Controller,
-    SilverStripe\View\Requirements,
-    SilverStripe\Control\HTTPRequest,
-    muskie9\DataToArrayList\ORM\DataToArrayListHelper;
+use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
+use muskie9\DataToArrayList\ORM\DataToArrayListHelper;
+use SilverStripe\Control\Controller;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Dev\Debug;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\View\Requirements;
+use SilverStripe\Control\HTTPRequest;
 
 /**
- * Class Locator
- *
- * @property bool $AutoGeocode
- * @property bool $ModalWindow
- * @property string $Unit
- * @method Categories|ManyManyList $Categories
+ * Class LocatorController
  */
-class Locator extends \Page
-{
-
-    /**
-     * @var array
-     */
-    private static $db = array(
-        'Unit' => 'Enum("m,km","m")',
-    );
-
-    /**
-     * @var array
-     */
-    private static $many_many = array(
-        'Categories' => 'Dynamic\\Locator\\LocationCategory',
-    );
-
-    /**
-     * @var string
-     */
-    private static $singular_name = 'Locator';
-    /**
-     * @var string
-     */
-    private static $plural_name = 'Locators';
-    /**
-     * @var string
-     */
-    private static $description = 'Find locations on a map';
-
-    /**
-     * @var string
-     */
-    private static $location_class = 'Dynamic\\Locator\\Location';
-
-    /**
-     * @return FieldList
-     */
-    public function getCMSFields()
-    {
-        $fields = parent::getCMSFields();
-
-        // Settings
-        $fields->addFieldsToTab('Root.Settings', array(
-            HeaderField::create('DisplayOptions', 'Display Options', 3),
-            OptionsetField::create('Unit', 'Unit of measure', array('m' => 'Miles', 'km' => 'Kilometers')),
-        ));
-
-        // Filter categories
-        $config = GridFieldConfig_RelationEditor::create();
-        if (class_exists('GridFieldAddExistingSearchButton')) {
-            $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
-            $config->addComponent(new GridFieldAddExistingSearchButton());
-        }
-        $categories = $this->Categories();
-        $categoriesField = GridField::create('Categories', 'Categories', $categories, $config)
-            ->setDescription('only show locations from the selected category');
-
-        // Filter
-        $fields->addFieldsToTab('Root.Filter', array(
-            HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
-            $categoriesField,
-        ));
-
-        $this->extend('updateCMSFields', $fields);
-
-        return $fields;
-    }
-
-    /**
-     * @param array $filter
-     * @param array $filterAny
-     * @param array $exclude
-     * @param null|callable $callback
-     * @return DataList|ArrayList
-     */
-    public static function get_locations(
-        $filter = [],
-        $filterAny = [],
-        $exclude = [],
-        $callback = null
-    )
-    {
-        $locationClass = Config::inst()->get('Dynamic\\Locator\\Locator', 'location_class');
-        $locations = $locationClass::get()->filter($filter)->exclude($exclude);
-
-        if (!empty($filterAny)) {
-            $locations = $locations->filterAny($filterAny);
-        }
-        if (!empty($exclude)) {
-            $locations = $locations->exclude($exclude);
-        }
-
-        if ($callback !== null && is_callable($callback)) {
-            $locations->filterByCallback($callback);
-        }
-
-        return $locations;
-    }
-
-    /**
-     * @return DataList
-     */
-    public static function get_all_categories()
-    {
-        return LocationCategory::get();
-    }
-
-    /**
-     * @return bool
-     */
-    public function getPageCategories()
-    {
-        return self::locator_categories_by_locator($this->ID);
-    }
-
-    /**
-     * @param int $id
-     * @return bool|
-     */
-    public static function locator_categories_by_locator($id = 0)
-    {
-        if ($id == 0) {
-            return false;
-        }
-
-        return Locator::get()->byID($id)->Categories();
-    }
-
-
-}
-
-/**
- * Class Locator_Controller
- */
-class Locator_Controller extends \Page_Controller
+class LocatorController extends \PageController
 {
     /**
      * @var array
@@ -242,16 +96,16 @@ class Locator_Controller extends \Page_Controller
 
         // prevent init of map if no query
         $request = Controller::curr()->getRequest();
+
         if ($this->getTrigger($request)) {
             // google maps api key
-            $key = Config::inst()->get('GoogleGeocoding', 'google_api_key');
+            $key = Config::inst()->get(GoogleGeocoder::class, 'geocoder_api_key');
 
             $locations = $this->getLocations();
 
             if ($locations) {
-
                 Requirements::css('locator/css/map.css');
-                Requirements::javascript('framework/thirdparty/jquery/jquery.js');
+                Requirements::javascript('silverstripe-admin/thirdparty/jquery/jquery.js');
                 Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
                 Requirements::javascript('locator/thirdparty/jquery-store-locator-plugin/assets/js/libs/handlebars.min.js');
                 Requirements::javascript('locator/thirdparty/jquery-store-locator-plugin/assets/js/plugins/storeLocator/jquery.storelocator.js');
@@ -264,12 +118,12 @@ class Locator_Controller extends \Page_Controller
                     : 'featuredLocations: false';
 
                 // map config based on user input in Settings tab
-                $limit = Config::inst()->get('Locator_Controller', 'limit');
+                $limit = Config::inst()->get(LocatorController::class, 'limit');
                 if ($limit < 1) $limit = -1;
                 $load = 'fullMapStart: true, storeLimit: ' . $limit . ', maxDistance: true,';
 
-                $listTemplatePath = Config::inst()->get('Locator_Controller', 'list_template_path');
-                $infowindowTemplatePath = Config::inst()->get('Locator_Controller', 'info_window_template_path');
+                $listTemplatePath = Config::inst()->get(LocatorController::class, 'list_template_path');
+                $infowindowTemplatePath = Config::inst()->get(LocatorController::class, 'info_window_template_path');
 
                 $kilometer = ($this->data()->Unit == 'km') ? "lengthUnit: 'km'" : "lengthUnit: 'm'";
 
@@ -283,8 +137,8 @@ class Locator_Controller extends \Page_Controller
                 $link = Controller::join_links($this->Link(), 'xml.xml', $url);
 
                 // containers
-                $map_id = Config::inst()->get('Locator_Controller', 'map_container');
-                $list_class = Config::inst()->get('Locator_Controller', 'list_container');
+                $map_id = Config::inst()->get(LocatorController::class, 'map_container');
+                $list_class = Config::inst()->get(LocatorController::class, 'list_container');
 
                 // init map
                 Requirements::customScript("
@@ -402,7 +256,7 @@ class Locator_Controller extends \Page_Controller
             $locations = $locations->sort('distance');
         }
 
-        if (Config::inst()->get('LocatorForm', 'show_radius')) {
+        if (Config::inst()->get(LocatorForm::class, 'show_radius')) {
             if ($radius = (int)$request->getVar('Radius')) {
                 $locations = $locations->filterByCallback(function ($location) use (&$radius) {
                     return $location->distance <= $radius;
@@ -413,7 +267,7 @@ class Locator_Controller extends \Page_Controller
         //allow for returning list to be set as
         $this->extend('updateListType', $locations);
 
-        $limit = Config::inst()->get('Locator_Controller', 'limit');
+        $limit = Config::inst()->get(LocatorController::class, 'limit');
         if ($limit > 0) {
             $locations = $locations->limit($limit);
         }
@@ -424,15 +278,15 @@ class Locator_Controller extends \Page_Controller
     }
 
     /**
-     * @param SS_HTTPRequest $request
+     * @param HTTPRequest $request
      * @return bool
      */
-    public function getTrigger(SS_HTTPRequest $request = null)
+    public function getTrigger(HTTPRequest $request = null)
     {
         if ($request === null) {
             $request = $this->getRequest();
         }
-        $trigger = $request->getVar(Config::inst()->get('Locator_Controller', 'query_trigger'));
+        $trigger = $request->getVar(Config::inst()->get(LocatorController::class, 'query_trigger'));
         return isset($trigger);
     }
 
@@ -444,11 +298,11 @@ class Locator_Controller extends \Page_Controller
         if (!$this->request->getVar('Address')) {
             return false;
         }
-        if (class_exists('GoogleGeocoding')) {
-            $coords = GoogleGeocoding::address_to_point(Controller::curr()->getRequest()->getVar('Address'));
-
-            $lat = $coords['lat'];
-            $lng = $coords['lng'];
+        if (class_exists(GoogleGeocoder::class)) {
+            $geocoder = new GoogleGeocoder($this->request->getVar('Address'));
+            $response = $geocoder->getResult();
+            $lat = $response->getLatitude();
+            $lng = $response->getLongitude();
 
             return "defaultLat: {$lat}, defaultLng: {$lng},";
         }
@@ -460,13 +314,13 @@ class Locator_Controller extends \Page_Controller
      *
      * Search form for locations, updates map and results list via AJAX
      *
-     * @return Form
+     * @return \SilverStripe\Forms\Form
      */
     public function LocationSearch()
     {
 
         $form = LocatorForm::create($this, 'LocationSearch');
-        if (class_exists('BootstrapForm') && $this->config()->get('bootstrapify')) {
+        if (class_exists(BootstrapForm::class) && $this->config()->get('bootstrapify')) {
             $form->Fields()->bootstrapify();
             $form->Actions()->bootstrapify();
         }
