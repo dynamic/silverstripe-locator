@@ -295,7 +295,7 @@ class Locator_Controller extends Page_Controller
 						}
                     });
                 });
-            ");
+            ", "locator_map_init_script");
             }
         }
     }
