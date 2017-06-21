@@ -23,7 +23,7 @@
     "silverstripe/framework": "^3.4",
     "silverstripe/cms": "^3.4",
     "silverstripe-australia/addressable": "^1.1",
-    "heyday/silverstripe-versioneddataobjects": "^1.4",
+    "heyday/silverstripe-versioneddataobjects": "^2.0",
     "unclecheese/betterbuttons": "^1.3",
     "muskie9/data-to-arraylist": "^1.0",
     "silverstripe-australia/gridfieldextensions": "^1.2"
