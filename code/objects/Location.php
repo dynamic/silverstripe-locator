@@ -113,7 +113,7 @@ class Location extends DataObject implements PermissionProvider
      * @var array
      */
     private static $extensions = [
-        'VersionedDataObject',
+        'Dynamic\ViewableDataObject\Extensions\VersionedDataObject',
     ];
 
     /**
