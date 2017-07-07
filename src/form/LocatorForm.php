@@ -51,6 +51,9 @@ class LocatorForm extends Form
             $categories = false;
         } else {
             $categories = Locator::get_all_categories();
+            if ($categories->count() < 1) {
+                $categories = false;
+            }
         }
 
         if ($categories) {

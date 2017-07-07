@@ -2,7 +2,6 @@
 
 namespace Dynamic\Locator;
 
-use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Forms\FieldList;
@@ -25,6 +24,15 @@ use SilverStripe\Security\Permission;
  */
 class Location extends DataObject implements PermissionProvider
 {
+    /**
+     * @var string
+     */
+    private static $singular_name = 'Location';
+
+    /**
+     * @var string
+     */
+    private static $plural_name = 'Locations';
 
     /**
      * @var array
@@ -46,6 +54,11 @@ class Location extends DataObject implements PermissionProvider
     );
 
     /**
+     * @var string
+     */
+    private static $table_name = 'Location';
+
+    /**
      * @var array
      */
     private static $casting = array(
@@ -56,16 +69,6 @@ class Location extends DataObject implements PermissionProvider
      * @var string
      */
     private static $default_sort = 'Title';
-
-    /**
-     * @var string
-     */
-    private static $singular_name = 'Location';
-
-    /**
-     * @var string
-     */
-    private static $plural_name = 'Locations';
 
     /**
      * api access via Restful Server module
@@ -173,6 +176,7 @@ class Location extends DataObject implements PermissionProvider
 
     /**
      * @param null $member
+     * @param array $context
      * @return bool
      */
     public function canView($member = null, $context = [])
@@ -182,6 +186,7 @@ class Location extends DataObject implements PermissionProvider
 
     /**
      * @param null $member
+     * @param array $context
      * @return bool|int
      */
     public function canEdit($member = null, $context = [])
@@ -191,6 +196,7 @@ class Location extends DataObject implements PermissionProvider
 
     /**
      * @param null $member
+     * @param array $context
      * @return bool|int
      */
     public function canDelete($member = null, $context = [])

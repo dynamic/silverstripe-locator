@@ -18,6 +18,16 @@ use SilverStripe\Security\Permission;
 class LocationCategory extends DataObject
 {
     /**
+     * @var string
+     */
+    private static $singular_name = 'Category';
+
+    /**
+     * @var string
+     */
+    private static $plural_name = 'Categories';
+
+    /**
      * @var array
      */
     private static $db = array(
@@ -41,18 +51,16 @@ class LocationCategory extends DataObject
     /**
      * @var string
      */
-    private static $singular_name = 'Category';
-
-    /**
-     * @var string
-     */
-    private static $plural_name = 'Categories';
+    private static $table_name = 'LocationCategory';
 
     /**
      * @var string
      */
     private static $default_sort = 'Name';
 
+    /**
+     * @return \SilverStripe\Forms\FieldList
+     */
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -79,7 +87,8 @@ class LocationCategory extends DataObject
     }
 
     /**
-     * @param null|Member $member
+     * @param null $member
+     * @param array $context
      * @return bool
      */
     public function canView($member = null, $context = [])
@@ -88,7 +97,8 @@ class LocationCategory extends DataObject
     }
 
     /**
-     * @param null|Member $member
+     * @param null $member
+     * @param array $context
      * @return bool|int
      */
     public function canEdit($member = null, $context = [])
@@ -97,7 +107,8 @@ class LocationCategory extends DataObject
     }
 
     /**
-     * @param null|Member $member
+     * @param null $member
+     * @param array $context
      * @return bool|int
      */
     public function canDelete($member = null, $context = [])
