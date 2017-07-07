@@ -6,8 +6,8 @@ use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 use muskie9\DataToArrayList\ORM\DataToArrayListHelper;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Dev\Debug;
 use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataList;
 use SilverStripe\View\Requirements;
 use SilverStripe\Control\HTTPRequest;
 

@@ -2,22 +2,15 @@
 
 namespace Dynamic\Locator;
 
-use SilverStripe\Dev\Debug;
-use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\OptionsetField;
-use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Control\Controller;
-use SilverStripe\View\Requirements;
-use SilverStripe\Control\HTTPRequest;
-use muskie9\DataToArrayList\ORM\DataToArrayListHelper;
-use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
+use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
 
 /**
  * Class Locator
@@ -29,6 +22,20 @@ use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
  */
 class Locator extends \Page
 {
+    /**
+     * @var string
+     */
+    private static $singular_name = 'Locator';
+
+    /**
+     * @var string
+     */
+    private static $plural_name = 'Locators';
+
+    /**
+     * @var string
+     */
+    private static $description = 'Display locations on a map';
 
     /**
      * @var array
@@ -41,26 +48,18 @@ class Locator extends \Page
      * @var array
      */
     private static $many_many = array(
-        'Categories' => 'Dynamic\\Locator\\LocationCategory',
+        'Categories' => LocationCategory::class,
     );
 
     /**
      * @var string
      */
-    private static $singular_name = 'Locator';
-    /**
-     * @var string
-     */
-    private static $plural_name = 'Locators';
-    /**
-     * @var string
-     */
-    private static $description = 'Find locations on a map';
+    private static $table_name = 'Locator';
 
     /**
      * @var string
      */
-    private static $location_class = 'Dynamic\\Locator\\Location';
+    private static $location_class = Location::class;
 
     /**
      * @return FieldList
@@ -77,10 +76,8 @@ class Locator extends \Page
 
         // Filter categories
         $config = GridFieldConfig_RelationEditor::create();
-        if (class_exists('GridFieldAddExistingSearchButton')) {
-            $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
-            $config->addComponent(new GridFieldAddExistingSearchButton());
-        }
+        $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
+        $config->addComponent(new GridFieldAddExistingSearchButton());
         $categories = $this->Categories();
         $categoriesField = GridField::create('Categories', 'Categories', $categories, $config)
             ->setDescription('only show locations from the selected category');
@@ -90,8 +87,6 @@ class Locator extends \Page
             HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
             $categoriesField,
         ));
-
-        $this->extend('updateCMSFields', $fields);
 
         return $fields;
     }
@@ -110,7 +105,7 @@ class Locator extends \Page
         $callback = null
     )
     {
-        $locationClass = Config::inst()->get('Dynamic\\Locator\\Locator', 'location_class');
+        $locationClass = Config::inst()->get(Locator::class, 'location_class');
         $locations = $locationClass::get()->filter($filter)->exclude($exclude);
 
         if (!empty($filterAny)) {
