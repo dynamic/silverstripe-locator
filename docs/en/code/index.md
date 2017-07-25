@@ -4,7 +4,7 @@ To change how the front-end javascript displays the map the custom script with t
 This example shows how to reference custom templates and a custom data location. It is recommended to copy the custom script from the [Locator Controller](../../../code/pages/Locator.php#L273-L298) and modify it.
 
 ```php
-class Locator_ControllerExtension extends DataExtension
+class Locator_ControllerExtension extends Extension
 {
 
     public function onAfterInit()
