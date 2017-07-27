@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Search from './SearchBar';
-import Location from './Location';
+import Map from './Map';
 
 class Locator extends React.Component {
 
@@ -10,11 +10,10 @@ class Locator extends React.Component {
         return (
             <div>
                 <Search/>
-                <Location/>
+                <Map/>
             </div>
         );
     }
-
 }
 
 export default Locator;
