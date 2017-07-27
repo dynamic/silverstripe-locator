@@ -20,3 +20,7 @@
 		<% end_if %>
 	<% end_if %>
 </div>
+
+<% require javascript('locator/client/dist/js/vendor.js') %>
+<% require javascript('locator/client/dist/js/main.js') %>
+<div class="locator"></div>
