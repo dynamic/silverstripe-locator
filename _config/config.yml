@@ -17,7 +17,7 @@ SilverStripe\GraphQL\Controller:
             Title: 'The title of the location'
             Featured: 'If the location is featured'
             Website: 'The website of the location'
-            Phone': 'The phone number of the location'
+            Phone: 'The phone number of the location'
             Email: 'The email of the location'
             Address: 'The address of the location'
             City: 'The city the location is in'
@@ -26,18 +26,11 @@ SilverStripe\GraphQL\Controller:
             Country: 'The country the location is in'
             Lat: 'The latitude of the location'
             Lng: 'The longitude of the location'
+            Category: 'The category of the location'
           operations:
             read:
-              resolver: Dynamic\Locator\Resolvers\LocatorResolver
+              resolver: Dynamic\Locator\Resolvers\LocationResolver
               args:
                 radius: Int(25)
                 address: String
-          nestedQueries:
-            Category:
-              description: 'The category of the location'
-        Dynamic\Locator\LocationCategory:
-          fields:
-            ID: 'The unique identifier of the location category'
-            Title: 'The title of the location category'
-          operations:
-            read: true
+                featured: Boolean

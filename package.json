@@ -1,10 +1,11 @@
 {
   "name": "locator",
   "version": "0.0.1",
-  "description": "A prototype for use as a boilerplate to get started with webpack, react and graphql",
+  "description": "SilverStripe Locator Module. Show locations on a map. Search by geoposition.",
   "main": "client/src/js/boot/index.js",
   "scripts": {
     "build": "NODE_ENV=production webpack -p --progress",
+    "build-dev": "NODE_ENV=development && webpack --progress",
     "watch": "NODE_ENV=development webpack --progress --watch",
     "test": "jest",
     "lint": "eslint webpack.config.js client/src/js"
@@ -17,7 +18,7 @@
     "redux"
   ],
   "author": "Dynamic <dev@dynamicagency.com>",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "dependencies": {
     "apollo-client": "^1.2.2",
     "es6-promise": "^4.0.5",
