@@ -2,6 +2,8 @@
 
 namespace Dynamic\Locator;
 
+use SilverStripe\Control\Controller;
+use SilverStripe\Control\Director;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\OptionsetField;
@@ -149,5 +151,15 @@ class Locator extends \Page
         }
 
         return Locator::get()->byID($id)->Categories();
+    }
+
+    /**
+     * The API URL
+     *
+     * @return string
+     */
+    public function ApiUrl()
+    {
+        return Controller::join_links(Director::baseURL(), 'graphql');
     }
 }

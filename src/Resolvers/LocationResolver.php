@@ -4,6 +4,7 @@
 namespace Dynamic\Locator\Resolvers;
 
 use Dynamic\Locator\Location;
+use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 use SilverStripe\GraphQL\Scaffolding\Interfaces\ResolverInterface;
 
 class LocationResolver implements ResolverInterface
@@ -22,6 +23,17 @@ class LocationResolver implements ResolverInterface
     {
         $list = Location::get();
         // TODO - isset($args['ID'])
+
+        if ($args['address'] && $args['radius']) {
+            $address = $args['address'];
+            $radius = $args['radius'];
+
+            $list = $list->filterByCallback(function ($location) use (&$radius) {
+                return $location->distance <= $radius;
+            });
+
+        }
+
         return $list;
     }
 
