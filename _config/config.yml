@@ -6,3 +6,38 @@ Dynamic\Locator\Location:
     - Dynamic\SilverStripeGeocoder\DistanceDataExtension
     - Dynamic\SilverStripeGeocoder\AddressDataExtension
     - SilverStripe\Versioned\Versioned('Stage','Live')
+
+SilverStripe\GraphQL\Controller:
+  schema:
+    scaffolding:
+      types:
+        Dynamic\Locator\Location:
+          fields:
+            ID: 'The unique identifier of the location'
+            Title: 'The title of the location'
+            Featured: 'If the location is featured'
+            Website: 'The website of the location'
+            Phone': 'The phone number of the location'
+            Email: 'The email of the location'
+            Address: 'The address of the location'
+            City: 'The city the location is in'
+            State: 'The state the location is in'
+            PostalCode: 'The postal code of the location'
+            Country: 'The country the location is in'
+            Lat: 'The latitude of the location'
+            Lng: 'The longitude of the location'
+          operations:
+            read:
+              resolver: Dynamic\Locator\Resolvers\LocatorResolver
+              args:
+                radius: Int(25)
+                address: String
+          nestedQueries:
+            Category:
+              description: 'The category of the location'
+        Dynamic\Locator\LocationCategory:
+          fields:
+            ID: 'The unique identifier of the location category'
+            Title: 'The title of the location category'
+          operations:
+            read: true
