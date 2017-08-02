@@ -20,6 +20,7 @@ SilverStripe\GraphQL\Controller:
             Phone: 'The phone number of the location'
             Email: 'The email of the location'
             Address: 'The address of the location'
+            Address2: 'The second line of the address of the location'
             City: 'The city the location is in'
             State: 'The state the location is in'
             PostalCode: 'The postal code of the location'

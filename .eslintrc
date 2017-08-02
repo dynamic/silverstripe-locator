@@ -16,6 +16,11 @@
 		}
 	},
 	"rules": {
-		"react/prefer-stateless-function": "off"
+		"react/prefer-stateless-function": "off",
+    "max-len": [2, 120, {
+      "ignoreComments": true,
+      "ignoreTrailingComments": true,
+      "ignoreUrls": true
+    }]
 	}
 }

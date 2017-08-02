@@ -3,9 +3,13 @@ import React from 'react';
 class SearchBar extends React.Component {
   mappedRadii() {
     return this.props.radii.map(radius =>
-      <option value="radius">radius</option>
+      (
+        <option
+          value="radius"
+          key={radius}
+        >{radius}</option>
+      ),
     );
-
   }
 
   radius() {
@@ -14,10 +18,12 @@ class SearchBar extends React.Component {
         <div className="field dropdown form-group--no-label">
 
           <div className="middleColumn">
-            <select name="Radius" className="dropdown form-group--no-label">
-
-              <option value="" selected="selected">radius
-              </option>
+            <select
+              name="radius"
+              className="dropdown form-group--no-label"
+              defaultValue=""
+            >
+              <option value="">radius</option>
               {this.mappedRadii()}
             </select>
           </div>
@@ -36,7 +42,7 @@ class SearchBar extends React.Component {
             <div className="middleColumn">
               <input
                 type="text"
-                name="adress"
+                name="address"
                 className="text form-group--no-label"
                 required="required"
                 aria-required="true"
@@ -46,20 +52,16 @@ class SearchBar extends React.Component {
           </div>
 
           {this.radius()}
-
-          <div className="clear">
-
-          </div>
         </fieldset>
 
         <div className="btn-toolbar">
           <input
             type="submit"
-            name="action_doFilterLocations"
             value="Search"
             className="action"
           />
         </div>
+        <div className="clear" />
       </form>
     );
   }
