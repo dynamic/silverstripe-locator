@@ -32,6 +32,13 @@ SilverStripe\GraphQL\Controller:
             read:
               resolver: Dynamic\Locator\Resolvers\LocationResolver
               args:
-                radius: Int(25)
-                address: String
-                featured: Boolean
+                radius:
+                  type: String
+                  default: '0'
+                  description: 'The radius to look for locations in around address'
+                address:
+                  type: String
+                  description: 'The address to search around'
+                featured:
+                  type: Boolean
+                  description: 'If the locations should be featured'

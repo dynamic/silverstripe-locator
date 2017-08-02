@@ -55,8 +55,8 @@ export default compose(
   graphql(readLocations, {
     options: ({ address, radius }) => ({
       variables: {
-        address,
-        radius,
+        address: address,
+        radius: radius,
       },
     }),
   }),
