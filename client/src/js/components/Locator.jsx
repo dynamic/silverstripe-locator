@@ -1,5 +1,5 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import {
   graphql,
   compose,
@@ -7,7 +7,7 @@ import {
 import { connect } from 'react-redux';
 
 import readLocations from '../queries/readLocations';
-import Search from './SearchBar';
+import Search from './search/SearchBar';
 import Map from './Map';
 
 /**
