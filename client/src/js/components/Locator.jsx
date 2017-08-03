@@ -39,8 +39,8 @@ class Locator extends React.Component {
  */
 function mapStateToProps(state) {
   return {
-    address: state.client.address,
-    radius: state.client.radius,
+    address: state.search.address,
+    radius: state.search.radius,
   };
 }
 
@@ -48,15 +48,21 @@ function mapStateToProps(state) {
  * The default export of the file.
  *
  * It is first connected to the redux state, then with graphql.
- * Graphql then uses the state to put variables into a query.
+ * Graphql then uses the props of the component to put variables into a query.
+ *
+ * State -> Props -> Query
+ *
+ * Whenever the state is changed the props change and this triggers a new query.
  */
 export default compose(
   connect(mapStateToProps),
   graphql(readLocations, {
     options: ({ address, radius }) => ({
       variables: {
+        /* eslint-disable object-shorthand */
         address: address,
         radius: radius,
+        /* eslint-enable */
       },
     }),
   }),
