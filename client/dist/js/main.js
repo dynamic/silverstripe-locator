@@ -10108,7 +10108,10 @@ function maybeDeepFreeze(obj) {
 "use strict";
 
 var ActionTypes = {
-  SEARCH: 'SEARCH'
+  SEARCH: 'SEARCH',
+
+  MARKER_CLICK: 'MARKER_CLICK',
+  MARKER_CLOSE: 'MARKER_CLOSE'
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (ActionTypes);
@@ -17531,9 +17534,12 @@ Location.propTypes = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_google_maps__ = __webpack_require__(603);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_google_maps___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_google_maps__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Location__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux__ = __webpack_require__(119);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_redux__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_google_maps__ = __webpack_require__(603);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_google_maps___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react_google_maps__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_actions_ActionTypes__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Location__ = __webpack_require__(152);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -17548,15 +17554,38 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var GoogleMapComponent = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_react_google_maps__["withGoogleMap"])(function (props) {
+
+
+var GoogleMapComponent = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_react_google_maps__["withGoogleMap"])(function (props) {
   return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-    __WEBPACK_IMPORTED_MODULE_2_react_google_maps__["GoogleMap"],
+    __WEBPACK_IMPORTED_MODULE_3_react_google_maps__["GoogleMap"],
     {
       defaultZoom: 9,
       defaultCenter: { lat: 43.8483258, lng: -87.7709294 }
     },
     props.markers.map(function (marker) {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_google_maps__["Marker"], marker);
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        __WEBPACK_IMPORTED_MODULE_3_react_google_maps__["Marker"],
+        {
+          key: marker.key,
+          position: marker.position,
+          defaultAnimation: marker.defaultAnimation,
+          onClick: function onClick() {
+            return props.onMarkerClick(marker);
+          }
+        },
+        marker.showInfo && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_3_react_google_maps__["InfoWindow"],
+          { onCloseClick: function onCloseClick() {
+              return props.onMarkerClose(marker);
+            } },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            null,
+            marker.infoContent
+          )
+        )
+      );
     })
   );
 });
@@ -17564,10 +17593,14 @@ var GoogleMapComponent = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_react
 var Map = function (_React$Component) {
   _inherits(Map, _React$Component);
 
-  function Map() {
+  function Map(props) {
     _classCallCheck(this, Map);
 
-    return _possibleConstructorReturn(this, (Map.__proto__ || Object.getPrototypeOf(Map)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Map.__proto__ || Object.getPrototypeOf(Map)).call(this, props));
+
+    _this.handleMarkerClick = _this.handleMarkerClick.bind(_this);
+    _this.handleMarkerClose = _this.handleMarkerClose.bind(_this);
+    return _this;
   }
 
   _createClass(Map, [{
@@ -17592,12 +17625,28 @@ var Map = function (_React$Component) {
       return markers;
     }
   }, {
+    key: 'handleMarkerClick',
+    value: function handleMarkerClick(target) {
+      this.props.dispatch({
+        type: __WEBPACK_IMPORTED_MODULE_4_actions_ActionTypes__["a" /* default */].MARKER_CLICK,
+        payload: target
+      });
+    }
+  }, {
+    key: 'handleMarkerClose',
+    value: function handleMarkerClose(target) {
+      this.props.dispatch({
+        type: __WEBPACK_IMPORTED_MODULE_4_actions_ActionTypes__["a" /* default */].MARKER_CLOSE,
+        payload: target
+      });
+    }
+  }, {
     key: 'renderLocations',
     value: function renderLocations() {
       var locs = this.props.locations.edges;
       if (locs !== undefined) {
         return locs.map(function (location, index) {
-          return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Location__["a" /* default */], {
+          return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__Location__["a" /* default */], {
             key: location.node.ID,
             index: index,
             location: location.node
@@ -17615,7 +17664,9 @@ var Map = function (_React$Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(GoogleMapComponent, {
           containerElement: __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'map' }),
           mapElement: __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { style: { height: '100%' } }),
-          markers: this.getMarkers()
+          markers: this.getMarkers(),
+          onMarkerClick: this.handleMarkerClick,
+          onMarkerClose: this.handleMarkerClose
         }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
@@ -17636,7 +17687,8 @@ var Map = function (_React$Component) {
 Map.propTypes = {
   locations: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
     edges: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.array
-  })
+  }),
+  dispatch: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired
 };
 
 Map.defaultProps = {
@@ -17645,7 +17697,7 @@ Map.defaultProps = {
   }
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (Map);
+/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_react_redux__["connect"])()(Map));
 
 /***/ }),
 /* 154 */

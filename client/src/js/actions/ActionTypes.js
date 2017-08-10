@@ -4,6 +4,9 @@
  */
 const ActionTypes = {
   SEARCH: 'SEARCH',
+
+  MARKER_CLICK: 'MARKER_CLICK',
+  MARKER_CLOSE: 'MARKER_CLOSE',
 };
 
 export default ActionTypes;

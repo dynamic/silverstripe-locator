@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
+import { connect } from 'react-redux';
+import { withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps';
 
+import ActionType from 'actions/ActionTypes';
 import Location from './Location';
 
 const GoogleMapComponent = withGoogleMap(props => (
@@ -11,8 +13,17 @@ const GoogleMapComponent = withGoogleMap(props => (
   >
     {props.markers.map(marker => (
       <Marker
-        {...marker}
-      />
+        key={marker.key}
+        position={marker.position}
+        defaultAnimation={marker.defaultAnimation}
+        onClick={() => props.onMarkerClick(marker)}
+      >
+        {marker.showInfo && (
+          <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>
+            <div>{marker.infoContent}</div>
+          </InfoWindow>
+        )}
+      </Marker>
     ))}
   </GoogleMap>
 ));
@@ -22,6 +33,17 @@ const GoogleMapComponent = withGoogleMap(props => (
  * Renders the map div and location list.
  */
 class Map extends React.Component {
+  /**
+   * Used to create the Map.
+   * needed to allow use of this keyword in handler.
+   * @param props
+   */
+  constructor(props) {
+    super(props);
+    this.handleMarkerClick = this.handleMarkerClick.bind(this);
+    this.handleMarkerClose = this.handleMarkerClose.bind(this);
+  }
+
   /**
    * Generates an array of marker objects to use on the map
    */
@@ -43,6 +65,28 @@ class Map extends React.Component {
       };
     }
     return markers;
+  }
+
+  /**
+   * Fires and event for clicking a marker
+   * @param target The marker that was clicked
+   */
+  handleMarkerClick(target) {
+    this.props.dispatch({
+      type: ActionType.MARKER_CLICK,
+      payload: target,
+    });
+  }
+
+  /**
+   * Fires event for closing a marker info box
+   * @param target The marker that had its info box closed
+   */
+  handleMarkerClose(target) {
+    this.props.dispatch({
+      type: ActionType.MARKER_CLOSE,
+      payload: target,
+    });
   }
 
   /**
@@ -80,6 +124,8 @@ class Map extends React.Component {
             <div style={{ height: '100%' }} />
           }
           markers={this.getMarkers()}
+          onMarkerClick={this.handleMarkerClick}
+          onMarkerClose={this.handleMarkerClose}
         />
         <div className="loc-list">
           <ul>
@@ -99,6 +145,7 @@ Map.propTypes = {
   locations: PropTypes.shape({
     edges: PropTypes.array,
   }),
+  dispatch: PropTypes.func.isRequired,
 };
 
 /**
@@ -114,4 +161,4 @@ Map.defaultProps = {
 /**
  * export the Map Component
  */
-export default Map;
+export default connect()(Map);
