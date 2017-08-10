@@ -4,9 +4,9 @@
   "description": "SilverStripe Locator Module. Show locations on a map. Search by geoposition.",
   "main": "client/src/js/boot/index.js",
   "scripts": {
-    "build": "NODE_ENV=production webpack -p --progress",
-    "build-dev": "NODE_ENV=development && webpack --progress",
-    "watch": "NODE_ENV=development webpack --progress --watch",
+    "build": "set NODE_ENV=production && webpack -p --progress",
+    "build-dev": "set NODE_ENV=development && webpack --progress",
+    "watch": "set NODE_ENV=development && webpack --progress --watch",
     "test": "jest",
     "lint": "eslint webpack.config.js client/src/js"
   },
@@ -31,6 +31,7 @@
     "react-apollo": "^1.2.0",
     "react-document-title": "^2.0.2",
     "react-dom": "^15.5.4",
+    "react-google-maps": "^7.2.0",
     "react-redux": "^4.4.5",
     "react-router-dom": "^4.1.1",
     "react-router-redux": "^4.0.8",

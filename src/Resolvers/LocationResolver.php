@@ -4,7 +4,6 @@
 namespace Dynamic\Locator\Resolvers;
 
 use Dynamic\Locator\Location;
-use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 use SilverStripe\GraphQL\Scaffolding\Interfaces\ResolverInterface;
 
 class LocationResolver implements ResolverInterface

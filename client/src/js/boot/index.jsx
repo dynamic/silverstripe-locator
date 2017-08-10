@@ -52,3 +52,4 @@ ReactDom.render(
     <Locator />
   </ApolloProvider>
   , container);
+
