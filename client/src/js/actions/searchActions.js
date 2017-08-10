@@ -1,4 +1,4 @@
-import ActionType from './ActionTypes';
+import ActionType from 'actions/ActionTypes';
 
 // eslint-disable-next-line import/prefer-default-export
 export function search(inputs) {

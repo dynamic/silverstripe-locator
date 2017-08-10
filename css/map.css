@@ -1,5 +1,5 @@
-/* === 
- Search Form 
+/* ===
+ Search Form
 === */
 #form-container form {
 	width: 100%;
@@ -30,25 +30,25 @@
 }
 
 
-/* === 
- Map 
+/* ===
+ Map
 === */
-#map-container {
+.map-area {
 	clear: left;
 	margin-top: 27px;
 	height: 530px;
 }
 
-#map-container a {
+.map-container a {
 	color: #e76737;
 	text-decoration: none;
 }
 
-#map-container a:hover, #map-container a:active {
+.map-container a:hover, .map-container a:active {
 	text-decoration: underline;
 }
 
-#map-container .custom-marker {
+.map-container .custom-marker {
 	width: 32px;
 	height: 37px;
 	color: #fff;
@@ -58,18 +58,18 @@
 }
 
 .map {
-	float: right; 
-	width: 74%; 
-	height: 530px; 
+	float: right;
+	width: 74%;
+	height: 530px;
 }
 
 
-/* === 
- Results List 
+/* ===
+ Results List
 === */
 .loc-list
 {
-	float: left; 
+	float: left;
 	height: 530px;
 	width: 25%;
 	overflow: auto;
@@ -84,6 +84,11 @@
 	margin: 0;
 	padding: 0;
 	width: 100%;
+}
+
+.loc-list li.focus {
+  outline: 2px solid lightskyblue;
+  outline-offset: -2px;
 }
 
 .loc-list .list-label
@@ -140,7 +145,7 @@
 	transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
 }
 
-#map-container .loc-name
+.map-container .loc-name
 {
 	color: #AD2118;
 	font-weight: bold;
@@ -150,13 +155,13 @@
 /* ===
  Loading
 === */
-.typography img.loading { 
-	border: none; 
+.typography img.loading {
+	border: none;
 }
 
 
-/* === 
- Modal window 
+/* ===
+ Modal window
 === */
 
 #overlay
@@ -207,8 +212,8 @@
 
 
 
-/* === 
- responsive for Simple theme 
+/* ===
+ responsive for Simple theme
 === */
 
 /* BREAKPOINT 960px */
@@ -216,11 +221,11 @@
 @media only screen and (max-width: 960px) {
 
 	.loc-list {
-		
+
 	}
-	
+
 	#map {
-		
+
 	}
 
 }
@@ -230,15 +235,15 @@
     /* Note: Design for a width of 768px */
 
 @media only screen and (min-width: 641px) and (max-width: 959px) {
-	
+
 	.loc-list .list-label{
 		margin-left: 0px;
 	}
-	
+
 	.loc-list .list-content {
 		padding: 10px 0px;
 	}
-	
+
 	.loc-list .list-details {
 		width: 140px;
 	}
@@ -246,25 +251,25 @@
 }
 /* BREAKPOINT 640px */
 
-@media only screen and (max-width: 640px) { 
+@media only screen and (max-width: 640px) {
 
 	.loc-list {
 		width: 100%;
 		height: auto;
 	}
-	
+
 	#map {
 		width: 100%;
 		float: left;
 	}
-	
+
 	#form-container fieldset { width: 100%;}
 	#form-container div.field {
 		width: 100%;
 		margin-right: 0;
 		float: none;
 	}
-	#form-container div.Actions { 
+	#form-container div.Actions {
 		width: 100%;
 		max-width: 400px;
 		float: none;

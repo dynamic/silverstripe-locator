@@ -6,9 +6,9 @@ import {
 } from 'react-apollo';
 import { connect } from 'react-redux';
 
-import readLocations from '../queries/readLocations';
-import Search from './search/SearchBar';
-import Map from './Map';
+import readLocations from 'queries/readLocations';
+import Search from 'components/search/SearchBar';
+import MapArea from 'components/map/MapArea';
 
 /**
  * The main locator component.
@@ -25,11 +25,21 @@ class Locator extends React.Component {
     return (
       <div>
         <Search radii={radii} />
-        <Map locations={this.props.data.readLocations} />
+        <MapArea locations={this.props.data.readLocations} />
       </div>
     );
   }
 }
+
+/**
+ * The prop types of the Locator component
+ * @type {{data}}
+ */
+Locator.propTypes = {
+  data: PropTypes.shape({
+    readLocations: PropTypes.object,
+  }).isRequired,
+};
 
 /**
  * Takes variables/functions from the state and assigns them to variables/functions in the components props.

@@ -1,38 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps';
 
 import ActionType from 'actions/ActionTypes';
-import Location from './Location';
-
-const GoogleMapComponent = withGoogleMap(props => (
-  <GoogleMap
-    defaultZoom={9}
-    defaultCenter={{ lat: 43.8483258, lng: -87.7709294 }}
-  >
-    {props.markers.map(marker => (
-      <Marker
-        key={marker.key}
-        position={marker.position}
-        defaultAnimation={marker.defaultAnimation}
-        onClick={() => props.onMarkerClick(marker)}
-      >
-        {marker.showInfo && (
-          <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>
-            <div>{marker.infoContent}</div>
-          </InfoWindow>
-        )}
-      </Marker>
-    ))}
-  </GoogleMap>
-));
+import Map from 'components/map/Map';
 
 /**
- * The Map component.
- * Renders the map div and location list.
+ * The MapArea component.
+ * Renders the map.
  */
-class Map extends React.Component {
+class MapContainer extends React.Component {
   /**
    * Used to create the Map.
    * needed to allow use of this keyword in handler.
@@ -89,34 +66,10 @@ class Map extends React.Component {
     });
   }
 
-  /**
-   * Renders the locations
-   * @returns {*}
-   */
-  renderLocations() {
-    const locs = this.props.locations.edges;
-    if (locs !== undefined) {
-      return locs.map((location, index) =>
-        (
-          <Location
-            key={location.node.ID}
-            index={index}
-            location={location.node}
-          />
-        ),
-      );
-    }
-    return null;
-  }
-
-  /**
-   * Renders the component
-   * @returns {XML}
-   */
   render() {
     return (
       <div id="map-container">
-        <GoogleMapComponent
+        <Map
           containerElement={
             <div className="map" />
           }
@@ -126,12 +79,9 @@ class Map extends React.Component {
           markers={this.getMarkers()}
           onMarkerClick={this.handleMarkerClick}
           onMarkerClose={this.handleMarkerClose}
+          current={this.props.current}
+          showCurrent={this.props.showCurrent}
         />
-        <div className="loc-list">
-          <ul>
-            {this.renderLocations()}
-          </ul>
-        </div>
       </div>
     );
   }
@@ -141,24 +91,38 @@ class Map extends React.Component {
  * Defines the prop types
  * @type {{locations: *}}
  */
-Map.propTypes = {
+MapContainer.propTypes = {
   locations: PropTypes.shape({
     edges: PropTypes.array,
   }),
   dispatch: PropTypes.func.isRequired,
+  current: PropTypes.string,
+  showCurrent: PropTypes.bool,
 };
 
 /**
  * Defines the default values of the props
  * @type {{locations: {edges: Array}}}
  */
-Map.defaultProps = {
+MapContainer.defaultProps = {
   locations: {
     edges: [],
   },
+  current: '-1',
+  showCurrent: false,
 };
 
 /**
- * export the Map Component
+ * Maps that state to props
+ * @param state
+ * @returns {{current}}
  */
-export default connect()(Map);
+function mapStateToProps(state) {
+  return {
+    current: state.map.current,
+    showCurrent: state.map.showCurrent,
+  };
+}
+
+
+export default connect(mapStateToProps)(MapContainer);

@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { search } from '../../actions/searchActions';
-import RadiusDropDown from './RadiusDropDown';
+import { search } from 'actions/searchActions';
+import RadiusDropDown from 'components/search/RadiusDropDown';
 
 class SearchBar extends React.Component {
   /**

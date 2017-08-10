@@ -30,7 +30,7 @@ SilverStripe\GraphQL\Controller:
             Category: 'The category of the location'
           operations:
             read:
-              resolver: Dynamic\Locator\Resolvers\LocationResolver
+              resolver: 'Dynamic\Locator\GraphQL\Resolvers\LocationResolver'
               args:
                 radius:
                   type: String

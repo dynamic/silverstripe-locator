@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Dynamic\Locator\Resolvers;
+namespace Dynamic\Locator\GraphQL\Resolvers;
 
 use Dynamic\Locator\Location;
 use SilverStripe\GraphQL\Scaffolding\Interfaces\ResolverInterface;
@@ -31,6 +31,11 @@ class LocationResolver implements ResolverInterface
                 return $location->distance <= $radius;
             });
 
+            // TODO - move this (here for example/testing)
+            $list = $list->exclude(array(
+                'Lat' => 0,
+                'Lng' => 0
+            ));
         }
 
         return $list;

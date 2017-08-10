@@ -57,9 +57,13 @@ class Location extends React.Component {
    * @returns {XML}
    */
   render() {
-    const { location, index } = this.props;
+    const { location, index, current } = this.props;
+    let className = '';
+    if (current === location.ID) {
+      className = 'focus';
+    }
     return (
-      <li data-markerid={index}>
+      <li data-markerid={index} className={className}>
         <div className="list-label">{index + 1}</div>
         <div className="list-details">
           <div className="list-content">
@@ -95,6 +99,7 @@ Location.propTypes = {
     Phone: PropTypes.string,
   }).isRequired,
   index: PropTypes.number.isRequired,
+  current: PropTypes.string.isRequired,
 };
 
 /**
