@@ -23,21 +23,20 @@ class LocationResolver implements ResolverInterface
         $list = Location::get();
         // TODO - isset($args['ID'])
 
+        $list = $list->exclude(array(
+            'Lat' => 0,
+            'Lng' => 0
+        ));
+
         if ($args['address'] && $args['radius']) {
-            $address = $args['address'];
             $radius = $args['radius'];
 
             $list = $list->filterByCallback(function ($location) use (&$radius) {
                 return $location->distance <= $radius;
             });
 
-            // TODO - move this (here for example/testing)
-            $list = $list->exclude(array(
-                'Lat' => 0,
-                'Lng' => 0
-            ));
+            $list = $list->sort('distance');
         }
-
         return $list;
     }
 

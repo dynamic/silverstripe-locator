@@ -20,7 +20,7 @@ class Locator extends React.Component {
    */
   render() {
     const radii = [
-      25, 50, 75, 100,
+      5, 25, 50, 75, 100,
     ];
     return (
       <div>
