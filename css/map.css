@@ -57,7 +57,7 @@
     cursor: pointer;
 }
 
-#map {
+.map {
 	float: right; 
 	width: 74%; 
 	height: 530px; 
@@ -75,7 +75,7 @@
 	overflow: auto;
 }
 
-.loc-list ul
+.loc-list ul, .typography .loc-list ul
 {
 	display: block;
 	clear: left;

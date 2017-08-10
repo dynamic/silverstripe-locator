@@ -17613,7 +17613,7 @@ var Map = function (_React$Component) {
         'div',
         { id: 'map-container' },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(GoogleMapComponent, {
-          containerElement: __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { style: { height: '100%' } }),
+          containerElement: __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'map' }),
           mapElement: __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { style: { height: '100%' } }),
           markers: this.getMarkers()
         }),
