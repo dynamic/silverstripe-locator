@@ -86,11 +86,6 @@
 	width: 100%;
 }
 
-.loc-list li.focus {
-  outline: 2px solid lightskyblue;
-  outline-offset: -2px;
-}
-
 .loc-list .list-label
 {
 	float: left;
@@ -136,7 +131,7 @@
 .loc-list li:first-child {margin-top: 0px;}
 
 
-.loc-list .list-focus
+.loc-list .focus
 {
 	border: 1px solid rgba(82,168,236,0.9);
 	-moz-box-shadow: 0 0 8px rgba(82,168,236,0.7);
