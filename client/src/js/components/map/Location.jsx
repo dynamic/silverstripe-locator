@@ -7,52 +7,6 @@ import PropTypes from 'prop-types';
  */
 class Location extends React.Component {
   /**
-   * Renders Address 3 line
-   * @returns {XML}
-   */
-  addressThree() {
-    const { City, State, PostalCode } = this.props.location;
-    if (City !== null && State !== null && PostalCode !== null) {
-      return <div className="loc-addr3">{City}, {State} {PostalCode}</div>;
-    } else if (City === null && State !== null && PostalCode !== null) {
-      return <div className="loc-addr3">{State} {PostalCode}</div>;
-    } else if (City !== null && State === null && PostalCode !== null) {
-      return <div className="loc-addr3">{City} {PostalCode}</div>;
-    }
-    return <div className="loc-addr3" />;
-  }
-
-  /**
-   * renders the link section (website/phone)
-   * @returns {XML}
-   */
-  links() {
-    const { Website, Phone } = this.props.location;
-    if (Website !== null && Phone !== null) {
-      return (
-        <div>
-          <a href={Website} target="_blank">website</a>
-          &nbsp;|&nbsp;
-          <a href={`tel:${Phone}`}>phone</a>
-        </div>
-      );
-    } else if (Website !== null) {
-      return (
-        <div>
-          <a href={Website} target="_blank">website</a>
-        </div>
-      );
-    } else if (Phone !== null) {
-      return (
-        <div>
-          <a href={`tel:${Phone}`}>phone</a>
-        </div>
-      );
-    }
-    return <div />;
-  }
-
-  /**
    * renders the component
    * @returns {XML}
    */
@@ -69,12 +23,22 @@ class Location extends React.Component {
           <div className="list-content">
             <div className="loc-name">{location.Title}</div>
             <div className="loc-addr">{location.Address}</div>
-            <div className="loc-addr2">{location.Address2}</div>
-            {this.addressThree()}
-            {this.links()}
-
+            {location.Address2 && <div className="loc-addr2">{location.Address2}</div>}
+            <div className="loc-addr3">{location.City}, {location.State} {location.PostalCode}</div>
+            {location.Phone && <div className="loc-phone">{location.Phone}</div>}
+            {location.Website &&
+            <div className="loc-web">
+              <a href={location.Website} target="_blank" rel="noopener noreferrer">Website</a>
+            </div>}
+            {location.Email && <div className="loc-email"><a href={`mailto:${location.Email}`}>Email</a></div>}
             <div className="loc-dist">
-              Distance
+              distance length |
+              <a
+                // TODO - update with proper values
+                href="http://maps.google.com/maps?saddr={{origin}}&amp;daddr={{address}} {{address2}} {{city}}, {{state}} {{postal}}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Directions</a>
             </div>
           </div>
         </div>

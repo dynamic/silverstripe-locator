@@ -45428,89 +45428,6 @@ var Location = function (_React$Component) {
   }
 
   _createClass(Location, [{
-    key: 'addressThree',
-    value: function addressThree() {
-      var _props$location = this.props.location,
-          City = _props$location.City,
-          State = _props$location.State,
-          PostalCode = _props$location.PostalCode;
-
-      if (City !== null && State !== null && PostalCode !== null) {
-        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'div',
-          { className: 'loc-addr3' },
-          City,
-          ', ',
-          State,
-          ' ',
-          PostalCode
-        );
-      } else if (City === null && State !== null && PostalCode !== null) {
-        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'div',
-          { className: 'loc-addr3' },
-          State,
-          ' ',
-          PostalCode
-        );
-      } else if (City !== null && State === null && PostalCode !== null) {
-        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'div',
-          { className: 'loc-addr3' },
-          City,
-          ' ',
-          PostalCode
-        );
-      }
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'loc-addr3' });
-    }
-  }, {
-    key: 'links',
-    value: function links() {
-      var _props$location2 = this.props.location,
-          Website = _props$location2.Website,
-          Phone = _props$location2.Phone;
-
-      if (Website !== null && Phone !== null) {
-        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'div',
-          null,
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'a',
-            { href: Website, target: '_blank' },
-            'website'
-          ),
-          '\xA0|\xA0',
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'a',
-            { href: 'tel:' + Phone },
-            'phone'
-          )
-        );
-      } else if (Website !== null) {
-        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'div',
-          null,
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'a',
-            { href: Website, target: '_blank' },
-            'website'
-          )
-        );
-      } else if (Phone !== null) {
-        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'div',
-          null,
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'a',
-            { href: 'tel:' + Phone },
-            'phone'
-          )
-        );
-      }
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', null);
-    }
-  }, {
     key: 'render',
     value: function render() {
       var _props = this.props,
@@ -45546,17 +45463,56 @@ var Location = function (_React$Component) {
               { className: 'loc-addr' },
               location.Address
             ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            location.Address2 && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'div',
               { className: 'loc-addr2' },
               location.Address2
             ),
-            this.addressThree(),
-            this.links(),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              { className: 'loc-addr3' },
+              location.City,
+              ', ',
+              location.State,
+              ' ',
+              location.PostalCode
+            ),
+            location.Phone && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              { className: 'loc-phone' },
+              location.Phone
+            ),
+            location.Website && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              { className: 'loc-web' },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'a',
+                { href: location.Website, target: '_blank', rel: 'noopener noreferrer' },
+                'Website'
+              )
+            ),
+            location.Email && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              { className: 'loc-email' },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'a',
+                { href: 'mailto:' + location.Email },
+                'Email'
+              )
+            ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'div',
               { className: 'loc-dist' },
-              'Distance'
+              'distance length |',
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'a',
+                {
+                  href: 'http://maps.google.com/maps?saddr={{origin}}&daddr={{address}} {{address2}} {{city}}, {{state}} {{postal}}',
+                  target: '_blank',
+                  rel: 'noopener noreferrer'
+                },
+                'Directions'
+              )
             )
           )
         )
@@ -45789,7 +45745,49 @@ var MapContainer = function (_React$Component) {
             lng: Number(loc.Lng)
           },
           key: loc.ID,
-          defaultAnimation: 2
+          defaultAnimation: 2,
+          infoContent: __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            null,
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              { className: 'loc-name' },
+              loc.Title
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              null,
+              loc.Address
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              null,
+              loc.Address2
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              null,
+              loc.City,
+              ', ',
+              loc.State,
+              ' ',
+              loc.PostalCode
+            ),
+            loc.Phone && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'a',
+              { href: 'tel:' + loc.Phone },
+              loc.Phone
+            ),
+            loc.Website && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              null,
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'a',
+                { href: loc.Website, target: '_blank', rel: 'noopener noreferrer' },
+                'Website'
+              )
+            )
+          )
         };
       }
       return markers;

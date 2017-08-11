@@ -39,6 +39,16 @@ class MapContainer extends React.Component {
         },
         key: loc.ID,
         defaultAnimation: 2,
+        infoContent: (
+          <div>
+            <div className="loc-name">{loc.Title}</div>
+            <div>{loc.Address}</div>
+            <div>{loc.Address2}</div>
+            <div>{loc.City}, {loc.State} {loc.PostalCode}</div>
+            {loc.Phone && <a href={`tel:${loc.Phone}`}>{loc.Phone}</a>}
+            {loc.Website && <div><a href={loc.Website} target="_blank" rel="noopener noreferrer">Website</a></div>}
+          </div>
+        ),
       };
     }
     return markers;
@@ -123,6 +133,5 @@ function mapStateToProps(state) {
     showCurrent: state.map.showCurrent,
   };
 }
-
 
 export default connect(mapStateToProps)(MapContainer);
