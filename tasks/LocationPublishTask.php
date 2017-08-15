@@ -29,7 +29,7 @@ class LocationPublishTask extends BuildTask
      */
     public function run($request)
     {
-        $class = ($request->getVar('locationclass')) ? $request->getVar('locationclass') : 'Location';
+        $class = ($request->getVar('locationclass')) ? $request->getVar('locationclass') : Location::class;
         $this->publishLocations($class);
     }
 
