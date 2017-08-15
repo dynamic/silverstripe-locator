@@ -21,6 +21,7 @@ export default gql`
           PostalCode
           Lat
           Lng
+          distance
         }
       } 
     }

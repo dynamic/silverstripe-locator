@@ -27,7 +27,7 @@ SilverStripe\GraphQL\Controller:
             Country: 'The country the location is in'
             Lat: 'The latitude of the location'
             Lng: 'The longitude of the location'
-            # distance: 'Calculated distance from a given address'
+            distance: 'Calculated distance from a given address'
             Category: 'The category of the location'
           operations:
             read:

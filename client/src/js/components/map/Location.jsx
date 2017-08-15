@@ -7,6 +7,19 @@ import PropTypes from 'prop-types';
  */
 class Location extends React.Component {
   /**
+   * Rounds the distance
+   */
+  getDistance() {
+    const { location } = this.props;
+    let distance = location.distance;
+    distance = parseFloat(distance);
+    if (distance === 0) {
+      return null;
+    }
+    return distance.toFixed(2);
+  }
+
+  /**
    * renders the component
    * @returns {XML}
    */
@@ -32,7 +45,7 @@ class Location extends React.Component {
             </div>}
             {location.Email && <div className="loc-email"><a href={`mailto:${location.Email}`}>Email</a></div>}
             <div className="loc-dist">
-              distance length |
+              {this.getDistance()} |
               <a
                 // TODO - update with proper values
                 href="http://maps.google.com/maps?saddr={{origin}}&amp;daddr={{address}} {{address2}} {{city}}, {{state}} {{postal}}"
@@ -61,6 +74,7 @@ Location.propTypes = {
     PostalCode: PropTypes.string,
     Website: PropTypes.string,
     Phone: PropTypes.string,
+    distance: PropTypes.string,
   }).isRequired,
   index: PropTypes.number.isRequired,
   current: PropTypes.string.isRequired,
