@@ -13,10 +13,63 @@ class Location extends React.Component {
     const { location } = this.props;
     let distance = location.distance;
     distance = parseFloat(distance);
-    if (distance === 0) {
-      return null;
-    }
     return distance.toFixed(2);
+  }
+
+  /**
+   * Gets the daddr string for google maps directions
+   * @returns {string}
+   */
+  getDaddr() {
+    const { location } = this.props;
+    let daddr = '';
+
+    if (location.Address) {
+      daddr += `${location.Address}+`;
+    }
+
+    if (location.Address2) {
+      daddr += `${location.Address2}+`;
+    }
+
+    if (location.City) {
+      daddr += `${location.City}+`;
+    }
+
+    if (location.State) {
+      daddr += `${location.State}+`;
+    }
+
+    if (location.PostalCode) {
+      daddr += location.PostalCode;
+    }
+
+    // return daddr after replacing any trailing '+' or whitespace
+    return daddr.replace(/([+\s]+$)/g, '');
+  }
+
+  /**
+   * Renders the distance for the location
+   * Only renders when there is a search
+   * @returns {*}
+   */
+  renderDistance() {
+    const distance = this.getDistance();
+    const { search } = this.props;
+
+    if (search) {
+      const link = `http://maps.google.com/maps?saddr=${search}&daddr=${this.getDaddr()}`;
+      return (
+        <div className="loc-dist">
+          {distance} |
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+          >Directions</a>
+        </div>);
+    }
+    return null;
   }
 
   /**
@@ -36,23 +89,27 @@ class Location extends React.Component {
           <div className="list-content">
             <div className="loc-name">{location.Title}</div>
             <div className="loc-addr">{location.Address}</div>
-            {location.Address2 && <div className="loc-addr2">{location.Address2}</div>}
+
+            {location.Address2 &&
+            <div className="loc-addr2">{location.Address2}</div>
+            }
             <div className="loc-addr3">{location.City}, {location.State} {location.PostalCode}</div>
-            {location.Phone && <div className="loc-phone">{location.Phone}</div>}
+
+            {location.Phone &&
+            <div className="loc-phone">{location.Phone}</div>
+            }
+
             {location.Website &&
             <div className="loc-web">
               <a href={location.Website} target="_blank" rel="noopener noreferrer">Website</a>
             </div>}
-            {location.Email && <div className="loc-email"><a href={`mailto:${location.Email}`}>Email</a></div>}
-            <div className="loc-dist">
-              {this.getDistance()} |
-              <a
-                // TODO - update with proper values
-                href="http://maps.google.com/maps?saddr={{origin}}&amp;daddr={{address}} {{address2}} {{city}}, {{state}} {{postal}}"
-                target="_blank"
-                rel="noopener noreferrer"
-              >Directions</a>
+
+            {location.Email &&
+            <div className="loc-email">
+              <a href={`mailto:${location.Email}`}>Email</a>
             </div>
+            }
+            {this.renderDistance()}
           </div>
         </div>
       </li>
@@ -78,6 +135,7 @@ Location.propTypes = {
   }).isRequired,
   index: PropTypes.number.isRequired,
   current: PropTypes.string.isRequired,
+  search: PropTypes.string.isRequired,
 };
 
 /**

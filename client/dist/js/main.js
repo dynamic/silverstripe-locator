@@ -221,10 +221,63 @@ var Location = function (_React$Component) {
 
       var distance = location.distance;
       distance = parseFloat(distance);
-      if (distance === 0) {
-        return null;
-      }
       return distance.toFixed(2);
+    }
+  }, {
+    key: 'getDaddr',
+    value: function getDaddr() {
+      var location = this.props.location;
+
+      var daddr = '';
+
+      if (location.Address) {
+        daddr += location.Address + '+';
+      }
+
+      if (location.Address2) {
+        daddr += location.Address2 + '+';
+      }
+
+      if (location.City) {
+        daddr += location.City + '+';
+      }
+
+      if (location.State) {
+        daddr += location.State + '+';
+      }
+
+      if (location.PostalCode) {
+        daddr += location.PostalCode;
+      }
+
+      return daddr.replace(/([+\s]+$)/g, '');
+    }
+  }, {
+    key: 'renderDistance',
+    value: function renderDistance() {
+      var distance = this.getDistance();
+      var search = this.props.search;
+
+
+      if (search) {
+        var link = 'http://maps.google.com/maps?saddr=' + search + '&daddr=' + this.getDaddr();
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'loc-dist' },
+          distance,
+          ' |',
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'a',
+            {
+              href: link,
+              target: '_blank',
+              rel: 'noopener noreferrer'
+            },
+            'Directions'
+          )
+        );
+      }
+      return null;
     }
   }, {
     key: 'render',
@@ -299,21 +352,7 @@ var Location = function (_React$Component) {
                 'Email'
               )
             ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'div',
-              { className: 'loc-dist' },
-              this.getDistance(),
-              ' |',
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'a',
-                {
-                  href: 'http://maps.google.com/maps?saddr={{origin}}&daddr={{address}} {{address2}} {{city}}, {{state}} {{postal}}',
-                  target: '_blank',
-                  rel: 'noopener noreferrer'
-                },
-                'Directions'
-              )
-            )
+            this.renderDistance()
           )
         )
       );
@@ -336,7 +375,8 @@ Location.propTypes = {
     distance: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string
   }).isRequired,
   index: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired,
-  current: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired
+  current: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
+  search: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Location);
@@ -440,7 +480,8 @@ var MapArea = function (_React$Component) {
             key: location.node.ID,
             index: index,
             location: location.node,
-            current: _this2.props.current
+            current: _this2.props.current,
+            search: _this2.props.search
           });
         });
       }
@@ -473,19 +514,22 @@ MapArea.propTypes = {
   locations: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
     edges: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.array
   }),
-  current: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string
+  current: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
+  search: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string
 };
 
 MapArea.defaultProps = {
   locations: {
     edges: []
   },
-  current: '-1'
+  current: '-1',
+  search: ''
 };
 
 function mapStateToProps(state) {
   return {
-    current: state.map.current
+    current: state.map.current,
+    search: state.search.address
   };
 }
 
