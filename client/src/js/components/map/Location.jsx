@@ -44,7 +44,7 @@ class Location extends React.Component {
       daddr += location.PostalCode;
     }
 
-    // return daddr after replacing any trailing '+' or whitespace
+    // return daddr after replacing any trailing '+' and whitespace
     return daddr.replace(/([+\s]+$)/g, '');
   }
 
@@ -131,6 +131,7 @@ Location.propTypes = {
     PostalCode: PropTypes.string,
     Website: PropTypes.string,
     Phone: PropTypes.string,
+    Email: PropTypes.string,
     distance: PropTypes.string,
   }).isRequired,
   index: PropTypes.number.isRequired,

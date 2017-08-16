@@ -160,6 +160,6 @@ class Locator extends \Page
      */
     public function ApiUrl()
     {
-        return Controller::join_links(Director::baseURL(), 'graphql');
+        return Controller::join_links(Director::baseURL(), 'graphql-locator');
     }
 }

@@ -1,0 +1,8 @@
+---
+Name: locatorroutes
+---
+SilverStripe\Control\Director:
+  rules:
+    'graphql-locator':
+      Controller: 'Dynamic\Locator\GraphQL\Controller'
+      Stage: Stage
