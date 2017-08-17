@@ -105,8 +105,7 @@ class Locator extends \Page
         $filterAny = [],
         $exclude = [],
         $callback = null
-    )
-    {
+    ) {
         $locationClass = Config::inst()->get(Locator::class, 'location_class');
         $locations = $locationClass::get()->filter($filter)->exclude($exclude);
 
@@ -161,5 +160,23 @@ class Locator extends \Page
     public function ApiUrl()
     {
         return Controller::join_links(Director::baseURL(), 'graphql-locator');
+    }
+
+    /**
+     * the map defaults to be passed to javascript
+     *
+     * @return string
+     */
+    public function MapDefaults()
+    {
+        $zoom = 11;
+
+        // replaces single with double quotes (so no escaping) and removes new lines and spaces
+        return str_replace("'", '"',
+            preg_replace("/\s/", '', "{
+                'zoom': $zoom,
+                'test': 'test'
+            }")
+        );
     }
 }

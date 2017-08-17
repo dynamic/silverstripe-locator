@@ -4,8 +4,8 @@ import gql from 'graphql-tag';
  * The query for getting locations
  */
 export default gql`
-  query($address: String, $radius: String){
-    readLocations(address: $address, radius: $radius) {
+  query($address: String, $radius: String, $category: String){
+    readLocations(address: $address, radius: $radius, category: $category) {
       edges {
         node {
           ID
@@ -22,6 +22,10 @@ export default gql`
           Lat
           Lng
           distance
+          Category {
+            ID
+            Name
+          }
         }
       } 
     }

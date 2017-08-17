@@ -37,6 +37,11 @@ class LocationResolver implements ResolverInterface
 
             $list = $list->sort('distance');
         }
+
+        if ($args['category']) {
+            $list = $list->filter('CategoryID', $args['category']);
+        }
+
         return $list;
     }
 

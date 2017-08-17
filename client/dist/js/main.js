@@ -1,36 +1,48 @@
 webpackJsonp([0],{
 
 /***/ 259:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_apollo__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_apollo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_apollo__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_redux__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_redux___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react_redux__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_queries_readLocations__ = __webpack_require__(284);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_components_search_SearchBar__ = __webpack_require__(283);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_components_map_MapArea__ = __webpack_require__(280);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactApollo = __webpack_require__(151);
+
+var _reactRedux = __webpack_require__(91);
+
+var _readLocations = __webpack_require__(284);
+
+var _readLocations2 = _interopRequireDefault(_readLocations);
+
+var _SearchBar = __webpack_require__(283);
+
+var _SearchBar2 = _interopRequireDefault(_SearchBar);
+
+var _MapArea = __webpack_require__(280);
+
+var _MapArea2 = _interopRequireDefault(_MapArea);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
-
-
-
-
-
-
 
 var Locator = function (_React$Component) {
   _inherits(Locator, _React$Component);
@@ -45,21 +57,21 @@ var Locator = function (_React$Component) {
     key: 'render',
     value: function render() {
       var radii = [5, 25, 50, 75, 100];
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      return _react2.default.createElement(
         'div',
         null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_components_search_SearchBar__["a" /* default */], { radii: radii }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_components_map_MapArea__["a" /* default */], { locations: this.props.data.readLocations })
+        _react2.default.createElement(_SearchBar2.default, { radii: radii }),
+        _react2.default.createElement(_MapArea2.default, { locations: this.props.data.readLocations })
       );
     }
   }]);
 
   return Locator;
-}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+}(_react2.default.Component);
 
 Locator.propTypes = {
-  data: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
-    readLocations: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.object
+  data: _propTypes2.default.shape({
+    readLocations: _propTypes2.default.object
   }).isRequired
 };
 
@@ -70,7 +82,7 @@ function mapStateToProps(state) {
   };
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_react_apollo__["compose"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_react_redux__["connect"])(mapStateToProps), __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_react_apollo__["graphql"])(__WEBPACK_IMPORTED_MODULE_4_queries_readLocations__["a" /* default */], {
+exports.default = (0, _reactApollo.compose)((0, _reactRedux.connect)(mapStateToProps), (0, _reactApollo.graphql)(_readLocations2.default, {
   options: function options(_ref) {
     var address = _ref.address,
         radius = _ref.radius;
@@ -81,44 +93,63 @@ function mapStateToProps(state) {
       }
     };
   }
-}))(Locator));
+}))(Locator);
 
 /***/ }),
 
 /***/ 260:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = reducers;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_reducers_searchReducer__ = __webpack_require__(286);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_reducers_mapReducer__ = __webpack_require__(285);
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = reducers;
 
+var _redux = __webpack_require__(51);
 
+var _searchReducer = __webpack_require__(286);
+
+var _searchReducer2 = _interopRequireDefault(_searchReducer);
+
+var _mapReducer = __webpack_require__(285);
+
+var _mapReducer2 = _interopRequireDefault(_mapReducer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function reducers(client) {
-  return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_redux__["combineReducers"])({
+  return (0, _redux.combineReducers)({
     client: client.reducer(),
-    search: __WEBPACK_IMPORTED_MODULE_1_reducers_searchReducer__["a" /* default */],
-    map: __WEBPACK_IMPORTED_MODULE_2_reducers_mapReducer__["a" /* default */]
+    search: _searchReducer2.default,
+    map: _mapReducer2.default
   });
 }
 
 /***/ }),
 
 /***/ 276:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = search;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_actions_ActionTypes__ = __webpack_require__(67);
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.search = search;
+
+var _ActionTypes = __webpack_require__(67);
+
+var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function search(inputs) {
   return {
-    type: __WEBPACK_IMPORTED_MODULE_0_actions_ActionTypes__["a" /* default */].SEARCH,
+    type: _ActionTypes2.default.SEARCH,
     payload: inputs
   };
 }
@@ -126,39 +157,47 @@ function search(inputs) {
 /***/ }),
 
 /***/ 277:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(94);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_redux__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_redux_thunk__ = __webpack_require__(261);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_redux_thunk___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_redux_thunk__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_apollo_client__ = __webpack_require__(150);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react_apollo__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react_apollo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_react_apollo__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_reducers__ = __webpack_require__(260);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_components_Locator__ = __webpack_require__(259);
 
 
+var _react = __webpack_require__(6);
 
+var _react2 = _interopRequireDefault(_react);
 
+var _reactDom = __webpack_require__(94);
 
+var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _redux = __webpack_require__(51);
 
+var _reduxThunk = __webpack_require__(261);
 
+var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
+var _apolloClient = __webpack_require__(150);
 
+var _apolloClient2 = _interopRequireDefault(_apolloClient);
 
+var _reactApollo = __webpack_require__(151);
 
+var _reducers = __webpack_require__(260);
+
+var _reducers2 = _interopRequireDefault(_reducers);
+
+var _Locator = __webpack_require__(259);
+
+var _Locator2 = _interopRequireDefault(_Locator);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var container = document.querySelector('.locator');
 
-var client = new __WEBPACK_IMPORTED_MODULE_4_apollo_client__["default"]({
-  networkInterface: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_apollo_client__["createNetworkInterface"])({
+console.log(JSON.parse(container.dataset.mapDefaults));
+
+var client = new _apolloClient2.default({
+  networkInterface: (0, _apolloClient.createNetworkInterface)({
     uri: container.dataset.apiUrl,
     opts: {
       credentials: 'same-origin'
@@ -171,39 +210,48 @@ var client = new __WEBPACK_IMPORTED_MODULE_4_apollo_client__["default"]({
 });
 
 function composedMiddleware() {
-  return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_redux__["compose"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_redux__["applyMiddleware"])(client.middleware(), __WEBPACK_IMPORTED_MODULE_3_redux_thunk___default.a), typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : function (f) {
+  return (0, _redux.compose)((0, _redux.applyMiddleware)(client.middleware(), _reduxThunk2.default), typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : function (f) {
     return f;
   });
 }
 
-var store = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_redux__["createStore"])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6_reducers__["a" /* default */])(client), composedMiddleware());
+var store = (0, _redux.createStore)((0, _reducers2.default)(client), composedMiddleware());
 
-__WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-  __WEBPACK_IMPORTED_MODULE_5_react_apollo__["ApolloProvider"],
+_reactDom2.default.render(_react2.default.createElement(
+  _reactApollo.ApolloProvider,
   { store: store, client: client },
-  __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_components_Locator__["a" /* default */], null)
+  _react2.default.createElement(_Locator2.default, null)
 ), container);
 
 /***/ }),
 
 /***/ 278:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
 
 var Location = function (_React$Component) {
   _inherits(Location, _React$Component);
@@ -261,12 +309,12 @@ var Location = function (_React$Component) {
 
       if (search) {
         var link = 'http://maps.google.com/maps?saddr=' + search + '&daddr=' + this.getDaddr();
-        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        return _react2.default.createElement(
           'div',
           { className: 'loc-dist' },
           distance,
           ' |',
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          _react2.default.createElement(
             'a',
             {
               href: link,
@@ -289,38 +337,38 @@ var Location = function (_React$Component) {
 
       var className = '';
       if (current === location.ID) {
-        className = 'focus';
+        className += 'focus';
       }
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      return _react2.default.createElement(
         'li',
         { 'data-markerid': index, className: className },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        _react2.default.createElement(
           'div',
           { className: 'list-label' },
           index + 1
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        _react2.default.createElement(
           'div',
           { className: 'list-details' },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          _react2.default.createElement(
             'div',
             { className: 'list-content' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            _react2.default.createElement(
               'div',
               { className: 'loc-name' },
               location.Title
             ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            _react2.default.createElement(
               'div',
               { className: 'loc-addr' },
               location.Address
             ),
-            location.Address2 && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            location.Address2 && _react2.default.createElement(
               'div',
               { className: 'loc-addr2' },
               location.Address2
             ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            _react2.default.createElement(
               'div',
               { className: 'loc-addr3' },
               location.City,
@@ -329,24 +377,24 @@ var Location = function (_React$Component) {
               ' ',
               location.PostalCode
             ),
-            location.Phone && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            location.Phone && _react2.default.createElement(
               'div',
               { className: 'loc-phone' },
               location.Phone
             ),
-            location.Website && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            location.Website && _react2.default.createElement(
               'div',
               { className: 'loc-web' },
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              _react2.default.createElement(
                 'a',
                 { href: location.Website, target: '_blank', rel: 'noopener noreferrer' },
                 'Website'
               )
             ),
-            location.Email && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            location.Email && _react2.default.createElement(
               'div',
               { className: 'loc-email' },
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              _react2.default.createElement(
                 'a',
                 { href: 'mailto:' + location.Email },
                 'Email'
@@ -360,51 +408,58 @@ var Location = function (_React$Component) {
   }]);
 
   return Location;
-}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+}(_react2.default.Component);
 
 Location.propTypes = {
-  location: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
-    Title: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
-    Address: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
-    Address2: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
-    City: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
-    State: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
-    PostalCode: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
-    Website: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
-    Phone: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
-    Email: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
-    distance: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string
+  location: _propTypes2.default.shape({
+    Title: _propTypes2.default.string,
+    Address: _propTypes2.default.string,
+    Address2: _propTypes2.default.string,
+    City: _propTypes2.default.string,
+    State: _propTypes2.default.string,
+    PostalCode: _propTypes2.default.string,
+    Website: _propTypes2.default.string,
+    Phone: _propTypes2.default.string,
+    Email: _propTypes2.default.string,
+    distance: _propTypes2.default.string
   }).isRequired,
-  index: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired,
-  current: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
-  search: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired
+  index: _propTypes2.default.number.isRequired,
+  current: _propTypes2.default.string.isRequired,
+  search: _propTypes2.default.string.isRequired
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (Location);
+exports.default = Location;
 
 /***/ }),
 
 /***/ 279:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_google_maps__ = __webpack_require__(583);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_google_maps___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_google_maps__);
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var Map = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_react_google_maps__["withGoogleMap"])(function (props) {
-  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-    __WEBPACK_IMPORTED_MODULE_1_react_google_maps__["GoogleMap"],
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactGoogleMaps = __webpack_require__(583);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Map = (0, _reactGoogleMaps.withGoogleMap)(function (props) {
+  return _react2.default.createElement(
+    _reactGoogleMaps.GoogleMap,
     {
       defaultZoom: 9,
       defaultCenter: { lat: 43.8483258, lng: -87.7709294 }
     },
     props.markers.map(function (marker) {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_1_react_google_maps__["Marker"],
+      return _react2.default.createElement(
+        _reactGoogleMaps.Marker,
         {
           key: marker.key,
           position: marker.position,
@@ -413,12 +468,12 @@ var Map = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_react_google_maps__[
             return props.onMarkerClick(marker);
           }
         },
-        props.current === marker.key && props.showCurrent && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_google_maps__["InfoWindow"],
+        props.current === marker.key && props.showCurrent && _react2.default.createElement(
+          _reactGoogleMaps.InfoWindow,
           { onCloseClick: function onCloseClick() {
               return props.onMarkerClose(marker);
             } },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          _react2.default.createElement(
             'div',
             null,
             marker.infoContent
@@ -429,36 +484,47 @@ var Map = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_react_google_maps__[
   );
 });
 
-/* harmony default export */ __webpack_exports__["a"] = (Map);
+exports.default = Map;
 
 /***/ }),
 
 /***/ 280:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_redux__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_components_map_Location__ = __webpack_require__(278);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_components_map_MapContainer__ = __webpack_require__(281);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = __webpack_require__(91);
+
+var _Location = __webpack_require__(278);
+
+var _Location2 = _interopRequireDefault(_Location);
+
+var _MapContainer = __webpack_require__(281);
+
+var _MapContainer2 = _interopRequireDefault(_MapContainer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
-
-
-
-
 
 var MapArea = function (_React$Component) {
   _inherits(MapArea, _React$Component);
@@ -477,7 +543,7 @@ var MapArea = function (_React$Component) {
       var locs = this.props.locations.edges;
       if (locs !== undefined) {
         return locs.map(function (location, index) {
-          return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_components_map_Location__["a" /* default */], {
+          return _react2.default.createElement(_Location2.default, {
             key: location.node.ID,
             index: index,
             location: location.node,
@@ -491,14 +557,14 @@ var MapArea = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      return _react2.default.createElement(
         'div',
         { className: 'map-area' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_components_map_MapContainer__["a" /* default */], { locations: this.props.locations }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        _react2.default.createElement(_MapContainer2.default, { locations: this.props.locations }),
+        _react2.default.createElement(
           'div',
           { className: 'loc-list' },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          _react2.default.createElement(
             'ul',
             null,
             this.renderLocations()
@@ -509,14 +575,14 @@ var MapArea = function (_React$Component) {
   }]);
 
   return MapArea;
-}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+}(_react2.default.Component);
 
 MapArea.propTypes = {
-  locations: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
-    edges: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.array
+  locations: _propTypes2.default.shape({
+    edges: _propTypes2.default.array
   }),
-  current: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
-  search: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string
+  current: _propTypes2.default.string,
+  search: _propTypes2.default.string
 };
 
 MapArea.defaultProps = {
@@ -534,36 +600,47 @@ function mapStateToProps(state) {
   };
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_react_redux__["connect"])(mapStateToProps)(MapArea));
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(MapArea);
 
 /***/ }),
 
 /***/ 281:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_redux__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_actions_ActionTypes__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_components_map_Map__ = __webpack_require__(279);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = __webpack_require__(91);
+
+var _ActionTypes = __webpack_require__(67);
+
+var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
+
+var _Map = __webpack_require__(279);
+
+var _Map2 = _interopRequireDefault(_Map);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
-
-
-
-
 
 var MapContainer = function (_React$Component) {
   _inherits(MapContainer, _React$Component);
@@ -595,25 +672,25 @@ var MapContainer = function (_React$Component) {
           },
           key: loc.ID,
           defaultAnimation: 2,
-          infoContent: __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          infoContent: _react2.default.createElement(
             'div',
             null,
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            _react2.default.createElement(
               'div',
               { className: 'loc-name' },
               loc.Title
             ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            _react2.default.createElement(
               'div',
               null,
               loc.Address
             ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            _react2.default.createElement(
               'div',
               null,
               loc.Address2
             ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            _react2.default.createElement(
               'div',
               null,
               loc.City,
@@ -622,15 +699,15 @@ var MapContainer = function (_React$Component) {
               ' ',
               loc.PostalCode
             ),
-            loc.Phone && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            loc.Phone && _react2.default.createElement(
               'a',
               { href: 'tel:' + loc.Phone },
               loc.Phone
             ),
-            loc.Website && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            loc.Website && _react2.default.createElement(
               'div',
               null,
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              _react2.default.createElement(
                 'a',
                 { href: loc.Website, target: '_blank', rel: 'noopener noreferrer' },
                 'Website'
@@ -645,7 +722,7 @@ var MapContainer = function (_React$Component) {
     key: 'handleMarkerClick',
     value: function handleMarkerClick(target) {
       this.props.dispatch({
-        type: __WEBPACK_IMPORTED_MODULE_3_actions_ActionTypes__["a" /* default */].MARKER_CLICK,
+        type: _ActionTypes2.default.MARKER_CLICK,
         payload: target
       });
     }
@@ -653,19 +730,19 @@ var MapContainer = function (_React$Component) {
     key: 'handleMarkerClose',
     value: function handleMarkerClose(target) {
       this.props.dispatch({
-        type: __WEBPACK_IMPORTED_MODULE_3_actions_ActionTypes__["a" /* default */].MARKER_CLOSE,
+        type: _ActionTypes2.default.MARKER_CLOSE,
         payload: target
       });
     }
   }, {
     key: 'render',
     value: function render() {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      return _react2.default.createElement(
         'div',
         { id: 'map-container' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_components_map_Map__["a" /* default */], {
-          containerElement: __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'map' }),
-          mapElement: __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { style: { height: '100%' } }),
+        _react2.default.createElement(_Map2.default, {
+          containerElement: _react2.default.createElement('div', { className: 'map' }),
+          mapElement: _react2.default.createElement('div', { style: { height: '100%' } }),
           markers: this.getMarkers(),
           onMarkerClick: this.handleMarkerClick,
           onMarkerClose: this.handleMarkerClose,
@@ -677,15 +754,15 @@ var MapContainer = function (_React$Component) {
   }]);
 
   return MapContainer;
-}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+}(_react2.default.Component);
 
 MapContainer.propTypes = {
-  locations: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
-    edges: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.array
+  locations: _propTypes2.default.shape({
+    edges: _propTypes2.default.array
   }),
-  dispatch: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired,
-  current: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
-  showCurrent: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.bool
+  dispatch: _propTypes2.default.func.isRequired,
+  current: _propTypes2.default.string,
+  showCurrent: _propTypes2.default.bool
 };
 
 MapContainer.defaultProps = {
@@ -703,28 +780,37 @@ function mapStateToProps(state) {
   };
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_react_redux__["connect"])(mapStateToProps)(MapContainer));
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(MapContainer);
 
 /***/ }),
 
 /***/ 282:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
 
 var RadiusDropDown = function (_React$Component) {
   _inherits(RadiusDropDown, _React$Component);
@@ -739,7 +825,7 @@ var RadiusDropDown = function (_React$Component) {
     key: 'mappedRadii',
     value: function mappedRadii() {
       return this.props.radii.map(function (radius) {
-        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        return _react2.default.createElement(
           'option',
           {
             value: radius,
@@ -755,20 +841,20 @@ var RadiusDropDown = function (_React$Component) {
       var radii = this.props.radii;
 
       if (radii !== undefined && radii.length > 0) {
-        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        return _react2.default.createElement(
           'div',
           { className: 'field dropdown form-group--no-label' },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          _react2.default.createElement(
             'div',
             { className: 'middleColumn' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            _react2.default.createElement(
               'select',
               {
                 name: 'radius',
                 className: 'dropdown form-group--no-label',
                 defaultValue: ''
               },
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              _react2.default.createElement(
                 'option',
                 { value: '' },
                 'radius'
@@ -784,42 +870,51 @@ var RadiusDropDown = function (_React$Component) {
   }]);
 
   return RadiusDropDown;
-}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+}(_react2.default.Component);
 
 RadiusDropDown.propTypes = {
-  radii: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.array.isRequired
+  radii: _propTypes2.default.array.isRequired
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (RadiusDropDown);
+exports.default = RadiusDropDown;
 
 /***/ }),
 
 /***/ 283:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_redux__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_actions_searchActions__ = __webpack_require__(276);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_components_search_RadiusDropDown__ = __webpack_require__(282);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = __webpack_require__(91);
+
+var _searchActions = __webpack_require__(276);
+
+var _RadiusDropDown = __webpack_require__(282);
+
+var _RadiusDropDown2 = _interopRequireDefault(_RadiusDropDown);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
-
-
-
-
 
 var SearchBar = function (_React$Component) {
   _inherits(SearchBar, _React$Component);
@@ -840,7 +935,7 @@ var SearchBar = function (_React$Component) {
       var addressInput = document.getElementsByName('address')[0].value;
       var radiusInput = document.getElementsByName('radius')[0].value;
 
-      this.props.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_actions_searchActions__["a" /* search */])({
+      this.props.dispatch((0, _searchActions.search)({
         address: addressInput,
         radius: radiusInput
       }));
@@ -848,19 +943,19 @@ var SearchBar = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      return _react2.default.createElement(
         'form',
         { action: '', onSubmit: this.handleSubmit },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        _react2.default.createElement(
           'fieldset',
           null,
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          _react2.default.createElement(
             'div',
             { className: 'field text form-group--no-label' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            _react2.default.createElement(
               'div',
               { className: 'middleColumn' },
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
+              _react2.default.createElement('input', {
                 type: 'text',
                 name: 'address',
                 className: 'text form-group--no-label',
@@ -870,59 +965,77 @@ var SearchBar = function (_React$Component) {
               })
             )
           ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_components_search_RadiusDropDown__["a" /* default */], { radii: this.props.radii })
+          _react2.default.createElement(_RadiusDropDown2.default, { radii: this.props.radii })
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        _react2.default.createElement(
           'div',
           { className: 'btn-toolbar' },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
+          _react2.default.createElement('input', {
             type: 'submit',
             value: 'Search',
             className: 'action'
           })
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'clear' })
+        _react2.default.createElement('div', { className: 'clear' })
       );
     }
   }]);
 
   return SearchBar;
-}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+}(_react2.default.Component);
 
 SearchBar.propTypes = {
-  radii: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.array.isRequired,
-  dispatch: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired
+  radii: _propTypes2.default.array.isRequired,
+  dispatch: _propTypes2.default.func.isRequired
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_react_redux__["connect"])()(SearchBar));
+exports.default = (0, _reactRedux.connect)()(SearchBar);
 
 /***/ }),
 
 /***/ 284:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_graphql_tag__ = __webpack_require__(177);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_graphql_tag___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_graphql_tag__);
-var _templateObject = _taggedTemplateLiteral(['\n  query($address: String, $radius: String){\n    readLocations(address: $address, radius: $radius) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n        }\n      } \n    }\n  }\n'], ['\n  query($address: String, $radius: String){\n    readLocations(address: $address, radius: $radius) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n        }\n      } \n    }\n  }\n']);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _templateObject = _taggedTemplateLiteral(['\n  query($address: String, $radius: String, $category: String){\n    readLocations(address: $address, radius: $radius, category: $category) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n          Category {\n            ID\n            Name\n          }\n        }\n      } \n    }\n  }\n'], ['\n  query($address: String, $radius: String, $category: String){\n    readLocations(address: $address, radius: $radius, category: $category) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n          Category {\n            ID\n            Name\n          }\n        }\n      } \n    }\n  }\n']);
+
+var _graphqlTag = __webpack_require__(177);
+
+var _graphqlTag2 = _interopRequireDefault(_graphqlTag);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
-
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_graphql_tag___default()(_templateObject));
+exports.default = (0, _graphqlTag2.default)(_templateObject);
 
 /***/ }),
 
 /***/ 285:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = reducer;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_actions_ActionTypes__ = __webpack_require__(67);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+exports.default = reducer;
 
+var _ActionTypes = __webpack_require__(67);
+
+var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var defaultState = {
   current: '-1',
@@ -934,13 +1047,13 @@ function reducer() {
   var action = arguments[1];
 
   switch (action.type) {
-    case __WEBPACK_IMPORTED_MODULE_0_actions_ActionTypes__["a" /* default */].MARKER_CLICK:
+    case _ActionTypes2.default.MARKER_CLICK:
       return _extends({}, state, {
         current: action.payload.key,
         showCurrent: true
       });
 
-    case __WEBPACK_IMPORTED_MODULE_0_actions_ActionTypes__["a" /* default */].MARKER_CLOSE:
+    case _ActionTypes2.default.MARKER_CLOSE:
       return _extends({}, state, {
         showCurrent: false
       });
@@ -953,14 +1066,24 @@ function reducer() {
 /***/ }),
 
 /***/ 286:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = reducer;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_actions_ActionTypes__ = __webpack_require__(67);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+exports.default = reducer;
 
+var _ActionTypes = __webpack_require__(67);
+
+var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var defaultState = {
   address: '',
@@ -972,7 +1095,7 @@ function reducer() {
   var action = arguments[1];
 
   switch (action.type) {
-    case __WEBPACK_IMPORTED_MODULE_0_actions_ActionTypes__["a" /* default */].SEARCH:
+    case _ActionTypes2.default.SEARCH:
       return _extends({}, state, {
         address: action.payload.address,
         radius: action.payload.radius
@@ -986,9 +1109,14 @@ function reducer() {
 /***/ }),
 
 /***/ 67:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var ActionTypes = {
   SEARCH: 'SEARCH',
@@ -997,7 +1125,7 @@ var ActionTypes = {
   MARKER_CLOSE: 'MARKER_CLOSE'
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (ActionTypes);
+exports.default = ActionTypes;
 
 /***/ })
 

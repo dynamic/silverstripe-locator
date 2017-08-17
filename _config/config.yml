@@ -39,7 +39,28 @@ Dynamic\Locator\GraphQL\Controller:
                   description: 'The radius to look for locations in around address'
                 address:
                   type: String
+                  default: ''
                   description: 'The address to search around'
                 featured:
                   type: Boolean
+                  default: false
                   description: 'If the locations should be featured'
+                category:
+                  type: String
+                  default: ''
+                  description: 'The category to get locations in'
+        Dynamic\Locator\LocationCategory:
+          fields:
+            ID: 'The ID of the category'
+            Name: 'The name of the category'
+          operations:
+            read:
+              args:
+                id:
+                  type: String
+                  default: ''
+                  description: 'The id of the category to get'
+                name:
+                  type: String
+                  default: ''
+                  description: 'The name of the category to get'
