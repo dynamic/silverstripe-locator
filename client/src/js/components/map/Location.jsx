@@ -80,7 +80,7 @@ class Location extends React.Component {
     const { location, index, current } = this.props;
     let className = '';
     if (current === location.ID) {
-      className = 'focus';
+      className += 'focus';
     }
     return (
       <li data-markerid={index} className={className}>

@@ -20,6 +20,13 @@ const location = {
 
 test('Location component should render test', () => {
   const component = shallow(<Location location={location} index={1} current={'1'} search="" />);
-  console.log(toJson(component));
-  // TODO - expect(something).toBe(expected);
+  expect(toJson(component).type).toBe('li');
+});
+
+test('Location component\'s address 2 should render test', () => {
+  const component = shallow(<Location location={location} index={1} current={'1'} search="" />);
+  const address2 = component.find('.loc-addr2');
+  expect(address2.length).toBe(1);
+  expect(address2.node.props.children).toBe(location.Address2);
+  // TODO - add location without address
 });
