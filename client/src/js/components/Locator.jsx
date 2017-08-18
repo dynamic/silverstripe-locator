@@ -36,6 +36,11 @@ Locator.propTypes = {
   data: PropTypes.shape({
     readLocations: PropTypes.object,
   }).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  radii: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]).isRequired,
 };
 
 /**

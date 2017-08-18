@@ -71,7 +71,9 @@ var Locator = function (_React$Component) {
 Locator.propTypes = {
   data: _propTypes2.default.shape({
     readLocations: _propTypes2.default.object
-  }).isRequired
+  }).isRequired,
+
+  radii: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired
 };
 
 function mapStateToProps(state) {
@@ -836,6 +838,7 @@ var RadiusDropDown = function (_React$Component) {
     value: function mappedRadii() {
       var radii = this.props.radii;
 
+
       return Object.keys(radii).map(function (key) {
         return _react2.default.createElement(
           'option',
@@ -885,7 +888,7 @@ var RadiusDropDown = function (_React$Component) {
 }(_react2.default.Component);
 
 RadiusDropDown.propTypes = {
-  radii: _propTypes2.default.object.isRequired
+  radii: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired
 };
 
 exports.default = RadiusDropDown;
@@ -997,7 +1000,7 @@ var SearchBar = function (_React$Component) {
 }(_react2.default.Component);
 
 SearchBar.propTypes = {
-  radii: _propTypes2.default.object.isRequired,
+  radii: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired,
   dispatch: _propTypes2.default.func.isRequired
 };
 

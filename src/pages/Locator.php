@@ -49,16 +49,6 @@ class Locator extends \Page
     /**
      * @var array
      */
-    private static $radius_array = [
-        '25' => '25',
-        '50' => '50',
-        '75' => '75',
-        '100' => '100',
-    ];
-
-    /**
-     * @var array
-     */
     private static $db = array(
         'Unit' => 'Enum("m,km","m")',
     );
@@ -186,11 +176,23 @@ class Locator extends \Page
      */
     public function MapSettings()
     {
+        // radius - because arrays merge
+        $radii = [
+            '25' => '25',
+            '50' => '50',
+            '75' => '75',
+            '100' => '100',
+        ];
+
+        $config_radii = Config::inst()->get(Locator::class, 'radius_array');
+        if ($config_radii) {
+            $radii = $config_radii;
+        }
+        $radii = json_encode($radii, JSON_OBJECT_AS_ARRAY);
+
+        // non-arrays just overwrite
         $lim = Config::inst()->get(Locator::class, 'limit');
         $showRadius = Config::inst()->get(Locator::class, 'show_radius');
-        $radii = json_encode(
-            Config::inst()->get(Locator::class, 'radius_array')
-        );
 
         $zoom = 12;
 
