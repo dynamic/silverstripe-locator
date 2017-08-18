@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import { openMarker } from 'actions/mapActions';
 import Location from 'components/map/Location';
 import MapContainer from 'components/map/MapContainer';
 
@@ -10,6 +11,20 @@ import MapContainer from 'components/map/MapContainer';
  * Renders the MapContainer and location list.
  */
 class MapArea extends React.Component {
+  /**
+   * Used to create the Map.
+   * needed to allow use of this keyword in handler.
+   * @param props
+   */
+  constructor(props) {
+    super(props);
+    this.handleLocationClick = this.handleLocationClick.bind(this);
+  }
+
+  handleLocationClick(target) {
+    this.props.dispatch(openMarker(target));
+  }
+
   /**
    * Renders the locations
    * @returns {*}
@@ -25,6 +40,7 @@ class MapArea extends React.Component {
             location={location.node}
             current={this.props.current}
             search={this.props.search}
+            onClick={this.handleLocationClick}
           />
         ),
       );
@@ -60,6 +76,7 @@ MapArea.propTypes = {
   }),
   current: PropTypes.string,
   search: PropTypes.string,
+  dispatch: PropTypes.func.isRequired,
 };
 
 /**

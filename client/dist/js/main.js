@@ -342,7 +342,8 @@ var Location = function (_React$Component) {
       var _props = this.props,
           location = _props.location,
           index = _props.index,
-          current = _props.current;
+          current = _props.current,
+          _onClick = _props.onClick;
 
       var className = '';
       if (current === location.ID) {
@@ -350,7 +351,9 @@ var Location = function (_React$Component) {
       }
       return _react2.default.createElement(
         'li',
-        { 'data-markerid': index, className: className },
+        { 'data-markerid': index, className: className, onClick: function onClick() {
+            return _onClick(location.ID);
+          } },
         _react2.default.createElement(
           'div',
           { className: 'list-label' },
@@ -434,7 +437,8 @@ Location.propTypes = {
   }).isRequired,
   index: _propTypes2.default.number.isRequired,
   current: _propTypes2.default.string.isRequired,
-  search: _propTypes2.default.string.isRequired
+  search: _propTypes2.default.string.isRequired,
+  onClick: _propTypes2.default.func.isRequired
 };
 
 exports.default = Location;
@@ -465,6 +469,7 @@ var Map = (0, _reactGoogleMaps.withGoogleMap)(function (props) {
     {
       defaultZoom: 9,
       defaultCenter: { lat: 43.8483258, lng: -87.7709294 }
+
     },
     props.markers.map(function (marker) {
       return _react2.default.createElement(
@@ -519,6 +524,8 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactRedux = __webpack_require__(91);
 
+var _mapActions = __webpack_require__(612);
+
 var _Location = __webpack_require__(278);
 
 var _Location2 = _interopRequireDefault(_Location);
@@ -538,13 +545,21 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var MapArea = function (_React$Component) {
   _inherits(MapArea, _React$Component);
 
-  function MapArea() {
+  function MapArea(props) {
     _classCallCheck(this, MapArea);
 
-    return _possibleConstructorReturn(this, (MapArea.__proto__ || Object.getPrototypeOf(MapArea)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (MapArea.__proto__ || Object.getPrototypeOf(MapArea)).call(this, props));
+
+    _this.handleLocationClick = _this.handleLocationClick.bind(_this);
+    return _this;
   }
 
   _createClass(MapArea, [{
+    key: 'handleLocationClick',
+    value: function handleLocationClick(target) {
+      this.props.dispatch((0, _mapActions.openMarker)(target));
+    }
+  }, {
     key: 'renderLocations',
     value: function renderLocations() {
       var _this2 = this;
@@ -557,7 +572,8 @@ var MapArea = function (_React$Component) {
             index: index,
             location: location.node,
             current: _this2.props.current,
-            search: _this2.props.search
+            search: _this2.props.search,
+            onClick: _this2.handleLocationClick
           });
         });
       }
@@ -591,7 +607,8 @@ MapArea.propTypes = {
     edges: _propTypes2.default.array
   }),
   current: _propTypes2.default.string,
-  search: _propTypes2.default.string
+  search: _propTypes2.default.string,
+  dispatch: _propTypes2.default.func.isRequired
 };
 
 MapArea.defaultProps = {
@@ -635,9 +652,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactRedux = __webpack_require__(91);
 
-var _ActionTypes = __webpack_require__(67);
-
-var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
+var _mapActions = __webpack_require__(612);
 
 var _Map = __webpack_require__(279);
 
@@ -730,18 +745,12 @@ var MapContainer = function (_React$Component) {
   }, {
     key: 'handleMarkerClick',
     value: function handleMarkerClick(target) {
-      this.props.dispatch({
-        type: _ActionTypes2.default.MARKER_CLICK,
-        payload: target
-      });
+      this.props.dispatch((0, _mapActions.highlightLocation)(target));
     }
   }, {
     key: 'handleMarkerClose',
     value: function handleMarkerClose(target) {
-      this.props.dispatch({
-        type: _ActionTypes2.default.MARKER_CLOSE,
-        payload: target
-      });
+      this.props.dispatch((0, _mapActions.closeMarker)(target));
     }
   }, {
     key: 'render',
@@ -1249,6 +1258,50 @@ CategoryDropDown.propTypes = {
 };
 
 exports.default = CategoryDropDown;
+
+/***/ }),
+
+/***/ 612:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.openMarker = openMarker;
+exports.highlightLocation = highlightLocation;
+exports.closeMarker = closeMarker;
+
+var _ActionTypes = __webpack_require__(67);
+
+var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function openMarker(target) {
+  return {
+    type: _ActionTypes2.default.MARKER_CLICK,
+    payload: {
+      key: target
+    }
+  };
+}
+
+function highlightLocation(target) {
+  return {
+    type: _ActionTypes2.default.MARKER_CLICK,
+    payload: target
+  };
+}
+
+function closeMarker(target) {
+  return {
+    type: _ActionTypes2.default.MARKER_CLOSE,
+    payload: target
+  };
+}
 
 /***/ }),
 

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import ActionType from 'actions/ActionTypes';
+import { highlightLocation, closeMarker } from 'actions/mapActions';
 import Map from 'components/map/Map';
 
 /**
@@ -59,10 +59,7 @@ class MapContainer extends React.Component {
    * @param target The marker that was clicked
    */
   handleMarkerClick(target) {
-    this.props.dispatch({
-      type: ActionType.MARKER_CLICK,
-      payload: target,
-    });
+    this.props.dispatch(highlightLocation(target));
   }
 
   /**
@@ -70,10 +67,7 @@ class MapContainer extends React.Component {
    * @param target The marker that had its info box closed
    */
   handleMarkerClose(target) {
-    this.props.dispatch({
-      type: ActionType.MARKER_CLOSE,
-      payload: target,
-    });
+    this.props.dispatch(closeMarker(target));
   }
 
   render() {
