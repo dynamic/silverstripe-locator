@@ -20,6 +20,13 @@ export default function reducer(state = defaultState, action) {
         showCurrent: false,
       };
 
+    case ActionType.SEARCH:
+      return {
+        ...state,
+        current: '-1',
+        showCurrent: false,
+      };
+
     default:
       return state;
   }

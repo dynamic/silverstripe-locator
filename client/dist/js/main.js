@@ -1093,6 +1093,12 @@ function reducer() {
         showCurrent: false
       });
 
+    case _ActionTypes2.default.SEARCH:
+      return _extends({}, state, {
+        current: '-1',
+        showCurrent: false
+      });
+
     default:
       return state;
   }
