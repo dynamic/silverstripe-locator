@@ -40,6 +40,23 @@ class Locator extends \Page
     private static $description = 'Display locations on a map';
 
     /**
+     * @var bool
+     */
+    private static $show_radius = true;
+
+    private static $limit = -1;
+
+    /**
+     * @var array
+     */
+    private static $radius_array = [
+        '25' => '25',
+        '50' => '50',
+        '75' => '75',
+        '100' => '100',
+    ];
+
+    /**
      * @var array
      */
     private static $db = array(
@@ -169,16 +186,24 @@ class Locator extends \Page
      */
     public function MapSettings()
     {
-        $limit = Config::inst()->get('Locator_Controller', 'limit');
-        if (!$limit) {
-            $limit = -1;
-        }
+        $lim = Config::inst()->get(Locator::class, 'limit');
+        $showRadius = Config::inst()->get(Locator::class, 'show_radius');
+
         $zoom = 12;
 
+        // filters out unused categories then encodes to json
+        $categories = json_encode(
+            $this->Categories()->filter(array(
+                'Locations.ID:GreaterThan' => 0)
+            )->Map('ID', 'Name')->toArray()
+        );
+
         return $this->minify("{
+            'showRadius': $showRadius,
             'zoom': $zoom,
             'unit': '$this->Unit',
-            'limit': $limit,
+            'limit': $lim,
+            'categories': $categories,
             'mapSettings': {
                 'mapType': 'ROADMAP',
                 'disableDoubleClickZoom': true,
