@@ -188,6 +188,9 @@ class Locator extends \Page
     {
         $lim = Config::inst()->get(Locator::class, 'limit');
         $showRadius = Config::inst()->get(Locator::class, 'show_radius');
+        $radii = json_encode(
+            Config::inst()->get(Locator::class, 'radius_array')
+        );
 
         $zoom = 12;
 
@@ -200,6 +203,7 @@ class Locator extends \Page
 
         return $this->minify("{
             'showRadius': $showRadius,
+            'radii': $radii,
             'zoom': $zoom,
             'unit': '$this->Unit',
             'limit': $lim,

@@ -4,17 +4,19 @@ import PropTypes from 'prop-types';
 class RadiusDropDown extends React.Component {
   /**
    * Maps the radii into options for the drop down.
-   * @returns {array}
+   * @returns {Array}
    */
   mappedRadii() {
-    return this.props.radii.map(radius =>
-      (
-        <option
-          value={radius}
-          key={radius}
-        >{radius}</option>
-      ),
-    );
+    const { radii } = this.props;
+
+    return Object.keys(radii).map(key => (
+      <option
+        value={radii[key]}
+        key={key}
+      >
+        {radii[key]}
+      </option>
+    ));
   }
 
   /**
@@ -23,7 +25,7 @@ class RadiusDropDown extends React.Component {
    */
   render() {
     const { radii } = this.props;
-    if (radii !== undefined && radii.length > 0) {
+    if (radii !== undefined && Object.keys(radii).length !== 0) {
       return (
         <div className="field dropdown form-group--no-label">
 
@@ -47,7 +49,7 @@ class RadiusDropDown extends React.Component {
 
 RadiusDropDown.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  radii: PropTypes.array.isRequired,
+  radii: PropTypes.object.isRequired,
 };
 
 export default RadiusDropDown;

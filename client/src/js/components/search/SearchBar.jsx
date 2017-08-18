@@ -71,7 +71,7 @@ class SearchBar extends React.Component {
 
 SearchBar.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  radii: PropTypes.array.isRequired,
+  radii: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 

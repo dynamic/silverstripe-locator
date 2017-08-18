@@ -19,12 +19,9 @@ class Locator extends React.Component {
    * @returns {XML}
    */
   render() {
-    const radii = [
-      5, 25, 50, 75, 100,
-    ];
     return (
       <div>
-        <Search radii={radii} />
+        <Search radii={this.props.radii} />
         <MapArea locations={this.props.data.readLocations} />
       </div>
     );
@@ -51,6 +48,8 @@ function mapStateToProps(state) {
   return {
     address: state.search.address,
     radius: state.search.radius,
+    category: state.search.category,
+    radii: state.settings.radii,
   };
 }
 
@@ -67,11 +66,12 @@ function mapStateToProps(state) {
 export default compose(
   connect(mapStateToProps),
   graphql(readLocations, {
-    options: ({ address, radius }) => ({
+    options: ({ address, radius, category }) => ({
       variables: {
         /* eslint-disable object-shorthand */
         address: address,
         radius: radius,
+        category: category,
         /* eslint-enable */
       },
     }),

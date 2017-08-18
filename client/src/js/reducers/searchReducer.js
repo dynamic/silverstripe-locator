@@ -12,6 +12,7 @@ export default function reducer(state = defaultState, action) {
         ...state,
         address: action.payload.address,
         radius: action.payload.radius,
+        category: action.payload.category,
       };
 
     default:

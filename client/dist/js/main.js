@@ -56,11 +56,10 @@ var Locator = function (_React$Component) {
   _createClass(Locator, [{
     key: 'render',
     value: function render() {
-      var radii = [5, 25, 50, 75, 100];
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_SearchBar2.default, { radii: radii }),
+        _react2.default.createElement(_SearchBar2.default, { radii: this.props.radii }),
         _react2.default.createElement(_MapArea2.default, { locations: this.props.data.readLocations })
       );
     }
@@ -78,18 +77,22 @@ Locator.propTypes = {
 function mapStateToProps(state) {
   return {
     address: state.search.address,
-    radius: state.search.radius
+    radius: state.search.radius,
+    category: state.search.category,
+    radii: state.settings.radii
   };
 }
 
 exports.default = (0, _reactApollo.compose)((0, _reactRedux.connect)(mapStateToProps), (0, _reactApollo.graphql)(_readLocations2.default, {
   options: function options(_ref) {
     var address = _ref.address,
-        radius = _ref.radius;
+        radius = _ref.radius,
+        category = _ref.category;
     return {
       variables: {
         address: address,
-        radius: radius
+        radius: radius,
+        category: category
       }
     };
   }
@@ -118,7 +121,7 @@ var _mapReducer = __webpack_require__(285);
 
 var _mapReducer2 = _interopRequireDefault(_mapReducer);
 
-var _settingsReducer = __webpack_require__(611);
+var _settingsReducer = __webpack_require__(287);
 
 var _settingsReducer2 = _interopRequireDefault(_settingsReducer);
 
@@ -453,7 +456,7 @@ var _react = __webpack_require__(6);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactGoogleMaps = __webpack_require__(583);
+var _reactGoogleMaps = __webpack_require__(584);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -831,14 +834,16 @@ var RadiusDropDown = function (_React$Component) {
   _createClass(RadiusDropDown, [{
     key: 'mappedRadii',
     value: function mappedRadii() {
-      return this.props.radii.map(function (radius) {
+      var radii = this.props.radii;
+
+      return Object.keys(radii).map(function (key) {
         return _react2.default.createElement(
           'option',
           {
-            value: radius,
-            key: radius
+            value: radii[key],
+            key: key
           },
-          radius
+          radii[key]
         );
       });
     }
@@ -847,7 +852,7 @@ var RadiusDropDown = function (_React$Component) {
     value: function render() {
       var radii = this.props.radii;
 
-      if (radii !== undefined && radii.length > 0) {
+      if (radii !== undefined && Object.keys(radii).length !== 0) {
         return _react2.default.createElement(
           'div',
           { className: 'field dropdown form-group--no-label' },
@@ -880,7 +885,7 @@ var RadiusDropDown = function (_React$Component) {
 }(_react2.default.Component);
 
 RadiusDropDown.propTypes = {
-  radii: _propTypes2.default.array.isRequired
+  radii: _propTypes2.default.object.isRequired
 };
 
 exports.default = RadiusDropDown;
@@ -992,7 +997,7 @@ var SearchBar = function (_React$Component) {
 }(_react2.default.Component);
 
 SearchBar.propTypes = {
-  radii: _propTypes2.default.array.isRequired,
+  radii: _propTypes2.default.object.isRequired,
   dispatch: _propTypes2.default.func.isRequired
 };
 
@@ -1105,7 +1110,8 @@ function reducer() {
     case _ActionTypes2.default.SEARCH:
       return _extends({}, state, {
         address: action.payload.address,
-        radius: action.payload.radius
+        radius: action.payload.radius,
+        category: action.payload.category
       });
 
     default:
@@ -1115,7 +1121,7 @@ function reducer() {
 
 /***/ }),
 
-/***/ 611:
+/***/ 287:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
