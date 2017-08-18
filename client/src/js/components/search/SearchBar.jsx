@@ -78,4 +78,16 @@ SearchBar.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect()(SearchBar);
+/**
+ * Takes variables/functions from the state and assigns them to variables/functions in the components props.
+ *
+ * @param state
+ * @returns {{address, radius}}
+ */
+function mapStateToProps(state) {
+  return {
+    radii: state.settings.radii,
+  };
+}
+
+export default connect(mapStateToProps)(SearchBar);

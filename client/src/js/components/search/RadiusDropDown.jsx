@@ -41,6 +41,7 @@ class RadiusDropDown extends React.Component {
           </div>
         </div>
       );
+    // eslint-disable-next-line no-else-return
     } else {
       return null;
     }

@@ -59,7 +59,7 @@ var Locator = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_SearchBar2.default, { radii: this.props.radii }),
+        _react2.default.createElement(_SearchBar2.default, null),
         _react2.default.createElement(_MapArea2.default, { locations: this.props.data.readLocations })
       );
     }
@@ -71,17 +71,14 @@ var Locator = function (_React$Component) {
 Locator.propTypes = {
   data: _propTypes2.default.shape({
     readLocations: _propTypes2.default.object
-  }).isRequired,
-
-  radii: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired
+  }).isRequired
 };
 
 function mapStateToProps(state) {
   return {
     address: state.search.address,
     radius: state.search.radius,
-    category: state.search.category,
-    radii: state.settings.radii
+    category: state.search.category
   };
 }
 
@@ -1004,7 +1001,13 @@ SearchBar.propTypes = {
   dispatch: _propTypes2.default.func.isRequired
 };
 
-exports.default = (0, _reactRedux.connect)()(SearchBar);
+function mapStateToProps(state) {
+  return {
+    radii: state.settings.radii
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(SearchBar);
 
 /***/ }),
 

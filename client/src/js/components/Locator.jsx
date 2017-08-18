@@ -21,7 +21,7 @@ class Locator extends React.Component {
   render() {
     return (
       <div>
-        <Search radii={this.props.radii} />
+        <Search />
         <MapArea locations={this.props.data.readLocations} />
       </div>
     );
@@ -36,11 +36,6 @@ Locator.propTypes = {
   data: PropTypes.shape({
     readLocations: PropTypes.object,
   }).isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  radii: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.array,
-  ]).isRequired,
 };
 
 /**
@@ -54,7 +49,6 @@ function mapStateToProps(state) {
     address: state.search.address,
     radius: state.search.radius,
     category: state.search.category,
-    radii: state.settings.radii,
   };
 }
 
