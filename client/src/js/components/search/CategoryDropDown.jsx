@@ -1,20 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class RadiusDropDown extends React.Component {
+class CategoryDropDown extends React.Component {
   /**
    * Maps the radii into options for the drop down.
    * @returns {Array}
    */
-  mappedRadii() {
-    const { radii } = this.props;
+  mappedCategories() {
+    const { categories } = this.props;
 
-    return Object.keys(radii).map(key => (
+    return Object.keys(categories).map(key => (
       <option
-        value={radii[key]}
+        value={key}
         key={key}
       >
-        {radii[key]}
+        {categories[key]}
       </option>
     ));
   }
@@ -24,19 +24,18 @@ class RadiusDropDown extends React.Component {
    * @returns {*}
    */
   render() {
-    const { radii } = this.props;
-    if (radii !== undefined && Object.keys(radii).length !== 0) {
+    const { categories } = this.props;
+    if (categories !== undefined && Object.keys(categories).length !== 0) {
       return (
         <div className="field dropdown form-group--no-label">
-
           <div className="middleColumn">
             <select
-              name="radius"
+              name="category"
               className="dropdown form-group--no-label"
               defaultValue=""
             >
-              <option value="">radius</option>
-              {this.mappedRadii()}
+              <option value="">category</option>
+              {this.mappedCategories()}
             </select>
           </div>
         </div>
@@ -46,12 +45,12 @@ class RadiusDropDown extends React.Component {
   }
 }
 
-RadiusDropDown.propTypes = {
+CategoryDropDown.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  radii: PropTypes.oneOfType([
+  categories: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.array,
   ]).isRequired,
 };
 
-export default RadiusDropDown;
+export default CategoryDropDown;

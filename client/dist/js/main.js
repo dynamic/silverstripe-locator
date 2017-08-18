@@ -875,9 +875,8 @@ var RadiusDropDown = function (_React$Component) {
             )
           )
         );
-      } else {
-        return null;
       }
+      return null;
     }
   }]);
 
@@ -920,6 +919,10 @@ var _RadiusDropDown = __webpack_require__(282);
 
 var _RadiusDropDown2 = _interopRequireDefault(_RadiusDropDown);
 
+var _CategoryDropDown = __webpack_require__(611);
+
+var _CategoryDropDown2 = _interopRequireDefault(_CategoryDropDown);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -946,10 +949,12 @@ var SearchBar = function (_React$Component) {
       event.preventDefault();
       var addressInput = document.getElementsByName('address')[0].value;
       var radiusInput = document.getElementsByName('radius')[0].value;
+      var categoryInput = document.getElementsByName('category')[0].value;
 
       this.props.dispatch((0, _searchActions.search)({
         address: addressInput,
-        radius: radiusInput
+        radius: radiusInput,
+        category: categoryInput
       }));
     }
   }, {
@@ -971,13 +976,13 @@ var SearchBar = function (_React$Component) {
                 type: 'text',
                 name: 'address',
                 className: 'text form-group--no-label',
-                required: 'required',
                 'aria-required': 'true',
                 placeholder: 'address or zip code'
               })
             )
           ),
-          _react2.default.createElement(_RadiusDropDown2.default, { radii: this.props.radii })
+          _react2.default.createElement(_RadiusDropDown2.default, { radii: this.props.radii }),
+          _react2.default.createElement(_CategoryDropDown2.default, { categories: this.props.categories })
         ),
         _react2.default.createElement(
           'div',
@@ -998,12 +1003,15 @@ var SearchBar = function (_React$Component) {
 
 SearchBar.propTypes = {
   radii: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired,
+
+  categories: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired,
   dispatch: _propTypes2.default.func.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    radii: state.settings.radii
+    radii: state.settings.radii,
+    categories: state.settings.categories
   };
 }
 
@@ -1143,6 +1151,104 @@ function reducer() {
 
   return state;
 }
+
+/***/ }),
+
+/***/ 611:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CategoryDropDown = function (_React$Component) {
+  _inherits(CategoryDropDown, _React$Component);
+
+  function CategoryDropDown() {
+    _classCallCheck(this, CategoryDropDown);
+
+    return _possibleConstructorReturn(this, (CategoryDropDown.__proto__ || Object.getPrototypeOf(CategoryDropDown)).apply(this, arguments));
+  }
+
+  _createClass(CategoryDropDown, [{
+    key: 'mappedCategories',
+    value: function mappedCategories() {
+      var categories = this.props.categories;
+
+
+      return Object.keys(categories).map(function (key) {
+        return _react2.default.createElement(
+          'option',
+          {
+            value: key,
+            key: key
+          },
+          categories[key]
+        );
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var categories = this.props.categories;
+
+      if (categories !== undefined && Object.keys(categories).length !== 0) {
+        return _react2.default.createElement(
+          'div',
+          { className: 'field dropdown form-group--no-label' },
+          _react2.default.createElement(
+            'div',
+            { className: 'middleColumn' },
+            _react2.default.createElement(
+              'select',
+              {
+                name: 'category',
+                className: 'dropdown form-group--no-label',
+                defaultValue: ''
+              },
+              _react2.default.createElement(
+                'option',
+                { value: '' },
+                'category'
+              ),
+              this.mappedCategories()
+            )
+          )
+        );
+      }
+      return null;
+    }
+  }]);
+
+  return CategoryDropDown;
+}(_react2.default.Component);
+
+CategoryDropDown.propTypes = {
+  categories: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired
+};
+
+exports.default = CategoryDropDown;
 
 /***/ }),
 

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { search } from 'actions/searchActions';
 import RadiusDropDown from 'components/search/RadiusDropDown';
+import CategoryDropDown from 'components/search/CategoryDropDown';
 
 class SearchBar extends React.Component {
   /**
@@ -24,11 +25,13 @@ class SearchBar extends React.Component {
     event.preventDefault();
     const addressInput = document.getElementsByName('address')[0].value;
     const radiusInput = document.getElementsByName('radius')[0].value;
+    const categoryInput = document.getElementsByName('category')[0].value;
 
     this.props.dispatch(
       search({
         address: addressInput,
         radius: radiusInput,
+        category: categoryInput,
       }),
     );
   }
@@ -47,13 +50,13 @@ class SearchBar extends React.Component {
                 type="text"
                 name="address"
                 className="text form-group--no-label"
-                required="required"
                 aria-required="true"
                 placeholder="address or zip code"
               />
             </div>
           </div>
           <RadiusDropDown radii={this.props.radii} />
+          <CategoryDropDown categories={this.props.categories} />
         </fieldset>
 
         <div className="btn-toolbar">
@@ -75,6 +78,11 @@ SearchBar.propTypes = {
     PropTypes.object,
     PropTypes.array,
   ]).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  categories: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
@@ -87,6 +95,7 @@ SearchBar.propTypes = {
 function mapStateToProps(state) {
   return {
     radii: state.settings.radii,
+    categories: state.settings.categories,
   };
 }
 
