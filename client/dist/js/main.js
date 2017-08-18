@@ -118,13 +118,18 @@ var _mapReducer = __webpack_require__(285);
 
 var _mapReducer2 = _interopRequireDefault(_mapReducer);
 
+var _settingsReducer = __webpack_require__(611);
+
+var _settingsReducer2 = _interopRequireDefault(_settingsReducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function reducers(client) {
   return (0, _redux.combineReducers)({
     client: client.reducer(),
     search: _searchReducer2.default,
-    map: _mapReducer2.default
+    map: _mapReducer2.default,
+    settings: _settingsReducer2.default
   });
 }
 
@@ -194,8 +199,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var container = document.querySelector('.locator');
 
-console.log(JSON.parse(container.dataset.mapDefaults));
-
 var client = new _apolloClient2.default({
   networkInterface: (0, _apolloClient.createNetworkInterface)({
     uri: container.dataset.apiUrl,
@@ -215,7 +218,11 @@ function composedMiddleware() {
   });
 }
 
-var store = (0, _redux.createStore)((0, _reducers2.default)(client), composedMiddleware());
+var defaultState = {
+  settings: JSON.parse(container.dataset.mapSettings)
+};
+
+var store = (0, _redux.createStore)((0, _reducers2.default)(client), defaultState, composedMiddleware());
 
 _reactDom2.default.render(_react2.default.createElement(
   _reactApollo.ApolloProvider,
@@ -1104,6 +1111,25 @@ function reducer() {
     default:
       return state;
   }
+}
+
+/***/ }),
+
+/***/ 611:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = reducer;
+function reducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
+
+  return state;
 }
 
 /***/ }),

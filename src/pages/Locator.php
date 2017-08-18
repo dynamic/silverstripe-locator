@@ -167,16 +167,39 @@ class Locator extends \Page
      *
      * @return string
      */
-    public function MapDefaults()
+    public function MapSettings()
     {
-        $zoom = 11;
+        $limit = Config::inst()->get('Locator_Controller', 'limit');
+        if (!$limit) {
+            $limit = -1;
+        }
+        $zoom = 12;
 
-        // replaces single with double quotes (so no escaping) and removes new lines and spaces
-        return str_replace("'", '"',
-            preg_replace("/\s/", '', "{
-                'zoom': $zoom,
-                'test': 'test'
-            }")
+        return $this->minify("{
+            'zoom': $zoom,
+            'unit': '$this->Unit',
+            'limit': $limit,
+            'mapSettings': {
+                'mapType': 'ROADMAP',
+                'disableDoubleClickZoom': true,
+                'scrollwheel': false,
+                'navigationControl': false,
+                'draggable': false
+            }
+        }");
+    }
+
+    /**
+     * Replaces single with double quotes (so no escaping) and removes new lines and spaces
+     *
+     * Regex pattern for replacing spaces from: https://stackoverflow.com/a/23860200
+     *
+     * @param String $string
+     * @return String
+     */
+    public function minify(String $string) {
+        return preg_replace("/\s(?=([^\"]*\"[^\"]*\")*[^\"]*$)/", '',
+            str_replace("'", '"', $string)
         );
     }
 }
