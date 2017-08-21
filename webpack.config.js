@@ -37,7 +37,7 @@ module.exports = {
         loader: 'babel-loader',
         options: {
           presets: [
-            ['es2015', {modules: false}],
+            ['es2015', { modules: false }],
             'es2016',
             'es2017',
             'react',
@@ -102,6 +102,6 @@ module.exports = {
       // move any modules inside "node_modules" to inside the vendor dist file
       minChunks: module => module.context && module.context.indexOf('/node_modules/') > -1,
     }),
-    new ExtractTextPlugin({filename: Path.join('css', '[name].css'), allChunks: true}),
+    new ExtractTextPlugin({ filename: Path.join('css', '[name].css'), allChunks: true }),
   ],
 };
