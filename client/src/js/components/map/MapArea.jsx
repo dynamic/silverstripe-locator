@@ -40,6 +40,7 @@ class MapArea extends React.Component {
             location={location.node}
             current={this.props.current}
             search={this.props.search}
+            unit={this.props.unit}
             onClick={this.handleLocationClick}
           />
         ),
@@ -76,6 +77,7 @@ MapArea.propTypes = {
   }),
   current: PropTypes.string,
   search: PropTypes.string,
+  unit: PropTypes.string,
   dispatch: PropTypes.func.isRequired,
 };
 
@@ -89,6 +91,7 @@ MapArea.defaultProps = {
   },
   current: '-1',
   search: '',
+  unit: 'm',
 };
 
 /**
@@ -100,6 +103,7 @@ function mapStateToProps(state) {
   return {
     current: state.map.current,
     search: state.search.address,
+    unit: state.settings.unit,
   };
 }
 

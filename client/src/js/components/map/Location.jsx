@@ -55,13 +55,13 @@ class Location extends React.Component {
    */
   renderDistance() {
     const distance = this.getDistance();
-    const { search } = this.props;
+    const { search, unit } = this.props;
 
     if (search) {
       const link = `http://maps.google.com/maps?saddr=${search}&daddr=${this.getDaddr()}`;
       return (
         <div className="loc-dist">
-          {distance} |
+          {distance} {unit} |
           <a
             href={link}
             target="_blank"
@@ -137,6 +137,7 @@ Location.propTypes = {
   index: PropTypes.number.isRequired,
   current: PropTypes.string.isRequired,
   search: PropTypes.string.isRequired,
+  unit: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 

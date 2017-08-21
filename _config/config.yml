@@ -41,6 +41,10 @@ Dynamic\Locator\GraphQL\Controller:
                   type: String
                   default: ''
                   description: 'The address to search around'
+                unit:
+                  type: String
+                  default: ''
+                  description: 'The unit to get the distance in'
                 featured:
                   type: Boolean
                   default: false

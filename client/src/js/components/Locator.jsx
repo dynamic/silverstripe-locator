@@ -49,6 +49,7 @@ function mapStateToProps(state) {
     address: state.search.address,
     radius: state.search.radius,
     category: state.search.category,
+    unit: state.settings.unit,
   };
 }
 
@@ -65,12 +66,13 @@ function mapStateToProps(state) {
 export default compose(
   connect(mapStateToProps),
   graphql(readLocations, {
-    options: ({ address, radius, category }) => ({
+    options: ({ address, radius, category, unit }) => ({
       variables: {
         /* eslint-disable object-shorthand */
         address: address,
         radius: radius,
         category: category,
+        unit: unit,
         /* eslint-enable */
       },
     }),
