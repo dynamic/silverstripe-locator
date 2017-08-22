@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 162:
+/***/ 159:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13,7 +13,7 @@ exports.openMarker = openMarker;
 exports.highlightLocation = highlightLocation;
 exports.closeMarker = closeMarker;
 
-var _ActionTypes = __webpack_require__(66);
+var _ActionTypes = __webpack_require__(55);
 
 var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
 
@@ -44,7 +44,7 @@ function closeMarker(target) {
 
 /***/ }),
 
-/***/ 263:
+/***/ 260:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64,19 +64,19 @@ var _propTypes = __webpack_require__(4);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactApollo = __webpack_require__(153);
+var _reactApollo = __webpack_require__(152);
 
-var _reactRedux = __webpack_require__(90);
+var _reactRedux = __webpack_require__(91);
 
-var _readLocations = __webpack_require__(290);
+var _readLocations = __webpack_require__(287);
 
 var _readLocations2 = _interopRequireDefault(_readLocations);
 
-var _SearchBar = __webpack_require__(289);
+var _SearchBar = __webpack_require__(286);
 
 var _SearchBar2 = _interopRequireDefault(_SearchBar);
 
-var _MapArea = __webpack_require__(285);
+var _MapArea = __webpack_require__(282);
 
 var _MapArea2 = _interopRequireDefault(_MapArea);
 
@@ -100,6 +100,9 @@ var Locator = function (_React$Component) {
   _createClass(Locator, [{
     key: 'render',
     value: function render() {
+      if (this.props.loadedSettings === false) {
+        return _react2.default.createElement('div', null);
+      }
       return _react2.default.createElement(
         'div',
         null,
@@ -115,7 +118,14 @@ var Locator = function (_React$Component) {
 Locator.propTypes = {
   data: _propTypes2.default.shape({
     readLocations: _propTypes2.default.object
-  }).isRequired
+  }),
+  loadedSettings: _propTypes2.default.bool.isRequired
+};
+
+Locator.defaultProps = {
+  data: {
+    readLocations: {}
+  }
 };
 
 function mapStateToProps(state) {
@@ -123,16 +133,21 @@ function mapStateToProps(state) {
     address: state.search.address,
     radius: state.search.radius,
     category: state.search.category,
-    unit: state.settings.unit
+    unit: state.settings.unit,
+    loadedSettings: state.settings.loadedSettings
   };
 }
 
 exports.default = (0, _reactApollo.compose)((0, _reactRedux.connect)(mapStateToProps), (0, _reactApollo.graphql)(_readLocations2.default, {
-  options: function options(_ref) {
-    var address = _ref.address,
-        radius = _ref.radius,
-        category = _ref.category,
-        unit = _ref.unit;
+  skip: function skip(_ref) {
+    var loadedSettings = _ref.loadedSettings;
+    return !loadedSettings;
+  },
+  options: function options(_ref2) {
+    var address = _ref2.address,
+        radius = _ref2.radius,
+        category = _ref2.category,
+        unit = _ref2.unit;
     return {
       variables: {
         address: address,
@@ -146,7 +161,31 @@ exports.default = (0, _reactApollo.compose)((0, _reactRedux.connect)(mapStateToP
 
 /***/ }),
 
-/***/ 264:
+/***/ 261:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _templateObject = _taggedTemplateLiteral(['\n  query {\n    locatorSettings {\n      Limit,\n      Radii\n    }\n  }\n'], ['\n  query {\n    locatorSettings {\n      Limit,\n      Radii\n    }\n  }\n']);
+
+var _graphqlTag = __webpack_require__(116);
+
+var _graphqlTag2 = _interopRequireDefault(_graphqlTag);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+exports.default = (0, _graphqlTag2.default)(_templateObject);
+
+/***/ }),
+
+/***/ 262:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -159,15 +198,15 @@ exports.default = reducers;
 
 var _redux = __webpack_require__(51);
 
-var _searchReducer = __webpack_require__(292);
+var _searchReducer = __webpack_require__(289);
 
 var _searchReducer2 = _interopRequireDefault(_searchReducer);
 
-var _mapReducer = __webpack_require__(291);
+var _mapReducer = __webpack_require__(288);
 
 var _mapReducer2 = _interopRequireDefault(_mapReducer);
 
-var _settingsReducer = __webpack_require__(293);
+var _settingsReducer = __webpack_require__(290);
 
 var _settingsReducer2 = _interopRequireDefault(_settingsReducer);
 
@@ -184,7 +223,7 @@ function reducers(client) {
 
 /***/ }),
 
-/***/ 281:
+/***/ 278:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -195,7 +234,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.search = search;
 
-var _ActionTypes = __webpack_require__(66);
+var _ActionTypes = __webpack_require__(55);
 
 var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
 
@@ -210,7 +249,7 @@ function search(inputs) {
 
 /***/ }),
 
-/***/ 282:
+/***/ 279:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -220,29 +259,33 @@ var _react = __webpack_require__(6);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(93);
+var _reactDom = __webpack_require__(94);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
 var _redux = __webpack_require__(51);
 
-var _reduxThunk = __webpack_require__(265);
+var _reduxThunk = __webpack_require__(263);
 
 var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-var _apolloClient = __webpack_require__(152);
+var _apolloClient = __webpack_require__(151);
 
 var _apolloClient2 = _interopRequireDefault(_apolloClient);
 
-var _reactApollo = __webpack_require__(153);
+var _reactApollo = __webpack_require__(152);
 
-var _reducers = __webpack_require__(264);
+var _reducers = __webpack_require__(262);
 
 var _reducers2 = _interopRequireDefault(_reducers);
 
-var _Locator = __webpack_require__(263);
+var _Locator = __webpack_require__(260);
 
 var _Locator2 = _interopRequireDefault(_Locator);
+
+var _locatorSettings = __webpack_require__(261);
+
+var _locatorSettings2 = _interopRequireDefault(_locatorSettings);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -267,11 +310,7 @@ function composedMiddleware() {
   });
 }
 
-var defaultState = {
-  settings: JSON.parse(container.dataset.mapSettings)
-};
-
-var store = (0, _redux.createStore)((0, _reducers2.default)(client), defaultState, composedMiddleware());
+var store = (0, _redux.createStore)((0, _reducers2.default)(client), composedMiddleware());
 
 _reactDom2.default.render(_react2.default.createElement(
   _reactApollo.ApolloProvider,
@@ -279,9 +318,13 @@ _reactDom2.default.render(_react2.default.createElement(
   _react2.default.createElement(_Locator2.default, null)
 ), container);
 
+client.query({
+  query: _locatorSettings2.default
+});
+
 /***/ }),
 
-/***/ 283:
+/***/ 280:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -396,9 +439,9 @@ var Location = function (_React$Component) {
           current = _props2.current,
           _onClick = _props2.onClick;
 
-      var className = '';
+      var className = 'list-location';
       if (current === location.ID) {
-        className += 'focus';
+        className += ' focus';
       }
       return _react2.default.createElement(
         'li',
@@ -497,7 +540,7 @@ exports.default = Location;
 
 /***/ }),
 
-/***/ 284:
+/***/ 281:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -511,7 +554,7 @@ var _react = __webpack_require__(6);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactGoogleMaps = __webpack_require__(590);
+var _reactGoogleMaps = __webpack_require__(587);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -554,7 +597,7 @@ exports.default = Map;
 
 /***/ }),
 
-/***/ 285:
+/***/ 282:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -574,15 +617,15 @@ var _propTypes = __webpack_require__(4);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(90);
+var _reactRedux = __webpack_require__(91);
 
-var _mapActions = __webpack_require__(162);
+var _mapActions = __webpack_require__(159);
 
-var _Location = __webpack_require__(283);
+var _Location = __webpack_require__(280);
 
 var _Location2 = _interopRequireDefault(_Location);
 
-var _MapContainer = __webpack_require__(286);
+var _MapContainer = __webpack_require__(283);
 
 var _MapContainer2 = _interopRequireDefault(_MapContainer);
 
@@ -686,7 +729,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(MapArea);
 
 /***/ }),
 
-/***/ 286:
+/***/ 283:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -706,11 +749,11 @@ var _propTypes = __webpack_require__(4);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(90);
+var _reactRedux = __webpack_require__(91);
 
-var _mapActions = __webpack_require__(162);
+var _mapActions = __webpack_require__(159);
 
-var _Map = __webpack_require__(284);
+var _Map = __webpack_require__(281);
 
 var _Map2 = _interopRequireDefault(_Map);
 
@@ -858,7 +901,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(MapContainer);
 
 /***/ }),
 
-/***/ 287:
+/***/ 284:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -956,7 +999,7 @@ exports.default = CategoryDropDown;
 
 /***/ }),
 
-/***/ 288:
+/***/ 285:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1054,7 +1097,7 @@ exports.default = RadiusDropDown;
 
 /***/ }),
 
-/***/ 289:
+/***/ 286:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1074,15 +1117,15 @@ var _propTypes = __webpack_require__(4);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(90);
+var _reactRedux = __webpack_require__(91);
 
-var _searchActions = __webpack_require__(281);
+var _searchActions = __webpack_require__(278);
 
-var _RadiusDropDown = __webpack_require__(288);
+var _RadiusDropDown = __webpack_require__(285);
 
 var _RadiusDropDown2 = _interopRequireDefault(_RadiusDropDown);
 
-var _CategoryDropDown = __webpack_require__(287);
+var _CategoryDropDown = __webpack_require__(284);
 
 var _CategoryDropDown2 = _interopRequireDefault(_CategoryDropDown);
 
@@ -1182,7 +1225,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(SearchBar);
 
 /***/ }),
 
-/***/ 290:
+/***/ 287:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1206,7 +1249,7 @@ exports.default = (0, _graphqlTag2.default)(_templateObject);
 
 /***/ }),
 
-/***/ 291:
+/***/ 288:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1220,7 +1263,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.default = reducer;
 
-var _ActionTypes = __webpack_require__(66);
+var _ActionTypes = __webpack_require__(55);
 
 var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
 
@@ -1260,7 +1303,7 @@ function reducer() {
 
 /***/ }),
 
-/***/ 292:
+/***/ 289:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1274,7 +1317,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.default = reducer;
 
-var _ActionTypes = __webpack_require__(66);
+var _ActionTypes = __webpack_require__(55);
 
 var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
 
@@ -1282,7 +1325,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var defaultState = {
   address: '',
-  radius: ''
+  radius: '',
+  category: ''
 };
 
 function reducer() {
@@ -1304,7 +1348,7 @@ function reducer() {
 
 /***/ }),
 
-/***/ 293:
+/***/ 290:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1313,17 +1357,49 @@ function reducer() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.default = reducer;
+
+var _ActionTypes = __webpack_require__(55);
+
+var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultState = {
+  loadedSettings: false
+};
+
 function reducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
   var action = arguments[1];
 
-  return state;
+  switch (action.type) {
+    case _ActionTypes2.default.QUERY_RESULT:
+      {
+        var settings = action.result.data.locatorSettings;
+        if (settings === undefined) {
+          return state;
+        }
+        return _extends({}, state, {
+          loadedSettings: true,
+
+          unit: 'm',
+          limit: settings.Limit,
+          radii: JSON.parse(settings.Radii)
+        });
+      }
+
+    default:
+      return state;
+  }
 }
 
 /***/ }),
 
-/***/ 66:
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1334,6 +1410,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var ActionTypes = {
+  QUERY_RESULT: 'APOLLO_QUERY_RESULT',
+
   SEARCH: 'SEARCH',
 
   MARKER_CLICK: 'MARKER_CLICK',
@@ -1344,5 +1422,5 @@ exports.default = ActionTypes;
 
 /***/ })
 
-},[282]);
+},[279]);
 //# sourceMappingURL=main.js.map

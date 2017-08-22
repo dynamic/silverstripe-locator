@@ -12,6 +12,7 @@ use SilverStripe\ORM\DataObject;
  */
 class LocatorSettings extends DataObject
 {
+    // TODO - figure out how to get current locator page (for categories)
 
     /**
      * gets the current settings for the locator
@@ -51,7 +52,7 @@ class LocatorSettings extends DataObject
         if ($config_radii) {
             $radii = $config_radii;
         }
-        return $radii;
+        return json_encode($radii);
     }
 
     /**

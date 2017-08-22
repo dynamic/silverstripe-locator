@@ -19,6 +19,9 @@ class Locator extends React.Component {
    * @returns {XML}
    */
   render() {
+    if (this.props.loadedSettings === false) {
+      return <div />;
+    }
     return (
       <div>
         <Search />
@@ -35,7 +38,18 @@ class Locator extends React.Component {
 Locator.propTypes = {
   data: PropTypes.shape({
     readLocations: PropTypes.object,
-  }).isRequired,
+  }),
+  loadedSettings: PropTypes.bool.isRequired,
+};
+
+/**
+ * The defaults of props that aren't required
+ * @type {{data: {readLocations: {}}}}
+ */
+Locator.defaultProps = {
+  data: {
+    readLocations: {},
+  },
 };
 
 /**
@@ -50,6 +64,7 @@ function mapStateToProps(state) {
     radius: state.search.radius,
     category: state.search.category,
     unit: state.settings.unit,
+    loadedSettings: state.settings.loadedSettings,
   };
 }
 
@@ -66,6 +81,7 @@ function mapStateToProps(state) {
 export default compose(
   connect(mapStateToProps),
   graphql(readLocations, {
+    skip: ({ loadedSettings }) => !loadedSettings,
     options: ({ address, radius, category, unit }) => ({
       variables: {
         /* eslint-disable object-shorthand */

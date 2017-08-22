@@ -14,6 +14,7 @@ import { ApolloProvider } from 'react-apollo';
 
 import allReducers from 'reducers';
 import Locator from 'components/Locator';
+import locatorSettings from 'queries/locatorSettings';
 
 // only the first container is used, can change to querySelectorAll() for multiple instances
 const container = document.querySelector('.locator');
@@ -43,12 +44,8 @@ function composedMiddleware() {
   );
 }
 
-const defaultState = {
-  settings: JSON.parse(container.dataset.mapSettings),
-};
-
-// creates the redux store with reducers, default state, and middleware
-const store = createStore(allReducers(client), defaultState, composedMiddleware());
+// creates the redux store with reducers and middleware
+const store = createStore(allReducers(client), composedMiddleware());
 
 // renders the locator, wrapped in an apollo provider so graphql can run queries
 ReactDom.render(
@@ -57,3 +54,7 @@ ReactDom.render(
   </ApolloProvider>
   , container);
 
+// query for settings
+client.query({
+  query: locatorSettings,
+});

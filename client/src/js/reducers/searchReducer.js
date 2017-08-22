@@ -3,6 +3,7 @@ import ActionType from 'actions/ActionTypes';
 const defaultState = {
   address: '',
   radius: '',
+  category: '',
 };
 
 export default function reducer(state = defaultState, action) {
