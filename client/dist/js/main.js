@@ -1,1 +1,1348 @@
-webpackJsonp([0],{159:function(e,t,n){"use strict";function r(e){return{type:i.default.MARKER_CLICK,payload:{key:e}}}function a(e){return{type:i.default.MARKER_CLICK,payload:e}}function o(e){return{type:i.default.MARKER_CLOSE,payload:e}}Object.defineProperty(t,"__esModule",{value:!0}),t.openMarker=r,t.highlightLocation=a,t.closeMarker=o;var u=n(64),i=function(e){return e&&e.__esModule?e:{default:e}}(u)},258:function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function u(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}function i(e){return{address:e.search.address,radius:e.search.radius,category:e.search.category,unit:e.settings.unit}}Object.defineProperty(t,"__esModule",{value:!0});var l=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),s=n(6),c=r(s),d=n(4),f=r(d),p=n(150),y=n(87),m=n(285),h=r(m),b=n(284),v=r(b),g=n(280),_=r(g),E=function(e){function t(){return a(this,t),o(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return u(t,e),l(t,[{key:"render",value:function(){return c.default.createElement("div",null,c.default.createElement(v.default,null),c.default.createElement(_.default,{locations:this.props.data.readLocations}))}}]),t}(c.default.Component);E.propTypes={data:f.default.shape({readLocations:f.default.object}).isRequired},t.default=(0,p.compose)((0,y.connect)(i),(0,p.graphql)(h.default,{options:function(e){return{variables:{address:e.address,radius:e.radius,category:e.category,unit:e.unit}}}}))(E)},259:function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function a(e){return(0,o.combineReducers)({client:e.reducer(),search:i.default,map:s.default,settings:d.default})}Object.defineProperty(t,"__esModule",{value:!0}),t.default=a;var o=n(49),u=n(287),i=r(u),l=n(286),s=r(l),c=n(288),d=r(c)},276:function(e,t,n){"use strict";function r(e){return{type:o.default.SEARCH,payload:e}}Object.defineProperty(t,"__esModule",{value:!0}),t.search=r;var a=n(64),o=function(e){return e&&e.__esModule?e:{default:e}}(a)},277:function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}var a=n(6),o=r(a),u=n(89),i=r(u),l=n(49),s=n(260),c=r(s),d=n(149),f=r(d),p=n(150),y=n(259),m=r(y),h=n(258),b=r(h),v=document.querySelector(".locator"),g=new f.default({networkInterface:(0,d.createNetworkInterface)({uri:v.dataset.apiUrl,opts:{credentials:"same-origin"}}),reduxRootSelector:function(e){return e.client}}),_={settings:JSON.parse(v.dataset.mapSettings)},E=(0,l.createStore)((0,m.default)(g),_,function(){return(0,l.compose)((0,l.applyMiddleware)(g.middleware(),c.default),void 0!==window.__REDUX_DEVTOOLS_EXTENSION__?window.__REDUX_DEVTOOLS_EXTENSION__():function(e){return e})}());i.default.render(o.default.createElement(p.ApolloProvider,{store:E,client:g},o.default.createElement(b.default,null)),v)},278:function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function u(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),l=n(6),s=r(l),c=n(4),d=r(c),f=function(e){function t(){return a(this,t),o(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return u(t,e),i(t,[{key:"getDistance",value:function(){var e=this.props.location,t=e.distance;return t=parseFloat(t),t.toFixed(2)}},{key:"getDaddr",value:function(){var e=this.props.location,t="";return e.Address&&(t+=e.Address+"+"),e.Address2&&(t+=e.Address2+"+"),e.City&&(t+=e.City+"+"),e.State&&(t+=e.State+"+"),e.PostalCode&&(t+=e.PostalCode),t.replace(/([+\s]+$)/g,"")}},{key:"renderDistance",value:function(){var e=this.getDistance(),t=this.props,n=t.search,r=t.unit;if(n){var a="http://maps.google.com/maps?saddr="+n+"&daddr="+this.getDaddr();return s.default.createElement("div",{className:"loc-dist"},e," ",r," |",s.default.createElement("a",{href:a,target:"_blank",rel:"noopener noreferrer"},"Directions"))}return null}},{key:"render",value:function(){var e=this.props,t=e.location,n=e.index,r=e.current,a=e.onClick,o="";return r===t.ID&&(o+="focus"),s.default.createElement("li",{"data-markerid":n,className:o,onClick:function(){return a(t.ID)}},s.default.createElement("div",{className:"list-label"},n+1),s.default.createElement("div",{className:"list-details"},s.default.createElement("div",{className:"list-content"},s.default.createElement("div",{className:"loc-name"},t.Title),s.default.createElement("div",{className:"loc-addr"},t.Address),t.Address2&&s.default.createElement("div",{className:"loc-addr2"},t.Address2),s.default.createElement("div",{className:"loc-addr3"},t.City,", ",t.State," ",t.PostalCode),t.Phone&&s.default.createElement("div",{className:"loc-phone"},t.Phone),t.Website&&s.default.createElement("div",{className:"loc-web"},s.default.createElement("a",{href:t.Website,target:"_blank",rel:"noopener noreferrer"},"Website")),t.Email&&s.default.createElement("div",{className:"loc-email"},s.default.createElement("a",{href:"mailto:"+t.Email},"Email")),this.renderDistance())))}}]),t}(s.default.Component);f.propTypes={location:d.default.shape({Title:d.default.string,Address:d.default.string,Address2:d.default.string,City:d.default.string,State:d.default.string,PostalCode:d.default.string,Website:d.default.string,Phone:d.default.string,Email:d.default.string,distance:d.default.string}).isRequired,index:d.default.number.isRequired,current:d.default.string.isRequired,search:d.default.string.isRequired,unit:d.default.string.isRequired,onClick:d.default.func.isRequired},t.default=f},279:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var r=n(6),a=function(e){return e&&e.__esModule?e:{default:e}}(r),o=n(578),u=(0,o.withGoogleMap)(function(e){return a.default.createElement(o.GoogleMap,{defaultZoom:9,defaultCenter:{lat:43.8483258,lng:-87.7709294}},e.markers.map(function(t){return a.default.createElement(o.Marker,{key:t.key,position:t.position,defaultAnimation:t.defaultAnimation,onClick:function(){return e.onMarkerClick(t)}},e.current===t.key&&e.showCurrent&&a.default.createElement(o.InfoWindow,{onCloseClick:function(){return e.onMarkerClose(t)}},a.default.createElement("div",null,t.infoContent)))}))});t.default=u},280:function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function u(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}function i(e){return{current:e.map.current,search:e.search.address,unit:e.settings.unit}}Object.defineProperty(t,"__esModule",{value:!0});var l=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),s=n(6),c=r(s),d=n(4),f=r(d),p=n(87),y=n(159),m=n(278),h=r(m),b=n(281),v=r(b),g=function(e){function t(e){a(this,t);var n=o(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));return n.handleLocationClick=n.handleLocationClick.bind(n),n}return u(t,e),l(t,[{key:"handleLocationClick",value:function(e){this.props.dispatch((0,y.openMarker)(e))}},{key:"renderLocations",value:function(){var e=this,t=this.props.locations.edges;return void 0!==t?t.map(function(t,n){return c.default.createElement(h.default,{key:t.node.ID,index:n,location:t.node,current:e.props.current,search:e.props.search,unit:e.props.unit,onClick:e.handleLocationClick})}):null}},{key:"render",value:function(){return c.default.createElement("div",{className:"map-area"},c.default.createElement(v.default,{locations:this.props.locations}),c.default.createElement("div",{className:"loc-list"},c.default.createElement("ul",null,this.renderLocations())))}}]),t}(c.default.Component);g.propTypes={locations:f.default.shape({edges:f.default.array}),current:f.default.string,search:f.default.string,unit:f.default.string,dispatch:f.default.func.isRequired},g.defaultProps={locations:{edges:[]},current:"-1",search:"",unit:"m"},t.default=(0,p.connect)(i)(g)},281:function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function u(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}function i(e){return{current:e.map.current,showCurrent:e.map.showCurrent}}Object.defineProperty(t,"__esModule",{value:!0});var l=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),s=n(6),c=r(s),d=n(4),f=r(d),p=n(87),y=n(159),m=n(279),h=r(m),b=function(e){function t(e){a(this,t);var n=o(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));return n.handleMarkerClick=n.handleMarkerClick.bind(n),n.handleMarkerClose=n.handleMarkerClose.bind(n),n}return u(t,e),l(t,[{key:"getMarkers",value:function(){var e=this.props.locations.edges,t=[],n=void 0;for(n=0;n<e.length;n++){var r=e[n].node;t[t.length]={position:{lat:Number(r.Lat),lng:Number(r.Lng)},key:r.ID,defaultAnimation:2,infoContent:c.default.createElement("div",null,c.default.createElement("div",{className:"loc-name"},r.Title),c.default.createElement("div",null,r.Address),c.default.createElement("div",null,r.Address2),c.default.createElement("div",null,r.City,", ",r.State," ",r.PostalCode),r.Phone&&c.default.createElement("a",{href:"tel:"+r.Phone},r.Phone),r.Website&&c.default.createElement("div",null,c.default.createElement("a",{href:r.Website,target:"_blank",rel:"noopener noreferrer"},"Website")))}}return t}},{key:"handleMarkerClick",value:function(e){this.props.dispatch((0,y.highlightLocation)(e))}},{key:"handleMarkerClose",value:function(e){this.props.dispatch((0,y.closeMarker)(e))}},{key:"render",value:function(){return c.default.createElement("div",{id:"map-container"},c.default.createElement(h.default,{containerElement:c.default.createElement("div",{className:"map"}),mapElement:c.default.createElement("div",{style:{height:"100%"}}),markers:this.getMarkers(),onMarkerClick:this.handleMarkerClick,onMarkerClose:this.handleMarkerClose,current:this.props.current,showCurrent:this.props.showCurrent}))}}]),t}(c.default.Component);b.propTypes={locations:f.default.shape({edges:f.default.array}),dispatch:f.default.func.isRequired,current:f.default.string,showCurrent:f.default.bool},b.defaultProps={locations:{edges:[]},current:"-1",showCurrent:!1},t.default=(0,p.connect)(i)(b)},282:function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function u(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),l=n(6),s=r(l),c=n(4),d=r(c),f=function(e){function t(){return a(this,t),o(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return u(t,e),i(t,[{key:"mappedCategories",value:function(){var e=this.props.categories;return Object.keys(e).map(function(t){return s.default.createElement("option",{value:t,key:t},e[t])})}},{key:"render",value:function(){var e=this.props.categories;return void 0!==e&&0!==Object.keys(e).length?s.default.createElement("div",{className:"field dropdown form-group--no-label"},s.default.createElement("div",{className:"middleColumn"},s.default.createElement("select",{name:"category",className:"dropdown form-group--no-label",defaultValue:""},s.default.createElement("option",{value:""},"category"),this.mappedCategories()))):null}}]),t}(s.default.Component);f.propTypes={categories:d.default.oneOfType([d.default.object,d.default.array]).isRequired},t.default=f},283:function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function u(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),l=n(6),s=r(l),c=n(4),d=r(c),f=function(e){function t(){return a(this,t),o(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return u(t,e),i(t,[{key:"mappedRadii",value:function(){var e=this.props.radii;return Object.keys(e).map(function(t){return s.default.createElement("option",{value:e[t],key:t},e[t])})}},{key:"render",value:function(){var e=this.props.radii;return void 0!==e&&0!==Object.keys(e).length?s.default.createElement("div",{className:"field dropdown form-group--no-label"},s.default.createElement("div",{className:"middleColumn"},s.default.createElement("select",{name:"radius",className:"dropdown form-group--no-label",defaultValue:""},s.default.createElement("option",{value:""},"radius"),this.mappedRadii()))):null}}]),t}(s.default.Component);f.propTypes={radii:d.default.oneOfType([d.default.object,d.default.array]).isRequired},t.default=f},284:function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function u(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}function i(e){return{radii:e.settings.radii,categories:e.settings.categories}}Object.defineProperty(t,"__esModule",{value:!0});var l=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),s=n(6),c=r(s),d=n(4),f=r(d),p=n(87),y=n(276),m=n(283),h=r(m),b=n(282),v=r(b),g=function(e){function t(e){a(this,t);var n=o(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));return n.handleSubmit=n.handleSubmit.bind(n),n}return u(t,e),l(t,[{key:"handleSubmit",value:function(e){e.preventDefault();var t=document.getElementsByName("address")[0].value,n=document.getElementsByName("radius")[0].value,r=document.getElementsByName("category")[0].value;this.props.dispatch((0,y.search)({address:t,radius:n,category:r}))}},{key:"render",value:function(){return c.default.createElement("form",{action:"",onSubmit:this.handleSubmit},c.default.createElement("fieldset",null,c.default.createElement("div",{className:"field text form-group--no-label"},c.default.createElement("div",{className:"middleColumn"},c.default.createElement("input",{type:"text",name:"address",className:"text form-group--no-label","aria-required":"true",placeholder:"address or zip code"}))),c.default.createElement(h.default,{radii:this.props.radii}),c.default.createElement(v.default,{categories:this.props.categories})),c.default.createElement("div",{className:"btn-toolbar"},c.default.createElement("input",{type:"submit",value:"Search",className:"action"})),c.default.createElement("div",{className:"clear"}))}}]),t}(c.default.Component);g.propTypes={radii:f.default.oneOfType([f.default.object,f.default.array]).isRequired,categories:f.default.oneOfType([f.default.object,f.default.array]).isRequired,dispatch:f.default.func.isRequired},t.default=(0,p.connect)(i)(g)},285:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var r=function(e,t){return Object.freeze(Object.defineProperties(e,{raw:{value:Object.freeze(t)}}))}(["\n  query($address: String, $radius: String, $category: String, $unit: String){\n    readLocations(address: $address, radius: $radius, category: $category, unit: $unit) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n          Category {\n            ID\n            Name\n          }\n        }\n      } \n    }\n  }\n"],["\n  query($address: String, $radius: String, $category: String, $unit: String){\n    readLocations(address: $address, radius: $radius, category: $category, unit: $unit) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n          Category {\n            ID\n            Name\n          }\n        }\n      } \n    }\n  }\n"]),a=n(112),o=function(e){return e&&e.__esModule?e:{default:e}}(a);t.default=(0,o.default)(r)},286:function(e,t,n){"use strict";function r(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:i,t=arguments[1];switch(t.type){case u.default.MARKER_CLICK:return a({},e,{current:t.payload.key,showCurrent:!0});case u.default.MARKER_CLOSE:return a({},e,{showCurrent:!1});case u.default.SEARCH:return a({},e,{current:"-1",showCurrent:!1});default:return e}}Object.defineProperty(t,"__esModule",{value:!0});var a=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e};t.default=r;var o=n(64),u=function(e){return e&&e.__esModule?e:{default:e}}(o),i={current:"-1",showCurrent:!1}},287:function(e,t,n){"use strict";function r(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:i,t=arguments[1];switch(t.type){case u.default.SEARCH:return a({},e,{address:t.payload.address,radius:t.payload.radius,category:t.payload.category});default:return e}}Object.defineProperty(t,"__esModule",{value:!0});var a=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e};t.default=r;var o=n(64),u=function(e){return e&&e.__esModule?e:{default:e}}(o),i={address:"",radius:""}},288:function(e,t,n){"use strict";function r(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{};arguments[1];return e}Object.defineProperty(t,"__esModule",{value:!0}),t.default=r},64:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var r={SEARCH:"SEARCH",MARKER_CLICK:"MARKER_CLICK",MARKER_CLOSE:"MARKER_CLOSE"};t.default=r}},[277]);
+webpackJsonp([0],{
+
+/***/ 162:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.openMarker = openMarker;
+exports.highlightLocation = highlightLocation;
+exports.closeMarker = closeMarker;
+
+var _ActionTypes = __webpack_require__(66);
+
+var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function openMarker(target) {
+  return {
+    type: _ActionTypes2.default.MARKER_CLICK,
+    payload: {
+      key: target
+    }
+  };
+}
+
+function highlightLocation(target) {
+  return {
+    type: _ActionTypes2.default.MARKER_CLICK,
+    payload: target
+  };
+}
+
+function closeMarker(target) {
+  return {
+    type: _ActionTypes2.default.MARKER_CLOSE,
+    payload: target
+  };
+}
+
+/***/ }),
+
+/***/ 263:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactApollo = __webpack_require__(153);
+
+var _reactRedux = __webpack_require__(90);
+
+var _readLocations = __webpack_require__(290);
+
+var _readLocations2 = _interopRequireDefault(_readLocations);
+
+var _SearchBar = __webpack_require__(289);
+
+var _SearchBar2 = _interopRequireDefault(_SearchBar);
+
+var _MapArea = __webpack_require__(285);
+
+var _MapArea2 = _interopRequireDefault(_MapArea);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Locator = function (_React$Component) {
+  _inherits(Locator, _React$Component);
+
+  function Locator() {
+    _classCallCheck(this, Locator);
+
+    return _possibleConstructorReturn(this, (Locator.__proto__ || Object.getPrototypeOf(Locator)).apply(this, arguments));
+  }
+
+  _createClass(Locator, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(_SearchBar2.default, null),
+        _react2.default.createElement(_MapArea2.default, { locations: this.props.data.readLocations })
+      );
+    }
+  }]);
+
+  return Locator;
+}(_react2.default.Component);
+
+Locator.propTypes = {
+  data: _propTypes2.default.shape({
+    readLocations: _propTypes2.default.object
+  }).isRequired
+};
+
+function mapStateToProps(state) {
+  return {
+    address: state.search.address,
+    radius: state.search.radius,
+    category: state.search.category,
+    unit: state.settings.unit
+  };
+}
+
+exports.default = (0, _reactApollo.compose)((0, _reactRedux.connect)(mapStateToProps), (0, _reactApollo.graphql)(_readLocations2.default, {
+  options: function options(_ref) {
+    var address = _ref.address,
+        radius = _ref.radius,
+        category = _ref.category,
+        unit = _ref.unit;
+    return {
+      variables: {
+        address: address,
+        radius: radius,
+        category: category,
+        unit: unit
+      }
+    };
+  }
+}))(Locator);
+
+/***/ }),
+
+/***/ 264:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = reducers;
+
+var _redux = __webpack_require__(51);
+
+var _searchReducer = __webpack_require__(292);
+
+var _searchReducer2 = _interopRequireDefault(_searchReducer);
+
+var _mapReducer = __webpack_require__(291);
+
+var _mapReducer2 = _interopRequireDefault(_mapReducer);
+
+var _settingsReducer = __webpack_require__(293);
+
+var _settingsReducer2 = _interopRequireDefault(_settingsReducer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function reducers(client) {
+  return (0, _redux.combineReducers)({
+    client: client.reducer(),
+    search: _searchReducer2.default,
+    map: _mapReducer2.default,
+    settings: _settingsReducer2.default
+  });
+}
+
+/***/ }),
+
+/***/ 281:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.search = search;
+
+var _ActionTypes = __webpack_require__(66);
+
+var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function search(inputs) {
+  return {
+    type: _ActionTypes2.default.SEARCH,
+    payload: inputs
+  };
+}
+
+/***/ }),
+
+/***/ 282:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(93);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _redux = __webpack_require__(51);
+
+var _reduxThunk = __webpack_require__(265);
+
+var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
+
+var _apolloClient = __webpack_require__(152);
+
+var _apolloClient2 = _interopRequireDefault(_apolloClient);
+
+var _reactApollo = __webpack_require__(153);
+
+var _reducers = __webpack_require__(264);
+
+var _reducers2 = _interopRequireDefault(_reducers);
+
+var _Locator = __webpack_require__(263);
+
+var _Locator2 = _interopRequireDefault(_Locator);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var container = document.querySelector('.locator');
+
+var client = new _apolloClient2.default({
+  networkInterface: (0, _apolloClient.createNetworkInterface)({
+    uri: container.dataset.apiUrl,
+    opts: {
+      credentials: 'same-origin'
+    }
+  }),
+
+  reduxRootSelector: function reduxRootSelector(state) {
+    return state.client;
+  }
+});
+
+function composedMiddleware() {
+  return (0, _redux.compose)((0, _redux.applyMiddleware)(client.middleware(), _reduxThunk2.default), typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : function (f) {
+    return f;
+  });
+}
+
+var defaultState = {
+  settings: JSON.parse(container.dataset.mapSettings)
+};
+
+var store = (0, _redux.createStore)((0, _reducers2.default)(client), defaultState, composedMiddleware());
+
+_reactDom2.default.render(_react2.default.createElement(
+  _reactApollo.ApolloProvider,
+  { store: store, client: client },
+  _react2.default.createElement(_Locator2.default, null)
+), container);
+
+/***/ }),
+
+/***/ 283:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Location = function (_React$Component) {
+  _inherits(Location, _React$Component);
+
+  function Location() {
+    _classCallCheck(this, Location);
+
+    return _possibleConstructorReturn(this, (Location.__proto__ || Object.getPrototypeOf(Location)).apply(this, arguments));
+  }
+
+  _createClass(Location, [{
+    key: 'getDistance',
+    value: function getDistance() {
+      var location = this.props.location;
+
+      var distance = location.distance;
+      distance = parseFloat(distance);
+      return distance.toFixed(2);
+    }
+  }, {
+    key: 'getDaddr',
+    value: function getDaddr() {
+      var location = this.props.location;
+
+      var daddr = '';
+
+      if (location.Address) {
+        daddr += location.Address + '+';
+      }
+
+      if (location.Address2) {
+        daddr += location.Address2 + '+';
+      }
+
+      if (location.City) {
+        daddr += location.City + '+';
+      }
+
+      if (location.State) {
+        daddr += location.State + '+';
+      }
+
+      if (location.PostalCode) {
+        daddr += location.PostalCode;
+      }
+
+      return daddr.replace(/([+\s]+$)/g, '');
+    }
+  }, {
+    key: 'renderDistance',
+    value: function renderDistance() {
+      var distance = this.getDistance();
+      var _props = this.props,
+          search = _props.search,
+          unit = _props.unit;
+
+
+      if (search) {
+        var link = 'http://maps.google.com/maps?saddr=' + search + '&daddr=' + this.getDaddr();
+        return _react2.default.createElement(
+          'div',
+          { className: 'loc-dist' },
+          distance,
+          ' ',
+          unit,
+          ' |',
+          _react2.default.createElement(
+            'a',
+            {
+              href: link,
+              target: '_blank',
+              rel: 'noopener noreferrer'
+            },
+            'Directions'
+          )
+        );
+      }
+      return null;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props2 = this.props,
+          location = _props2.location,
+          index = _props2.index,
+          current = _props2.current,
+          _onClick = _props2.onClick;
+
+      var className = '';
+      if (current === location.ID) {
+        className += 'focus';
+      }
+      return _react2.default.createElement(
+        'li',
+        { 'data-markerid': index, className: className, onClick: function onClick() {
+            return _onClick(location.ID);
+          } },
+        _react2.default.createElement(
+          'div',
+          { className: 'list-label' },
+          index + 1
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'list-details' },
+          _react2.default.createElement(
+            'div',
+            { className: 'list-content' },
+            _react2.default.createElement(
+              'div',
+              { className: 'loc-name' },
+              location.Title
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'loc-addr' },
+              location.Address
+            ),
+            location.Address2 && _react2.default.createElement(
+              'div',
+              { className: 'loc-addr2' },
+              location.Address2
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'loc-addr3' },
+              location.City,
+              ', ',
+              location.State,
+              ' ',
+              location.PostalCode
+            ),
+            location.Phone && _react2.default.createElement(
+              'div',
+              { className: 'loc-phone' },
+              location.Phone
+            ),
+            location.Website && _react2.default.createElement(
+              'div',
+              { className: 'loc-web' },
+              _react2.default.createElement(
+                'a',
+                { href: location.Website, target: '_blank', rel: 'noopener noreferrer' },
+                'Website'
+              )
+            ),
+            location.Email && _react2.default.createElement(
+              'div',
+              { className: 'loc-email' },
+              _react2.default.createElement(
+                'a',
+                { href: 'mailto:' + location.Email },
+                'Email'
+              )
+            ),
+            this.renderDistance()
+          )
+        )
+      );
+    }
+  }]);
+
+  return Location;
+}(_react2.default.Component);
+
+Location.propTypes = {
+  location: _propTypes2.default.shape({
+    Title: _propTypes2.default.string,
+    Address: _propTypes2.default.string,
+    Address2: _propTypes2.default.string,
+    City: _propTypes2.default.string,
+    State: _propTypes2.default.string,
+    PostalCode: _propTypes2.default.string,
+    Website: _propTypes2.default.string,
+    Phone: _propTypes2.default.string,
+    Email: _propTypes2.default.string,
+    distance: _propTypes2.default.string
+  }).isRequired,
+  index: _propTypes2.default.number.isRequired,
+  current: _propTypes2.default.string.isRequired,
+  search: _propTypes2.default.string.isRequired,
+  unit: _propTypes2.default.string.isRequired,
+  onClick: _propTypes2.default.func.isRequired
+};
+
+exports.default = Location;
+
+/***/ }),
+
+/***/ 284:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactGoogleMaps = __webpack_require__(590);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Map = (0, _reactGoogleMaps.withGoogleMap)(function (props) {
+  return _react2.default.createElement(
+    _reactGoogleMaps.GoogleMap,
+    {
+      defaultZoom: 9,
+      defaultCenter: { lat: 43.8483258, lng: -87.7709294 }
+
+    },
+    props.markers.map(function (marker) {
+      return _react2.default.createElement(
+        _reactGoogleMaps.Marker,
+        {
+          key: marker.key,
+          position: marker.position,
+          defaultAnimation: marker.defaultAnimation,
+          onClick: function onClick() {
+            return props.onMarkerClick(marker);
+          }
+        },
+        props.current === marker.key && props.showCurrent && _react2.default.createElement(
+          _reactGoogleMaps.InfoWindow,
+          { onCloseClick: function onCloseClick() {
+              return props.onMarkerClose(marker);
+            } },
+          _react2.default.createElement(
+            'div',
+            null,
+            marker.infoContent
+          )
+        )
+      );
+    })
+  );
+});
+
+exports.default = Map;
+
+/***/ }),
+
+/***/ 285:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = __webpack_require__(90);
+
+var _mapActions = __webpack_require__(162);
+
+var _Location = __webpack_require__(283);
+
+var _Location2 = _interopRequireDefault(_Location);
+
+var _MapContainer = __webpack_require__(286);
+
+var _MapContainer2 = _interopRequireDefault(_MapContainer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MapArea = function (_React$Component) {
+  _inherits(MapArea, _React$Component);
+
+  function MapArea(props) {
+    _classCallCheck(this, MapArea);
+
+    var _this = _possibleConstructorReturn(this, (MapArea.__proto__ || Object.getPrototypeOf(MapArea)).call(this, props));
+
+    _this.handleLocationClick = _this.handleLocationClick.bind(_this);
+    return _this;
+  }
+
+  _createClass(MapArea, [{
+    key: 'handleLocationClick',
+    value: function handleLocationClick(target) {
+      this.props.dispatch((0, _mapActions.openMarker)(target));
+    }
+  }, {
+    key: 'renderLocations',
+    value: function renderLocations() {
+      var _this2 = this;
+
+      var locs = this.props.locations.edges;
+      if (locs !== undefined) {
+        return locs.map(function (location, index) {
+          return _react2.default.createElement(_Location2.default, {
+            key: location.node.ID,
+            index: index,
+            location: location.node,
+            current: _this2.props.current,
+            search: _this2.props.search,
+            unit: _this2.props.unit,
+            onClick: _this2.handleLocationClick
+          });
+        });
+      }
+      return null;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'map-area' },
+        _react2.default.createElement(_MapContainer2.default, { locations: this.props.locations }),
+        _react2.default.createElement(
+          'div',
+          { className: 'loc-list' },
+          _react2.default.createElement(
+            'ul',
+            null,
+            this.renderLocations()
+          )
+        )
+      );
+    }
+  }]);
+
+  return MapArea;
+}(_react2.default.Component);
+
+MapArea.propTypes = {
+  locations: _propTypes2.default.shape({
+    edges: _propTypes2.default.array
+  }),
+  current: _propTypes2.default.string,
+  search: _propTypes2.default.string,
+  unit: _propTypes2.default.string,
+  dispatch: _propTypes2.default.func.isRequired
+};
+
+MapArea.defaultProps = {
+  locations: {
+    edges: []
+  },
+  current: '-1',
+  search: '',
+  unit: 'm'
+};
+
+function mapStateToProps(state) {
+  return {
+    current: state.map.current,
+    search: state.search.address,
+    unit: state.settings.unit
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(MapArea);
+
+/***/ }),
+
+/***/ 286:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = __webpack_require__(90);
+
+var _mapActions = __webpack_require__(162);
+
+var _Map = __webpack_require__(284);
+
+var _Map2 = _interopRequireDefault(_Map);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MapContainer = function (_React$Component) {
+  _inherits(MapContainer, _React$Component);
+
+  function MapContainer(props) {
+    _classCallCheck(this, MapContainer);
+
+    var _this = _possibleConstructorReturn(this, (MapContainer.__proto__ || Object.getPrototypeOf(MapContainer)).call(this, props));
+
+    _this.handleMarkerClick = _this.handleMarkerClick.bind(_this);
+    _this.handleMarkerClose = _this.handleMarkerClose.bind(_this);
+    return _this;
+  }
+
+  _createClass(MapContainer, [{
+    key: 'getMarkers',
+    value: function getMarkers() {
+      var locations = this.props.locations.edges;
+      var markers = [];
+
+      var i = void 0;
+
+      for (i = 0; i < locations.length; i++) {
+        var loc = locations[i].node;
+        markers[markers.length] = {
+          position: {
+            lat: Number(loc.Lat),
+            lng: Number(loc.Lng)
+          },
+          key: loc.ID,
+          defaultAnimation: 2,
+          infoContent: _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'div',
+              { className: 'loc-name' },
+              loc.Title
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              loc.Address
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              loc.Address2
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              loc.City,
+              ', ',
+              loc.State,
+              ' ',
+              loc.PostalCode
+            ),
+            loc.Phone && _react2.default.createElement(
+              'a',
+              { href: 'tel:' + loc.Phone },
+              loc.Phone
+            ),
+            loc.Website && _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'a',
+                { href: loc.Website, target: '_blank', rel: 'noopener noreferrer' },
+                'Website'
+              )
+            )
+          )
+        };
+      }
+      return markers;
+    }
+  }, {
+    key: 'handleMarkerClick',
+    value: function handleMarkerClick(target) {
+      this.props.dispatch((0, _mapActions.highlightLocation)(target));
+    }
+  }, {
+    key: 'handleMarkerClose',
+    value: function handleMarkerClose(target) {
+      this.props.dispatch((0, _mapActions.closeMarker)(target));
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { id: 'map-container' },
+        _react2.default.createElement(_Map2.default, {
+          containerElement: _react2.default.createElement('div', { className: 'map' }),
+          mapElement: _react2.default.createElement('div', { style: { height: '100%' } }),
+          markers: this.getMarkers(),
+          onMarkerClick: this.handleMarkerClick,
+          onMarkerClose: this.handleMarkerClose,
+          current: this.props.current,
+          showCurrent: this.props.showCurrent
+        })
+      );
+    }
+  }]);
+
+  return MapContainer;
+}(_react2.default.Component);
+
+MapContainer.propTypes = {
+  locations: _propTypes2.default.shape({
+    edges: _propTypes2.default.array
+  }),
+  dispatch: _propTypes2.default.func.isRequired,
+  current: _propTypes2.default.string,
+  showCurrent: _propTypes2.default.bool
+};
+
+MapContainer.defaultProps = {
+  locations: {
+    edges: []
+  },
+  current: '-1',
+  showCurrent: false
+};
+
+function mapStateToProps(state) {
+  return {
+    current: state.map.current,
+    showCurrent: state.map.showCurrent
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(MapContainer);
+
+/***/ }),
+
+/***/ 287:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CategoryDropDown = function (_React$Component) {
+  _inherits(CategoryDropDown, _React$Component);
+
+  function CategoryDropDown() {
+    _classCallCheck(this, CategoryDropDown);
+
+    return _possibleConstructorReturn(this, (CategoryDropDown.__proto__ || Object.getPrototypeOf(CategoryDropDown)).apply(this, arguments));
+  }
+
+  _createClass(CategoryDropDown, [{
+    key: 'mappedCategories',
+    value: function mappedCategories() {
+      var categories = this.props.categories;
+
+
+      return Object.keys(categories).map(function (key) {
+        return _react2.default.createElement(
+          'option',
+          {
+            value: key,
+            key: key
+          },
+          categories[key]
+        );
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var categories = this.props.categories;
+
+      if (categories !== undefined && Object.keys(categories).length !== 0) {
+        return _react2.default.createElement(
+          'div',
+          { className: 'field dropdown form-group--no-label' },
+          _react2.default.createElement(
+            'div',
+            { className: 'middleColumn' },
+            _react2.default.createElement(
+              'select',
+              {
+                name: 'category',
+                className: 'dropdown form-group--no-label',
+                defaultValue: ''
+              },
+              _react2.default.createElement(
+                'option',
+                { value: '' },
+                'category'
+              ),
+              this.mappedCategories()
+            )
+          )
+        );
+      }
+      return null;
+    }
+  }]);
+
+  return CategoryDropDown;
+}(_react2.default.Component);
+
+CategoryDropDown.propTypes = {
+  categories: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired
+};
+
+exports.default = CategoryDropDown;
+
+/***/ }),
+
+/***/ 288:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var RadiusDropDown = function (_React$Component) {
+  _inherits(RadiusDropDown, _React$Component);
+
+  function RadiusDropDown() {
+    _classCallCheck(this, RadiusDropDown);
+
+    return _possibleConstructorReturn(this, (RadiusDropDown.__proto__ || Object.getPrototypeOf(RadiusDropDown)).apply(this, arguments));
+  }
+
+  _createClass(RadiusDropDown, [{
+    key: 'mappedRadii',
+    value: function mappedRadii() {
+      var radii = this.props.radii;
+
+
+      return Object.keys(radii).map(function (key) {
+        return _react2.default.createElement(
+          'option',
+          {
+            value: radii[key],
+            key: key
+          },
+          radii[key]
+        );
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var radii = this.props.radii;
+
+      if (radii !== undefined && Object.keys(radii).length !== 0) {
+        return _react2.default.createElement(
+          'div',
+          { className: 'field dropdown form-group--no-label' },
+          _react2.default.createElement(
+            'div',
+            { className: 'middleColumn' },
+            _react2.default.createElement(
+              'select',
+              {
+                name: 'radius',
+                className: 'dropdown form-group--no-label',
+                defaultValue: ''
+              },
+              _react2.default.createElement(
+                'option',
+                { value: '' },
+                'radius'
+              ),
+              this.mappedRadii()
+            )
+          )
+        );
+      }
+      return null;
+    }
+  }]);
+
+  return RadiusDropDown;
+}(_react2.default.Component);
+
+RadiusDropDown.propTypes = {
+  radii: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired
+};
+
+exports.default = RadiusDropDown;
+
+/***/ }),
+
+/***/ 289:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(4);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = __webpack_require__(90);
+
+var _searchActions = __webpack_require__(281);
+
+var _RadiusDropDown = __webpack_require__(288);
+
+var _RadiusDropDown2 = _interopRequireDefault(_RadiusDropDown);
+
+var _CategoryDropDown = __webpack_require__(287);
+
+var _CategoryDropDown2 = _interopRequireDefault(_CategoryDropDown);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SearchBar = function (_React$Component) {
+  _inherits(SearchBar, _React$Component);
+
+  function SearchBar(props) {
+    _classCallCheck(this, SearchBar);
+
+    var _this = _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).call(this, props));
+
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    return _this;
+  }
+
+  _createClass(SearchBar, [{
+    key: 'handleSubmit',
+    value: function handleSubmit(event) {
+      event.preventDefault();
+      var addressInput = document.getElementsByName('address')[0].value;
+      var radiusInput = document.getElementsByName('radius')[0].value;
+      var categoryInput = document.getElementsByName('category')[0].value;
+
+      this.props.dispatch((0, _searchActions.search)({
+        address: addressInput,
+        radius: radiusInput,
+        category: categoryInput
+      }));
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'form',
+        { action: '', onSubmit: this.handleSubmit },
+        _react2.default.createElement(
+          'fieldset',
+          null,
+          _react2.default.createElement(
+            'div',
+            { className: 'field text form-group--no-label' },
+            _react2.default.createElement(
+              'div',
+              { className: 'middleColumn' },
+              _react2.default.createElement('input', {
+                type: 'text',
+                name: 'address',
+                className: 'text form-group--no-label',
+                'aria-required': 'true',
+                placeholder: 'address or zip code'
+              })
+            )
+          ),
+          _react2.default.createElement(_RadiusDropDown2.default, { radii: this.props.radii }),
+          _react2.default.createElement(_CategoryDropDown2.default, { categories: this.props.categories })
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'btn-toolbar' },
+          _react2.default.createElement('input', {
+            type: 'submit',
+            value: 'Search',
+            className: 'action'
+          })
+        ),
+        _react2.default.createElement('div', { className: 'clear' })
+      );
+    }
+  }]);
+
+  return SearchBar;
+}(_react2.default.Component);
+
+SearchBar.propTypes = {
+  radii: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired,
+
+  categories: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired,
+  dispatch: _propTypes2.default.func.isRequired
+};
+
+function mapStateToProps(state) {
+  return {
+    radii: state.settings.radii,
+    categories: state.settings.categories
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(SearchBar);
+
+/***/ }),
+
+/***/ 290:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _templateObject = _taggedTemplateLiteral(['\n  query($address: String, $radius: String, $category: String, $unit: String){\n    readLocations(address: $address, radius: $radius, category: $category, unit: $unit) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n          Category {\n            ID\n            Name\n          }\n        }\n      } \n    }\n  }\n'], ['\n  query($address: String, $radius: String, $category: String, $unit: String){\n    readLocations(address: $address, radius: $radius, category: $category, unit: $unit) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n          Category {\n            ID\n            Name\n          }\n        }\n      } \n    }\n  }\n']);
+
+var _graphqlTag = __webpack_require__(116);
+
+var _graphqlTag2 = _interopRequireDefault(_graphqlTag);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+exports.default = (0, _graphqlTag2.default)(_templateObject);
+
+/***/ }),
+
+/***/ 291:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.default = reducer;
+
+var _ActionTypes = __webpack_require__(66);
+
+var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultState = {
+  current: '-1',
+  showCurrent: false
+};
+
+function reducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
+  var action = arguments[1];
+
+  switch (action.type) {
+    case _ActionTypes2.default.MARKER_CLICK:
+      return _extends({}, state, {
+        current: action.payload.key,
+        showCurrent: true
+      });
+
+    case _ActionTypes2.default.MARKER_CLOSE:
+      return _extends({}, state, {
+        showCurrent: false
+      });
+
+    case _ActionTypes2.default.SEARCH:
+      return _extends({}, state, {
+        current: '-1',
+        showCurrent: false
+      });
+
+    default:
+      return state;
+  }
+}
+
+/***/ }),
+
+/***/ 292:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.default = reducer;
+
+var _ActionTypes = __webpack_require__(66);
+
+var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultState = {
+  address: '',
+  radius: ''
+};
+
+function reducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
+  var action = arguments[1];
+
+  switch (action.type) {
+    case _ActionTypes2.default.SEARCH:
+      return _extends({}, state, {
+        address: action.payload.address,
+        radius: action.payload.radius,
+        category: action.payload.category
+      });
+
+    default:
+      return state;
+  }
+}
+
+/***/ }),
+
+/***/ 293:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = reducer;
+function reducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
+
+  return state;
+}
+
+/***/ }),
+
+/***/ 66:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var ActionTypes = {
+  SEARCH: 'SEARCH',
+
+  MARKER_CLICK: 'MARKER_CLICK',
+  MARKER_CLOSE: 'MARKER_CLOSE'
+};
+
+exports.default = ActionTypes;
+
+/***/ })
+
+},[282]);
+//# sourceMappingURL=main.js.map

@@ -9,3 +9,4 @@
 
 <% require javascript('locator/client/dist/js/vendor.js') %>
 <% require javascript('locator/client/dist/js/main.js') %>
+<%-- require css('locator/client/dist/css/map.css') --%>

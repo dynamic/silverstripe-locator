@@ -8,13 +8,14 @@ const env = process.env.NODE_ENV || 'dev';
 
 const paths = {
   srcJs: Path.resolve('client', 'src', 'js'),
-  srcSass: Path.resolve('client', 'src', 'sass'),
+  srcSass: Path.resolve('client', 'src', 'scss'),
   dist: Path.resolve('client', 'dist'),
 };
 
 module.exports = {
   entry: {
     main: Path.join(paths.srcJs, 'boot', 'index.jsx'),
+    // map: Path.join(paths.srcSass, 'main.scss'),
   },
   output: {
     path: paths.dist,

@@ -78,11 +78,12 @@ class Location extends React.Component {
    */
   render() {
     const { location, index, current, onClick } = this.props;
-    let className = '';
+    let className = 'list-location';
     if (current === location.ID) {
-      className += 'focus';
+      className += ' focus';
     }
     return (
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
       <li data-markerid={index} className={className} onClick={() => onClick(location.ID)}>
         <div className="list-label">{index + 1}</div>
         <div className="list-details">

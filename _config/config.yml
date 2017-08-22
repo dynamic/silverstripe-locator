@@ -68,3 +68,13 @@ Dynamic\Locator\GraphQL\Controller:
                   type: String
                   default: ''
                   description: 'The name of the category to get'
+        Dynamic\Locator\LocatorSettings:
+          fields:
+            Radii: 'The list of radii to show'
+            # TODO - fill out more
+
+      queries:
+        locatorSettings:
+          type: Dynamic\Locator\LocatorSettings
+          paginated: false
+          resolver: Dynamic\Locator\GraphQL\Resolvers\SettingsResolver
