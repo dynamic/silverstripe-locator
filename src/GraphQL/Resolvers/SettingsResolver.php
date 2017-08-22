@@ -23,7 +23,9 @@ class SettingsResolver implements ResolverInterface
      */
     public function resolve($object, $args, $context, $info)
     {
-        return LocatorSettings::current_locator_settings();
+        $settings = LocatorSettings::create();
+        $settings->LocatorID = $args['ID'];
+        return $settings;
     }
 
 }

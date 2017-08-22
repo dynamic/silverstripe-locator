@@ -77,7 +77,7 @@ MapArea.propTypes = {
   }),
   current: PropTypes.string,
   search: PropTypes.string,
-  unit: PropTypes.string,
+  unit: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
@@ -91,7 +91,6 @@ MapArea.defaultProps = {
   },
   current: '-1',
   search: '',
-  unit: 'm',
 };
 
 /**

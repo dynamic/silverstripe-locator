@@ -1,13 +1,15 @@
 import gql from 'graphql-tag';
 
 /**
- * The query for getting locations
+ * The query for getting the locator settings
  */
 export default gql`
-  query {
-    locatorSettings {
+  query ($id: Int!){
+    locatorSettings (ID: $id){
       Limit,
-      Radii
+      Radii,
+      Unit,
+      Categories
     }
   }
 `;

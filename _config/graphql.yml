@@ -63,6 +63,8 @@ Dynamic\Locator\GraphQL\Controller:
           fields:
             Radii: 'The list of radii to show'
             Limit: 'The limit of locations'
+            Unit: 'The unit for distance'
+            Categories: 'The categories of the current locator'
             # TODO - fill out more
 
       queries:
@@ -70,3 +72,5 @@ Dynamic\Locator\GraphQL\Controller:
           type: Dynamic\Locator\LocatorSettings
           paginate: false
           resolver: Dynamic\Locator\GraphQL\Resolvers\SettingsResolver
+          args:
+            ID: Int!

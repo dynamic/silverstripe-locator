@@ -12,16 +12,12 @@ use SilverStripe\ORM\DataObject;
  */
 class LocatorSettings extends DataObject
 {
-    // TODO - figure out how to get current locator page (for categories)
-
     /**
-     * gets the current settings for the locator
-     * @return LocatorSettings
+     * @var array
      */
-    public static function current_locator_settings()
-    {
-        return Injector::inst()->get(LocatorSettings::class);
-    }
+    private static $has_one = array(
+        'Locator' => Locator::class
+    );
 
     /**
      * Gets the fields allowed to be retrieved through Graphql
@@ -71,6 +67,30 @@ class LocatorSettings extends DataObject
     public function getShowRadius()
     {
         return Config::inst()->get(Locator::class, 'show_radius');
+    }
+
+    /**
+     * Gets the list of categories
+     * @return string
+     */
+    public function getCategories()
+    {
+        return json_encode(
+            $this->Locator()->Categories()->filter(array(
+                    'Locations.ID:GreaterThan' => 0
+                )
+            )->Map('ID', 'Name')->toArray()
+        );
+    }
+
+    /**
+     * Gets the unit of distance
+     *
+     * @return mixed
+     */
+    public function getUnit()
+    {
+        return $this->Locator()->Unit;
     }
 
 }

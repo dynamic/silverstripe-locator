@@ -2,7 +2,7 @@
 	<h1>$Title</h1>
 	<% if $Content %><div class="typography">$Content</div><% end_if %>
 
-    <div class="locator" data-api-url="$ApiUrl">
+    <div class="locator" data-api-url="$ApiUrl" data-locator-id="$ID">
     </div>
 
 </div>

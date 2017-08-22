@@ -171,7 +171,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _templateObject = _taggedTemplateLiteral(['\n  query {\n    locatorSettings {\n      Limit,\n      Radii\n    }\n  }\n'], ['\n  query {\n    locatorSettings {\n      Limit,\n      Radii\n    }\n  }\n']);
+var _templateObject = _taggedTemplateLiteral(['\n  query ($id: Int!){\n    locatorSettings (ID: $id){\n      Limit,\n      Radii,\n      Unit,\n      Categories\n    }\n  }\n'], ['\n  query ($id: Int!){\n    locatorSettings (ID: $id){\n      Limit,\n      Radii,\n      Unit,\n      Categories\n    }\n  }\n']);
 
 var _graphqlTag = __webpack_require__(116);
 
@@ -319,7 +319,10 @@ _reactDom2.default.render(_react2.default.createElement(
 ), container);
 
 client.query({
-  query: _locatorSettings2.default
+  query: _locatorSettings2.default,
+  variables: {
+    id: container.dataset.locatorId
+  }
 });
 
 /***/ }),
@@ -704,7 +707,7 @@ MapArea.propTypes = {
   }),
   current: _propTypes2.default.string,
   search: _propTypes2.default.string,
-  unit: _propTypes2.default.string,
+  unit: _propTypes2.default.string.isRequired,
   dispatch: _propTypes2.default.func.isRequired
 };
 
@@ -713,8 +716,7 @@ MapArea.defaultProps = {
     edges: []
   },
   current: '-1',
-  search: '',
-  unit: 'm'
+  search: ''
 };
 
 function mapStateToProps(state) {
@@ -1380,15 +1382,17 @@ function reducer() {
     case _ActionTypes2.default.QUERY_RESULT:
       {
         var settings = action.result.data.locatorSettings;
+
         if (settings === undefined) {
           return state;
         }
         return _extends({}, state, {
           loadedSettings: true,
 
-          unit: 'm',
+          unit: settings.Unit,
           limit: settings.Limit,
-          radii: JSON.parse(settings.Radii)
+          radii: JSON.parse(settings.Radii),
+          categories: JSON.parse(settings.Categories)
         });
       }
 

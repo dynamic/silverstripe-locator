@@ -57,4 +57,7 @@ ReactDom.render(
 // query for settings
 client.query({
   query: locatorSettings,
+  variables: {
+    id: container.dataset.locatorId,
+  },
 });

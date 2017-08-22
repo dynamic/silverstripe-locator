@@ -23,6 +23,7 @@ export default function reducer(state = defaultState, action) {
         unit: settings.Unit,
         limit: settings.Limit,
         radii: JSON.parse(settings.Radii),
+        categories: JSON.parse(settings.Categories),
       };
     }
 
