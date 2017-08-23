@@ -5,6 +5,7 @@ import { Parser as HtmlToReactParser } from 'html-to-react';
 
 import { highlightLocation, closeMarker } from 'actions/mapActions';
 import Map from 'components/map/Map';
+import parseTpl from 'helpers/parseTpl';
 
 /**
  * The MapArea component.
@@ -44,15 +45,7 @@ class MapContainer extends React.Component {
         defaultAnimation: 2,
         infoContent: (
           <div>
-            <div>
-              {htmlToReactParser.parse(this.props.template)}
-            </div>
-            <div className="loc-name">{loc.Title}</div>
-            <div>{loc.Address}</div>
-            <div>{loc.Address2}</div>
-            <div>{loc.City}, {loc.State} {loc.PostalCode}</div>
-            {loc.Phone && <a href={`tel:${loc.Phone}`}>{loc.Phone}</a>}
-            {loc.Website && <div><a href={loc.Website} target="_blank" rel="noopener noreferrer">Website</a></div>}
+            {htmlToReactParser.parse(parseTpl(this.props.template, loc))}
           </div>
         ),
       };

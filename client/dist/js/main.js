@@ -68,7 +68,7 @@ var _reactApollo = __webpack_require__(162);
 
 var _reactRedux = __webpack_require__(94);
 
-var _readLocations = __webpack_require__(309);
+var _readLocations = __webpack_require__(310);
 
 var _readLocations2 = _interopRequireDefault(_readLocations);
 
@@ -198,15 +198,15 @@ exports.default = reducers;
 
 var _redux = __webpack_require__(53);
 
-var _searchReducer = __webpack_require__(311);
+var _searchReducer = __webpack_require__(312);
 
 var _searchReducer2 = _interopRequireDefault(_searchReducer);
 
-var _mapReducer = __webpack_require__(310);
+var _mapReducer = __webpack_require__(311);
 
 var _mapReducer2 = _interopRequireDefault(_mapReducer);
 
-var _settingsReducer = __webpack_require__(312);
+var _settingsReducer = __webpack_require__(313);
 
 var _settingsReducer2 = _interopRequireDefault(_settingsReducer);
 
@@ -557,7 +557,7 @@ var _react = __webpack_require__(6);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactGoogleMaps = __webpack_require__(653);
+var _reactGoogleMaps = __webpack_require__(654);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -753,13 +753,17 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactRedux = __webpack_require__(94);
 
-var _htmlToReact = __webpack_require__(408);
+var _htmlToReact = __webpack_require__(409);
 
 var _mapActions = __webpack_require__(171);
 
 var _Map = __webpack_require__(303);
 
 var _Map2 = _interopRequireDefault(_Map);
+
+var _parseTpl = __webpack_require__(309);
+
+var _parseTpl2 = _interopRequireDefault(_parseTpl);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -804,49 +808,7 @@ var MapContainer = function (_React$Component) {
           infoContent: _react2.default.createElement(
             'div',
             null,
-            _react2.default.createElement(
-              'div',
-              null,
-              htmlToReactParser.parse(this.props.template)
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'loc-name' },
-              loc.Title
-            ),
-            _react2.default.createElement(
-              'div',
-              null,
-              loc.Address
-            ),
-            _react2.default.createElement(
-              'div',
-              null,
-              loc.Address2
-            ),
-            _react2.default.createElement(
-              'div',
-              null,
-              loc.City,
-              ', ',
-              loc.State,
-              ' ',
-              loc.PostalCode
-            ),
-            loc.Phone && _react2.default.createElement(
-              'a',
-              { href: 'tel:' + loc.Phone },
-              loc.Phone
-            ),
-            loc.Website && _react2.default.createElement(
-              'div',
-              null,
-              _react2.default.createElement(
-                'a',
-                { href: loc.Website, target: '_blank', rel: 'noopener noreferrer' },
-                'Website'
-              )
-            )
+            htmlToReactParser.parse((0, _parseTpl2.default)(this.props.template, loc))
           )
         };
       }
@@ -1246,6 +1208,34 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(SearchBar);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+function get(path, obj) {
+  var fb = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '${' + path + '}';
+
+  return path.split('.').reduce(function (res, key) {
+    return res[key] || fb;
+  }, obj);
+}
+
+function parseTpl(template, map, fallback) {
+  return template.replace(/\$\{.+?}/g, function (match) {
+    var path = match.substr(2, match.length - 3).trim();
+    return get(path, map, fallback);
+  });
+}
+
+exports.default = parseTpl;
+
+/***/ }),
+
+/***/ 310:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _templateObject = _taggedTemplateLiteral(['\n  query($address: String, $radius: String, $category: String, $unit: String){\n    readLocations(address: $address, radius: $radius, category: $category, unit: $unit) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n          Category {\n            ID\n            Name\n          }\n        }\n      } \n    }\n  }\n'], ['\n  query($address: String, $radius: String, $category: String, $unit: String){\n    readLocations(address: $address, radius: $radius, category: $category, unit: $unit) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n          Category {\n            ID\n            Name\n          }\n        }\n      } \n    }\n  }\n']);
 
@@ -1261,7 +1251,7 @@ exports.default = (0, _graphqlTag2.default)(_templateObject);
 
 /***/ }),
 
-/***/ 310:
+/***/ 311:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1315,7 +1305,7 @@ function reducer() {
 
 /***/ }),
 
-/***/ 311:
+/***/ 312:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1360,7 +1350,7 @@ function reducer() {
 
 /***/ }),
 
-/***/ 312:
+/***/ 313:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
