@@ -131,35 +131,6 @@ class Locator extends \Page
     }
 
     /**
-     * @return DataList
-     */
-    public static function get_all_categories()
-    {
-        return LocationCategory::get();
-    }
-
-    /**
-     * @return bool
-     */
-    public function getPageCategories()
-    {
-        return self::locator_categories_by_locator($this->ID);
-    }
-
-    /**
-     * @param int $id
-     * @return bool|
-     */
-    public static function locator_categories_by_locator($id = 0)
-    {
-        if ($id == 0) {
-            return false;
-        }
-
-        return Locator::get()->byID($id)->Categories();
-    }
-
-    /**
      * The API URL
      *
      * @return string
@@ -167,70 +138,5 @@ class Locator extends \Page
     public function ApiUrl()
     {
         return Controller::join_links(Director::baseURL(), 'graphql-locator');
-    }
-
-    /**
-     * the map defaults to be passed to javascript
-     *
-     * @return string
-     */
-    public function MapSettings()
-    {
-        // radius - because arrays merge
-        $radii = [
-            '25' => '25',
-            '50' => '50',
-            '75' => '75',
-            '100' => '100',
-        ];
-
-        $config_radii = Config::inst()->get(Locator::class, 'radius_array');
-        if ($config_radii) {
-            $radii = $config_radii;
-        }
-        $radii = json_encode($radii, JSON_OBJECT_AS_ARRAY);
-
-        // non-arrays just overwrite
-        $lim = Config::inst()->get(Locator::class, 'limit');
-        $showRadius = Config::inst()->get(Locator::class, 'show_radius');
-
-        $zoom = 12;
-
-        // filters out unused categories then encodes to json
-        $categories = json_encode(
-            $this->Categories()->filter(array(
-                'Locations.ID:GreaterThan' => 0)
-            )->Map('ID', 'Name')->toArray()
-        );
-
-        return $this->minify("{
-            'showRadius': $showRadius,
-            'radii': $radii,
-            'zoom': $zoom,
-            'unit': '$this->Unit',
-            'limit': $lim,
-            'categories': $categories,
-            'mapSettings': {
-                'mapType': 'ROADMAP',
-                'disableDoubleClickZoom': true,
-                'scrollwheel': false,
-                'navigationControl': false,
-                'draggable': false
-            }
-        }");
-    }
-
-    /**
-     * Replaces single with double quotes (so no escaping) and removes new lines and spaces
-     *
-     * Regex pattern for replacing spaces from: https://stackoverflow.com/a/23860200
-     *
-     * @param String $string
-     * @return String
-     */
-    public function minify(String $string) {
-        return preg_replace("/\s(?=([^\"]*\"[^\"]*\")*[^\"]*$)/", '',
-            str_replace("'", '"', $string)
-        );
     }
 }

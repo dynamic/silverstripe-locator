@@ -27,7 +27,7 @@ const client = new ApolloClient({
       credentials: 'same-origin',
     },
   }),
-  // needed because it errors without it (unsure what it actually does)
+  // changes the name of where the client stores information in the state
   reduxRootSelector: state => state.client,
 });
 

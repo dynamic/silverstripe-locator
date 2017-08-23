@@ -70,6 +70,15 @@ class LocatorSettings extends DataObject
     }
 
     /**
+     * Gets the info window template
+     * @return mixed
+     */
+    public function getInfoWindowTemplate() {
+        // TODO - allow a locator class to override this
+        return json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(Locator::class, 'infoWindowTemplate')));
+    }
+
+    /**
      * Gets the list of categories
      * @return string
      */

@@ -6,3 +6,6 @@ Dynamic\Locator\Location:
     - Dynamic\SilverStripeGeocoder\DistanceDataExtension
     - Dynamic\SilverStripeGeocoder\AddressDataExtension
     - SilverStripe\Versioned\Versioned('Stage','Live')
+
+Dynamic\Locator\Locator:
+  infoWindowTemplate: 'locator/templates/infoWindowTemplate.rt'

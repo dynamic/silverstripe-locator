@@ -65,6 +65,7 @@ Dynamic\Locator\GraphQL\Controller:
             Limit: 'The limit of locations'
             Unit: 'The unit for distance'
             Categories: 'The categories of the current locator'
+            InfoWindowTemplate: 'The template for the info window'
             # TODO - fill out more
 
       queries:

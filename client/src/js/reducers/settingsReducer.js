@@ -24,6 +24,7 @@ export default function reducer(state = defaultState, action) {
         limit: settings.Limit,
         radii: JSON.parse(settings.Radii),
         categories: JSON.parse(settings.Categories),
+        infoWindowTemplate: JSON.parse(settings.InfoWindowTemplate),
       };
     }
 

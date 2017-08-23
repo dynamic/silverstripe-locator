@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Parser as HtmlToReactParser } from 'html-to-react';
 
 import { highlightLocation, closeMarker } from 'actions/mapActions';
 import Map from 'components/map/Map';
@@ -28,6 +29,8 @@ class MapContainer extends React.Component {
     const locations = this.props.locations.edges;
     const markers = [];
 
+    const htmlToReactParser = new HtmlToReactParser();
+
     let i;
     // eslint-disable-next-line no-plusplus
     for (i = 0; i < locations.length; i++) {
@@ -41,6 +44,9 @@ class MapContainer extends React.Component {
         defaultAnimation: 2,
         infoContent: (
           <div>
+            <div>
+              {htmlToReactParser.parse(this.props.template)}
+            </div>
             <div className="loc-name">{loc.Title}</div>
             <div>{loc.Address}</div>
             <div>{loc.Address2}</div>
@@ -125,6 +131,7 @@ function mapStateToProps(state) {
   return {
     current: state.map.current,
     showCurrent: state.map.showCurrent,
+    template: state.settings.infoWindowTemplate,
   };
 }
 
