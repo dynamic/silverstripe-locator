@@ -34,17 +34,6 @@ class LocatorController extends \PageController
     }
 
     /**
-     * @return ArrayList|DataList
-     */
-    public function getLocations()
-    {
-        if (!$this->locations) {
-            $this->setLocations($this->request);
-        }
-        return $this->locations;
-    }
-
-    /**
      * @param HTTPRequest|null $request
      * @return $this
      */

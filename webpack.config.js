@@ -28,6 +28,9 @@ module.exports = {
       paths.srcJs,
       'node_modules',
     ],
+    alias: {
+      'handlebars': 'handlebars/dist/handlebars.js',
+    },
     extensions: ['.js', '.jsx', '.json'],
   },
   module: {

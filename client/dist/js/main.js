@@ -68,7 +68,7 @@ var _reactApollo = __webpack_require__(162);
 
 var _reactRedux = __webpack_require__(94);
 
-var _readLocations = __webpack_require__(310);
+var _readLocations = __webpack_require__(309);
 
 var _readLocations2 = _interopRequireDefault(_readLocations);
 
@@ -198,15 +198,15 @@ exports.default = reducers;
 
 var _redux = __webpack_require__(53);
 
-var _searchReducer = __webpack_require__(312);
+var _searchReducer = __webpack_require__(311);
 
 var _searchReducer2 = _interopRequireDefault(_searchReducer);
 
-var _mapReducer = __webpack_require__(311);
+var _mapReducer = __webpack_require__(310);
 
 var _mapReducer2 = _interopRequireDefault(_mapReducer);
 
-var _settingsReducer = __webpack_require__(313);
+var _settingsReducer = __webpack_require__(312);
 
 var _settingsReducer2 = _interopRequireDefault(_settingsReducer);
 
@@ -761,10 +761,6 @@ var _Map = __webpack_require__(303);
 
 var _Map2 = _interopRequireDefault(_Map);
 
-var _parseTpl = __webpack_require__(309);
-
-var _parseTpl2 = _interopRequireDefault(_parseTpl);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -808,7 +804,7 @@ var MapContainer = function (_React$Component) {
           infoContent: _react2.default.createElement(
             'div',
             null,
-            htmlToReactParser.parse((0, _parseTpl2.default)(this.props.template, loc))
+            htmlToReactParser.parse(this.props.template(loc))
           )
         };
       }
@@ -1208,34 +1204,6 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(SearchBar);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-function get(path, obj) {
-  var fb = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '${' + path + '}';
-
-  return path.split('.').reduce(function (res, key) {
-    return res[key] || fb;
-  }, obj);
-}
-
-function parseTpl(template, map, fallback) {
-  return template.replace(/\$\{.+?}/g, function (match) {
-    var path = match.substr(2, match.length - 3).trim();
-    return get(path, map, fallback);
-  });
-}
-
-exports.default = parseTpl;
-
-/***/ }),
-
-/***/ 310:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
 var _templateObject = _taggedTemplateLiteral(['\n  query($address: String, $radius: String, $category: String, $unit: String){\n    readLocations(address: $address, radius: $radius, category: $category, unit: $unit) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n          Category {\n            ID\n            Name\n          }\n        }\n      } \n    }\n  }\n'], ['\n  query($address: String, $radius: String, $category: String, $unit: String){\n    readLocations(address: $address, radius: $radius, category: $category, unit: $unit) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n          Category {\n            ID\n            Name\n          }\n        }\n      } \n    }\n  }\n']);
 
@@ -1251,7 +1219,7 @@ exports.default = (0, _graphqlTag2.default)(_templateObject);
 
 /***/ }),
 
-/***/ 311:
+/***/ 310:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1305,7 +1273,7 @@ function reducer() {
 
 /***/ }),
 
-/***/ 312:
+/***/ 311:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1350,7 +1318,7 @@ function reducer() {
 
 /***/ }),
 
-/***/ 313:
+/***/ 312:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1363,6 +1331,10 @@ Object.defineProperty(exports, "__esModule", {
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 exports.default = reducer;
+
+var _handlebars = __webpack_require__(408);
+
+var _handlebars2 = _interopRequireDefault(_handlebars);
 
 var _ActionTypes = __webpack_require__(57);
 
@@ -1386,6 +1358,11 @@ function reducer() {
         if (settings === undefined) {
           return state;
         }
+
+        if (settings.constructor === Array) {
+          settings = settings[0];
+        }
+
         return _extends({}, state, {
           loadedSettings: true,
 
@@ -1393,7 +1370,7 @@ function reducer() {
           limit: settings.Limit,
           radii: JSON.parse(settings.Radii),
           categories: JSON.parse(settings.Categories),
-          infoWindowTemplate: JSON.parse(settings.InfoWindowTemplate)
+          infoWindowTemplate: _handlebars2.default.compile(JSON.parse(settings.InfoWindowTemplate))
         });
       }
 

@@ -1,3 +1,4 @@
+import handlebars from 'handlebars';
 import ActionType from 'actions/ActionTypes';
 
 const defaultState = {
@@ -10,12 +11,18 @@ const defaultState = {
 export default function reducer(state = defaultState, action) {
   switch (action.type) {
     case ActionType.QUERY_RESULT: {
-      const settings = action.result.data.locatorSettings;
+      let settings = action.result.data.locatorSettings;
 
       // skip if no settings attached
       if (settings === undefined) {
         return state;
       }
+
+      // in case its an array
+      if (settings.constructor === Array) {
+        settings = settings[0];
+      }
+
       return {
         ...state,
         loadedSettings: true,
@@ -24,7 +31,7 @@ export default function reducer(state = defaultState, action) {
         limit: settings.Limit,
         radii: JSON.parse(settings.Radii),
         categories: JSON.parse(settings.Categories),
-        infoWindowTemplate: JSON.parse(settings.InfoWindowTemplate),
+        infoWindowTemplate: handlebars.compile(JSON.parse(settings.InfoWindowTemplate)),
       };
     }
 
