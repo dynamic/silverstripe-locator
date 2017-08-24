@@ -38,9 +38,9 @@ class LocatorSettings extends DataObject
     public function getRadii()
     {
         $radii = [
-            '25' => '25',
-            '50' => '50',
-            '75' => '75',
+            '25'  => '25',
+            '50'  => '50',
+            '75'  => '75',
             '100' => '100',
         ];
 
@@ -48,6 +48,7 @@ class LocatorSettings extends DataObject
         if ($config_radii) {
             $radii = $config_radii;
         }
+
         return json_encode($radii);
     }
 
@@ -73,9 +74,21 @@ class LocatorSettings extends DataObject
      * Gets the info window template
      * @return mixed
      */
-    public function getInfoWindowTemplate() {
-        // TODO - allow a locator class to override this
-        return json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(Locator::class, 'infoWindowTemplate')));
+    public function getInfoWindowTemplate()
+    {
+        // TODO - allow a locator class to override this?
+        return json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(Locator::class,
+                'infoWindowTemplate')));
+    }
+
+    /**
+     * Gets the template for locations in the list
+     * @return string
+     */
+    public function getListTemplate()
+    {
+        return json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(Locator::class,
+                'listTemplate')));
     }
 
     /**

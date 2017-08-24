@@ -10,7 +10,8 @@ export default gql`
       Radii,
       Unit,
       Categories,
-      InfoWindowTemplate
+      InfoWindowTemplate,
+      ListTemplate
     }
   }
 `;

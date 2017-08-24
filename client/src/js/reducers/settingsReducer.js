@@ -32,6 +32,7 @@ export default function reducer(state = defaultState, action) {
         radii: JSON.parse(settings.Radii),
         categories: JSON.parse(settings.Categories),
         infoWindowTemplate: handlebars.compile(JSON.parse(settings.InfoWindowTemplate)),
+        listTemplate: handlebars.compile(JSON.parse(settings.ListTemplate))
       };
     }
 

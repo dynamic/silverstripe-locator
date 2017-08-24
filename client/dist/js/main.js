@@ -171,7 +171,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _templateObject = _taggedTemplateLiteral(['\n  query ($id: Int!){\n    locatorSettings (ID: $id){\n      Limit,\n      Radii,\n      Unit,\n      Categories,\n      InfoWindowTemplate\n    }\n  }\n'], ['\n  query ($id: Int!){\n    locatorSettings (ID: $id){\n      Limit,\n      Radii,\n      Unit,\n      Categories,\n      InfoWindowTemplate\n    }\n  }\n']);
+var _templateObject = _taggedTemplateLiteral(['\n  query ($id: Int!){\n    locatorSettings (ID: $id){\n      Limit,\n      Radii,\n      Unit,\n      Categories,\n      InfoWindowTemplate,\n      ListTemplate\n    }\n  }\n'], ['\n  query ($id: Int!){\n    locatorSettings (ID: $id){\n      Limit,\n      Radii,\n      Unit,\n      Categories,\n      InfoWindowTemplate,\n      ListTemplate\n    }\n  }\n']);
 
 var _graphqlTag = __webpack_require__(73);
 
@@ -337,6 +337,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(6);
@@ -346,6 +348,8 @@ var _react2 = _interopRequireDefault(_react);
 var _propTypes = __webpack_require__(4);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _htmlToReact = __webpack_require__(409);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -367,10 +371,17 @@ var Location = function (_React$Component) {
   _createClass(Location, [{
     key: 'getDistance',
     value: function getDistance() {
-      var location = this.props.location;
+      var _props = this.props,
+          location = _props.location,
+          search = _props.search;
 
       var distance = location.distance;
       distance = parseFloat(distance);
+
+      if (distance === 0 && !search) {
+        return false;
+      }
+
       return distance.toFixed(2);
     }
   }, {
@@ -400,38 +411,7 @@ var Location = function (_React$Component) {
         daddr += location.PostalCode;
       }
 
-      return daddr.replace(/([+\s]+$)/g, '');
-    }
-  }, {
-    key: 'renderDistance',
-    value: function renderDistance() {
-      var distance = this.getDistance();
-      var _props = this.props,
-          search = _props.search,
-          unit = _props.unit;
-
-
-      if (search) {
-        var link = 'http://maps.google.com/maps?saddr=' + search + '&daddr=' + this.getDaddr();
-        return _react2.default.createElement(
-          'div',
-          { className: 'loc-dist' },
-          distance,
-          ' ',
-          unit,
-          ' |',
-          _react2.default.createElement(
-            'a',
-            {
-              href: link,
-              target: '_blank',
-              rel: 'noopener noreferrer'
-            },
-            'Directions'
-          )
-        );
-      }
-      return null;
+      return daddr.replace(/([+\s]+$)/g, '').replace(/(\s)/g, '+');
     }
   }, {
     key: 'render',
@@ -440,7 +420,19 @@ var Location = function (_React$Component) {
           location = _props2.location,
           index = _props2.index,
           current = _props2.current,
+          search = _props2.search,
+          template = _props2.template,
+          unit = _props2.unit,
           _onClick = _props2.onClick;
+
+      var htmlToReactParser = new _htmlToReact.Parser();
+
+      var loc = _extends({}, location, {
+        Distance: this.getDistance(),
+        DirectionsLink: 'http://maps.google.com/maps?saddr=' + search + '&daddr=' + this.getDaddr(),
+        Unit: unit,
+        Number: index + 1
+      });
 
       var className = 'list-location';
       if (current === location.ID) {
@@ -451,67 +443,7 @@ var Location = function (_React$Component) {
         { 'data-markerid': index, className: className, onClick: function onClick() {
             return _onClick(location.ID);
           } },
-        _react2.default.createElement(
-          'div',
-          { className: 'list-label' },
-          index + 1
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'list-details' },
-          _react2.default.createElement(
-            'div',
-            { className: 'list-content' },
-            _react2.default.createElement(
-              'div',
-              { className: 'loc-name' },
-              location.Title
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'loc-addr' },
-              location.Address
-            ),
-            location.Address2 && _react2.default.createElement(
-              'div',
-              { className: 'loc-addr2' },
-              location.Address2
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'loc-addr3' },
-              location.City,
-              ', ',
-              location.State,
-              ' ',
-              location.PostalCode
-            ),
-            location.Phone && _react2.default.createElement(
-              'div',
-              { className: 'loc-phone' },
-              location.Phone
-            ),
-            location.Website && _react2.default.createElement(
-              'div',
-              { className: 'loc-web' },
-              _react2.default.createElement(
-                'a',
-                { href: location.Website, target: '_blank', rel: 'noopener noreferrer' },
-                'Website'
-              )
-            ),
-            location.Email && _react2.default.createElement(
-              'div',
-              { className: 'loc-email' },
-              _react2.default.createElement(
-                'a',
-                { href: 'mailto:' + location.Email },
-                'Email'
-              )
-            ),
-            this.renderDistance()
-          )
-        )
+        htmlToReactParser.parse(template(loc))
       );
     }
   }]);
@@ -536,7 +468,8 @@ Location.propTypes = {
   current: _propTypes2.default.string.isRequired,
   search: _propTypes2.default.string.isRequired,
   unit: _propTypes2.default.string.isRequired,
-  onClick: _propTypes2.default.func.isRequired
+  onClick: _propTypes2.default.func.isRequired,
+  template: _propTypes2.default.func.isRequired
 };
 
 exports.default = Location;
@@ -662,6 +595,12 @@ var MapArea = function (_React$Component) {
     value: function renderLocations() {
       var _this2 = this;
 
+      var _props = this.props,
+          current = _props.current,
+          search = _props.search,
+          unit = _props.unit,
+          template = _props.template;
+
       var locs = this.props.locations.edges;
       if (locs !== undefined) {
         return locs.map(function (location, index) {
@@ -669,10 +608,11 @@ var MapArea = function (_React$Component) {
             key: location.node.ID,
             index: index,
             location: location.node,
-            current: _this2.props.current,
-            search: _this2.props.search,
-            unit: _this2.props.unit,
-            onClick: _this2.handleLocationClick
+            current: current,
+            search: search,
+            unit: unit,
+            onClick: _this2.handleLocationClick,
+            template: template
           });
         });
       }
@@ -723,7 +663,8 @@ function mapStateToProps(state) {
   return {
     current: state.map.current,
     search: state.search.address,
-    unit: state.settings.unit
+    unit: state.settings.unit,
+    template: state.settings.listTemplate
   };
 }
 
@@ -1370,7 +1311,8 @@ function reducer() {
           limit: settings.Limit,
           radii: JSON.parse(settings.Radii),
           categories: JSON.parse(settings.Categories),
-          infoWindowTemplate: _handlebars2.default.compile(JSON.parse(settings.InfoWindowTemplate))
+          infoWindowTemplate: _handlebars2.default.compile(JSON.parse(settings.InfoWindowTemplate)),
+          listTemplate: _handlebars2.default.compile(JSON.parse(settings.ListTemplate))
         });
       }
 

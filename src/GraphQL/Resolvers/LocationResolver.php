@@ -16,6 +16,7 @@ class LocationResolver implements ResolverInterface
      * @param array $args
      * @param array $context
      * @param \GraphQL\Type\Definition\ResolveInfo $info
+     *
      * @return $this|\SilverStripe\ORM\DataList
      */
     public function resolve($object, $args, $context, $info)
@@ -28,18 +29,25 @@ class LocationResolver implements ResolverInterface
             'Lng' => 0
         ));
 
-        if ($args['address'] && $args['radius']) {
-            $radius = $args['radius'];
-
-            $list = $list->filterByCallback(function ($location) use (&$radius) {
-                return $location->distance <= $radius;
-            });
-
-            $list = $list->sort('distance');
-        }
-
         if ($args['category']) {
             $list = $list->filter('CategoryID', $args['category']);
+        }
+
+        if ($args['address']) {
+            if ($args['radius']) {
+
+                $radius = $args['radius'];
+                $list   = $list->filterByCallback(function ($location) use (&$radius) {
+                    return $location->distance <= $radius;
+                });
+            } else {
+                //to avoid stupid errors when trying to sort by distance
+                $list = $list->filterByCallback(function () {
+                    return true;
+                });
+            }
+
+            $list = $list->sort('distance');
         }
 
         return $list;

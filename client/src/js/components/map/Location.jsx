@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Parser as HtmlToReactParser } from 'html-to-react';
 
 /**
  * The Location component.
@@ -8,11 +9,17 @@ import PropTypes from 'prop-types';
 class Location extends React.Component {
   /**
    * Rounds the distance
+   * @returns Number|Boolean
    */
   getDistance() {
-    const { location } = this.props;
+    const { location, search } = this.props;
     let distance = location.distance;
     distance = parseFloat(distance);
+
+    if (distance === 0 && !search) {
+      return false;
+    }
+
     return distance.toFixed(2);
   }
 
@@ -44,32 +51,8 @@ class Location extends React.Component {
       daddr += location.PostalCode;
     }
 
-    // return daddr after replacing any trailing '+' and whitespace
-    return daddr.replace(/([+\s]+$)/g, '');
-  }
-
-  /**
-   * Renders the distance for the location
-   * Only renders when there is a search
-   * @returns {*}
-   */
-  renderDistance() {
-    const distance = this.getDistance();
-    const { search, unit } = this.props;
-
-    if (search) {
-      const link = `http://maps.google.com/maps?saddr=${search}&daddr=${this.getDaddr()}`;
-      return (
-        <div className="loc-dist">
-          {distance} {unit} |
-          <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-          >Directions</a>
-        </div>);
-    }
-    return null;
+    // return daddr after replacing any trailing '+' and whitespace and replace any spaces left with '+'
+    return daddr.replace(/([+\s]+$)/g, '').replace(/(\s)/g, '+');
   }
 
   /**
@@ -77,7 +60,17 @@ class Location extends React.Component {
    * @returns {XML}
    */
   render() {
-    const { location, index, current, onClick } = this.props;
+    const { location, index, current, search, template, unit, onClick } = this.props;
+    const htmlToReactParser = new HtmlToReactParser();
+
+    const loc = {
+      ...location,
+      Distance: this.getDistance(),
+      DirectionsLink: `http://maps.google.com/maps?saddr=${search}&daddr=${this.getDaddr()}`,
+      Unit: unit,
+      Number: index + 1,
+    };
+
     let className = 'list-location';
     if (current === location.ID) {
       className += ' focus';
@@ -85,34 +78,7 @@ class Location extends React.Component {
     return (
       // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
       <li data-markerid={index} className={className} onClick={() => onClick(location.ID)}>
-        <div className="list-label">{index + 1}</div>
-        <div className="list-details">
-          <div className="list-content">
-            <div className="loc-name">{location.Title}</div>
-            <div className="loc-addr">{location.Address}</div>
-
-            {location.Address2 &&
-            <div className="loc-addr2">{location.Address2}</div>
-            }
-            <div className="loc-addr3">{location.City}, {location.State} {location.PostalCode}</div>
-
-            {location.Phone &&
-            <div className="loc-phone">{location.Phone}</div>
-            }
-
-            {location.Website &&
-            <div className="loc-web">
-              <a href={location.Website} target="_blank" rel="noopener noreferrer">Website</a>
-            </div>}
-
-            {location.Email &&
-            <div className="loc-email">
-              <a href={`mailto:${location.Email}`}>Email</a>
-            </div>
-            }
-            {this.renderDistance()}
-          </div>
-        </div>
+        {htmlToReactParser.parse(template(loc))}
       </li>
     );
   }
@@ -140,6 +106,7 @@ Location.propTypes = {
   search: PropTypes.string.isRequired,
   unit: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
+  template: PropTypes.func.isRequired,
 };
 
 /**

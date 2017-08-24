@@ -66,6 +66,7 @@ Dynamic\Locator\GraphQL\Controller:
             Unit: 'The unit for distance'
             Categories: 'The categories of the current locator'
             InfoWindowTemplate: 'The template for the info window'
+            ListTemplate: 'The template for locations in the list'
             # TODO - fill out more
 
       queries:

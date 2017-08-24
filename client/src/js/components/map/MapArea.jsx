@@ -30,6 +30,7 @@ class MapArea extends React.Component {
    * @returns {*}
    */
   renderLocations() {
+    const { current, search, unit, template } = this.props;
     const locs = this.props.locations.edges;
     if (locs !== undefined) {
       return locs.map((location, index) =>
@@ -38,10 +39,11 @@ class MapArea extends React.Component {
             key={location.node.ID}
             index={index}
             location={location.node}
-            current={this.props.current}
-            search={this.props.search}
-            unit={this.props.unit}
+            current={current}
+            search={search}
+            unit={unit}
             onClick={this.handleLocationClick}
+            template={template}
           />
         ),
       );
@@ -103,6 +105,7 @@ function mapStateToProps(state) {
     current: state.map.current,
     search: state.search.address,
     unit: state.settings.unit,
+    template: state.settings.listTemplate,
   };
 }
 
