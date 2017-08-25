@@ -411,7 +411,12 @@ var Location = function (_React$Component) {
         daddr += location.PostalCode;
       }
 
-      return daddr.replace(/([+\s]+$)/g, '').replace(/(\s)/g, '+');
+      return this.cleanAddress(daddr);
+    }
+  }, {
+    key: 'cleanAddress',
+    value: function cleanAddress(address) {
+      return address.replace(/([+\s]+$)/g, '').replace(/(\s)/g, '+');
     }
   }, {
     key: 'render',
@@ -429,7 +434,7 @@ var Location = function (_React$Component) {
 
       var loc = _extends({}, location, {
         Distance: this.getDistance(),
-        DirectionsLink: 'http://maps.google.com/maps?saddr=' + search + '&daddr=' + this.getDaddr(),
+        DirectionsLink: 'http://maps.google.com/maps?saddr=' + this.cleanAddress(search) + '&daddr=' + this.getDaddr(),
         Unit: unit,
         Number: index + 1
       });

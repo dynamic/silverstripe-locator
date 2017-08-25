@@ -51,8 +51,17 @@ class Location extends React.Component {
       daddr += location.PostalCode;
     }
 
-    // return daddr after replacing any trailing '+' and whitespace and replace any spaces left with '+'
-    return daddr.replace(/([+\s]+$)/g, '').replace(/(\s)/g, '+');
+    return this.cleanAddress(daddr);
+  }
+
+  /**
+   * Replaces any trailing '+' and whitespace and any spaces left with '+'
+   *
+   * @param address
+   * @returns String
+   */
+  cleanAddress(address) {
+    return address.replace(/([+\s]+$)/g, '').replace(/(\s)/g, '+');
   }
 
   /**
@@ -66,7 +75,7 @@ class Location extends React.Component {
     const loc = {
       ...location,
       Distance: this.getDistance(),
-      DirectionsLink: `http://maps.google.com/maps?saddr=${search}&daddr=${this.getDaddr()}`,
+      DirectionsLink: `http://maps.google.com/maps?saddr=${this.cleanAddress(search)}&daddr=${this.getDaddr()}`,
       Unit: unit,
       Number: index + 1,
     };
