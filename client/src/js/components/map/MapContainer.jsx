@@ -69,6 +69,7 @@ class MapContainer extends React.Component {
   }
 
   render() {
+    const { current, showCurrent, clusters } = this.props;
     return (
       <div id="map-container">
         <Map
@@ -81,8 +82,9 @@ class MapContainer extends React.Component {
           markers={this.getMarkers()}
           onMarkerClick={this.handleMarkerClick}
           onMarkerClose={this.handleMarkerClose}
-          current={this.props.current}
-          showCurrent={this.props.showCurrent}
+          current={current}
+          showCurrent={showCurrent}
+          clusters={clusters}
         />
       </div>
     );
@@ -123,6 +125,7 @@ function mapStateToProps(state) {
   return {
     current: state.map.current,
     showCurrent: state.map.showCurrent,
+    clusters: state.settings.clusters,
     template: state.settings.infoWindowTemplate,
   };
 }

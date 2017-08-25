@@ -115,4 +115,14 @@ class LocatorSettings extends DataObject
         return $this->Locator()->Unit;
     }
 
+    /**
+     * If the locator should cluster markers together
+     *
+     * @return mixed
+     */
+    public function getClusters()
+    {
+        return $this->Locator()->Clusters;
+    }
+
 }

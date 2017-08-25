@@ -4,6 +4,7 @@ namespace Dynamic\Locator;
 
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\OptionsetField;
@@ -50,7 +51,8 @@ class Locator extends \Page
      * @var array
      */
     private static $db = array(
-        'Unit' => 'Enum("m,km","m")',
+        'Unit'     => 'Enum("m,km","m")',
+        'Clusters' => 'Enum("false,true","false")',
     );
 
     /**
@@ -80,7 +82,14 @@ class Locator extends \Page
         // Settings
         $fields->addFieldsToTab('Root.Settings', array(
             HeaderField::create('DisplayOptions', 'Display Options', 3),
-            OptionsetField::create('Unit', 'Unit of measure', array('m' => 'Miles', 'km' => 'Kilometers'), 'm'),
+            OptionsetField::create('Unit', 'Unit of measure', array(
+                'm'  => 'Miles',
+                'km' => 'Kilometers'
+            ), 'm'),
+            DropdownField::create('Clusters', 'Use clusters?', array(
+                'false' => 'No',
+                'true'  => 'Yes'
+            ), 'false'),
         ));
 
         // Filter categories
@@ -89,7 +98,7 @@ class Locator extends \Page
         $config->addComponent(new GridFieldAddExistingSearchButton());
         $categories = $this->Categories();
         $categoriesField = GridField::create('Categories', 'Categories', $categories, $config)
-            ->setDescription('only show locations from the selected category');
+                                    ->setDescription('only show locations from the selected category');
 
         // Filter
         $fields->addFieldsToTab('Root.Filter', array(
@@ -105,6 +114,7 @@ class Locator extends \Page
      * @param array $filterAny
      * @param array $exclude
      * @param null|callable $callback
+     *
      * @return DataList|ArrayList
      */
     public static function get_locations(
@@ -116,10 +126,10 @@ class Locator extends \Page
         $locationClass = Config::inst()->get(Locator::class, 'location_class');
         $locations = $locationClass::get()->filter($filter)->exclude($exclude);
 
-        if (!empty($filterAny)) {
+        if ( !empty($filterAny)) {
             $locations = $locations->filterAny($filterAny);
         }
-        if (!empty($exclude)) {
+        if ( !empty($exclude)) {
             $locations = $locations->exclude($exclude);
         }
 

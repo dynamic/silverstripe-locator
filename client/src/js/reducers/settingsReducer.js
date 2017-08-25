@@ -28,11 +28,16 @@ export default function reducer(state = defaultState, action) {
         settings.Unit = 'm';
       }
 
+      if (settings.Clusters === null) {
+        settings.Clusters = 'false';
+      }
+
       return {
         ...state,
         loadedSettings: true,
 
         unit: settings.Unit,
+        clusters: settings.Clusters,
         limit: settings.Limit,
         radii: JSON.parse(settings.Radii),
         categories: JSON.parse(settings.Categories),

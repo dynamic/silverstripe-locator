@@ -56,11 +56,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(6);
+var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(4);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -171,7 +171,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _templateObject = _taggedTemplateLiteral(['\n  query ($id: Int!){\n    locatorSettings (ID: $id){\n      Limit,\n      Radii,\n      Unit,\n      Categories,\n      InfoWindowTemplate,\n      ListTemplate\n    }\n  }\n'], ['\n  query ($id: Int!){\n    locatorSettings (ID: $id){\n      Limit,\n      Radii,\n      Unit,\n      Categories,\n      InfoWindowTemplate,\n      ListTemplate\n    }\n  }\n']);
+var _templateObject = _taggedTemplateLiteral(['\n  query ($id: Int!){\n    locatorSettings (ID: $id){\n      Limit,\n      Radii,\n      Unit,\n      Clusters,\n      Categories,\n      InfoWindowTemplate,\n      ListTemplate\n    }\n  }\n'], ['\n  query ($id: Int!){\n    locatorSettings (ID: $id){\n      Limit,\n      Radii,\n      Unit,\n      Clusters,\n      Categories,\n      InfoWindowTemplate,\n      ListTemplate\n    }\n  }\n']);
 
 var _graphqlTag = __webpack_require__(73);
 
@@ -255,7 +255,7 @@ function search(inputs) {
 "use strict";
 
 
-var _react = __webpack_require__(6);
+var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -341,11 +341,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(6);
+var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(4);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -491,13 +491,44 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _react = __webpack_require__(6);
+var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactGoogleMaps = __webpack_require__(654);
+var _reactGoogleMaps = __webpack_require__(656);
+
+var _MarkerClusterer = __webpack_require__(655);
+
+var _MarkerClusterer2 = _interopRequireDefault(_MarkerClusterer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var markers = function markers(props) {
+  return props.markers.map(function (marker) {
+    return _react2.default.createElement(
+      _reactGoogleMaps.Marker,
+      {
+        key: marker.key,
+        position: marker.position,
+        defaultAnimation: marker.defaultAnimation,
+        onClick: function onClick() {
+          return props.onMarkerClick(marker);
+        }
+      },
+      props.current === marker.key && props.showCurrent && _react2.default.createElement(
+        _reactGoogleMaps.InfoWindow,
+        { onCloseClick: function onCloseClick() {
+            return props.onMarkerClose(marker);
+          } },
+        _react2.default.createElement(
+          'div',
+          null,
+          marker.infoContent
+        )
+      )
+    );
+  });
+};
 
 var Map = (0, _reactGoogleMaps.withGoogleMap)(function (props) {
   return _react2.default.createElement(
@@ -507,30 +538,15 @@ var Map = (0, _reactGoogleMaps.withGoogleMap)(function (props) {
       defaultCenter: { lat: 43.8483258, lng: -87.7709294 }
 
     },
-    props.markers.map(function (marker) {
-      return _react2.default.createElement(
-        _reactGoogleMaps.Marker,
-        {
-          key: marker.key,
-          position: marker.position,
-          defaultAnimation: marker.defaultAnimation,
-          onClick: function onClick() {
-            return props.onMarkerClick(marker);
-          }
-        },
-        props.current === marker.key && props.showCurrent && _react2.default.createElement(
-          _reactGoogleMaps.InfoWindow,
-          { onCloseClick: function onCloseClick() {
-              return props.onMarkerClose(marker);
-            } },
-          _react2.default.createElement(
-            'div',
-            null,
-            marker.infoContent
-          )
-        )
-      );
-    })
+    props.clusters === 'true' ? _react2.default.createElement(
+      _MarkerClusterer2.default,
+      {
+        averageCenter: true,
+        enableRetinaIcons: true,
+        gridSize: 60
+      },
+      markers(props)
+    ) : markers(props)
   );
 });
 
@@ -550,11 +566,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(6);
+var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(4);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -689,11 +705,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(6);
+var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(4);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -769,6 +785,11 @@ var MapContainer = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _props = this.props,
+          current = _props.current,
+          showCurrent = _props.showCurrent,
+          clusters = _props.clusters;
+
       return _react2.default.createElement(
         'div',
         { id: 'map-container' },
@@ -778,8 +799,9 @@ var MapContainer = function (_React$Component) {
           markers: this.getMarkers(),
           onMarkerClick: this.handleMarkerClick,
           onMarkerClose: this.handleMarkerClose,
-          current: this.props.current,
-          showCurrent: this.props.showCurrent
+          current: current,
+          showCurrent: showCurrent,
+          clusters: clusters
         })
       );
     }
@@ -809,6 +831,7 @@ function mapStateToProps(state) {
   return {
     current: state.map.current,
     showCurrent: state.map.showCurrent,
+    clusters: state.settings.clusters,
     template: state.settings.infoWindowTemplate
   };
 }
@@ -829,11 +852,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(6);
+var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(4);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -927,11 +950,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(6);
+var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(4);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -1025,11 +1048,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(6);
+var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(4);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -1313,10 +1336,15 @@ function reducer() {
           settings.Unit = 'm';
         }
 
+        if (settings.Clusters === null) {
+          settings.Clusters = 'false';
+        }
+
         return _extends({}, state, {
           loadedSettings: true,
 
           unit: settings.Unit,
+          clusters: settings.Clusters,
           limit: settings.Limit,
           radii: JSON.parse(settings.Radii),
           categories: JSON.parse(settings.Categories),

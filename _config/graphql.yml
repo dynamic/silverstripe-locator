@@ -64,6 +64,7 @@ Dynamic\Locator\GraphQL\Controller:
             Radii: 'The list of radii to show'
             Limit: 'The limit of locations'
             Unit: 'The unit for distance'
+            Clusters: 'If the markers should cluster together'
             Categories: 'The categories of the current locator'
             InfoWindowTemplate: 'The template for the info window'
             ListTemplate: 'The template for locations in the list'

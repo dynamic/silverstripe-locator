@@ -9,6 +9,7 @@ export default gql`
       Limit,
       Radii,
       Unit,
+      Clusters,
       Categories,
       InfoWindowTemplate,
       ListTemplate
