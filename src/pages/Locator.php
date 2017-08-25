@@ -80,7 +80,7 @@ class Locator extends \Page
         // Settings
         $fields->addFieldsToTab('Root.Settings', array(
             HeaderField::create('DisplayOptions', 'Display Options', 3),
-            OptionsetField::create('Unit', 'Unit of measure', array('m' => 'Miles', 'km' => 'Kilometers')),
+            OptionsetField::create('Unit', 'Unit of measure', array('m' => 'Miles', 'km' => 'Kilometers'), 'm'),
         ));
 
         // Filter categories

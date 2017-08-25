@@ -23,6 +23,11 @@ export default function reducer(state = defaultState, action) {
         settings = settings[0];
       }
 
+      // just in case unit is null
+      if (settings.Unit === null) {
+        settings.Unit = 'm';
+      }
+
       return {
         ...state,
         loadedSettings: true,
