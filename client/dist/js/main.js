@@ -1094,7 +1094,10 @@ var SearchBar = function (_React$Component) {
       event.preventDefault();
       var addressInput = document.getElementsByName('address')[0].value;
       var radiusInput = document.getElementsByName('radius')[0].value;
-      var categoryInput = document.getElementsByName('category')[0].value;
+      var categoryInput = '';
+      if (document.getElementsByName('category')[0] !== undefined) {
+        categoryInput = document.getElementsByName('category')[0].value;
+      }
 
       this.props.dispatch((0, _searchActions.search)({
         address: addressInput,

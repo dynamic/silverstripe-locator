@@ -25,7 +25,12 @@ class SearchBar extends React.Component {
     event.preventDefault();
     const addressInput = document.getElementsByName('address')[0].value;
     const radiusInput = document.getElementsByName('radius')[0].value;
-    const categoryInput = document.getElementsByName('category')[0].value;
+
+    // because categories are optional
+    let categoryInput = '';
+    if (document.getElementsByName('category')[0] !== undefined) {
+      categoryInput = document.getElementsByName('category')[0].value;
+    }
 
     this.props.dispatch(
       search({

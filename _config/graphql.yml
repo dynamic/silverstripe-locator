@@ -22,6 +22,9 @@ Dynamic\Locator\GraphQL\Controller:
             Category: 'The category of the location'
           operations:
             read:
+              paginate:
+                limit: 500
+                maximumLimit: 500
               resolver: 'Dynamic\Locator\GraphQL\Resolvers\LocationResolver'
               args:
                 radius:
