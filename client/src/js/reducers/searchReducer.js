@@ -1,10 +1,11 @@
 import ActionType from 'actions/ActionTypes';
+import url from 'url';
 
-const defaultState = {
+const defaultState = Object.assign({
   address: '',
   radius: '',
   category: '',
-};
+}, url.parse(window.location.href, true).query);
 
 export default function reducer(state = defaultState, action) {
   switch (action.type) {

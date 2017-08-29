@@ -20,6 +20,20 @@ class CategoryDropDown extends React.Component {
   }
 
   /**
+   * Gets the default value for the dropdown
+   * @return {*}
+   */
+  defaultValue() {
+    const {category, categories} = this.props;
+
+    // if the category exists in the dropdown
+    if (Object.keys(categories).indexOf(category) > -1) {
+      return category;
+    }
+    return '';
+  }
+
+  /**
    * Outputs the radius drop down.
    * @returns {*}
    */
@@ -32,7 +46,7 @@ class CategoryDropDown extends React.Component {
             <select
               name="category"
               className="dropdown form-group--no-label"
-              defaultValue=""
+              defaultValue={this.defaultValue()}
             >
               <option value="">category</option>
               {this.mappedCategories()}
@@ -46,6 +60,7 @@ class CategoryDropDown extends React.Component {
 }
 
 CategoryDropDown.propTypes = {
+  category: PropTypes.string.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   categories: PropTypes.oneOfType([
     PropTypes.object,

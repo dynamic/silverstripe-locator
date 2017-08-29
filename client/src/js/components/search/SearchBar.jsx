@@ -76,6 +76,7 @@ class SearchBar extends React.Component {
    * @returns {XML}
    */
   render() {
+    const {address, radius, category, radii, categories} = this.props;
     return (
       <form action="" onSubmit={this.handleSubmit}>
         <fieldset>
@@ -87,11 +88,12 @@ class SearchBar extends React.Component {
                 className="text form-group--no-label"
                 aria-required="true"
                 placeholder="address or zip code"
+                defaultValue={address}
               />
             </div>
           </div>
-          <RadiusDropDown radii={this.props.radii} />
-          <CategoryDropDown categories={this.props.categories} />
+          <RadiusDropDown radii={radii} radius={radius} />
+          <CategoryDropDown categories={categories} category={category} />
         </fieldset>
 
         <div className="btn-toolbar">
@@ -108,6 +110,10 @@ class SearchBar extends React.Component {
 }
 
 SearchBar.propTypes = {
+  address: PropTypes.string.isRequired,
+  radius: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+
   // eslint-disable-next-line react/forbid-prop-types
   radii: PropTypes.oneOfType([
     PropTypes.object,
@@ -129,6 +135,12 @@ SearchBar.propTypes = {
  */
 function mapStateToProps(state) {
   return {
+    // the defaults
+    address: state.search.address,
+    radius: state.search.radius,
+    category: state.search.category,
+
+    // the options
     radii: state.settings.radii,
     categories: state.settings.categories,
   };

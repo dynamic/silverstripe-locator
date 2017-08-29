@@ -66,7 +66,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactApollo = __webpack_require__(162);
 
-var _reactRedux = __webpack_require__(94);
+var _reactRedux = __webpack_require__(95);
 
 var _readLocations = __webpack_require__(310);
 
@@ -173,7 +173,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _templateObject = _taggedTemplateLiteral(['\n  query ($id: Int!){\n    locatorSettings (ID: $id){\n      Limit,\n      Radii,\n      Unit,\n      Clusters,\n      Categories,\n      InfoWindowTemplate,\n      ListTemplate\n    }\n  }\n'], ['\n  query ($id: Int!){\n    locatorSettings (ID: $id){\n      Limit,\n      Radii,\n      Unit,\n      Clusters,\n      Categories,\n      InfoWindowTemplate,\n      ListTemplate\n    }\n  }\n']);
 
-var _graphqlTag = __webpack_require__(73);
+var _graphqlTag = __webpack_require__(74);
 
 var _graphqlTag2 = _interopRequireDefault(_graphqlTag);
 
@@ -259,7 +259,7 @@ var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(97);
+var _reactDom = __webpack_require__(98);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -495,9 +495,9 @@ var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactGoogleMaps = __webpack_require__(656);
+var _reactGoogleMaps = __webpack_require__(660);
 
-var _MarkerClusterer = __webpack_require__(655);
+var _MarkerClusterer = __webpack_require__(659);
 
 var _MarkerClusterer2 = _interopRequireDefault(_MarkerClusterer);
 
@@ -574,7 +574,7 @@ var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(94);
+var _reactRedux = __webpack_require__(95);
 
 var _mapActions = __webpack_require__(171);
 
@@ -713,7 +713,7 @@ var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(94);
+var _reactRedux = __webpack_require__(95);
 
 var _htmlToReact = __webpack_require__(197);
 
@@ -895,6 +895,18 @@ var CategoryDropDown = function (_React$Component) {
       });
     }
   }, {
+    key: 'defaultValue',
+    value: function defaultValue() {
+      var _props = this.props,
+          category = _props.category,
+          categories = _props.categories;
+
+      if (Object.keys(categories).indexOf(category) > -1) {
+        return category;
+      }
+      return '';
+    }
+  }, {
     key: 'render',
     value: function render() {
       var categories = this.props.categories;
@@ -911,7 +923,7 @@ var CategoryDropDown = function (_React$Component) {
               {
                 name: 'category',
                 className: 'dropdown form-group--no-label',
-                defaultValue: ''
+                defaultValue: this.defaultValue()
               },
               _react2.default.createElement(
                 'option',
@@ -931,6 +943,8 @@ var CategoryDropDown = function (_React$Component) {
 }(_react2.default.Component);
 
 CategoryDropDown.propTypes = {
+  category: _propTypes2.default.string.isRequired,
+
   categories: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired
 };
 
@@ -993,6 +1007,18 @@ var RadiusDropDown = function (_React$Component) {
       });
     }
   }, {
+    key: 'defaultValue',
+    value: function defaultValue() {
+      var _props = this.props,
+          radius = _props.radius,
+          radii = _props.radii;
+
+      if (Object.values(radii).indexOf(radius) > -1) {
+        return radius;
+      }
+      return '';
+    }
+  }, {
     key: 'render',
     value: function render() {
       var radii = this.props.radii;
@@ -1009,7 +1035,7 @@ var RadiusDropDown = function (_React$Component) {
               {
                 name: 'radius',
                 className: 'dropdown form-group--no-label',
-                defaultValue: ''
+                defaultValue: this.defaultValue()
               },
               _react2.default.createElement(
                 'option',
@@ -1029,6 +1055,8 @@ var RadiusDropDown = function (_React$Component) {
 }(_react2.default.Component);
 
 RadiusDropDown.propTypes = {
+  radius: _propTypes2.default.string.isRequired,
+
   radii: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired
 };
 
@@ -1056,7 +1084,7 @@ var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(94);
+var _reactRedux = __webpack_require__(95);
 
 var _searchActions = __webpack_require__(301);
 
@@ -1095,8 +1123,8 @@ var SearchBar = function (_React$Component) {
 
       Object.keys(obj).forEach(function (key) {
         var value = obj[key];
+
         if (value !== undefined && value !== '') {
-          console.log(value);
           vars += key + '=' + value + '&';
         }
       });
@@ -1132,6 +1160,13 @@ var SearchBar = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _props = this.props,
+          address = _props.address,
+          radius = _props.radius,
+          category = _props.category,
+          radii = _props.radii,
+          categories = _props.categories;
+
       return _react2.default.createElement(
         'form',
         { action: '', onSubmit: this.handleSubmit },
@@ -1149,12 +1184,13 @@ var SearchBar = function (_React$Component) {
                 name: 'address',
                 className: 'text form-group--no-label',
                 'aria-required': 'true',
-                placeholder: 'address or zip code'
+                placeholder: 'address or zip code',
+                defaultValue: address
               })
             )
           ),
-          _react2.default.createElement(_RadiusDropDown2.default, { radii: this.props.radii }),
-          _react2.default.createElement(_CategoryDropDown2.default, { categories: this.props.categories })
+          _react2.default.createElement(_RadiusDropDown2.default, { radii: radii, radius: radius }),
+          _react2.default.createElement(_CategoryDropDown2.default, { categories: categories, category: category })
         ),
         _react2.default.createElement(
           'div',
@@ -1174,6 +1210,10 @@ var SearchBar = function (_React$Component) {
 }(_react2.default.Component);
 
 SearchBar.propTypes = {
+  address: _propTypes2.default.string.isRequired,
+  radius: _propTypes2.default.string.isRequired,
+  category: _propTypes2.default.string.isRequired,
+
   radii: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired,
 
   categories: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired,
@@ -1182,6 +1222,10 @@ SearchBar.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    address: state.search.address,
+    radius: state.search.radius,
+    category: state.search.category,
+
     radii: state.settings.radii,
     categories: state.settings.categories
   };
@@ -1203,7 +1247,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _templateObject = _taggedTemplateLiteral(['\n  query($address: String, $radius: String, $category: String, $unit: String){\n    readLocations(address: $address, radius: $radius, category: $category, unit: $unit) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n          Category {\n            ID\n            Name\n          }\n        }\n      } \n    }\n  }\n'], ['\n  query($address: String, $radius: String, $category: String, $unit: String){\n    readLocations(address: $address, radius: $radius, category: $category, unit: $unit) {\n      edges {\n        node {\n          ID\n          Title\n          Website\n          Email\n          Phone\n          Address\n          Address2\n          City\n          State\n          Country\n          PostalCode\n          Lat\n          Lng\n          distance\n          Category {\n            ID\n            Name\n          }\n        }\n      } \n    }\n  }\n']);
 
-var _graphqlTag = __webpack_require__(73);
+var _graphqlTag = __webpack_require__(74);
 
 var _graphqlTag2 = _interopRequireDefault(_graphqlTag);
 
@@ -1287,13 +1331,17 @@ var _ActionTypes = __webpack_require__(57);
 
 var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
 
+var _url = __webpack_require__(692);
+
+var _url2 = _interopRequireDefault(_url);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var defaultState = {
+var defaultState = Object.assign({
   address: '',
   radius: '',
   category: ''
-};
+}, _url2.default.parse(window.location.href, true).query);
 
 function reducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;

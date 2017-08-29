@@ -20,6 +20,20 @@ class RadiusDropDown extends React.Component {
   }
 
   /**
+   * Gets the default value for the dropdown
+   * @return {*}
+   */
+  defaultValue() {
+    const {radius, radii} = this.props;
+
+    // if the radius exists in the dropdown
+    if (Object.values(radii).indexOf(radius) > -1) {
+      return radius;
+    }
+    return '';
+  }
+
+  /**
    * Outputs the radius drop down.
    * @returns {*}
    */
@@ -33,7 +47,7 @@ class RadiusDropDown extends React.Component {
             <select
               name="radius"
               className="dropdown form-group--no-label"
-              defaultValue=""
+              defaultValue={this.defaultValue()}
             >
               <option value="">radius</option>
               {this.mappedRadii()}
@@ -47,6 +61,7 @@ class RadiusDropDown extends React.Component {
 }
 
 RadiusDropDown.propTypes = {
+  radius: PropTypes.string.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   radii: PropTypes.oneOfType([
     PropTypes.object,
