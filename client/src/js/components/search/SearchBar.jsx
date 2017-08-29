@@ -19,7 +19,28 @@ class SearchBar extends React.Component {
   }
 
   /**
-   * 'Submits' form. Really just fires state change.
+   * Turns a javascript object into url params
+   * @param obj
+   * @return {string}
+   */
+  objToUrl(obj) {
+    let vars = '';
+
+    Object.keys(obj).forEach((key) => {
+      const value = obj[key];
+
+      // dont add it if its blank
+      if (value !== undefined && value !== '') {
+        vars += `${key}=${value}&`;
+      }
+    });
+
+    // replaces trailing spaces and '&' symbols then replaces spaces with +
+    return vars.replace(/([&\s]+$)/g, '').replace(/(\s)/g, '+');
+  }
+
+  /**
+   * 'Submits' form. Really just fires state change and changes the url.
    */
   handleSubmit(event) {
     event.preventDefault();
@@ -32,13 +53,22 @@ class SearchBar extends React.Component {
       categoryInput = document.getElementsByName('category')[0].value;
     }
 
+    const params = {
+      address: addressInput,
+      radius: radiusInput,
+      category: categoryInput,
+    };
+
     this.props.dispatch(
-      search({
-        address: addressInput,
-        radius: radiusInput,
-        category: categoryInput,
-      }),
+      search(params),
     );
+
+
+    const loc = window.location;
+    const newurl = `${loc.protocol}//${loc.host}${loc.pathname}?${this.objToUrl(params)}`;
+    window.history.pushState({
+      path: newurl
+    }, '', newurl);
   }
 
   /**

@@ -1089,21 +1089,45 @@ var SearchBar = function (_React$Component) {
   }
 
   _createClass(SearchBar, [{
+    key: 'objToUrl',
+    value: function objToUrl(obj) {
+      var vars = '';
+
+      Object.keys(obj).forEach(function (key) {
+        var value = obj[key];
+        if (value !== undefined && value !== '') {
+          console.log(value);
+          vars += key + '=' + value + '&';
+        }
+      });
+
+      return vars.replace(/([&\s]+$)/g, '').replace(/(\s)/g, '+');
+    }
+  }, {
     key: 'handleSubmit',
     value: function handleSubmit(event) {
       event.preventDefault();
       var addressInput = document.getElementsByName('address')[0].value;
       var radiusInput = document.getElementsByName('radius')[0].value;
+
       var categoryInput = '';
       if (document.getElementsByName('category')[0] !== undefined) {
         categoryInput = document.getElementsByName('category')[0].value;
       }
 
-      this.props.dispatch((0, _searchActions.search)({
+      var params = {
         address: addressInput,
         radius: radiusInput,
         category: categoryInput
-      }));
+      };
+
+      this.props.dispatch((0, _searchActions.search)(params));
+
+      var loc = window.location;
+      var newurl = loc.protocol + '//' + loc.host + loc.pathname + '?' + this.objToUrl(params);
+      window.history.pushState({
+        path: newurl
+      }, '', newurl);
     }
   }, {
     key: 'render',
