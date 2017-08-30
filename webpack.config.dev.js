@@ -4,8 +4,6 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const Path = require('path');
 
-const env = process.env.NODE_ENV || 'dev';
-
 const paths = {
   srcJs: Path.resolve('client', 'src', 'js'),
   srcSass: Path.resolve('client', 'src', 'scss'),
@@ -21,7 +19,7 @@ module.exports = {
     path: paths.dist,
     filename: Path.join('js', '[name].js'),
   },
-  devtool: (env !== 'production') ? 'source-map' : false,
+  devtool: 'source-map',
   resolve: {
     modules: [
       paths.srcSass,
@@ -29,7 +27,7 @@ module.exports = {
       'node_modules',
     ],
     alias: {
-      'handlebars': 'handlebars/dist/handlebars.js',
+      handlebars: 'handlebars/dist/handlebars.js',
     },
     extensions: ['.js', '.jsx', '.json'],
   },
@@ -48,7 +46,7 @@ module.exports = {
           ],
           plugins: ['transform-object-rest-spread'],
           comments: false,
-          cacheDirectory: (env !== 'production'),
+          cacheDirectory: true,
         },
       },
       {
@@ -98,7 +96,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(env),
+        NODE_ENV: JSON.stringify('development'),
       },
     }),
     new webpack.optimize.CommonsChunkPlugin({

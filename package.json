@@ -4,11 +4,11 @@
   "description": "SilverStripe Locator Module. Show locations on a map. Search by geoposition.",
   "main": "client/src/js/boot/index.js",
   "scripts": {
-    "build": "NODE_ENV=production webpack -p --progress",
-    "build-dev": "NODE_ENV=development webpack --progress",
-    "watch": "NODE_ENV=development webpack --progress --watch",
+    "build": "webpack --config webpack.config.prod.js -p --progress",
+    "build-dev": "webpack --config webpack.config.dev.js --progress",
+    "watch": "webpack --config webpack.config.dev.js --progress --watch",
     "test": "jest",
-    "lint": "eslint webpack.config.js client/src/js"
+    "lint": "eslint webpack.config.dev.js webpack.config.prod.js client/src/js"
   },
   "keywords": [
     "locator",
