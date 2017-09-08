@@ -7,6 +7,7 @@ use muskie9\DataToArrayList\ORM\DataToArrayListHelper;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
+use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 use SilverStripe\Control\HTTPRequest;
 
@@ -15,6 +16,10 @@ use SilverStripe\Control\HTTPRequest;
  */
 class LocatorController extends \PageController
 {
+
+    private static $allowed_actions = array(
+        'json'
+    );
 
     /**
      * @var DataList|ArrayList
@@ -33,8 +38,20 @@ class LocatorController extends \PageController
         Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
     }
 
+    public function json()
+    {
+        $this->getResponse()->addHeader("Content-Type", "application/json");
+
+        $data = new ArrayData(array(
+            // TODO
+            "Locations" => Location::get()
+        ));
+        return $data->renderWith('locations');
+    }
+
     /**
      * @param HTTPRequest|null $request
+     *
      * @return $this
      */
     public function setLocations(HTTPRequest $request = null)
@@ -82,6 +99,7 @@ class LocatorController extends \PageController
         }
 
         $this->locations = $locations;
+
         return $this;
 
     }

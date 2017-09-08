@@ -1,4 +1,4 @@
-/* global document */
+/* global window, document */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -67,7 +67,7 @@ class SearchBar extends React.Component {
     const loc = window.location;
     const newurl = `${loc.protocol}//${loc.host}${loc.pathname}?${this.objToUrl(params)}`;
     window.history.pushState({
-      path: newurl
+      path: newurl,
     }, '', newurl);
   }
 
@@ -76,7 +76,7 @@ class SearchBar extends React.Component {
    * @returns {XML}
    */
   render() {
-    const {address, radius, category, radii, categories} = this.props;
+    const { address, radius, category, radii, categories } = this.props;
     return (
       <form action="" onSubmit={this.handleSubmit}>
         <fieldset>

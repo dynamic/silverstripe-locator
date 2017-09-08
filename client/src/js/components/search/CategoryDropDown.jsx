@@ -24,7 +24,7 @@ class CategoryDropDown extends React.Component {
    * @return {*}
    */
   defaultValue() {
-    const {category, categories} = this.props;
+    const { category, categories } = this.props;
 
     // if the category exists in the dropdown
     if (Object.keys(categories).indexOf(category) > -1) {

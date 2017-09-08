@@ -26,7 +26,7 @@ class MapContainer extends React.Component {
    * Generates an array of marker objects to use on the map
    */
   getMarkers() {
-    const locations = this.props.locations.edges;
+    const { locations } = this.props;
     const markers = [];
 
     const htmlToReactParser = new HtmlToReactParser();
@@ -34,7 +34,7 @@ class MapContainer extends React.Component {
     let i;
     // eslint-disable-next-line no-plusplus
     for (i = 0; i < locations.length; i++) {
-      const loc = locations[i].node;
+      const loc = locations[i];
       markers[markers.length] = {
         position: {
           lat: Number(loc.Lat),
@@ -96,12 +96,13 @@ class MapContainer extends React.Component {
  * @type {{locations: *}}
  */
 MapContainer.propTypes = {
-  locations: PropTypes.shape({
-    edges: PropTypes.array,
-  }),
+  // eslint-disable-next-line react/forbid-prop-types
+  locations: PropTypes.array,
   dispatch: PropTypes.func.isRequired,
-  current: PropTypes.string,
-  showCurrent: PropTypes.bool,
+  current: PropTypes.number.isRequired,
+  showCurrent: PropTypes.bool.isRequired,
+  clusters: PropTypes.string.isRequired,
+  template: PropTypes.func.isRequired,
 };
 
 /**
@@ -109,11 +110,7 @@ MapContainer.propTypes = {
  * @type {{locations: {edges: Array}}}
  */
 MapContainer.defaultProps = {
-  locations: {
-    edges: [],
-  },
-  current: '-1',
-  showCurrent: false,
+  locations: [],
 };
 
 /**
@@ -127,6 +124,7 @@ function mapStateToProps(state) {
     showCurrent: state.map.showCurrent,
     clusters: state.settings.clusters,
     template: state.settings.infoWindowTemplate,
+    locations: state.locations.locations,
   };
 }
 

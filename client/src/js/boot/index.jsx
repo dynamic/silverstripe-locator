@@ -8,6 +8,7 @@ import {
   compose,
 } from 'redux';
 import thunk from 'redux-thunk';
+import promise from 'redux-promise-middleware';
 
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
@@ -38,7 +39,10 @@ const client = new ApolloClient({
  */
 function composedMiddleware() {
   return compose(
-    applyMiddleware(client.middleware(), thunk),
+    applyMiddleware(client.middleware(), promise({
+      // new suffixes
+      promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'ERROR'],
+    }), thunk),
     // eslint-disable-next-line no-underscore-dangle
     (typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined') ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f,
   );

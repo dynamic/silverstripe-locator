@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import toJson from 'enzyme-to-json';
 
-import Location from '../../../js/components/map/Location';
+import Location from '../../../js/components/list/Location';
 
 const location = {
   ID: '1',

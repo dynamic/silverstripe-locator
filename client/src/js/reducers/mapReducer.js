@@ -1,7 +1,7 @@
 import ActionType from 'actions/ActionTypes';
 
 const defaultState = {
-  current: '-1',
+  current: -1,
   showCurrent: false,
 };
 
@@ -23,7 +23,7 @@ export default function reducer(state = defaultState, action) {
     case ActionType.SEARCH:
       return {
         ...state,
-        current: '-1',
+        current: -1,
         showCurrent: false,
       };
 

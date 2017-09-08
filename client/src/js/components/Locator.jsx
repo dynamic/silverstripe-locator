@@ -1,31 +1,41 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  graphql,
-  compose,
-} from 'react-apollo';
 import { connect } from 'react-redux';
 
-import readLocations from 'queries/readLocations';
+import { fetchLocations } from 'actions/locationActions';
+
 import Search from 'components/search/SearchBar';
-import MapArea from 'components/map/MapArea';
+import MapContainer from 'components/map/MapContainer';
+import List from 'components/list/List';
 
 /**
  * The main locator component.
  */
-class Locator extends React.Component {
+class Locator extends Component {
+  /**
+   * Called before the component mounts
+   */
+  componentWillMount() {
+    const { dispatch } = this.props;
+    dispatch(fetchLocations());
+  }
+
   /**
    * Renders the component
    * @returns {XML}
    */
   render() {
-    if (this.props.loadedSettings === false) {
+    const { loadedSettings } = this.props;
+    if (loadedSettings === false) {
       return <div />;
     }
     return (
       <div>
         <Search />
-        <MapArea locations={this.props.data.readLocations} />
+        <div id="map-area">
+          <MapContainer />
+          <List />
+        </div>
       </div>
     );
   }
@@ -36,34 +46,18 @@ class Locator extends React.Component {
  * @type {{data}}
  */
 Locator.propTypes = {
-  data: PropTypes.shape({
-    readLocations: PropTypes.object,
-  }),
   loadedSettings: PropTypes.bool.isRequired,
-};
-
-/**
- * The defaults of props that aren't required
- * @type {{data: {readLocations: {}}}}
- */
-Locator.defaultProps = {
-  data: {
-    readLocations: {},
-  },
+  dispatch: PropTypes.func.isRequired,
 };
 
 /**
  * Takes variables/functions from the state and assigns them to variables/functions in the components props.
  *
  * @param state
- * @returns {{address, radius}}
+ * @returns {{loadedSettings}}
  */
 function mapStateToProps(state) {
   return {
-    address: state.search.address,
-    radius: state.search.radius,
-    category: state.search.category,
-    unit: state.settings.unit,
     loadedSettings: state.settings.loadedSettings,
   };
 }
@@ -71,26 +65,8 @@ function mapStateToProps(state) {
 /**
  * The default export of the file.
  *
- * It is first connected to the redux state, then with graphql.
- * Graphql then uses the props of the component to put variables into a query.
+ * The component is connected to the redux state
  *
- * State -> Props -> Query
- *
- * Whenever the state is changed the props change and this triggers a new query.
+ * Whenever the state is changed the props change.
  */
-export default compose(
-  connect(mapStateToProps),
-  graphql(readLocations, {
-    skip: ({ loadedSettings }) => !loadedSettings,
-    options: ({ address, radius, category, unit }) => ({
-      variables: {
-        /* eslint-disable object-shorthand */
-        address: address,
-        radius: radius,
-        category: category,
-        unit: unit,
-        /* eslint-enable */
-      },
-    }),
-  }),
-)(Locator);
+export default connect(mapStateToProps)(Locator);
