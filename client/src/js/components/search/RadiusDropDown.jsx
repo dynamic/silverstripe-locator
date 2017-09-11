@@ -24,7 +24,7 @@ class RadiusDropDown extends React.Component {
    * @return {*}
    */
   defaultValue() {
-    const {radius, radii} = this.props;
+    const { radius, radii } = this.props;
 
     // if the radius exists in the dropdown
     if (Object.values(radii).indexOf(radius) > -1) {
@@ -61,10 +61,7 @@ class RadiusDropDown extends React.Component {
 }
 
 RadiusDropDown.propTypes = {
-  radius: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]).isRequired,
+  radius: PropTypes.number.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   radii: PropTypes.oneOfType([
     PropTypes.object,

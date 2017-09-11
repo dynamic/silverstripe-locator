@@ -1062,7 +1062,7 @@ var RadiusDropDown = function (_React$Component) {
 }(_react2.default.Component);
 
 RadiusDropDown.propTypes = {
-  radius: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.string]).isRequired,
+  radius: _propTypes2.default.number.isRequired,
 
   radii: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired
 };
@@ -1179,11 +1179,14 @@ var SearchBar = function (_Component) {
     value: function render() {
       var _props2 = this.props,
           address = _props2.address,
-          radius = _props2.radius,
           category = _props2.category,
           radii = _props2.radii,
           categories = _props2.categories;
+      var radius = this.props.radius;
 
+      if (typeof radius === 'string') {
+        radius = Number(radius);
+      }
       return _react2.default.createElement(
         'form',
         { action: '', onSubmit: this.handleSubmit },

@@ -83,7 +83,11 @@ class SearchBar extends Component {
    * @returns {XML}
    */
   render() {
-    const { address, radius, category, radii, categories } = this.props;
+    const { address, category, radii, categories } = this.props;
+    let { radius } = this.props;
+    if (typeof radius === 'string') {
+      radius = Number(radius);
+    }
     return (
       <form action="" onSubmit={this.handleSubmit}>
         <fieldset>

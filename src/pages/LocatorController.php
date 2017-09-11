@@ -17,6 +17,24 @@ use SilverStripe\Control\HTTPRequest;
 class LocatorController extends \PageController
 {
 
+    /**
+     * @var array
+     */
+    private static $base_filter = [];
+
+    /**
+     * @var array
+     */
+    private static $base_exclude = [
+        'Lat' => 0,
+        'Lng' => 0,
+    ];
+
+    /**
+     * @var array
+     */
+    private static $base_filter_any = [];
+
     private static $allowed_actions = array(
         'json',
         'settings'
@@ -44,13 +62,14 @@ class LocatorController extends \PageController
         $this->getResponse()->addHeader("Content-Type", "application/json");
 
         $data = new ArrayData(array(
-            // TODO
-            "Locations" => Location::get()
+            "Locations" => $this->getLocations($this->getRequest()),
         ));
+
         return $data->renderWith('Dynamic/Locator/locations');
     }
 
-    public function settings() {
+    public function settings()
+    {
         $this->getResponse()->addHeader("Content-Type", "application/json");
 
         $data = new ArrayData(array(
@@ -65,27 +84,28 @@ class LocatorController extends \PageController
             "Clusters" => $this->Clusters,
 
         ));
+
         return $data->renderWith('Dynamic/Locator/settings');
     }
 
     /**
      * @param HTTPRequest|null $request
      *
-     * @return $this
+     * @return ArrayList|DataList|static
      */
-    public function setLocations(HTTPRequest $request = null)
+    public function getLocations(HTTPRequest $request = null)
     {
-
         if ($request === null) {
             $request = $this->request;
         }
+
         $filter = $this->config()->get('base_filter');
 
-        if ($request->getVar('CategoryID')) {
-            $filter['CategoryID'] = $request->getVar('CategoryID');
+        if ($request->getVar('category')) {
+            $filter['CategoryID'] = $request->getVar('category');
         } else {
-            if ($this->getPageCategories()->exists()) {
-                foreach ($this->getPageCategories() as $category) {
+            if ($this->getCategories()->exists()) {
+                foreach ($this->getCategories() as $category) {
                     $filter['CategoryID'][] = $category->ID;
                 }
             }
@@ -100,26 +120,32 @@ class LocatorController extends \PageController
         $this->extend('updateLocatorExclude', $exclude, $request);
 
         $locations = Locator::get_locations($filter, $filterAny, $exclude);
+
         $locations = DataToArrayListHelper::to_array_list($locations);
 
         //allow for adjusting list post possible distance calculation
         $this->extend('updateLocationList', $locations);
-
         if ($locations->canSortBy('distance')) {
             $locations = $locations->sort('distance');
         }
 
+        if ($request->getVar('address') && $request->getVar('radius')) {
+            $radius = $request->getVar('radius');
+            $locations = $locations->filterByCallback(function ($location) use (&$radius) {
+                if ($radius === -1) {
+                    return true;
+                }
+                return $location->distance <= $radius;
+            });
+        }
+
         //allow for returning list to be set as
         $this->extend('updateListType', $locations);
-
         $limit = Config::inst()->get(LocatorController::class, 'limit');
         if ($limit > 0) {
             $locations = $locations->limit($limit);
         }
 
-        $this->locations = $locations;
-
-        return $this;
-
+        return $locations;
     }
 }

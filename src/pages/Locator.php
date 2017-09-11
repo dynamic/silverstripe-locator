@@ -3,7 +3,6 @@
 namespace Dynamic\Locator;
 
 use \Page;
-use SilverStripe\Control\Director;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HeaderField;
@@ -173,6 +172,7 @@ class Locator extends Page
     {
         $contents = json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(Locator::class,
                 'infoWindowTemplate')));
+
         return str_replace('\n', '', $contents);
     }
 
@@ -184,6 +184,7 @@ class Locator extends Page
     {
         $contents = json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(Locator::class,
                 'listTemplate')));
+
         return str_replace('\n', '', $contents);
     }
 
@@ -202,11 +203,11 @@ class Locator extends Page
         $callback = null
     ) {
         $locationClass = Config::inst()->get(Locator::class, 'location_class');
-        $locations = $locationClass::get()->filter($filter)->exclude($exclude);
-
+        $locations = Location::get()->filter($filter)->exclude($exclude);
         if ( !empty($filterAny)) {
             $locations = $locations->filterAny($filterAny);
         }
+
         if ( !empty($exclude)) {
             $locations = $locations->exclude($exclude);
         }
