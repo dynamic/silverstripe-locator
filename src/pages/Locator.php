@@ -2,7 +2,7 @@
 
 namespace Dynamic\Locator;
 
-use SilverStripe\Control\Controller;
+use \Page;
 use SilverStripe\Control\Director;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
@@ -13,6 +13,7 @@ use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\View\ArrayData;
 use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
 
 /**
@@ -23,7 +24,7 @@ use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
  * @property string $Unit
  * @method Categories|ManyManyList $Categories
  */
-class Locator extends \Page
+class Locator extends Page
 {
     /**
      * @var string
@@ -51,7 +52,7 @@ class Locator extends \Page
      * @var array
      */
     private static $db = array(
-        'Unit'     => 'Enum("m,km","m")',
+        'Unit' => 'Enum("m,km","m")',
         'Clusters' => 'Enum("false,true","false")',
     );
 
@@ -83,12 +84,12 @@ class Locator extends \Page
         $fields->addFieldsToTab('Root.Settings', array(
             HeaderField::create('DisplayOptions', 'Display Options', 3),
             OptionsetField::create('Unit', 'Unit of measure', array(
-                'm'  => 'Miles',
+                'm' => 'Miles',
                 'km' => 'Kilometers'
             ), 'm'),
             DropdownField::create('Clusters', 'Use clusters?', array(
                 'false' => 'No',
-                'true'  => 'Yes'
+                'true' => 'Yes'
             ), 'false'),
         ));
 
@@ -107,6 +108,83 @@ class Locator extends \Page
         ));
 
         return $fields;
+    }
+
+    /**
+     * Gets the list of radius
+     *
+     * @return ArrayList
+     */
+    public function getRadii()
+    {
+        $radii = [
+            '0' => '25',
+            '1' => '50',
+            '2' => '75',
+            '3' => '100',
+        ];
+
+        $config_radii = Config::inst()->get(Locator::class, 'radius_array');
+        if ($config_radii) {
+            $radii = $config_radii;
+        }
+
+        $list = [];
+        foreach ($radii as $radius) {
+            $list[] = new ArrayData(array(
+                'Radius' => $radius,
+            ));
+        }
+
+        return new ArrayList($list);
+    }
+
+    /**
+     * Gets the limit of locations
+     * @return mixed
+     */
+    public function getLimit()
+    {
+        return Config::inst()->get(Locator::class, 'limit');
+    }
+
+    /**
+     * Gets if the radius drop down should be shown
+     * @return mixed
+     */
+    public function getShowRadius()
+    {
+        return Config::inst()->get(Locator::class, 'show_radius');
+    }
+
+    public function getCategories()
+    {
+        return $this->Categories()->filter(array(
+                'Locations.ID:GreaterThan' => 0
+            )
+        );
+    }
+
+    /**
+     * Gets the info window template
+     * @return mixed
+     */
+    public function getInfoWindowTemplate()
+    {
+        $contents = json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(Locator::class,
+                'infoWindowTemplate')));
+        return str_replace('\n', '', $contents);
+    }
+
+    /**
+     * Gets the template for locations in the list
+     * @return string
+     */
+    public function getListTemplate()
+    {
+        $contents = json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(Locator::class,
+                'listTemplate')));
+        return str_replace('\n', '', $contents);
     }
 
     /**
@@ -138,15 +216,5 @@ class Locator extends \Page
         }
 
         return $locations;
-    }
-
-    /**
-     * The API URL
-     *
-     * @return string
-     */
-    public function ApiUrl()
-    {
-        return Controller::join_links(Director::baseURL(), 'graphql-locator');
     }
 }

@@ -18,7 +18,8 @@ class LocatorController extends \PageController
 {
 
     private static $allowed_actions = array(
-        'json'
+        'json',
+        'settings'
     );
 
     /**
@@ -46,7 +47,25 @@ class LocatorController extends \PageController
             // TODO
             "Locations" => Location::get()
         ));
-        return $data->renderWith('locations');
+        return $data->renderWith('Dynamic/Locator/locations');
+    }
+
+    public function settings() {
+        $this->getResponse()->addHeader("Content-Type", "application/json");
+
+        $data = new ArrayData(array(
+            // TODO
+            "Radii" => $this->getRadii(),
+            "Limit" => $this->getLimit(),
+            "ShowRadius" => $this->getShowRadius(),
+            "InfoWindowTemplate" => $this->getInfoWindowTemplate(),
+            "ListTemplate" => $this->getListTemplate(),
+            "Categories" => $this->getCategories(),
+            "Unit" => $this->Unit,
+            "Clusters" => $this->Clusters,
+
+        ));
+        return $data->renderWith('Dynamic/Locator/settings');
     }
 
     /**

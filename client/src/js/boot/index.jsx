@@ -7,30 +7,16 @@ import {
   applyMiddleware,
   compose,
 } from 'redux';
+import { Provider } from 'react-redux';
+
 import thunk from 'redux-thunk';
 import promise from 'redux-promise-middleware';
 
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
-import { ApolloProvider } from 'react-apollo';
-
-import allReducers from 'reducers';
+import reducers from 'reducers';
 import Locator from 'components/Locator';
-import locatorSettings from 'queries/locatorSettings';
 
 // only the first container is used, can change to querySelectorAll() for multiple instances
 const container = document.querySelector('.locator');
-
-// creates the apollo client used to run graphql queries
-const client = new ApolloClient({
-  networkInterface: createNetworkInterface({
-    uri: container.dataset.apiUrl,
-    opts: {
-      credentials: 'same-origin',
-    },
-  }),
-  // changes the name of where the client stores information in the state
-  reduxRootSelector: state => state.client,
-});
 
 /**
  * Writes deeply nested function transformations without the rightward drift of the code.
@@ -39,7 +25,7 @@ const client = new ApolloClient({
  */
 function composedMiddleware() {
   return compose(
-    applyMiddleware(client.middleware(), promise({
+    applyMiddleware(promise({
       // new suffixes
       promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'ERROR'],
     }), thunk),
@@ -49,19 +35,11 @@ function composedMiddleware() {
 }
 
 // creates the redux store with reducers and middleware
-const store = createStore(allReducers(client), composedMiddleware());
+const store = createStore(reducers, composedMiddleware());
 
-// renders the locator, wrapped in an apollo provider so graphql can run queries
+// renders the locator
 ReactDom.render(
-  <ApolloProvider store={store} client={client}>
+  <Provider store={store}>
     <Locator />
-  </ApolloProvider>
+  </Provider>
   , container);
-
-// query for settings
-client.query({
-  query: locatorSettings,
-  variables: {
-    id: container.dataset.locatorId,
-  },
-});

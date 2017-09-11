@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { search } from 'actions/searchActions';
+import { fetchLocations } from 'actions/locationActions';
 import RadiusDropDown from 'components/search/RadiusDropDown';
 import CategoryDropDown from 'components/search/CategoryDropDown';
 
@@ -60,10 +60,14 @@ class SearchBar extends Component {
       category: categoryInput,
     };
 
-    // selects dispatch from this.props. Like calling this.props.dispatch
-    const { dispatch } = this.props;
+    // selects dispatch and unit from this.props.
+    // const dispatch = this.props.dispatch; const unit = this.props.unit;
+    const { dispatch, unit } = this.props;
     dispatch(
-      search(params),
+      fetchLocations({
+        ...params,
+        unit,
+      }),
     );
 
     // changes the url for the window and adds it to the browser history(no redirect)
@@ -114,7 +118,10 @@ class SearchBar extends Component {
 
 SearchBar.propTypes = {
   address: PropTypes.string.isRequired,
-  radius: PropTypes.string.isRequired,
+  radius: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]).isRequired,
   category: PropTypes.string.isRequired,
 
   // eslint-disable-next-line react/forbid-prop-types
@@ -127,6 +134,7 @@ SearchBar.propTypes = {
     PropTypes.object,
     PropTypes.array,
   ]).isRequired,
+  unit: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
@@ -146,6 +154,9 @@ function mapStateToProps(state) {
     // the options
     radii: state.settings.radii,
     categories: state.settings.categories,
+
+    // other
+    unit: state.settings.unit,
   };
 }
 

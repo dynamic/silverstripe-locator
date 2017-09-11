@@ -3,6 +3,7 @@ import ActionType from 'actions/ActionTypes';
 
 const defaultState = {
   loadedSettings: false,
+  unit: 'm',
 };
 
 /**
@@ -10,39 +11,29 @@ const defaultState = {
  */
 export default function reducer(state = defaultState, action) {
   switch (action.type) {
-    case ActionType.QUERY_RESULT: {
-      let settings = action.result.data.locatorSettings;
-
-      // skip if no settings attached
-      if (settings === undefined) {
-        return state;
-      }
-
-      // in case its an array
-      if (settings.constructor === Array) {
-        settings = settings[0];
-      }
+    case ActionType.FETCH_SETTINGS_SUCCESS: {
+      const settings = action.payload.data;
 
       // just in case unit is null
-      if (settings.Unit === null) {
-        settings.Unit = 'm';
+      if (settings.unit === null) {
+        settings.unit = 'm';
       }
 
-      if (settings.Clusters === null) {
-        settings.Clusters = 'false';
+      if (settings.clusters === null) {
+        settings.clusters = 'false';
       }
 
       return {
         ...state,
         loadedSettings: true,
 
-        unit: settings.Unit,
-        clusters: settings.Clusters,
-        limit: settings.Limit,
-        radii: JSON.parse(settings.Radii),
-        categories: JSON.parse(settings.Categories),
-        infoWindowTemplate: handlebars.compile(JSON.parse(settings.InfoWindowTemplate)),
-        listTemplate: handlebars.compile(JSON.parse(settings.ListTemplate)),
+        unit: settings.unit,
+        clusters: settings.clusters,
+        limit: settings.limit,
+        radii: settings.radii,
+        categories: settings.categories,
+        infoWindowTemplate: handlebars.compile(settings.infoWindowTemplate),
+        listTemplate: handlebars.compile(settings.listTemplate),
       };
     }
 

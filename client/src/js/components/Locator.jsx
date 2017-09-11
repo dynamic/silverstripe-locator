@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { fetchLocations } from 'actions/locationActions';
+import { fetchSettings } from 'actions/settingsActions';
 
 import Search from 'components/search/SearchBar';
 import MapContainer from 'components/map/MapContainer';
@@ -17,7 +18,31 @@ class Locator extends Component {
    */
   componentWillMount() {
     const { dispatch } = this.props;
-    dispatch(fetchLocations());
+    dispatch(fetchSettings());
+  }
+
+  /**
+   * Should this component update
+   * @param nextProps
+   * @return {boolean}
+   */
+  shouldComponentUpdate(nextProps) {
+    const { loadedSettings } = this.props;
+    return (loadedSettings !== nextProps.loadedSettings);
+  }
+
+  /**
+   * Called before the component updates
+   * @param nextProps
+   */
+  componentWillUpdate(nextProps) {
+    const { dispatch, unit, address, radius, category } = nextProps;
+    dispatch(fetchLocations({
+      unit,
+      address,
+      radius,
+      category,
+    }));
   }
 
   /**
@@ -47,6 +72,13 @@ class Locator extends Component {
  */
 Locator.propTypes = {
   loadedSettings: PropTypes.bool.isRequired,
+  unit: PropTypes.string.isRequired,
+  address: PropTypes.string.isRequired,
+  radius: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]).isRequired,
+  category: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
@@ -59,6 +91,11 @@ Locator.propTypes = {
 function mapStateToProps(state) {
   return {
     loadedSettings: state.settings.loadedSettings,
+
+    unit: state.settings.unit,
+    address: state.search.address,
+    radius: state.search.radius,
+    category: state.search.category,
   };
 }
 

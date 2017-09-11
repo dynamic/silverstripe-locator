@@ -7,12 +7,11 @@ import mapReducer from 'reducers/mapReducer';
 import settingsReducer from 'reducers/settingsReducer';
 import locationReducer from 'reducers/locationReducer';
 
-export default function reducers(client) {
-  return combineReducers({
-    client: client.reducer(),
-    search: searchReducer,
-    map: mapReducer,
-    settings: settingsReducer,
-    locations: locationReducer,
-  });
-}
+const reducers = combineReducers({
+  search: searchReducer,
+  map: mapReducer,
+  settings: settingsReducer,
+  locations: locationReducer,
+});
+
+export default reducers;

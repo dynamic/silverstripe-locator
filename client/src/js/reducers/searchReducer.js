@@ -4,7 +4,7 @@ import url from 'url';
 
 const defaultState = Object.assign({
   address: '',
-  radius: '',
+  radius: -1,
   category: '',
 }, url.parse(window.location.href, true).query);
 

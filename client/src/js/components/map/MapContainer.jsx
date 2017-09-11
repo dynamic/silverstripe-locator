@@ -101,7 +101,7 @@ MapContainer.propTypes = {
   dispatch: PropTypes.func.isRequired,
   current: PropTypes.number.isRequired,
   showCurrent: PropTypes.bool.isRequired,
-  clusters: PropTypes.string.isRequired,
+  clusters: PropTypes.bool.isRequired,
   template: PropTypes.func.isRequired,
 };
 

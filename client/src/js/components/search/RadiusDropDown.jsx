@@ -61,7 +61,10 @@ class RadiusDropDown extends React.Component {
 }
 
 RadiusDropDown.propTypes = {
-  radius: PropTypes.string.isRequired,
+  radius: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   radii: PropTypes.oneOfType([
     PropTypes.object,

@@ -9,12 +9,12 @@ class CategoryDropDown extends React.Component {
   mappedCategories() {
     const { categories } = this.props;
 
-    return Object.keys(categories).map(key => (
+    return categories.map(category => (
       <option
-        value={key}
-        key={key}
+        value={category.ID}
+        key={category.ID}
       >
-        {categories[key]}
+        {category.Name}
       </option>
     ));
   }
