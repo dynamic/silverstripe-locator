@@ -1,5 +1,5 @@
 /* global window, document */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -7,7 +7,28 @@ import { search } from 'actions/searchActions';
 import RadiusDropDown from 'components/search/RadiusDropDown';
 import CategoryDropDown from 'components/search/CategoryDropDown';
 
-class SearchBar extends React.Component {
+class SearchBar extends Component {
+  /**
+   * Turns a javascript object into url params
+   * @param obj
+   * @return {string}
+   */
+  static objToUrl(obj) {
+    let vars = '';
+
+    Object.keys(obj).forEach((key) => {
+      const value = obj[key];
+
+      // don't add it if its blank
+      if (value !== undefined && value !== '') {
+        vars += `${key}=${value}&`;
+      }
+    });
+
+    // replaces trailing spaces and '&' symbols then replaces spaces with +
+    return vars.replace(/([&\s]+$)/g, '').replace(/(\s)/g, '+');
+  }
+
   /**
    * Used to create the SearchBar.
    * needed to allow use of this keyword in handler.
@@ -18,26 +39,6 @@ class SearchBar extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  /**
-   * Turns a javascript object into url params
-   * @param obj
-   * @return {string}
-   */
-  objToUrl(obj) {
-    let vars = '';
-
-    Object.keys(obj).forEach((key) => {
-      const value = obj[key];
-
-      // dont add it if its blank
-      if (value !== undefined && value !== '') {
-        vars += `${key}=${value}&`;
-      }
-    });
-
-    // replaces trailing spaces and '&' symbols then replaces spaces with +
-    return vars.replace(/([&\s]+$)/g, '').replace(/(\s)/g, '+');
-  }
 
   /**
    * 'Submits' form. Really just fires state change and changes the url.
@@ -59,13 +60,15 @@ class SearchBar extends React.Component {
       category: categoryInput,
     };
 
-    this.props.dispatch(
+    // selects dispatch from this.props. Like calling this.props.dispatch
+    const { dispatch } = this.props;
+    dispatch(
       search(params),
     );
 
-
+    // changes the url for the window and adds it to the browser history(no redirect)
     const loc = window.location;
-    const newurl = `${loc.protocol}//${loc.host}${loc.pathname}?${this.objToUrl(params)}`;
+    const newurl = `${loc.protocol}//${loc.host}${loc.pathname}?${SearchBar.objToUrl(params)}`;
     window.history.pushState({
       path: newurl,
     }, '', newurl);
@@ -135,7 +138,7 @@ SearchBar.propTypes = {
  */
 function mapStateToProps(state) {
   return {
-    // the defaults
+    // the defaults - for when it gets loaded from the url
     address: state.search.address,
     radius: state.search.radius,
     category: state.search.category,

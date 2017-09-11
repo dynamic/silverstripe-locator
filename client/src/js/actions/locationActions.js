@@ -10,7 +10,7 @@ export function fetchLocations() {
     dispatch({
       type: ActionType.FETCH_LOCATIONS,
       payload: axios.get(
-        `${loc.protocol}//${loc.host}${loc.pathname}json`,
+        `${loc.protocol}//${loc.host}${loc.pathname}/json`,
       ),
     });
   };

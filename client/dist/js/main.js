@@ -237,7 +237,7 @@ function fetchLocations() {
   return function (dispatch) {
     dispatch({
       type: _ActionTypes2.default.FETCH_LOCATIONS,
-      payload: _axios2.default.get(loc.protocol + '//' + loc.host + loc.pathname + 'json')
+      payload: _axios2.default.get(loc.protocol + '//' + loc.host + loc.pathname + '/json')
     });
   };
 }
@@ -368,9 +368,9 @@ var ActionTypes = {
   QUERY_RESULT: 'APOLLO_QUERY_RESULT',
 
   FETCH_LOCATIONS: 'FETCH_LOCATIONS',
-  FETCH_LOCATIONS_LOADING: "FETCH_LOCATIONS_LOADING",
-  FETCH_LOCATIONS_SUCCESS: "FETCH_LOCATIONS_SUCCESS",
-  FETCH_LOCATIONS_ERROR: "FETCH_LOCATIONS_ERROR",
+  FETCH_LOCATIONS_LOADING: 'FETCH_LOCATIONS_LOADING',
+  FETCH_LOCATIONS_SUCCESS: 'FETCH_LOCATIONS_SUCCESS',
+  FETCH_LOCATIONS_ERROR: 'FETCH_LOCATIONS_ERROR',
 
   SEARCH: 'SEARCH',
 
@@ -418,8 +418,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var List = function (_React$Component) {
-  _inherits(List, _React$Component);
+var List = function (_Component) {
+  _inherits(List, _Component);
 
   function List(props) {
     _classCallCheck(this, List);
@@ -483,7 +483,7 @@ var List = function (_React$Component) {
   }]);
 
   return List;
-}(_react2.default.Component);
+}(_react.Component);
 
 List.propTypes = {
   locations: _propTypes2.default.array,
@@ -556,11 +556,6 @@ var Location = function (_Component) {
   }
 
   _createClass(Location, [{
-    key: 'shouldComponentUpdate',
-    value: function shouldComponentUpdate() {
-      return false;
-    }
-  }, {
     key: 'getDistance',
     value: function getDistance() {
       var _props = this.props,
@@ -784,8 +779,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var MapContainer = function (_React$Component) {
-  _inherits(MapContainer, _React$Component);
+var MapContainer = function (_Component) {
+  _inherits(MapContainer, _Component);
 
   function MapContainer(props) {
     _classCallCheck(this, MapContainer);
@@ -862,7 +857,7 @@ var MapContainer = function (_React$Component) {
   }]);
 
   return MapContainer;
-}(_react2.default.Component);
+}(_react.Component);
 
 MapContainer.propTypes = {
   locations: _propTypes2.default.array,
@@ -1155,19 +1150,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var SearchBar = function (_React$Component) {
-  _inherits(SearchBar, _React$Component);
+var SearchBar = function (_Component) {
+  _inherits(SearchBar, _Component);
 
-  function SearchBar(props) {
-    _classCallCheck(this, SearchBar);
-
-    var _this = _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).call(this, props));
-
-    _this.handleSubmit = _this.handleSubmit.bind(_this);
-    return _this;
-  }
-
-  _createClass(SearchBar, [{
+  _createClass(SearchBar, null, [{
     key: 'objToUrl',
     value: function objToUrl(obj) {
       var vars = '';
@@ -1182,7 +1168,18 @@ var SearchBar = function (_React$Component) {
 
       return vars.replace(/([&\s]+$)/g, '').replace(/(\s)/g, '+');
     }
-  }, {
+  }]);
+
+  function SearchBar(props) {
+    _classCallCheck(this, SearchBar);
+
+    var _this = _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).call(this, props));
+
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    return _this;
+  }
+
+  _createClass(SearchBar, [{
     key: 'handleSubmit',
     value: function handleSubmit(event) {
       event.preventDefault();
@@ -1200,10 +1197,12 @@ var SearchBar = function (_React$Component) {
         category: categoryInput
       };
 
-      this.props.dispatch((0, _searchActions.search)(params));
+      var dispatch = this.props.dispatch;
+
+      dispatch((0, _searchActions.search)(params));
 
       var loc = window.location;
-      var newurl = loc.protocol + '//' + loc.host + loc.pathname + '?' + this.objToUrl(params);
+      var newurl = loc.protocol + '//' + loc.host + loc.pathname + '?' + SearchBar.objToUrl(params);
       window.history.pushState({
         path: newurl
       }, '', newurl);
@@ -1258,7 +1257,7 @@ var SearchBar = function (_React$Component) {
   }]);
 
   return SearchBar;
-}(_react2.default.Component);
+}(_react.Component);
 
 SearchBar.propTypes = {
   address: _propTypes2.default.string.isRequired,

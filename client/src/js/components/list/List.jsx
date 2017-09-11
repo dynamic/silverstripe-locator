@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -9,7 +9,7 @@ import Location from 'components/list/Location';
  * The List component.
  * Renders the location list.
  */
-class List extends React.Component {
+class List extends Component {
   /**
    * Used to create the Map.
    * needed to allow use of this keyword in handler.

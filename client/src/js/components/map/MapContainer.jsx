@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Parser as HtmlToReactParser } from 'html-to-react';
@@ -10,7 +10,7 @@ import Map from 'components/map/Map';
  * The MapArea component.
  * Renders the map.
  */
-class MapContainer extends React.Component {
+class MapContainer extends Component {
   /**
    * Used to create the Map.
    * needed to allow use of this keyword in handler.

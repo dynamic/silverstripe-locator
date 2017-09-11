@@ -7,11 +7,6 @@ import { Parser as HtmlToReactParser } from 'html-to-react';
  * Used in the location list.
  */
 class Location extends Component {
-  shouldComponentUpdate() {
-    // TODO
-    return false;
-  }
-
   /**
    * Rounds the distance
    * @returns Number|Boolean
