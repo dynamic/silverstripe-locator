@@ -2,12 +2,22 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import {
+  CellMeasurer,
+  CellMeasurerCache,
+  AutoSizer,
+  List as VirtualList,
+} from 'react-virtualized';
+
 import { openMarker } from 'actions/mapActions';
 import Location from 'components/list/Location';
 
 /**
  * The List component.
  * Renders the location list.
+ *
+ * some of the code related to virtualization came from:
+ * https://github.com/bvaughn/tweets/blob/37d0139736346db16b9681d5b859a4e127964518/src/components/TweetList.js
  */
 class List extends Component {
   /**
@@ -17,38 +27,91 @@ class List extends Component {
    */
   constructor(props) {
     super(props);
+    // bind actions/handlers
     this.handleLocationClick = this.handleLocationClick.bind(this);
-  }
+    this.renderRow = this.renderRow.bind(this);
+    this.resizeAll = this.resizeAll.bind(this);
 
-  handleLocationClick(target) {
-    this.props.dispatch(openMarker(target));
+    // create variables
+    this.cache = new CellMeasurerCache({ defaultHeight: 85, fixedWidth: true });
+    this.mostRecentWidth = 0;
+    this.resizeAllFlag = false;
   }
 
   /**
-   * Renders the locations
-   * @returns {*}
+   * Called after the component updates
+   * @param prevProps
    */
-  renderLocations() {
-    const { current, search, unit, template, locations } = this.props;
-    if (locations !== undefined) {
-      return locations.map((location, index) =>
-        (
-          <Location
-            key={location.ID}
-            index={index}
-            location={location}
-            current={current === location.ID}
-            search={search}
-            unit={unit}
-            onClick={this.handleLocationClick}
-            template={template}
-          />
-        ),
-      );
+  componentDidUpdate(prevProps) {
+    const { locations } = this.props;
+    if (this.resizeAllFlag) {
+      this.resizeAllFlag = false;
+      this.cache.clearAll();
+      if (this.list) {
+        this.list.recomputeRowHeights();
+      }
+    } else if (locations !== prevProps.locations) {
+      const index = prevProps.locations.length;
+      this.cache.clear(index, 0);
+      if (this.list) {
+        this.list.recomputeRowHeights(index);
+      }
     }
-    return (<li>
-      No locations
-    </li>);
+  }
+
+  /**
+   * Re-calculates heights for rows
+   */
+  resizeAll() {
+    this.resizeAllFlag = false;
+    this.cache.clearAll();
+    if (this.list) {
+      this.list.recomputeRowHeights();
+    }
+  }
+
+  /**
+   * Handles a list item click
+   * @param target
+   */
+  handleLocationClick(target) {
+    const { dispatch } = this.props;
+    dispatch(openMarker(target));
+  }
+
+  /**
+   * Renders the row
+   *
+   * @param index
+   * @param key
+   * @param style
+   * @param parent
+   * @return {XML}
+   */
+  renderRow({ index, key, style, parent }) {
+    const { current, search, unit, template, locations } = this.props;
+    const location = locations[index];
+    return (
+      <CellMeasurer
+        cache={this.cache}
+        columnIndex={0}
+        key={key}
+        parent={parent}
+        rowIndex={index}
+      >
+        <Location
+          key={key}
+          style={style}
+          location={location}
+          index={index}
+          current={current === location.ID}
+          search={search.length > 0}
+          unit={unit}
+          onClick={this.handleLocationClick}
+          template={template}
+        />
+      </CellMeasurer>
+    );
   }
 
   /**
@@ -56,11 +119,32 @@ class List extends Component {
    * @returns {XML}
    */
   render() {
+    const { locations, current } = this.props;
     return (
-      <div className="loc-list">
-        <ul>
-          {this.renderLocations()}
-        </ul>
+      <div className="loc-list" role="list">
+        <AutoSizer>
+          {({ width, height }) => {
+            if (this.mostRecentWidth && this.mostRecentWidth !== width) {
+              this.resizeAllFlag = true;
+
+              setTimeout(this.resizeAll, 0);
+            }
+
+            this.mostRecentWidth = width;
+
+            return (
+              <VirtualList
+                current={current}
+                deferredMeasurementCache={this.cache}
+                width={width}
+                height={height}
+                rowCount={locations.length}
+                rowHeight={this.cache.rowHeight}
+                rowRenderer={this.renderRow}
+              />
+            );
+          }}
+        </AutoSizer>
       </div>
     );
   }

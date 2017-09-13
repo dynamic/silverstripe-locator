@@ -33,6 +33,7 @@
     "react-dom": "^15.5.4",
     "react-google-maps": "^7.3.0",
     "react-redux": "^4.4.5",
+    "react-virtualized": "^9.9.0",
     "redux": "^3.6.0",
     "redux-promise-middleware": "^4.4.1",
     "redux-thunk": "^2.1.0"

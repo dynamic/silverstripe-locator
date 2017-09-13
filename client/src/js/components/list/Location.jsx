@@ -8,6 +8,21 @@ import { Parser as HtmlToReactParser } from 'html-to-react';
  */
 class Location extends Component {
   /**
+   * Replaces any trailing '+' and whitespace and any spaces left with '+'
+   *
+   * @param address
+   * @returns String
+   */
+  static cleanAddress(address) {
+    if (address) {
+      if (typeof address === 'string') {
+        return address.replace(/([+\s]+$)/g, '').replace(/(\s)/g, '+');
+      }
+    }
+    return '';
+  }
+
+  /**
    * Rounds the distance
    * @returns Number|Boolean
    */
@@ -51,17 +66,7 @@ class Location extends Component {
       daddr += location.PostalCode;
     }
 
-    return this.cleanAddress(daddr);
-  }
-
-  /**
-   * Replaces any trailing '+' and whitespace and any spaces left with '+'
-   *
-   * @param address
-   * @returns String
-   */
-  cleanAddress(address) {
-    return address.replace(/([+\s]+$)/g, '').replace(/(\s)/g, '+');
+    return Location.cleanAddress(daddr);
   }
 
   /**
@@ -69,13 +74,13 @@ class Location extends Component {
    * @returns {XML}
    */
   render() {
-    const { location, index, current, search, template, unit, onClick } = this.props;
+    const { location, index, current, search, template, unit, onClick, style } = this.props;
     const htmlToReactParser = new HtmlToReactParser();
 
     const loc = {
       ...location,
       Distance: this.getDistance(),
-      DirectionsLink: `http://maps.google.com/maps?saddr=${this.cleanAddress(search)}&daddr=${this.getDaddr()}`,
+      DirectionsLink: `http://maps.google.com/maps?saddr=${Location.cleanAddress(search)}&daddr=${this.getDaddr()}`,
       Unit: unit,
       Number: index + 1,
     };
@@ -86,9 +91,15 @@ class Location extends Component {
     }
     return (
       // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-      <li data-markerid={index} className={className} onClick={() => onClick(location.ID)}>
+      <div
+        data-markerid={index}
+        className={className}
+        onClick={() => onClick(location.ID)}
+        style={style}
+        role="listitem"
+      >
         {htmlToReactParser.parse(template(loc))}
-      </li>
+      </div>
     );
   }
 }
@@ -112,10 +123,12 @@ Location.propTypes = {
   }).isRequired,
   index: PropTypes.number.isRequired,
   current: PropTypes.bool.isRequired,
-  search: PropTypes.string.isRequired,
+  search: PropTypes.bool.isRequired,
   unit: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   template: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  style: PropTypes.object.isRequired,
 };
 
 /**

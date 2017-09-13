@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Parser as HtmlToReactParser } from 'html-to-react';
 
@@ -6,7 +6,7 @@ import { Parser as HtmlToReactParser } from 'html-to-react';
  * The Location component.
  * Used in the location list.
  */
-class Location extends React.Component {
+class Location extends Component {
   /**
    * Rounds the distance
    * @returns Number|Boolean

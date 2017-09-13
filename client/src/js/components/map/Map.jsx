@@ -1,23 +1,21 @@
 import React from 'react';
 import { withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps';
-import MarkerClusterer from "react-google-maps/lib/addons/MarkerClusterer";
+import MarkerClusterer from 'react-google-maps/lib/addons/MarkerClusterer';
 
-const markers = (props) => {
-  return props.markers.map(marker => (
-    <Marker
-      key={marker.key}
-      position={marker.position}
-      defaultAnimation={marker.defaultAnimation}
-      onClick={() => props.onMarkerClick(marker)}
-    >
-      {props.current === marker.key && props.showCurrent && (
-        <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>
-          <div>{marker.infoContent}</div>
-        </InfoWindow>
-      )}
-    </Marker>
-  ));
-};
+const markers = props => props.markers.map(marker => (
+  <Marker
+    key={marker.key}
+    position={marker.position}
+    defaultAnimation={marker.defaultAnimation}
+    onClick={() => props.onMarkerClick(marker)}
+  >
+    {props.current === marker.key && props.showCurrent && (
+      <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>
+        <div>{marker.infoContent}</div>
+      </InfoWindow>
+    )}
+  </Marker>
+));
 
 const Map = withGoogleMap(props => (
   <GoogleMap
@@ -26,12 +24,12 @@ const Map = withGoogleMap(props => (
 
   >
     {props.clusters === 'true' ? <MarkerClusterer
-        averageCenter
-        enableRetinaIcons
-        gridSize={60}
-      >
-        {markers(props)}
-      </MarkerClusterer> :
+      averageCenter
+      enableRetinaIcons
+      gridSize={60}
+    >
+      {markers(props)}
+    </MarkerClusterer> :
       markers(props)}
   </GoogleMap>
 ));

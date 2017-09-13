@@ -82,7 +82,6 @@ class LocatorController extends \PageController
             "Categories" => $this->getCategories(),
             "Unit" => $this->Unit,
             "Clusters" => $this->Clusters,
-
         ));
 
         return $data->renderWith('Dynamic/Locator/settings');

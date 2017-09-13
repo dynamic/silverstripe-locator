@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class CategoryDropDown extends React.Component {
+class CategoryDropDown extends Component {
   /**
    * Maps the radii into options for the drop down.
    * @returns {Array}
