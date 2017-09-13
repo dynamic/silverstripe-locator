@@ -659,8 +659,13 @@ var Location = function (_Component) {
       });
 
       var className = 'list-location';
+
       if (current) {
         className += ' focus';
+      }
+
+      if (index % 2 === 0) {
+        className += ' even';
       }
       return _react2.default.createElement(
         'div',

@@ -85,8 +85,13 @@ class Location extends Component {
     };
 
     let className = 'list-location';
+    // if it should be focused
     if (current) {
       className += ' focus';
+    }
+    // if it is even (needed because the list acts odd with :nth-child)
+    if (index % 2 === 0) {
+      className += ' even';
     }
     return (
       // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions

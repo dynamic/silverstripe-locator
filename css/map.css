@@ -132,19 +132,25 @@
 	border: 1px solid #fff; /* Adding this to prevent moving li elements when adding the list-focus class*/
 }
 
+.loc-list .list-location.even {
+  background-color: rgb(238, 238, 238);
+}
+
 .loc-list .list-location:first-child {margin-top: 0px;}
 
 
-.loc-list .focus
+.loc-list .list-location.focus
 {
 	border: 1px solid rgba(82,168,236,0.9);
 	-moz-box-shadow: 0 0 8px rgba(82,168,236,0.7);
 	-webkit-box-shadow: 0 0 8px rgba(82,168,236,0.7);
 	box-shadow: 0 0 8px rgba(82,168,236,0.7);
 	transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+  /* so the border doesn't get blocked by other elements */
+  z-index: 1;
 }
 
-.map-container .loc-name
+.loc-name
 {
 	color: #AD2118;
 	font-weight: bold;
