@@ -35,6 +35,7 @@ class List extends Component {
     // create variables
     this.cache = new CellMeasurerCache({ defaultHeight: 85, fixedWidth: true });
     this.mostRecentWidth = 0;
+    this.lastDistance = -1;
     this.resizeAllFlag = false;
   }
 
@@ -67,6 +68,11 @@ class List extends Component {
     this.cache.clearAll();
     if (this.list) {
       this.list.recomputeRowHeights();
+    }
+
+    const { locations } = this.props;
+    if (locations.length > 0) {
+      this.lastDistance = locations[0].Distance;
     }
   }
 
@@ -124,9 +130,9 @@ class List extends Component {
       <div className="loc-list" role="list">
         <AutoSizer>
           {({ width, height }) => {
-            if (this.mostRecentWidth && this.mostRecentWidth !== width) {
+            if ((this.mostRecentWidth && this.mostRecentWidth !== width) ||
+              (locations.length > 0 && this.lastDistance !== locations[0].Distance)) {
               this.resizeAllFlag = true;
-
               setTimeout(this.resizeAll, 0);
             }
 

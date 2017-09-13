@@ -395,6 +395,7 @@ var List = function (_Component) {
 
     _this.cache = new _reactVirtualized.CellMeasurerCache({ defaultHeight: 85, fixedWidth: true });
     _this.mostRecentWidth = 0;
+    _this.lastDistance = -1;
     _this.resizeAllFlag = false;
     return _this;
   }
@@ -425,6 +426,12 @@ var List = function (_Component) {
       this.cache.clearAll();
       if (this.list) {
         this.list.recomputeRowHeights();
+      }
+
+      var locations = this.props.locations;
+
+      if (locations.length > 0) {
+        this.lastDistance = locations[0].Distance;
       }
     }
   }, {
@@ -490,9 +497,8 @@ var List = function (_Component) {
             var width = _ref2.width,
                 height = _ref2.height;
 
-            if (_this2.mostRecentWidth && _this2.mostRecentWidth !== width) {
+            if (_this2.mostRecentWidth && _this2.mostRecentWidth !== width || locations.length > 0 && _this2.lastDistance !== locations[0].Distance) {
               _this2.resizeAllFlag = true;
-
               setTimeout(_this2.resizeAll, 0);
             }
 
@@ -593,8 +599,7 @@ var Location = function (_Component) {
           location = _props.location,
           search = _props.search;
 
-      var distance = location.distance;
-      distance = parseFloat(distance);
+      var distance = location.Distance;
 
       if (distance === 0 && !search) {
         return false;

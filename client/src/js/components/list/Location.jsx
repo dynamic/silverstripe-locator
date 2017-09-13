@@ -28,8 +28,7 @@ class Location extends Component {
    */
   getDistance() {
     const { location, search } = this.props;
-    let distance = location.distance;
-    distance = parseFloat(distance);
+    const distance = location.Distance;
 
     if (distance === 0 && !search) {
       return false;
