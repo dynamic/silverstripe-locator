@@ -1,16 +1,16 @@
 <div className="list-label">{{Number}}</div>
 <div className="list-details">
   <div className="list-content">
-    <div className="loc-name">{{Title}}</div>
-    <div className="loc-addr">{{Address}}</div>
-    {{#if Address2}}<div className="loc-addr2">{{Address2}}</div>{{/if}}
-    <div className="loc-addr3">{{City}}, {{State}} {{PostalCode}}</div>
-    {{#if Phone}}<div className="loc-phone">{{Phone}}</div>{{/if}}
-    {{#if Website}}<div className="loc-web"><a href={{Website}} target="_blank">Website</a></div>{{/if}}
-    {{#if Email}}<div className="loc-email"><a href="mailto:{{Email}}">Email</a></div>{{/if}}
+    <div className="loc-name">{{{Title}}}</div>
+    <div className="loc-addr">{{{Address}}}</div>
+    {{#if Address2}}<div className="loc-addr2">{{{Address2}}}</div>{{/if}}
+    <div className="loc-addr3">{{{City}}}, {{{State}}} {{{PostalCode}}}</div>
+    {{#if Phone}}<div className="loc-phone">{{{Phone}}}</div>{{/if}}
+    {{#if Website}}<div className="loc-web"><a href={{{Website}}} target="_blank">Website</a></div>{{/if}}
+    {{#if Email}}<div className="loc-email"><a href="mailto:{{{Email}}}">Email</a></div>{{/if}}
     <div className="loc-dist">
       {{#if Distance}}{{Distance}} {{Unit}} |
-      <a href={{DirectionsLink}} target="_blank">Directions</a>
+      <a href={{{DirectionsLink}}} target="_blank">Directions</a>
       {{/if}}
     </div>
   </div>
