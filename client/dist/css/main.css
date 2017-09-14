@@ -517,9 +517,51 @@ select.form-control-lg:not([size]):not([multiple]) {
   }
 }
 
-.locator input[type="submit"],
-.locator input[type="reset"] {
+.locator-search {
+  width: 100%;
+  max-width: none;
+}
+
+.locator-search input[type="submit"],
+.locator-search input[type="reset"] {
   float: none;
+}
+
+.locator-search input.form-control {
+  box-sizing: border-box;
+}
+
+.locator-search fieldset {
+  display: -webkit-box;
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.locator-search fieldset .form-group {
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+  -webkit-box-flex: 0;
+          flex: 0 0 100%;
+  max-width: 100%;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .locator-search fieldset .address-input,
+  .locator-search fieldset .radius-dropdown {
+    -webkit-box-flex: 0;
+            flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+.locator-search fieldset select {
+  max-width: none;
 }
 
 /* ===
