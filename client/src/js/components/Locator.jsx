@@ -57,7 +57,7 @@ class Locator extends Component {
     return (
       <div>
         <Search />
-        <div id="map-area">
+        <div className="map-area">
           <MapContainer />
           <List />
         </div>

@@ -1,0 +1,75 @@
+// ==================
+// == Results List ==
+// ==================
+.loc-list {
+  height: 530px;
+
+  .list-label {
+    float: left;
+    margin: 10px 0 0 6px;
+    padding: 2px 3px;
+    width: 27px;
+    text-align: center;
+    background: #451400;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .list-details {
+    float: left;
+    margin-left: 6px;
+    width: 165px;
+  }
+
+  .list-content {
+    padding: 10px;
+  }
+
+  .loc-dist {
+    font-weight: bold;
+    font-style: italic;
+    color: #8e8e8e;
+  }
+
+  .list-location {
+    display: block;
+    box-sizing: border-box;
+    clear: left;
+    float: left;
+    margin: 6px 0;
+    cursor: pointer;
+    width: 99%;
+    // Adding this to prevent moving elements when adding the list-focus class
+    border: 1px solid transparent;
+
+    &.first {
+      margin-top: 0;
+    }
+
+    &.last {
+      margin-bottom: 0;
+    }
+
+    &.even {
+      background-color: rgb(238, 238, 238);
+    }
+
+    &.focus {
+      border: 1px solid rgba(82, 168, 236, 0.9);
+      box-shadow: 0 0 8px rgba(82, 168, 236, 0.7);
+      transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+      // so the border doesn't get blocked by other elements
+      z-index: 1;
+    }
+  }
+
+}
+
+.ReactVirtualized__List:focus {
+  border: none;
+  outline: none;
+}
+
+.ReactVirtualized__Grid__innerScrollContainer {
+  padding-bottom: 10px;
+}

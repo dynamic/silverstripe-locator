@@ -95,6 +95,10 @@ class Location extends Component {
     if (index % 2 === 0) {
       className += ' even';
     }
+    // if it is first (needed because the list acts odd with :nth-child)
+    if (index === 0) {
+      className += ' first';
+    }
     return (
       // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
       <div

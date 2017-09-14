@@ -2,6 +2,7 @@
 	<h1>$Title</h1>
 	<% if $Content %><div class="typography">$Content</div><% end_if %>
 
+    <%-- This is where react hooks into the page --%>
     <div class="locator">
     </div>
 
@@ -9,4 +10,4 @@
 
 <% require javascript('locator/client/dist/js/vendor.js') %>
 <% require javascript('locator/client/dist/js/main.js') %>
-<%-- require css('locator/client/dist/css/map.css') --%>
+<% require css('locator/client/dist/css/main.css') %>

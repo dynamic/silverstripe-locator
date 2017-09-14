@@ -21,6 +21,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "axios": "^0.16.2",
+    "bootstrap": "^4.0.0-beta",
     "es6-promise": "^4.0.5",
     "handlebars": "^4.0.10",
     "history": "^4.7.2",

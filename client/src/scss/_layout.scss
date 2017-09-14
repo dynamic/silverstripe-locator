@@ -1,0 +1,42 @@
+.map-area {
+  @include make-row-no-gutter;
+
+  margin-top: 27px;
+  margin-right: 0;
+  margin-left: 0;
+
+  flex-direction: row;
+  @include media-breakpoint-up(md) {
+    flex-direction: row-reverse;
+  }
+
+  .loc-list {
+    box-sizing: border-box;
+
+    @include make-col-ready-no-gutter;
+    @include make-col(12);
+
+    @include media-breakpoint-up(md) {
+      @include make-col(3);
+    }
+
+    @include media-breakpoint-up(lg) {
+      @include make-col(3);
+    }
+  }
+
+  .map-container {
+    box-sizing: border-box;
+
+    @include make-col-ready-no-gutter;
+    @include make-col(12);
+
+    @include media-breakpoint-up(md) {
+      @include make-col(9);
+    }
+
+    @include media-breakpoint-up(lg) {
+      @include make-col(9);
+    }
+  }
+}

@@ -53,7 +53,6 @@ class LocatorController extends \PageController
         parent::init();
 
         $key = Config::inst()->get(GoogleGeocoder::class, 'geocoder_api_key');
-        Requirements::css('locator/css/map.css');
         Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
     }
 

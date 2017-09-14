@@ -71,7 +71,7 @@ class MapContainer extends Component {
   render() {
     const { current, showCurrent, clusters } = this.props;
     return (
-      <div id="map-container">
+      <div className="map-container">
         <Map
           containerElement={
             <div className="map" />

@@ -41,17 +41,16 @@ class CategoryDropDown extends Component {
     const { categories } = this.props;
     if (categories !== undefined && Object.keys(categories).length !== 0) {
       return (
-        <div className="field dropdown form-group--no-label">
-          <div className="middleColumn">
-            <select
-              name="category"
-              className="dropdown form-group--no-label"
-              defaultValue={this.defaultValue()}
-            >
-              <option value="">category</option>
-              {this.mappedCategories()}
-            </select>
-          </div>
+        <div className="category-dropdown form-group">
+          <label htmlFor="address" className="sr-only">Category</label>
+          <select
+            name="category"
+            className="form-control"
+            defaultValue={this.defaultValue()}
+          >
+            <option value="">category</option>
+            {this.mappedCategories()}
+          </select>
         </div>
       );
     }

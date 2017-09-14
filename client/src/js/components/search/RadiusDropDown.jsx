@@ -7,14 +7,14 @@ class RadiusDropDown extends React.Component {
    * @returns {Array}
    */
   mappedRadii() {
-    const { radii } = this.props;
+    const { radii, unit } = this.props;
 
     return Object.keys(radii).map(key => (
       <option
         value={radii[key]}
         key={key}
       >
-        {radii[key]}
+        {radii[key]} {unit}
       </option>
     ));
   }
@@ -41,18 +41,15 @@ class RadiusDropDown extends React.Component {
     const { radii } = this.props;
     if (radii !== undefined && Object.keys(radii).length !== 0) {
       return (
-        <div className="field dropdown form-group--no-label">
-
-          <div className="middleColumn">
-            <select
-              name="radius"
-              className="dropdown form-group--no-label"
-              defaultValue={this.defaultValue()}
-            >
-              <option value="">radius</option>
-              {this.mappedRadii()}
-            </select>
-          </div>
+        <div className="radius-dropdown form-group">
+          <select
+            name="radius"
+            className="form-control"
+            defaultValue={this.defaultValue()}
+          >
+            <option value="">radius</option>
+            {this.mappedRadii()}
+          </select>
         </div>
       );
     }
@@ -67,6 +64,7 @@ RadiusDropDown.propTypes = {
     PropTypes.object,
     PropTypes.array,
   ]).isRequired,
+  unit: PropTypes.string.isRequired,
 };
 
 export default RadiusDropDown;

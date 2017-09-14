@@ -9,7 +9,9 @@ import CategoryDropDown from 'components/search/CategoryDropDown';
 
 class SearchBar extends Component {
   /**
-   * Turns a javascript object into url params
+   * Turns a javascript object into url params.
+   * Skips keys without values
+   *
    * @param obj
    * @return {string}
    */
@@ -20,7 +22,7 @@ class SearchBar extends Component {
       const value = obj[key];
 
       // don't add it if its blank
-      if (value !== undefined && value !== '') {
+      if (value !== undefined && value !== null && value !== '') {
         vars += `${key}=${value}&`;
       }
     });
@@ -83,38 +85,33 @@ class SearchBar extends Component {
    * @returns {XML}
    */
   render() {
-    const { address, category, radii, categories } = this.props;
+    const { address, category, radii, categories, unit } = this.props;
     let { radius } = this.props;
     if (typeof radius === 'string') {
       radius = Number(radius);
     }
     return (
-      <form action="" onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} className="locator-search">
         <fieldset>
-          <div className="field text form-group--no-label">
-            <div className="middleColumn">
-              <input
-                type="text"
-                name="address"
-                className="text form-group--no-label"
-                aria-required="true"
-                placeholder="address or zip code"
-                defaultValue={address}
-              />
-            </div>
+          <div className="address-input form-group">
+            <label htmlFor="address" className="sr-only">Address or zip code</label>
+            <input
+              type="text"
+              name="address"
+              className="form-control"
+              placeholder="address or zip code"
+              defaultValue={address}
+            />
           </div>
-          <RadiusDropDown radii={radii} radius={radius} />
+          <RadiusDropDown radii={radii} radius={radius} unit={unit} />
           <CategoryDropDown categories={categories} category={category} />
         </fieldset>
 
-        <div className="btn-toolbar">
-          <input
-            type="submit"
-            value="Search"
-            className="action"
-          />
-        </div>
-        <div className="clear" />
+        <input
+          type="submit"
+          value="Search"
+          className="btn"
+        />
       </form>
     );
   }

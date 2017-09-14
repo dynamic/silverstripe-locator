@@ -178,7 +178,7 @@ var Locator = function (_Component) {
         _react2.default.createElement(_SearchBar2.default, null),
         _react2.default.createElement(
           'div',
-          { id: 'map-area' },
+          { className: 'map-area' },
           _react2.default.createElement(_MapContainer2.default, null),
           _react2.default.createElement(_List2.default, null)
         )
@@ -365,7 +365,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactRedux = __webpack_require__(67);
 
-var _reactVirtualized = __webpack_require__(793);
+var _reactVirtualized = __webpack_require__(794);
 
 var _mapActions = __webpack_require__(197);
 
@@ -689,6 +689,10 @@ var Location = function (_Component) {
       if (index % 2 === 0) {
         className += ' even';
       }
+
+      if (index === 0) {
+        className += ' first';
+      }
       return _react2.default.createElement(
         'div',
         {
@@ -760,9 +764,9 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactGoogleMaps = __webpack_require__(589);
+var _reactGoogleMaps = __webpack_require__(590);
 
-var _MarkerClusterer = __webpack_require__(588);
+var _MarkerClusterer = __webpack_require__(589);
 
 var _MarkerClusterer2 = _interopRequireDefault(_MarkerClusterer);
 
@@ -919,7 +923,7 @@ var MapContainer = function (_Component) {
 
       return _react2.default.createElement(
         'div',
-        { id: 'map-container' },
+        { className: 'map-container' },
         _react2.default.createElement(_Map2.default, {
           containerElement: _react2.default.createElement('div', { className: 'map' }),
           mapElement: _react2.default.createElement('div', { style: { height: '100%' } }),
@@ -1038,24 +1042,25 @@ var CategoryDropDown = function (_Component) {
       if (categories !== undefined && Object.keys(categories).length !== 0) {
         return _react2.default.createElement(
           'div',
-          { className: 'field dropdown form-group--no-label' },
+          { className: 'category-dropdown form-group' },
           _react2.default.createElement(
-            'div',
-            { className: 'middleColumn' },
+            'label',
+            { htmlFor: 'address', className: 'sr-only' },
+            'Category'
+          ),
+          _react2.default.createElement(
+            'select',
+            {
+              name: 'category',
+              className: 'form-control',
+              defaultValue: this.defaultValue()
+            },
             _react2.default.createElement(
-              'select',
-              {
-                name: 'category',
-                className: 'dropdown form-group--no-label',
-                defaultValue: this.defaultValue()
-              },
-              _react2.default.createElement(
-                'option',
-                { value: '' },
-                'category'
-              ),
-              this.mappedCategories()
-            )
+              'option',
+              { value: '' },
+              'category'
+            ),
+            this.mappedCategories()
           )
         );
       }
@@ -1116,7 +1121,9 @@ var RadiusDropDown = function (_React$Component) {
   _createClass(RadiusDropDown, [{
     key: 'mappedRadii',
     value: function mappedRadii() {
-      var radii = this.props.radii;
+      var _props = this.props,
+          radii = _props.radii,
+          unit = _props.unit;
 
 
       return Object.keys(radii).map(function (key) {
@@ -1126,16 +1133,18 @@ var RadiusDropDown = function (_React$Component) {
             value: radii[key],
             key: key
           },
-          radii[key]
+          radii[key],
+          ' ',
+          unit
         );
       });
     }
   }, {
     key: 'defaultValue',
     value: function defaultValue() {
-      var _props = this.props,
-          radius = _props.radius,
-          radii = _props.radii;
+      var _props2 = this.props,
+          radius = _props2.radius,
+          radii = _props2.radii;
 
       if (Object.values(radii).indexOf(radius) > -1) {
         return radius;
@@ -1150,24 +1159,20 @@ var RadiusDropDown = function (_React$Component) {
       if (radii !== undefined && Object.keys(radii).length !== 0) {
         return _react2.default.createElement(
           'div',
-          { className: 'field dropdown form-group--no-label' },
+          { className: 'radius-dropdown form-group' },
           _react2.default.createElement(
-            'div',
-            { className: 'middleColumn' },
+            'select',
+            {
+              name: 'radius',
+              className: 'form-control',
+              defaultValue: this.defaultValue()
+            },
             _react2.default.createElement(
-              'select',
-              {
-                name: 'radius',
-                className: 'dropdown form-group--no-label',
-                defaultValue: this.defaultValue()
-              },
-              _react2.default.createElement(
-                'option',
-                { value: '' },
-                'radius'
-              ),
-              this.mappedRadii()
-            )
+              'option',
+              { value: '' },
+              'radius'
+            ),
+            this.mappedRadii()
           )
         );
       }
@@ -1181,7 +1186,8 @@ var RadiusDropDown = function (_React$Component) {
 RadiusDropDown.propTypes = {
   radius: _propTypes2.default.number.isRequired,
 
-  radii: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired
+  radii: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.array]).isRequired,
+  unit: _propTypes2.default.string.isRequired
 };
 
 exports.default = RadiusDropDown;
@@ -1241,7 +1247,7 @@ var SearchBar = function (_Component) {
       Object.keys(obj).forEach(function (key) {
         var value = obj[key];
 
-        if (value !== undefined && value !== '') {
+        if (value !== undefined && value !== null && value !== '') {
           vars += key + '=' + value + '&';
         }
       });
@@ -1298,7 +1304,8 @@ var SearchBar = function (_Component) {
           address = _props2.address,
           category = _props2.category,
           radii = _props2.radii,
-          categories = _props2.categories;
+          categories = _props2.categories,
+          unit = _props2.unit;
       var radius = this.props.radius;
 
       if (typeof radius === 'string') {
@@ -1306,39 +1313,34 @@ var SearchBar = function (_Component) {
       }
       return _react2.default.createElement(
         'form',
-        { action: '', onSubmit: this.handleSubmit },
+        { onSubmit: this.handleSubmit, className: 'locator-search' },
         _react2.default.createElement(
           'fieldset',
           null,
           _react2.default.createElement(
             'div',
-            { className: 'field text form-group--no-label' },
+            { className: 'address-input form-group' },
             _react2.default.createElement(
-              'div',
-              { className: 'middleColumn' },
-              _react2.default.createElement('input', {
-                type: 'text',
-                name: 'address',
-                className: 'text form-group--no-label',
-                'aria-required': 'true',
-                placeholder: 'address or zip code',
-                defaultValue: address
-              })
-            )
+              'label',
+              { htmlFor: 'address', className: 'sr-only' },
+              'Address or zip code'
+            ),
+            _react2.default.createElement('input', {
+              type: 'text',
+              name: 'address',
+              className: 'form-control',
+              placeholder: 'address or zip code',
+              defaultValue: address
+            })
           ),
-          _react2.default.createElement(_RadiusDropDown2.default, { radii: radii, radius: radius }),
+          _react2.default.createElement(_RadiusDropDown2.default, { radii: radii, radius: radius, unit: unit }),
           _react2.default.createElement(_CategoryDropDown2.default, { categories: categories, category: category })
         ),
-        _react2.default.createElement(
-          'div',
-          { className: 'btn-toolbar' },
-          _react2.default.createElement('input', {
-            type: 'submit',
-            value: 'Search',
-            className: 'action'
-          })
-        ),
-        _react2.default.createElement('div', { className: 'clear' })
+        _react2.default.createElement('input', {
+          type: 'submit',
+          value: 'Search',
+          className: 'btn'
+        })
       );
     }
   }]);
@@ -1488,7 +1490,7 @@ var _ActionTypes = __webpack_require__(42);
 
 var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
 
-var _url = __webpack_require__(824);
+var _url = __webpack_require__(825);
 
 var _url2 = _interopRequireDefault(_url);
 
@@ -1533,7 +1535,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.default = reducer;
 
-var _handlebars = __webpack_require__(448);
+var _handlebars = __webpack_require__(449);
 
 var _handlebars2 = _interopRequireDefault(_handlebars);
 
