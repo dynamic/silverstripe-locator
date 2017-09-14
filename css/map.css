@@ -128,6 +128,7 @@
 .loc-list .list-location
 {
 	display: block;
+  box-sizing: border-box;
 	clear: left;
 	float: left;
 	margin: 6px 0;
