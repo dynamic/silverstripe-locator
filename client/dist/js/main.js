@@ -787,7 +787,7 @@ var markers = function markers(props) {
           } },
         _react2.default.createElement(
           'div',
-          null,
+          { className: 'marker-content' },
           marker.infoContent
         )
       )

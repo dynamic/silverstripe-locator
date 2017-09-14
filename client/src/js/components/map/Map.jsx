@@ -11,7 +11,7 @@ const markers = props => props.markers.map(marker => (
   >
     {props.current === marker.key && props.showCurrent && (
       <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>
-        <div>{marker.infoContent}</div>
+        <div className="marker-content">{marker.infoContent}</div>
       </InfoWindow>
     )}
   </Marker>
