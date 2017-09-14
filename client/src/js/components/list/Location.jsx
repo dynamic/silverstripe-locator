@@ -84,6 +84,8 @@ class Location extends Component {
       Number: index + 1,
     };
 
+    const id = `loc-${location.ID}`;
+
     let className = 'list-location';
     // if it should be focused
     if (current) {
@@ -96,6 +98,7 @@ class Location extends Component {
     return (
       // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
       <div
+        id={id}
         data-markerid={index}
         className={className}
         onClick={() => onClick(location.ID)}

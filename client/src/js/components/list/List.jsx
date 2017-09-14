@@ -58,6 +58,7 @@ class List extends Component {
         this.list.recomputeRowHeights(index);
       }
     }
+    this.scrollToCurrentIndex();
   }
 
   /**
@@ -74,6 +75,15 @@ class List extends Component {
     if (locations.length > 0) {
       this.lastDistance = locations[0].Distance;
     }
+  }
+
+  scrollToCurrentIndex() {
+    const { locations, current } = this.props;
+    let index = locations.findIndex(l => l.ID === current);
+    if (index === -1) {
+      index = 0;
+    }
+    this.list.scrollToRow(index);
   }
 
   /**
@@ -140,6 +150,9 @@ class List extends Component {
 
             return (
               <VirtualList
+                ref={(list) => {
+                  this.list = list;
+                }}
                 current={current}
                 deferredMeasurementCache={this.cache}
                 width={width}
@@ -147,6 +160,7 @@ class List extends Component {
                 rowCount={locations.length}
                 rowHeight={this.cache.rowHeight}
                 rowRenderer={this.renderRow}
+                scrollToAlignment="start"
               />
             );
           }}

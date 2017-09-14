@@ -47,6 +47,8 @@ class Locator extends Page
 
     private static $limit = -1;
 
+    private static $locationClass = Location::class;
+
     /**
      * @var array
      */
@@ -203,7 +205,7 @@ class Locator extends Page
         $callback = null
     ) {
         $locationClass = Config::inst()->get(Locator::class, 'location_class');
-        $locations = Location::get()->filter($filter)->exclude($exclude);
+        $locations = $locationClass::get()->filter($filter)->exclude($exclude);
         if ( !empty($filterAny)) {
             $locations = $locations->filterAny($filterAny);
         }

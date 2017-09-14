@@ -418,6 +418,7 @@ var List = function (_Component) {
           this.list.recomputeRowHeights(index);
         }
       }
+      this.scrollToCurrentIndex();
     }
   }, {
     key: 'resizeAll',
@@ -435,6 +436,21 @@ var List = function (_Component) {
       }
     }
   }, {
+    key: 'scrollToCurrentIndex',
+    value: function scrollToCurrentIndex() {
+      var _props = this.props,
+          locations = _props.locations,
+          current = _props.current;
+
+      var index = locations.findIndex(function (l) {
+        return l.ID === current;
+      });
+      if (index === -1) {
+        index = 0;
+      }
+      this.list.scrollToRow(index);
+    }
+  }, {
     key: 'handleLocationClick',
     value: function handleLocationClick(target) {
       var dispatch = this.props.dispatch;
@@ -448,12 +464,12 @@ var List = function (_Component) {
           key = _ref.key,
           style = _ref.style,
           parent = _ref.parent;
-      var _props = this.props,
-          current = _props.current,
-          search = _props.search,
-          unit = _props.unit,
-          template = _props.template,
-          locations = _props.locations;
+      var _props2 = this.props,
+          current = _props2.current,
+          search = _props2.search,
+          unit = _props2.unit,
+          template = _props2.template,
+          locations = _props2.locations;
 
       var location = locations[index];
       return _react2.default.createElement(
@@ -483,9 +499,9 @@ var List = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var _props2 = this.props,
-          locations = _props2.locations,
-          current = _props2.current;
+      var _props3 = this.props,
+          locations = _props3.locations,
+          current = _props3.current;
 
       return _react2.default.createElement(
         'div',
@@ -505,13 +521,17 @@ var List = function (_Component) {
             _this2.mostRecentWidth = width;
 
             return _react2.default.createElement(_reactVirtualized.List, {
+              ref: function ref(list) {
+                _this2.list = list;
+              },
               current: current,
               deferredMeasurementCache: _this2.cache,
               width: width,
               height: height,
               rowCount: locations.length,
               rowHeight: _this2.cache.rowHeight,
-              rowRenderer: _this2.renderRow
+              rowRenderer: _this2.renderRow,
+              scrollToAlignment: 'start'
             });
           }
         )
@@ -658,6 +678,8 @@ var Location = function (_Component) {
         Number: index + 1
       });
 
+      var id = 'loc-' + location.ID;
+
       var className = 'list-location';
 
       if (current) {
@@ -670,6 +692,7 @@ var Location = function (_Component) {
       return _react2.default.createElement(
         'div',
         {
+          id: id,
           'data-markerid': index,
           className: className,
           onClick: function onClick() {
