@@ -65,27 +65,20 @@
       z-index: 1;
     }
   }
-}
 
-/* #Tablet (Portrait)
-================================================== */
+  @include media-breakpoint-between(sm, md) {
+    .list-label {
+      margin-left: 0px;
+    }
 
-/* Note: Design for a width of 768px */
+    .list-content {
+      padding: 10px 0px;
+    }
 
-@media only screen and (min-width: 641px) and (max-width: 959px) {
-
-  .loc-list .list-label {
-    margin-left: 0px;
+    .list-details {
+      width: 140px;
+    }
   }
-
-  .loc-list .list-content {
-    padding: 10px 0px;
-  }
-
-  .loc-list .list-details {
-    width: 140px;
-  }
-
 }
 
 // react-virtulized stuff

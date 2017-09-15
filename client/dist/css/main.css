@@ -666,12 +666,7 @@ select.form-control-lg:not([size]):not([multiple]) {
   z-index: 1;
 }
 
-/* #Tablet (Portrait)
-================================================== */
-
-/* Note: Design for a width of 768px */
-
-@media only screen and (min-width: 641px) and (max-width: 959px) {
+@media (min-width: 576px) and (max-width: 991px) {
   .loc-list .list-label {
     margin-left: 0px;
   }
