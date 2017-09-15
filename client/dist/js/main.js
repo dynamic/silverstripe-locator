@@ -1045,7 +1045,7 @@ var CategoryDropDown = function (_Component) {
           { className: 'category-dropdown form-group' },
           _react2.default.createElement(
             'label',
-            { htmlFor: 'address', className: 'sr-only' },
+            { htmlFor: 'category', className: 'sr-only' },
             'Category'
           ),
           _react2.default.createElement(
@@ -1160,6 +1160,11 @@ var RadiusDropDown = function (_React$Component) {
         return _react2.default.createElement(
           'div',
           { className: 'radius-dropdown form-group' },
+          _react2.default.createElement(
+            'label',
+            { htmlFor: 'radius', className: 'sr-only' },
+            'Radius'
+          ),
           _react2.default.createElement(
             'select',
             {
@@ -1315,8 +1320,8 @@ var SearchBar = function (_Component) {
         'form',
         { onSubmit: this.handleSubmit, className: 'locator-search' },
         _react2.default.createElement(
-          'fieldset',
-          null,
+          'div',
+          { className: 'fieldset' },
           _react2.default.createElement(
             'div',
             { className: 'address-input form-group' },
@@ -1336,11 +1341,19 @@ var SearchBar = function (_Component) {
           _react2.default.createElement(_RadiusDropDown2.default, { radii: radii, radius: radius, unit: unit }),
           _react2.default.createElement(_CategoryDropDown2.default, { categories: categories, category: category })
         ),
-        _react2.default.createElement('input', {
-          type: 'submit',
-          value: 'Search',
-          className: 'btn'
-        })
+        _react2.default.createElement(
+          'div',
+          { className: 'fieldset actions' },
+          _react2.default.createElement(
+            'div',
+            { className: 'form-group' },
+            _react2.default.createElement('input', {
+              type: 'submit',
+              value: 'Search',
+              className: 'btn'
+            })
+          )
+        )
       );
     }
   }]);

@@ -1,35 +1,50 @@
 .locator-search {
   width: 100%;
-  max-width: none;
+  max-width: 100%;
+  margin: 0;
 
-  input[type="submit"],
-  input[type="reset"] {
-    float: none;
-  }
-
+  .form-group,
   input.form-control {
     box-sizing: border-box;
   }
 
-  fieldset {
+  .fieldset {
     @include make-row;
+    @include make-col-ready;
+
+    &.actions {
+      justify-content: space-around;
+
+      .form-group {
+        @include media-breakpoint-up(sm) {
+          @include make-col(6);
+        }
+
+        @include media-breakpoint-up(md) {
+          @include make-col(4);
+        }
+      }
+    }
 
     .form-group {
       @include make-col-ready;
-      @include make-col(12);
-
-      width: auto;
     }
 
-    .address-input, .radius-dropdown {
+    .address-input,
+    .radius-dropdown {
       @include media-breakpoint-up(md) {
         @include make-col(6);
       }
     }
 
     select {
-      max-width: none;
+      max-width: 100%;
     }
 
+    input[type="submit"],
+    input[type="reset"] {
+      float: none;
+      width: 100%;
+    }
   }
 }

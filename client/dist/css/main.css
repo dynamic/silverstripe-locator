@@ -449,15 +449,10 @@ select.form-control-lg:not([size]):not([multiple]) {
   display: -webkit-box;
   display: flex;
   flex-wrap: wrap;
-  margin-top: 27px;
-  margin-right: 0;
-  margin-left: 0;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-          flex-direction: row;
+  margin: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 576px) {
   .map-area {
     -webkit-box-orient: horizontal;
     -webkit-box-direction: reverse;
@@ -465,51 +460,39 @@ select.form-control-lg:not([size]):not([multiple]) {
   }
 }
 
-.map-area .loc-list {
-  box-sizing: border-box;
-  position: relative;
-  width: 100%;
-  min-height: 1px;
-  -webkit-box-flex: 0;
-          flex: 0 0 100%;
-  max-width: 100%;
-}
-
-@media (min-width: 768px) {
-  .map-area .loc-list {
-    -webkit-box-flex: 0;
-            flex: 0 0 25%;
-    max-width: 25%;
-  }
-}
-
-@media (min-width: 992px) {
-  .map-area .loc-list {
-    -webkit-box-flex: 0;
-            flex: 0 0 25%;
-    max-width: 25%;
-  }
-}
-
+.map-area .loc-list,
 .map-area .map-container {
   box-sizing: border-box;
   position: relative;
   width: 100%;
   min-height: 1px;
-  -webkit-box-flex: 0;
-          flex: 0 0 100%;
-  max-width: 100%;
 }
 
-@media (min-width: 768px) {
-  .map-area .map-container {
+@media (min-width: 576px) {
+  .map-area .loc-list {
     -webkit-box-flex: 0;
-            flex: 0 0 75%;
-    max-width: 75%;
+            flex: 0 0 33.33333%;
+    max-width: 33.33333%;
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 768px) {
+  .map-area .loc-list {
+    -webkit-box-flex: 0;
+            flex: 0 0 25%;
+    max-width: 25%;
+  }
+}
+
+@media (min-width: 576px) {
+  .map-area .map-container {
+    -webkit-box-flex: 0;
+            flex: 0 0 66.66667%;
+    max-width: 66.66667%;
+  }
+}
+
+@media (min-width: 768px) {
   .map-area .map-container {
     -webkit-box-flex: 0;
             flex: 0 0 75%;
@@ -519,49 +502,73 @@ select.form-control-lg:not([size]):not([multiple]) {
 
 .locator-search {
   width: 100%;
-  max-width: none;
+  max-width: 100%;
+  margin: 0;
 }
 
-.locator-search input[type="submit"],
-.locator-search input[type="reset"] {
-  float: none;
-}
-
+.locator-search .form-group,
 .locator-search input.form-control {
   box-sizing: border-box;
 }
 
-.locator-search fieldset {
+.locator-search .fieldset {
   display: -webkit-box;
   display: flex;
   flex-wrap: wrap;
   margin-right: -15px;
   margin-left: -15px;
-}
-
-.locator-search fieldset .form-group {
   position: relative;
   width: 100%;
   min-height: 1px;
   padding-right: 15px;
   padding-left: 15px;
-  -webkit-box-flex: 0;
-          flex: 0 0 100%;
-  max-width: 100%;
-  width: auto;
 }
 
-@media (min-width: 768px) {
-  .locator-search fieldset .address-input,
-  .locator-search fieldset .radius-dropdown {
+.locator-search .fieldset.actions {
+  justify-content: space-around;
+}
+
+@media (min-width: 576px) {
+  .locator-search .fieldset.actions .form-group {
     -webkit-box-flex: 0;
             flex: 0 0 50%;
     max-width: 50%;
   }
 }
 
-.locator-search fieldset select {
-  max-width: none;
+@media (min-width: 768px) {
+  .locator-search .fieldset.actions .form-group {
+    -webkit-box-flex: 0;
+            flex: 0 0 33.33333%;
+    max-width: 33.33333%;
+  }
+}
+
+.locator-search .fieldset .form-group {
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+@media (min-width: 768px) {
+  .locator-search .fieldset .address-input,
+  .locator-search .fieldset .radius-dropdown {
+    -webkit-box-flex: 0;
+            flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+.locator-search .fieldset select {
+  max-width: 100%;
+}
+
+.locator-search .fieldset input[type="submit"],
+.locator-search .fieldset input[type="reset"] {
+  float: none;
+  width: 100%;
 }
 
 /* ===

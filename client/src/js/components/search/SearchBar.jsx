@@ -92,7 +92,8 @@ class SearchBar extends Component {
     }
     return (
       <form onSubmit={this.handleSubmit} className="locator-search">
-        <fieldset>
+        {/* not a fieldset because no flexbox */}
+        <div className="fieldset">
           <div className="address-input form-group">
             <label htmlFor="address" className="sr-only">Address or zip code</label>
             <input
@@ -105,13 +106,17 @@ class SearchBar extends Component {
           </div>
           <RadiusDropDown radii={radii} radius={radius} unit={unit} />
           <CategoryDropDown categories={categories} category={category} />
-        </fieldset>
+        </div>
 
-        <input
-          type="submit"
-          value="Search"
-          className="btn"
-        />
+        <div className="fieldset actions">
+          <div className="form-group">
+            <input
+              type="submit"
+              value="Search"
+              className="btn"
+            />
+          </div>
+        </div>
       </form>
     );
   }

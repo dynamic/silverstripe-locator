@@ -42,7 +42,7 @@ class CategoryDropDown extends Component {
     if (categories !== undefined && Object.keys(categories).length !== 0) {
       return (
         <div className="category-dropdown form-group">
-          <label htmlFor="address" className="sr-only">Category</label>
+          <label htmlFor="category" className="sr-only">Category</label>
           <select
             name="category"
             className="form-control"

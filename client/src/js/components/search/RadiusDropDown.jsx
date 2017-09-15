@@ -42,6 +42,7 @@ class RadiusDropDown extends React.Component {
     if (radii !== undefined && Object.keys(radii).length !== 0) {
       return (
         <div className="radius-dropdown form-group">
+          <label htmlFor="radius" className="sr-only">Radius</label>
           <select
             name="radius"
             className="form-control"
