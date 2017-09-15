@@ -10,4 +10,5 @@
 
 <% require javascript('locator/client/dist/js/vendor.js') %>
 <% require javascript('locator/client/dist/js/main.js') %>
+<%-- TODO - make optional? --%>
 <% require css('locator/client/dist/css/main.css') %>

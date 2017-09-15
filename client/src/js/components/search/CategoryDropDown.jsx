@@ -27,7 +27,7 @@ class CategoryDropDown extends Component {
     const { category, categories } = this.props;
 
     // if the category exists in the dropdown
-    if (Object.keys(categories).indexOf(category) > -1) {
+    if (categories.filter(cat => cat.ID === category)) {
       return category;
     }
     return '';

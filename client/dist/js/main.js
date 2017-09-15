@@ -1029,7 +1029,9 @@ var CategoryDropDown = function (_Component) {
           category = _props.category,
           categories = _props.categories;
 
-      if (Object.keys(categories).indexOf(category) > -1) {
+      if (categories.filter(function (cat) {
+        return cat.ID === category;
+      })) {
         return category;
       }
       return '';
