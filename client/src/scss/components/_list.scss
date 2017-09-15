@@ -1,6 +1,9 @@
 // ==================
 // == Results List ==
 // ==================
+
+// loc-name is in general
+
 .loc-list {
   height: 530px;
 
@@ -62,9 +65,30 @@
       z-index: 1;
     }
   }
+}
+
+/* #Tablet (Portrait)
+================================================== */
+
+/* Note: Design for a width of 768px */
+
+@media only screen and (min-width: 641px) and (max-width: 959px) {
+
+  .loc-list .list-label {
+    margin-left: 0px;
+  }
+
+  .loc-list .list-content {
+    padding: 10px 0px;
+  }
+
+  .loc-list .list-details {
+    width: 140px;
+  }
 
 }
 
+// react-virtulized stuff
 .ReactVirtualized__List:focus {
   border: none;
   outline: none;

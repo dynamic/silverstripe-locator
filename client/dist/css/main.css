@@ -571,10 +571,6 @@ select.form-control-lg:not([size]):not([multiple]) {
   width: 100%;
 }
 
-/* ===
- Map
-=== */
-
 .map-container a {
   color: #e76737;
   text-decoration: none;
@@ -607,84 +603,6 @@ select.form-control-lg:not([size]):not([multiple]) {
   margin: 0;
   border: 0;
   padding: 0;
-}
-
-.loc-name {
-  color: #AD2118;
-  font-weight: bold;
-}
-
-/* ===
- Loading
-=== */
-
-.typography img.loading {
-  border: none;
-}
-
-/* ===
- Modal window
-=== */
-
-#overlay {
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 100%;
-  z-index: 10000;
-  background: url(../images/overlay-bg.png) repeat;
-}
-
-#modal-window {
-  position: absolute;
-  left: 50%;
-  margin-left: -460px;
-  /* width divided by 2 */
-  margin-top: 60px;
-  width: 920px;
-  height: 590px;
-  z-index: 10010;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #656565;
-}
-
-#modal-content {
-  padding: 0 22px;
-  /* there's already a margin on the top of the map-container div */
-}
-
-#close-icon {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  background: #2c2c2c url(../images/close-icon.png) 3px 3px no-repeat;
-  border: 1px solid #000;
-  border-radius: 3px;
-  box-shadow: 0 0 3px #656565;
-}
-
-/* #Tablet (Portrait)
-================================================== */
-
-/* Note: Design for a width of 768px */
-
-@media only screen and (min-width: 641px) and (max-width: 959px) {
-  .loc-list .list-label {
-    margin-left: 0px;
-  }
-
-  .loc-list .list-content {
-    padding: 10px 0px;
-  }
-
-  .loc-list .list-details {
-    width: 140px;
-  }
 }
 
 .loc-list {
@@ -748,6 +666,25 @@ select.form-control-lg:not([size]):not([multiple]) {
   z-index: 1;
 }
 
+/* #Tablet (Portrait)
+================================================== */
+
+/* Note: Design for a width of 768px */
+
+@media only screen and (min-width: 641px) and (max-width: 959px) {
+  .loc-list .list-label {
+    margin-left: 0px;
+  }
+
+  .loc-list .list-content {
+    padding: 10px 0px;
+  }
+
+  .loc-list .list-details {
+    width: 140px;
+  }
+}
+
 .ReactVirtualized__List:focus {
   border: none;
   outline: none;
@@ -755,6 +692,48 @@ select.form-control-lg:not([size]):not([multiple]) {
 
 .ReactVirtualized__Grid__innerScrollContainer {
   padding-bottom: 10px;
+}
+
+#overlay {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  background: url(../images/overlay-bg.png) repeat;
+}
+
+#modal-window {
+  position: absolute;
+  left: 50%;
+  margin-left: -460px;
+  /* width divided by 2 */
+  margin-top: 60px;
+  width: 920px;
+  height: 590px;
+  z-index: 10010;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #656565;
+}
+
+#modal-content {
+  padding: 0 22px;
+  /* there's already a margin on the top of the map-container div */
+}
+
+#close-icon {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  background: #2c2c2c url(../images/close-icon.png) 3px 3px no-repeat;
+  border: 1px solid #000;
+  border-radius: 3px;
+  box-shadow: 0 0 3px #656565;
 }
 
 
