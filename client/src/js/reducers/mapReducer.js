@@ -3,6 +3,7 @@ import ActionType from 'actions/ActionTypes';
 const defaultState = {
   current: -1,
   showCurrent: false,
+  isLoading: true,
 };
 
 export default function reducer(state = defaultState, action) {
@@ -25,6 +26,18 @@ export default function reducer(state = defaultState, action) {
         ...state,
         current: -1,
         showCurrent: false,
+      };
+
+    case ActionType.FETCH_LOCATIONS_LOADING:
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+    case ActionType.FETCH_LOCATIONS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
       };
 
     default:

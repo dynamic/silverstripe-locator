@@ -3,6 +3,7 @@
 // ====================
 .map-area {
   @include make-row-no-gutter;
+  position: relative;
 
   margin: 0;
 

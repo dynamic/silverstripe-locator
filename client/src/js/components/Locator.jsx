@@ -8,6 +8,7 @@ import { fetchSettings } from 'actions/settingsActions';
 import Search from 'components/search/SearchBar';
 import MapContainer from 'components/map/MapContainer';
 import List from 'components/list/List';
+import Loading from 'components/Loading';
 
 /**
  * The main locator component.
@@ -60,6 +61,7 @@ class Locator extends Component {
         <div className="map-area">
           <MapContainer />
           <List />
+          <Loading />
         </div>
       </div>
     );
