@@ -24,7 +24,8 @@ class Location extends Component {
 
   /**
    * Rounds the distance
-   * @returns Number|Boolean
+   *
+   * @return Boolean | String
    */
   getDistance() {
     const { location, search } = this.props;

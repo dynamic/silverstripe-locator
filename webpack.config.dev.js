@@ -39,9 +39,7 @@ module.exports = {
         loader: 'babel-loader',
         options: {
           presets: [
-            ['es2015', { modules: false }],
-            'es2016',
-            'es2017',
+            'env',
             'react',
           ],
           plugins: ['transform-object-rest-spread'],

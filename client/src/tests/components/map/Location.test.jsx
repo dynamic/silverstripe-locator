@@ -15,12 +15,12 @@ const location = {
   Website: 'http://example.com',
   Phone: '123-456-7777',
   Email: 'd@a.g',
-  distance: '0',
+  Distance: 0,
 };
 
 test('Location component should render test', () => {
   const component = shallow(<Location location={location} index={1} current={'1'} search="" />);
-  expect(toJson(component).type).toBe('li');
+  expect(toJson(component).type).toBe('div');
 });
 
 test('Location component\'s address 2 should render test', () => {

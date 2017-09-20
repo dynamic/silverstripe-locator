@@ -26,7 +26,7 @@ class MapContainer extends Component {
    * Generates an array of marker objects to use on the map
    */
   getMarkers() {
-    const { locations } = this.props;
+    const { locations, template } = this.props;
     const markers = [];
 
     const htmlToReactParser = new HtmlToReactParser();
@@ -35,16 +35,17 @@ class MapContainer extends Component {
     // eslint-disable-next-line no-plusplus
     for (i = 0; i < locations.length; i++) {
       const loc = locations[i];
+      const { Lat, Lng } = loc;
       markers[markers.length] = {
         position: {
-          lat: Number(loc.Lat),
-          lng: Number(loc.Lng),
+          lat: Number(Lat),
+          lng: Number(Lng),
         },
         key: loc.ID,
         defaultAnimation: 2,
         infoContent: (
           <div>
-            {htmlToReactParser.parse(this.props.template(loc))}
+            {htmlToReactParser.parse(template(loc))}
           </div>
         ),
       };
@@ -57,7 +58,8 @@ class MapContainer extends Component {
    * @param target The marker that was clicked
    */
   handleMarkerClick(target) {
-    this.props.dispatch(highlightLocation(target));
+    const { dispatch } = this.props;
+    dispatch(highlightLocation(target));
   }
 
   /**
@@ -65,7 +67,8 @@ class MapContainer extends Component {
    * @param target The marker that had its info box closed
    */
   handleMarkerClose(target) {
-    this.props.dispatch(closeMarker(target));
+    const { dispatch } = this.props;
+    dispatch(closeMarker(target));
   }
 
   render() {
