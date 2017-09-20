@@ -79,7 +79,7 @@ function closeMarker(target) {
 
 /***/ }),
 
-/***/ 295:
+/***/ 294:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -97,19 +97,19 @@ var _redux = __webpack_require__(118);
 
 var _reactRedux = __webpack_require__(50);
 
-var _reduxThunk = __webpack_require__(418);
+var _reduxThunk = __webpack_require__(417);
 
 var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-var _reduxPromiseMiddleware = __webpack_require__(419);
+var _reduxPromiseMiddleware = __webpack_require__(418);
 
 var _reduxPromiseMiddleware2 = _interopRequireDefault(_reduxPromiseMiddleware);
 
-var _reducers = __webpack_require__(421);
+var _reducers = __webpack_require__(420);
 
 var _reducers2 = _interopRequireDefault(_reducers);
 
-var _Locator = __webpack_require__(433);
+var _Locator = __webpack_require__(432);
 
 var _Locator2 = _interopRequireDefault(_Locator);
 
@@ -170,7 +170,7 @@ exports.default = ActionTypes;
 
 /***/ }),
 
-/***/ 421:
+/***/ 420:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -182,19 +182,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(118);
 
-var _searchReducer = __webpack_require__(422);
+var _searchReducer = __webpack_require__(421);
 
 var _searchReducer2 = _interopRequireDefault(_searchReducer);
 
-var _mapReducer = __webpack_require__(429);
+var _mapReducer = __webpack_require__(428);
 
 var _mapReducer2 = _interopRequireDefault(_mapReducer);
 
-var _settingsReducer = __webpack_require__(430);
+var _settingsReducer = __webpack_require__(429);
 
 var _settingsReducer2 = _interopRequireDefault(_settingsReducer);
 
-var _locationReducer = __webpack_require__(432);
+var _locationReducer = __webpack_require__(431);
 
 var _locationReducer2 = _interopRequireDefault(_locationReducer);
 
@@ -211,7 +211,7 @@ exports.default = reducers;
 
 /***/ }),
 
-/***/ 422:
+/***/ 421:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -229,7 +229,7 @@ var _ActionTypes = __webpack_require__(37);
 
 var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
 
-var _url = __webpack_require__(423);
+var _url = __webpack_require__(422);
 
 var _url2 = _interopRequireDefault(_url);
 
@@ -260,7 +260,7 @@ function reducer() {
 
 /***/ }),
 
-/***/ 429:
+/***/ 428:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -325,7 +325,7 @@ function reducer() {
 
 /***/ }),
 
-/***/ 430:
+/***/ 429:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -339,7 +339,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.default = reducer;
 
-var _handlebars = __webpack_require__(431);
+var _handlebars = __webpack_require__(430);
 
 var _handlebars2 = _interopRequireDefault(_handlebars);
 
@@ -391,7 +391,7 @@ function reducer() {
 
 /***/ }),
 
-/***/ 432:
+/***/ 431:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -432,7 +432,7 @@ function reducer() {
 
 /***/ }),
 
-/***/ 433:
+/***/ 432:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -456,21 +456,21 @@ var _reactRedux = __webpack_require__(50);
 
 var _locationActions = __webpack_require__(201);
 
-var _settingsActions = __webpack_require__(452);
+var _settingsActions = __webpack_require__(451);
 
-var _SearchBar = __webpack_require__(453);
+var _SearchBar = __webpack_require__(452);
 
 var _SearchBar2 = _interopRequireDefault(_SearchBar);
 
-var _MapContainer = __webpack_require__(456);
+var _MapContainer = __webpack_require__(455);
 
 var _MapContainer2 = _interopRequireDefault(_MapContainer);
 
-var _List = __webpack_require__(695);
+var _List = __webpack_require__(694);
 
 var _List2 = _interopRequireDefault(_List);
 
-var _Loading = __webpack_require__(743);
+var _Loading = __webpack_require__(742);
 
 var _Loading2 = _interopRequireDefault(_Loading);
 
@@ -571,7 +571,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(Locator);
 
 /***/ }),
 
-/***/ 452:
+/***/ 451:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -604,7 +604,7 @@ function fetchSettings() {
 
 /***/ }),
 
-/***/ 453:
+/***/ 452:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -630,11 +630,11 @@ var _reactRedux = __webpack_require__(50);
 
 var _locationActions = __webpack_require__(201);
 
-var _RadiusDropDown = __webpack_require__(454);
+var _RadiusDropDown = __webpack_require__(453);
 
 var _RadiusDropDown2 = _interopRequireDefault(_RadiusDropDown);
 
-var _CategoryDropDown = __webpack_require__(455);
+var _CategoryDropDown = __webpack_require__(454);
 
 var _CategoryDropDown2 = _interopRequireDefault(_CategoryDropDown);
 
@@ -795,7 +795,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(SearchBar);
 
 /***/ }),
 
-/***/ 454:
+/***/ 453:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -913,7 +913,7 @@ exports.default = RadiusDropDown;
 
 /***/ }),
 
-/***/ 455:
+/***/ 454:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1028,7 +1028,7 @@ exports.default = CategoryDropDown;
 
 /***/ }),
 
-/***/ 456:
+/***/ 455:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1054,7 +1054,7 @@ var _htmlToReact = __webpack_require__(208);
 
 var _mapActions = __webpack_require__(218);
 
-var _Map = __webpack_require__(506);
+var _Map = __webpack_require__(505);
 
 var _Map2 = _interopRequireDefault(_Map);
 
@@ -1182,7 +1182,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(MapContainer);
 
 /***/ }),
 
-/***/ 506:
+/***/ 505:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1196,7 +1196,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactGoogleMaps = __webpack_require__(507);
+var _reactGoogleMaps = __webpack_require__(506);
 
 var _MarkerClusterer = __webpack_require__(692);
 
@@ -1255,7 +1255,7 @@ exports.default = Map;
 
 /***/ }),
 
-/***/ 695:
+/***/ 694:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1277,11 +1277,11 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactRedux = __webpack_require__(50);
 
-var _reactVirtualized = __webpack_require__(696);
+var _reactVirtualized = __webpack_require__(695);
 
 var _mapActions = __webpack_require__(218);
 
-var _Location = __webpack_require__(742);
+var _Location = __webpack_require__(741);
 
 var _Location2 = _interopRequireDefault(_Location);
 
@@ -1483,7 +1483,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(List);
 
 /***/ }),
 
-/***/ 742:
+/***/ 741:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1605,8 +1605,6 @@ var Location = function (_Component) {
       if (index === 0) {
         className += ' first';
       }
-
-      console.log(template);
       return _react2.default.createElement(
         'div',
         {
@@ -1664,7 +1662,7 @@ exports.default = Location;
 
 /***/ }),
 
-/***/ 743:
+/***/ 742:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1745,5 +1743,5 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(Loading);
 
 /***/ })
 
-},[295]);
+},[294]);
 //# sourceMappingURL=main.js.map

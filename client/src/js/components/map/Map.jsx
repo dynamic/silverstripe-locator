@@ -1,6 +1,6 @@
 import React from 'react';
 import { withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps';
-import MarkerClusterer from 'react-google-maps/lib/addons/MarkerClusterer';
+import MarkerClusterer from 'react-google-maps/lib/components/addons/MarkerClusterer';
 
 const markers = props => props.markers.map(marker => (
   <Marker

@@ -5,9 +5,10 @@
   "main": "client/src/js/boot/index.js",
   "scripts": {
     "build": "webpack --config webpack.config.prod.js -p --progress",
-    "build-dev": "webpack --config webpack.config.dev.js --progress",
+    "build:dev": "webpack --config webpack.config.dev.js --progress",
     "watch": "webpack --config webpack.config.dev.js --progress --watch",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "lint": "eslint webpack.config.dev.js webpack.config.prod.js client/src/js"
   },
   "keywords": [
