@@ -9,11 +9,6 @@ addons:
 
 before_install:
   - |
-    if [ "$LANG" = "PHP" ]; then
-      pip install --user codecov
-    fi
-
-  - |
     if [ "$LANG" = "JS" ]; then
       nvm install 6.10
       nvm use 6.10
@@ -58,7 +53,6 @@ before_script:
   - |
     if [ "$LANG" = "PHP" ]; then
       phpenv rehash
-      phpenv config-rm xdebug.ini
       composer self-update || true
       echo 'memory_limit = 2048M' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
       composer install --prefer-dist
@@ -104,11 +98,11 @@ after_success:
   - |
     if [ "$LANG" = "PHP" ] && [ "$COVERAGE" = "1" ]; then
       wget https://scrutinizer-ci.com/ocular.phar
-      travis_retry codecov && travis_retry php ocular.phar code-coverage:upload --format=php-clover coverage.clover;
+      travis_retry bash <(curl -s https://codecov.io/bash) -cF javascript -F php && travis_retry php ocular.phar code-coverage:upload --format=php-clover coverage.clover;
     fi
 
   #javascript with coverage
   - |
     if [ "$LANG" = "JS" ] && [ "$COVERAGE" = "1" ]; then
-      ./node_modules/.bin/codecov
+      ./node_modules/.bin/codecov -F js
     fi
