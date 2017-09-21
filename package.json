@@ -79,6 +79,9 @@
     "roots": [
       "<rootDir>/client/src/",
       "<rootDir>/client/tests/"
+    ],
+    "collectCoverageFrom" : [
+      "**/client/src/**/*.{js,jsx}"
     ]
   },
   "babel": {

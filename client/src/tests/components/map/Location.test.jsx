@@ -5,6 +5,7 @@ import toJson from 'enzyme-to-json';
 
 import Location from '../../../js/components/list/Location';
 
+// list of locations to use
 const locations = [
   {
     ID: '1',
@@ -48,6 +49,7 @@ const locations = [
   },
 ];
 
+// a basic template
 const templateString = `
     <div className="list-label">{{Number}}</div>
     <div className="list-details">
@@ -65,12 +67,16 @@ const templateString = `
     </div>
  `;
 
+// compiled template
 const template = handlebars.compile(templateString);
 
+// unit of measure
 const unit = 'm';
 
+// a mock function for onClick
 const mockOnClick = jest.fn();
 
+// creates shallow renders of all the locations in the list
 const locationComponents = locations.map(
   (loc, index) =>
     shallow(
