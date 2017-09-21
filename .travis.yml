@@ -66,6 +66,11 @@ before_script:
       composer update
     fi
 
+  - |
+    if [ "$DB" = "PGSQL" ]; then
+      composer require silverstripe/postgresql 2.0.x-dev
+    fi
+
 #Execute tests with or without coverage
 script:
   # php without coverage
