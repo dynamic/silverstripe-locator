@@ -162,8 +162,7 @@ class Locator extends Page
     {
         return $this->Categories()->filter(array(
                 'Locations.ID:GreaterThan' => 0
-            )
-        );
+            ));
     }
 
     /**
@@ -172,8 +171,10 @@ class Locator extends Page
      */
     public function getInfoWindowTemplate()
     {
-        $contents = json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(Locator::class,
-                'infoWindowTemplate')));
+        $contents = json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(
+            Locator::class,
+            'infoWindowTemplate'
+        )));
 
         return str_replace('\n', '', $contents);
     }
@@ -184,8 +185,10 @@ class Locator extends Page
      */
     public function getListTemplate()
     {
-        $contents = json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(Locator::class,
-                'listTemplate')));
+        $contents = json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(
+            Locator::class,
+            'listTemplate'
+        )));
 
         return str_replace('\n', '', $contents);
     }
@@ -206,11 +209,11 @@ class Locator extends Page
     ) {
         $locationClass = Config::inst()->get(Locator::class, 'location_class');
         $locations = $locationClass::get()->filter($filter)->exclude($exclude);
-        if ( !empty($filterAny)) {
+        if (!empty($filterAny)) {
             $locations = $locations->filterAny($filterAny);
         }
 
-        if ( !empty($exclude)) {
+        if (!empty($exclude)) {
             $locations = $locations->exclude($exclude);
         }
 

@@ -25,5 +25,4 @@ class LocatorTest extends FunctionalTest
         $locator = singleton(Locator::class);
         $this->assertInstanceOf(FieldList::class, $locator->getCMSFields());
     }
-
 }
