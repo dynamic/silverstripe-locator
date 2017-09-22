@@ -10,12 +10,8 @@ use SilverStripe\Dev\FunctionalTest;
 /**
  * Class LocatorTest
  */
-class LocatorTest extends FunctionalTest
+class LocatorTest extends LocatorTest_Base
 {
-    /**
-     * @var string
-     */
-    protected static $fixture_file = 'fixtures.yml';
 
     /**
      *
