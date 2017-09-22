@@ -48,5 +48,9 @@
     "branch-alias": {
       "dev-master": "3.0.x-dev"
     }
+  },
+  "scripts": {
+    "lint": "vendor/bin/phpcs src/ tests/",
+    "lint-clean": "vendor/bin/phpcbf src/ tests/"
   }
 }

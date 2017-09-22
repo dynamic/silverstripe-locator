@@ -9,14 +9,14 @@ addons:
 
 before_install:
   - |
-    if [ "$LANG" = "JS" ]; then
+    if [[ $LANG == JS ]]; then
       nvm install 6.10
       nvm use 6.10
     fi
 
 install:
   - |
-    if [ "$LANG" = "JS" ]; then
+    if [[ $LANG == JS ]]; then
       npm install
       npm install codecov
     fi
@@ -26,6 +26,7 @@ env:
     - DB=MYSQL
     - COMPOSER_ROOT_VERSION=4.0.x-dev
     - COVERAGE=0
+    - LINT=0
     - LANG=PHP
 
 matrix:
@@ -36,6 +37,8 @@ matrix:
       env: DB=PGSQL
     - php: 7.0
       env: COVERAGE=1
+    - php: 7.0
+      env: LINT=1
     - php: 5.6
 
     # js stuff
@@ -43,6 +46,10 @@ matrix:
       env:
         - LANG=JS
         - COVERAGE=1
+    - php: 7.0
+      env:
+        - LANG=JS
+        - LINT=1
 
 
   allow_failures:
@@ -51,7 +58,7 @@ matrix:
 
 before_script:
   - |
-    if [ "$LANG" = "PHP" ]; then
+    if [[ $LANG == PHP ]]; then
       phpenv rehash
       composer self-update || true
       echo 'memory_limit = 2048M' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
@@ -61,34 +68,44 @@ before_script:
     fi
 
   - |
-    if [ "$DB" = "PGSQL" ]; then
+    if [[ $DB == PGSQL ]]; then
       composer require silverstripe/postgresql 2.0.x-dev
     fi
 
 #Execute tests with or without coverage
 script:
-  # php without coverage
+  # php without coverage and without linting
   - |
-    if [ "$LANG" = "PHP" ] && [ "$COVERAGE" = "0" ]; then
+    if [[ $LANG == PHP ]] && [[ $COVERAGE == 0 ]] && [[ $LINT == 0 ]]; then
       vendor/bin/phpunit
     fi
 
   # php with coverage
   - |
-    if [ "$LANG" = "PHP" ] && [ "$COVERAGE" = "1" ]; then
+    if [[ $LANG == PHP ]] && [[ $COVERAGE == 1 ]]; then
       vendor/bin/phpunit --coverage-clover=coverage.clover
+    fi
+
+  - |
+    if [[ $LANG == PHP ]] && [[ $LINT == 1 ]]; then
+      composer run-script lint
     fi
 
   # javascript without coverage
   - |
-    if [ "$LANG" = "JS" ] && [ "$COVERAGE" = "0" ]; then
+    if [[ $LANG == JS ]] && [[ $COVERAGE == 0 ]] && [[ $LINT == 0 ]]; then
       npm run test;
     fi
 
   # javascript with coverage
   - |
-    if [ "$LANG" = "JS" ] && [ "$COVERAGE" = "1" ]; then
+    if [[ $LANG == JS ]] && [[ $COVERAGE == 1 ]]; then
       npm run test:coverage;
+    fi
+
+  - |
+    if [[ $LANG == JS ]] && [[ $LINT == 1 ]]; then
+      npm run lint
     fi
 
 # Upload code coverage when tests pass
@@ -96,13 +113,13 @@ after_success:
 
   # php with coverage
   - |
-    if [ "$LANG" = "PHP" ] && [ "$COVERAGE" = "1" ]; then
+    if [[ $LANG == PHP ]] && [[ $COVERAGE == 1 ]]; then
       wget https://scrutinizer-ci.com/ocular.phar
       travis_retry bash <(curl -s https://codecov.io/bash) -cF javascript -F php && travis_retry php ocular.phar code-coverage:upload --format=php-clover coverage.clover;
     fi
 
   #javascript with coverage
   - |
-    if [ "$LANG" = "JS" ] && [ "$COVERAGE" = "1" ]; then
+    if [[ $LANG == JS ]] && [[ $COVERAGE == 1 ]]; then
       ./node_modules/.bin/codecov -F js
     fi
