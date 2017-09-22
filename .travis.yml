@@ -8,6 +8,7 @@ addons:
       - tidy
 
 before_install:
+  # ony install node if javascript
   - |
     if [[ $LANG == JS ]]; then
       nvm install 6.10
@@ -15,9 +16,15 @@ before_install:
     fi
 
 install:
+  # only install node packages if javascript
   - |
     if [[ $LANG == JS ]]; then
       npm install
+    fi
+
+  # only install codecov node package if javascript and coverage
+  - |
+    if [[ $LANG == JS ]] && [[ $COVERAGE == 1 ]]; then
       npm install codecov
     fi
 
@@ -57,6 +64,7 @@ matrix:
       env: DB=SQLITE
 
 before_script:
+  # only install composer stuff if PHP
   - |
     if [[ $LANG == PHP ]]; then
       phpenv rehash
@@ -67,9 +75,16 @@ before_script:
       composer update
     fi
 
+  #we need an extra package if it is PGSQL
   - |
     if [[ $DB == PGSQL ]]; then
       composer require silverstripe/postgresql 2.0.x-dev
+    fi
+
+  #we need an extra package if it is SQLITE
+  - |
+    if [[ $DB == SQLITE ]]; then
+      composer require silverstripe/sqlite3 2.1.x-dev
     fi
 
 #Execute tests with or without coverage
