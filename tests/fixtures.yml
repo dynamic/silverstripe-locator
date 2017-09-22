@@ -61,7 +61,7 @@ Dynamic\Locator\Location:
     Address: 1526 S. 12th St
     City: Sheboygan
     State: WI
-    PostalCode:
+    PostalCode: 53081
     Country: US
     Category: =>Dynamic\Locator\LocationCategory.service
   silverstripe:
