@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import RadiusDropDown from '../../../js/components/search/RadiusDropDown';
 
@@ -20,14 +19,10 @@ test('Radius dropdown component should render', () => {
     />,
   );
 
-  expect(toJson(dropdown).type).toBe('div');
+  expect(dropdown.length).toEqual(1);
 
   const select = dropdown.find('.form-control');
-  expect(select.length).toBe(1);
-
-  const children = select.node.props.children;
-  expect(children.length).toBe(2);
-  expect(children[1].length).toBe(4);
+  expect(select.children().length).toEqual(5);
 });
 
 test('Radius dropdown component should not render', () => {
@@ -39,7 +34,7 @@ test('Radius dropdown component should not render', () => {
     />,
   );
 
-  expect(toJson(dropdown)).toBe(null);
+  expect(dropdown.getNode()).toEqual(null);
 });
 
 test('Radius dropdown default valid value test', () => {
@@ -52,10 +47,9 @@ test('Radius dropdown default valid value test', () => {
   );
 
   const select = dropdown.find('.form-control');
-  expect(select.length).toBe(1);
+  expect(select.length).toEqual(1);
 
-  const props = select.node.props;
-  expect(props.defaultValue).toBe(16);
+  expect(select.prop('defaultValue')).toEqual(16);
 });
 
 test('Radius dropdown default invalid value test', () => {
@@ -68,8 +62,7 @@ test('Radius dropdown default invalid value test', () => {
   );
 
   const select = dropdown.find('.form-control');
-  expect(select.length).toBe(1);
+  expect(select.length).toEqual(1);
 
-  const props = select.node.props;
-  expect(props.defaultValue).toBe('');
+  expect(select.prop('defaultValue')).toEqual('');
 });

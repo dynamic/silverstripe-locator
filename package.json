@@ -8,7 +8,9 @@
     "build:dev": "webpack --config webpack.config.dev.js --progress",
     "watch": "webpack --config webpack.config.dev.js --progress --watch",
     "test": "jest",
+    "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage",
+    "test:coverage:watch": "jest --coverage --watchAll",
     "lint": "eslint webpack.config.dev.js webpack.config.prod.js client/src/js"
   },
   "keywords": [
@@ -52,7 +54,6 @@
     "babel-register": "^6.26.0",
     "css-loader": "^0.28.7",
     "enzyme": "^2.9.1",
-    "enzyme-to-json": "^2.0.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.2",
     "eslint-config-airbnb-base": "^12.0.0",
@@ -80,7 +81,7 @@
       "<rootDir>/client/src/",
       "<rootDir>/client/tests/"
     ],
-    "collectCoverageFrom" : [
+    "collectCoverageFrom": [
       "**/client/src/**/*.{js,jsx}"
     ]
   },

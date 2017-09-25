@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import CategoryDropDown from '../../../js/components/search/CategoryDropDown';
 
@@ -26,14 +25,11 @@ test('Category dropdown component should render', () => {
       categories={values}
     />,
   );
-  expect(toJson(dropdown).type).toBe('div');
+
+  expect(dropdown.length).toEqual(1);
 
   const select = dropdown.find('.form-control');
-  expect(select.length).toBe(1);
-
-  const children = select.node.props.children;
-  expect(children.length).toBe(2);
-  expect(children[1].length).toBe(3);
+  expect(select.children().length).toEqual(4);
 });
 
 
@@ -45,7 +41,7 @@ test('Category dropdown component should not render', () => {
     />,
   );
 
-  expect(toJson(dropdown)).toBe(null);
+  expect(dropdown.getNode()).toEqual(null);
 });
 
 test('Category dropdown default empty value test', () => {
@@ -57,10 +53,9 @@ test('Category dropdown default empty value test', () => {
   );
 
   const select = dropdown.find('.form-control');
-  expect(select.length).toBe(1);
+  expect(select.length).toEqual(1);
 
-  const props = select.node.props;
-  expect(props.defaultValue).toBe('');
+  expect(select.prop('defaultValue')).toEqual('');
 });
 
 test('Category dropdown default valid value test', () => {
@@ -72,10 +67,9 @@ test('Category dropdown default valid value test', () => {
   );
 
   const select = dropdown.find('.form-control');
-  expect(select.length).toBe(1);
+  expect(select.length).toEqual(1);
 
-  const props = select.node.props;
-  expect(props.defaultValue).toBe('2');
+  expect(select.prop('defaultValue')).toEqual('2');
 });
 
 test('Category dropdown default invalid value test', () => {
@@ -87,8 +81,7 @@ test('Category dropdown default invalid value test', () => {
   );
 
   const select = dropdown.find('.form-control');
-  expect(select.length).toBe(1);
+  expect(select.length).toEqual(1);
 
-  const props = select.node.props;
-  expect(props.defaultValue).toBe('');
+  expect(select.prop('defaultValue')).toEqual('');
 });

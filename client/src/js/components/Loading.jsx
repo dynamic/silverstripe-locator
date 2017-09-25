@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-class Loading extends Component {
+// exported for tests
+export class Loading extends Component {
   render() {
     const { isLoading } = this.props;
     if (isLoading) {

@@ -1,7 +1,6 @@
 import React from 'react';
 import handlebars from 'handlebars';
 import { shallow } from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import Location from '../../../js/components/list/Location';
 
@@ -96,33 +95,29 @@ const locationComponents = locations.map(
 );
 
 test('Location component should render', () => {
-  expect(toJson(locationComponents[0]).type).toBe('div');
-
-  const address2 = locationComponents[0].find('.loc-addr2');
-  expect(address2.length).toBe(1);
-  expect(address2.node.props.children).toBe('Address 2');
+  expect(locationComponents[0].length).toEqual(1);
 });
 
 test('Location component\'s distance', () => {
   let distance = locationComponents[0].find('.loc-dist');
-  expect(distance.length).toBe(1);
-  expect(distance.node.props.children).toBe('false');
+  expect(distance.length).toEqual(1);
+  expect(distance.text()).toEqual('false');
 
   distance = locationComponents[1].find('.loc-dist');
-  expect(distance.length).toBe(1);
-  expect(distance.node.props.children).toBe('10.00');
+  expect(distance.length).toEqual(1);
+  expect(distance.text()).toEqual('10.00');
 });
 
 test('Location component\'s directions', () => {
   let daddr = locationComponents[0].find('.loc-directions');
-  expect(daddr.length).toBe(1);
-  expect(daddr.node.props.children)
-    .toBe('http://maps.google.com/maps?saddr=&daddr=Address+1+Address+2+City+State+Zip');
+  expect(daddr.length).toEqual(1);
+  expect(daddr.text())
+    .toEqual('http://maps.google.com/maps?saddr=&daddr=Address+1+Address+2+City+State+Zip');
 
   daddr = locationComponents[2].find('.loc-directions');
-  expect(daddr.length).toBe(1);
-  expect(daddr.node.props.children)
-    .toBe('http://maps.google.com/maps?saddr=&daddr=');
+  expect(daddr.length).toEqual(1);
+  expect(daddr.text())
+    .toEqual('http://maps.google.com/maps?saddr=&daddr=');
 });
 
 test('Location\'s onClick call', () => {
