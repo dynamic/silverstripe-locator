@@ -34,7 +34,8 @@
     }
 
     .address-input,
-    .radius-dropdown {
+    .radius-dropdown,
+    .address-input + .category-dropdown {
       @include media-breakpoint-up(md) {
         @include make-col(6);
       }

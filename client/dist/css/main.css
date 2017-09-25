@@ -555,7 +555,8 @@ select.form-control-lg:not([size]):not([multiple]) {
 
 @media (min-width: 768px) {
   .locator-search .fieldset .address-input,
-  .locator-search .fieldset .radius-dropdown {
+  .locator-search .fieldset .radius-dropdown,
+  .locator-search .fieldset .address-input + .category-dropdown {
     -webkit-box-flex: 0;
             flex: 0 0 50%;
     max-width: 50%;

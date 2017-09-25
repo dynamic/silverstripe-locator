@@ -1,5 +1,9 @@
 {
-  "radii": [<% loop $Radii %>$Radius<% if not $Last %>,<% end_if %><% end_loop %>],
+  "radii": <% if $ShowRadius %>
+    [<% loop $Radii %>$Radius<% if not $Last %>,<% end_if %><% end_loop %>]
+  <% else %>
+    []
+  <% end_if %>,
   <% if $Categories %>"categories": [<% loop $Categories %>
     {
       "ID": $ID,
