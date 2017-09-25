@@ -53,7 +53,7 @@ export class Locator extends Component {
   render() {
     const { loadedSettings } = this.props;
     if (loadedSettings === false) {
-      return <div />;
+      return null;
     }
     return (
       <div>

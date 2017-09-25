@@ -530,7 +530,7 @@ var Locator = exports.Locator = function (_Component) {
       var loadedSettings = this.props.loadedSettings;
 
       if (loadedSettings === false) {
-        return _react2.default.createElement('div', null);
+        return null;
       }
       return _react2.default.createElement(
         'div',
