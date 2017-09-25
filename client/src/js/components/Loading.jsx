@@ -26,7 +26,7 @@ Loading.propTypes = {
   isLoading: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     isLoading: state.map.isLoading,
   };

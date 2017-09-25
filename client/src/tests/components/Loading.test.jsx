@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import { Loading } from '../../js/components/Loading';
+import { Loading, mapStateToProps } from '../../js/components/Loading';
 
 test('Loading component should render', () => {
   const props = {
@@ -35,4 +35,15 @@ test('Loading component should be hiding', () => {
 
   expect(loading.children().length).toEqual(0);
   expect(loading.hasClass('show')).toEqual(false);
+});
+
+test('Map state to props', () => {
+  const state = {
+    search: {},
+    map: {},
+    settings: {},
+    locations: {},
+  };
+  // expects mapStateToProps to be an Object
+  expect(mapStateToProps(state)).toEqual(expect.any(Object));
 });
