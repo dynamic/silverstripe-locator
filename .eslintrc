@@ -20,6 +20,7 @@
   },
   "rules": {
     "react/prefer-stateless-function": "off",
+    "import/no-named-as-default": "off",
     "max-len": [
       2,
       120,

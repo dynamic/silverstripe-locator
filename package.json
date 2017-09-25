@@ -83,6 +83,10 @@
     ],
     "collectCoverageFrom": [
       "**/client/src/**/*.{js,jsx}"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "client/src/js"
     ]
   },
   "babel": {

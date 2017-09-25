@@ -13,7 +13,7 @@ import Loading from 'components/Loading';
 /**
  * The main locator component.
  */
-class Locator extends Component {
+export class Locator extends Component {
   /**
    * Called before the component mounts
    */
@@ -90,7 +90,7 @@ Locator.propTypes = {
  * @param state
  * @returns {{loadedSettings}}
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     loadedSettings: state.settings.loadedSettings,
 
