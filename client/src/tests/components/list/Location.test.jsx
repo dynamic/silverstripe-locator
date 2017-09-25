@@ -95,7 +95,7 @@ const locationComponents = locations.map(
     ),
 );
 
-test('Location component should render test', () => {
+test('Location component should render', () => {
   expect(toJson(locationComponents[0]).type).toBe('div');
 
   const address2 = locationComponents[0].find('.loc-addr2');

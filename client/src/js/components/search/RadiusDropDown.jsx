@@ -27,7 +27,10 @@ class RadiusDropDown extends React.Component {
     const { radius, radii } = this.props;
 
     // if the radius exists in the dropdown
-    if (Object.values(radii).indexOf(radius) > -1) {
+    const values = Object.keys(radii).map(
+      key => radii[key],
+    );
+    if (values.indexOf(radius) > -1) {
       return radius;
     }
     return '';

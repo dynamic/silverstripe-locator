@@ -860,7 +860,10 @@ var RadiusDropDown = function (_React$Component) {
           radius = _props2.radius,
           radii = _props2.radii;
 
-      if (Object.values(radii).indexOf(radius) > -1) {
+      var values = Object.keys(radii).map(function (key) {
+        return radii[key];
+      });
+      if (values.indexOf(radius) > -1) {
         return radius;
       }
       return '';
@@ -975,9 +978,9 @@ var CategoryDropDown = function (_Component) {
           categories = _props.categories;
 
       if (categories.filter(function (cat) {
-        return cat.ID === category;
-      })) {
-        return category;
+        return cat.ID === Number(category);
+      }).length) {
+        return category.toString();
       }
       return '';
     }

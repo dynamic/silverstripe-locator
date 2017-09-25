@@ -25,10 +25,11 @@ class CategoryDropDown extends Component {
    */
   defaultValue() {
     const { category, categories } = this.props;
-
     // if the category exists in the dropdown
-    if (categories.filter(cat => cat.ID === category)) {
-      return category;
+    if (categories.filter(
+        cat => cat.ID === Number(category),
+      ).length) {
+      return category.toString();
     }
     return '';
   }
