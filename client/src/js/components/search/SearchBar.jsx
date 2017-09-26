@@ -46,20 +46,25 @@ export class SearchBar extends Component {
    * 'Submits' form. Really just fires state change and changes the url.
    */
   handleSubmit(event) {
+    // stops the submit from reloading
     event.preventDefault();
-    const addressInput = document.getElementsByName('address')[0].value;
-    const radiusInput = document.getElementsByName('radius')[0].value;
 
-    // because categories are optional
-    let categoryInput = '';
+    const address = document.getElementsByName('address')[0].value;
+
+    let radius = '';
+    if (document.getElementsByName('radius')[0] !== undefined) {
+      radius = document.getElementsByName('radius')[0].value;
+    }
+
+    let category = '';
     if (document.getElementsByName('category')[0] !== undefined) {
-      categoryInput = document.getElementsByName('category')[0].value;
+      category = document.getElementsByName('category')[0].value;
     }
 
     const params = {
-      address: addressInput,
-      radius: radiusInput,
-      category: categoryInput,
+      address,
+      radius,
+      category,
     };
 
     // selects dispatch and unit from this.props.
