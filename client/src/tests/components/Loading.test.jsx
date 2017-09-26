@@ -37,6 +37,10 @@ test('Loading component should be hiding', () => {
   expect(loading.hasClass('show')).toEqual(false);
 });
 
+/**
+ * tests the map state to props method.
+ * Only requires that an object is returned, doesn't matter what is in it.
+ */
 test('Map state to props', () => {
   const state = {
     search: {},

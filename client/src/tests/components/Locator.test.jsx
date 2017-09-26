@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import { Locator, mapStateToProps } from '../../js/components/Locator';
 
@@ -17,8 +17,7 @@ test('Locator component should render', () => {
     address: '',
     radius: '',
     category: '',
-    // eslint-disable-next-line object-shorthand
-    dispatch: dispatch,
+    dispatch,
   };
   const locator = shallow(
     <Locator {...props} />,
@@ -39,8 +38,7 @@ test('Locator component should not render', () => {
     address: '',
     radius: '',
     category: '',
-    // eslint-disable-next-line object-shorthand
-    dispatch: dispatch,
+    dispatch,
   };
   const locator = shallow(
     <Locator {...props} />,
@@ -56,10 +54,9 @@ test('Locator component should update', () => {
     address: '',
     radius: '',
     category: '',
-    // eslint-disable-next-line object-shorthand
-    dispatch: dispatch,
+    dispatch,
   };
-  const locator = mount(
+  const locator = shallow(
     <Locator {...props} />,
   );
 
@@ -69,11 +66,10 @@ test('Locator component should update', () => {
     address: '',
     radius: '',
     category: '',
-    // eslint-disable-next-line object-shorthand
-    dispatch: dispatch,
+    dispatch,
   };
   let shouldUpdate = locator.instance().shouldComponentUpdate(nextProps);
-  expect(shouldUpdate).toBe(false);
+  expect(shouldUpdate).toEqual(false);
 
 
   nextProps = {
@@ -82,14 +78,36 @@ test('Locator component should update', () => {
     address: '',
     radius: '',
     category: '',
-    // eslint-disable-next-line object-shorthand
-    dispatch: dispatch,
+    dispatch,
   };
   shouldUpdate = locator.instance().shouldComponentUpdate(nextProps);
-  expect(shouldUpdate).toBe(true);
+  expect(shouldUpdate).toEqual(true);
 });
 
+test('Locator component will update', () => {
+  const props = {
+    loadedSettings: false,
+    unit: 'm',
+    address: '',
+    radius: '',
+    category: '',
+    dispatch,
+  };
+  const locator = shallow(
+    <Locator {...props} />,
+  );
 
+  locator.setProps({
+    loadedSettings: true,
+  });
+
+  expect(dispatch).toBeCalled();
+});
+
+/**
+ * tests the map state to props method.
+ * Only requires that an object is returned, doesn't matter what is in it.
+ */
 test('Map state to props', () => {
   const state = {
     search: {},

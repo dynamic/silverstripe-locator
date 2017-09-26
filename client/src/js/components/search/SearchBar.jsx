@@ -7,7 +7,7 @@ import { fetchLocations } from 'actions/locationActions';
 import RadiusDropDown from 'components/search/RadiusDropDown';
 import CategoryDropDown from 'components/search/CategoryDropDown';
 
-class SearchBar extends Component {
+export class SearchBar extends Component {
   /**
    * Turns a javascript object into url params.
    * Skips keys without values
@@ -150,7 +150,7 @@ SearchBar.propTypes = {
  * @param state
  * @returns {{address, radius}}
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     // the defaults - for when it gets loaded from the url
     address: state.search.address,
