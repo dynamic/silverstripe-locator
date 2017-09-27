@@ -3,6 +3,6 @@ Name: locator
 ---
 Dynamic\Locator\Location:
   extensions:
-    - Dynamic\Locator\DistanceDataExtension
-    - Dynamic\Locator\AddressDataExtension
+    - Dynamic\SilverStripeGeocoder\DistanceDataExtension
+    - Dynamic\SilverStripeGeocoder\AddressDataExtension
     - SilverStripe\Versioned\Versioned('Stage','Live')

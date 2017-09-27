@@ -16,7 +16,7 @@ class LocationTest extends SapphireTest
     /**
      * @var string
      */
-    protected static $fixture_file = 'locator/tests/fixtures.yml';
+    protected static $fixture_file = 'fixtures.yml';
 
     /**
      *

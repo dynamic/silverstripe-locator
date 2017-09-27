@@ -1,13 +1,13 @@
-<phpunit bootstrap="framework/tests/bootstrap.php" colors="true">
+<phpunit bootstrap="cms/tests/bootstrap.php" colors="true">
     <testsuite name="locator">
-        <directory>locator/tests</directory>
+        <directory>tests</directory>
     </testsuite>
 
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">locator/src/</directory>
+            <directory suffix=".php">src/</directory>
             <exclude>
-                <directory suffix=".php">locator/tests/</directory>
+                <directory suffix=".php">tests/</directory>
             </exclude>
         </whitelist>
     </filter>
