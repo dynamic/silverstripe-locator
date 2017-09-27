@@ -2,16 +2,24 @@ import {
   combineReducers,
 } from 'redux';
 
-import searchReducer from 'reducers/searchReducer';
-import mapReducer from 'reducers/mapReducer';
-import settingsReducer from 'reducers/settingsReducer';
-import locationReducer from 'reducers/locationReducer';
+import search from 'reducers/searchReducer';
+import map from 'reducers/mapReducer';
+import settings from 'reducers/settingsReducer';
+import locations from 'reducers/locationReducer';
 
+/**
+ * Combines the reducers.
+ *
+ * uses shorthand to set key/values
+ * "search" is short for "search: search"
+ *
+ * @type {Reducer<any>}
+ */
 const reducers = combineReducers({
-  search: searchReducer,
-  map: mapReducer,
-  settings: settingsReducer,
-  locations: locationReducer,
+  search,
+  map,
+  settings,
+  locations,
 });
 
 export default reducers;

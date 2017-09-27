@@ -133,7 +133,7 @@ class LocatorController extends \PageController
                 if ($radius === -1) {
                     return true;
                 }
-                return $location->distance <= $radius;
+                return $location->Distance <= $radius;
             });
         }
 
