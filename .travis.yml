@@ -70,9 +70,8 @@ before_script:
       phpenv rehash
       composer self-update || true
       echo 'memory_limit = 2048M' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-      composer install --prefer-dist
-      composer require --prefer-dist --no-update silverstripe/recipe-cms:1.0.x-dev silverstripe-themes/simple:~3.2
-      composer update
+      composer require --prefer-dist --no-update silverstripe-themes/simple:~3.2
+      composer update --no-suggest --prefer-dist
     fi
 
   #we need an extra package if it is PGSQL
@@ -98,7 +97,7 @@ script:
   # php with coverage
   - |
     if [[ $LANG == PHP ]] && [[ $COVERAGE == 1 ]]; then
-      vendor/bin/phpunit --coverage-clover=coverage.clover
+      phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml && wget https://scrutinizer-ci.com/ocular.phar;
     fi
 
   - |
@@ -129,8 +128,7 @@ after_success:
   # php with coverage
   - |
     if [[ $LANG == PHP ]] && [[ $COVERAGE == 1 ]]; then
-      wget https://scrutinizer-ci.com/ocular.phar
-      travis_retry bash <(curl -s https://codecov.io/bash) -cF javascript -F php && travis_retry php ocular.phar code-coverage:upload --format=php-clover coverage.clover;
+      bash <(curl -s https://codecov.io/bash) -f coverage.xml -t $CODECOV_TOKEN && travis_retry php ocular.phar code-coverage:upload --format=php-clover --access-token=$SCRUT_TOKEN coverage.xml;
     fi
 
   #javascript with coverage
