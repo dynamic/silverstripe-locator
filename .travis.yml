@@ -1,55 +1,33 @@
-
 language: php
-
-sudo: false
-
-addons:
-  apt:
-    packages:
-      - tidy
-
-before_install:
-  - pip install --user codecov
 
 env:
   global:
-    - DB=MYSQL CORE_RELEASE=4.0
-    - MODULE_PATH=locator
-    - COVERAGE=0
+    - COMPOSER_ROOT_VERSION=4.0.x-dev
+    - CODECOV_TOKEN=
+    - SCRUT_TOKEN=
 
 matrix:
   include:
-    - php: 7.0
-      env: DB=SQLITE
-    - php: 7.0
-      env: DB=PGSQL
-    - php: 7.0
-      env: COVERAGE=1
     - php: 5.6
-  allow_failures:
+      env: DB=MYSQL PHPCS_TEST=1 PHPUNIT_TEST=1
     - php: 7.0
-      env: DB=SQLITE
-
+      env: DB=MYSQL PHPUNIT_TEST=1
+    - php: 7.1
+      env: DB=MYSQL PHPUNIT_COVERAGE_TEST=1
 
 before_script:
+  # Init PHP
   - phpenv rehash
-  - composer self-update || true
-  - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
-  - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
-  - cd ~/builds/ss
-  - mv "$MODULE_PATH/phpunit.xml.dist" .
+  - phpenv config-rm xdebug.ini
+  - echo 'memory_limit = 2048M' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
-#Execute tests with or without coverage
+  # Install composer dependencies
+  - composer require --prefer-dist --no-update silverstripe-themes/simple:~3.2
+  - composer update --no-suggest --prefer-dist
+
 script:
-  # Execute tests with no coverage.  This is the fastest option
-  - "if [ \"$COVERAGE\" = \"0\" ]; then vendor/bin/phpunit $MODULE_PATH/tests/; fi"
+  - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit; fi
+  - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml && wget https://scrutinizer-ci.com/ocular.phar; fi
 
-  # Execute tests with coverage.  Do this for a small
-  - "if [ \"$COVERAGE\" = \"1\" ]; then vendor/bin/phpunit --coverage-clover=coverage.clover $MODULE_PATH/tests/; fi"
-
-# Upload code coverage when tests pass
 after_success:
-  - "if [ \"$COVERAGE\" = \"1\" ]; then mv coverage.clover ~/build/$TRAVIS_REPO_SLUG/; fi"
-  - cd ~/build/$TRAVIS_REPO_SLUG
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - "if [ \"$COVERAGE\" = \"1\" ]; then travis_retry codecov && travis_retry php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi"
+  - if [[ $PHPUNIT_COVERAGE_TEST ]]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml -t $CODECOV_TOKEN && travis_retry php ocular.phar code-coverage:upload --format=php-clover --access-token=$SCRUT_TOKEN coverage.xml; fi
