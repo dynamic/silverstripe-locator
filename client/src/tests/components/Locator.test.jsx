@@ -8,6 +8,17 @@ import MapContainer from '../../js/components/map/MapContainer';
 import List from '../../js/components/list/List';
 import Loading from '../../js/components/Loading';
 
+import * as locationActions from '../../js/actions/locationActions';
+import * as settingsActions from '../../js/actions/settingsActions';
+
+// mock the fetchLocations action (because of axios)
+locationActions.fetchLocations = jest.fn();
+jest.setMock('../../js/actions/locationActions', locationActions);
+
+// mock the fetchSettings action (because of axios)
+settingsActions.fetchSettings = jest.fn();
+jest.setMock('../../js/actions/settingsActions', settingsActions);
+
 const dispatch = jest.fn();
 
 test('Locator component should render', () => {
