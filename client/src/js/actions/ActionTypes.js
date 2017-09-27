@@ -3,9 +3,6 @@
  * Could just be strings, but I feel better when referencing a constant that doesn't change without erroring.
  */
 const ActionTypes = {
-  // Query actions
-  QUERY_RESULT: 'APOLLO_QUERY_RESULT',
-
   // location fetching
   FETCH_LOCATIONS: 'FETCH_LOCATIONS',
 

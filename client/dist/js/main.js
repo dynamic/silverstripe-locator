@@ -23,13 +23,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function fetchLocations(params) {
   var loc = window.location;
-  return function (dispatch) {
-    dispatch({
-      type: _ActionTypes2.default.FETCH_LOCATIONS,
-      payload: _axios2.default.get(loc.protocol + '//' + loc.host + loc.pathname + '/json', {
-        params: params
-      })
-    });
+  return {
+    type: _ActionTypes2.default.FETCH_LOCATIONS,
+    payload: _axios2.default.get(loc.protocol + '//' + loc.host + loc.pathname + '/json', {
+      params: params
+    })
   };
 }
 
@@ -146,8 +144,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var ActionTypes = {
-  QUERY_RESULT: 'APOLLO_QUERY_RESULT',
-
   FETCH_LOCATIONS: 'FETCH_LOCATIONS',
 
   FETCH_SETTINGS: 'FETCH_SETTINGS',
@@ -368,7 +364,7 @@ function reducer() {
         }
 
         if (settings.clusters === null) {
-          settings.clusters = 'false';
+          settings.clusters = false;
         }
 
         return _extends({}, state, {
@@ -597,11 +593,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function fetchSettings() {
   var loc = window.location;
-  return function (dispatch) {
-    dispatch({
-      type: _ActionTypes2.default.FETCH_SETTINGS,
-      payload: _axios2.default.get(loc.protocol + '//' + loc.host + loc.pathname + '/settings')
-    });
+  return {
+    type: _ActionTypes2.default.FETCH_SETTINGS,
+    payload: _axios2.default.get(loc.protocol + '//' + loc.host + loc.pathname + '/settings')
   };
 }
 
