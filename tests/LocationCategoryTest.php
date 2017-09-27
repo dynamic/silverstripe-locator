@@ -31,7 +31,12 @@ class LocationCategoryTest extends LocatorTest_Base
     public function testCanView()
     {
         $object = $this->objFromFixture(LocationCategory::class, 'service');
-        $this->assertTrue($object->canView());
+
+        $admin = $this->objFromFixture(Member::class, 'admin');
+        $this->assertTrue($object->canView($admin));
+
+        $member = $this->objFromFixture(Member::class, 'default');
+        $this->assertTrue($object->canView($member));
     }
 
     /**
@@ -41,7 +46,7 @@ class LocationCategoryTest extends LocatorTest_Base
     {
         $object = $this->objFromFixture(LocationCategory::class, 'service');
 
-        $admin = $this->objFromFixture(Member::class, 'locationedit');
+        $admin = $this->objFromFixture(Member::class, 'admin');
         $this->assertTrue($object->canEdit($admin));
 
         $member = $this->objFromFixture(Member::class, 'default');
@@ -55,7 +60,7 @@ class LocationCategoryTest extends LocatorTest_Base
     {
         $object = $this->objFromFixture(LocationCategory::class, 'service');
 
-        $admin = $this->objFromFixture(Member::class, 'locationdelete');
+        $admin = $this->objFromFixture(Member::class, 'admin');
         $this->assertTrue($object->canDelete($admin));
 
         $member = $this->objFromFixture(Member::class, 'default');
@@ -69,7 +74,7 @@ class LocationCategoryTest extends LocatorTest_Base
     {
         $object = $this->objFromFixture(LocationCategory::class, 'service');
 
-        $admin = $this->objFromFixture(Member::class, 'locationcreate');
+        $admin = $this->objFromFixture(Member::class, 'admin');
         $this->assertTrue($object->canCreate($admin));
 
         $member = $this->objFromFixture(Member::class, 'default');

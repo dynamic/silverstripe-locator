@@ -72,16 +72,12 @@ class LocationTest extends LocatorTest_Base
     public function testCanView()
     {
         $object = $this->objFromFixture(Location::class, 'dynamic');
-        $object->write();
 
-        $this->assertTrue($object->canView());
+        $admin = $this->objFromFixture(Member::class, 'admin');
+        $this->assertTrue($object->canView($admin));
 
-        $nullMember = Member::create();
-        $nullMember->write();
-
-        $this->assertTrue($object->canView($nullMember));
-
-        $nullMember->delete();
+        $member = $this->objFromFixture(Member::class, 'default');
+        $this->assertTrue($object->canView($member));
     }
 
     /**
@@ -90,27 +86,12 @@ class LocationTest extends LocatorTest_Base
     public function testCanEdit()
     {
         $object = $this->objFromFixture(Location::class, 'dynamic');
-        $object->write();
 
-        $objectID = $object->ID;
+        $admin = $this->objFromFixture(Member::class, 'admin');
+        $this->assertTrue($object->canEdit($admin));
 
-        //test permissions per permission setting
-        $create = $this->objFromFixture(Member::class, 'locationcreate');
-        $edit = $this->objFromFixture(Member::class, 'locationedit');
-        $delete = $this->objFromFixture(Member::class, 'locationdelete');
-
-        $originalTitle = $object->Title;
-        $this->assertEquals($originalTitle, 'Dynamic, Inc.');
-
-        $this->assertTrue($object->canEdit($edit));
-        $this->assertFalse($object->canEdit($create));
-        $this->assertFalse($object->canEdit($delete));
-
-        $object->Title = 'Changed Title';
-        $object->write();
-
-        $testEdit = Location::get()->byID($objectID);
-        $this->assertEquals($testEdit->Title, 'Changed Title');
+        $member = $this->objFromFixture(Member::class, 'default');
+        $this->assertFalse($object->canEdit($member));
     }
 
     /**
@@ -119,21 +100,12 @@ class LocationTest extends LocatorTest_Base
     public function testCanDelete()
     {
         $object = $this->objFromFixture(Location::class, 'dynamic');
-        $object->write();
 
-        //test permissions per permission setting
-        $create = $this->objFromFixture(Member::class, 'locationcreate');
-        $edit = $this->objFromFixture(Member::class, 'locationedit');
-        $delete = $this->objFromFixture(Member::class, 'locationdelete');
+        $admin = $this->objFromFixture(Member::class, 'admin');
+        $this->assertTrue($object->canDelete($admin));
 
-        $this->assertTrue($object->canDelete($delete));
-        $this->assertFalse($object->canDelete($create));
-        $this->assertFalse($object->canDelete($edit));
-
-        $checkObject = $object;
-        $object->delete();
-
-        $this->assertEquals($checkObject->ID, 0);
+        $member = $this->objFromFixture(Member::class, 'default');
+        $this->assertFalse($object->canDelete($member));
     }
 
     /**
@@ -141,22 +113,13 @@ class LocationTest extends LocatorTest_Base
      */
     public function testCanCreate()
     {
-        $object = singleton(Location::class);
+        $object = $this->objFromFixture(Location::class, 'dynamic');
 
-        //test permissions per permission setting
-        $create = $this->objFromFixture(Member::class, 'locationcreate');
-        $edit = $this->objFromFixture(Member::class, 'locationedit');
-        $delete = $this->objFromFixture(Member::class, 'locationdelete');
+        $admin = $this->objFromFixture(Member::class, 'admin');
+        $this->assertTrue($object->canCreate($admin));
 
-        $this->assertTrue($object->canCreate($create));
-        $this->assertFalse($object->canCreate($edit));
-        $this->assertFalse($object->canCreate($delete));
-
-        $nullMember = Member::create();
-        $nullMember->write();
-        $this->assertFalse($object->canCreate($nullMember));
-
-        $nullMember->delete();
+        $member = $this->objFromFixture(Member::class, 'default');
+        $this->assertFalse($object->canCreate($member));
     }
 
     /**
