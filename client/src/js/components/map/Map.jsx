@@ -23,7 +23,7 @@ const Map = withGoogleMap(props => (
     defaultCenter={{ lat: 43.8483258, lng: -87.7709294 }}
 
   >
-    {props.clusters === 'true' ? <MarkerClusterer
+    {props.clusters === true ? <MarkerClusterer
       averageCenter
       enableRetinaIcons
       gridSize={60}

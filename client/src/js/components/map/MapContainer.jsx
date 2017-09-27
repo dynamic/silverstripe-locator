@@ -10,7 +10,7 @@ import Map from 'components/map/Map';
  * The MapArea component.
  * Renders the map.
  */
-class MapContainer extends Component {
+export class MapContainer extends Component {
   /**
    * Used to create the Map.
    * needed to allow use of this keyword in handler.
@@ -121,7 +121,7 @@ MapContainer.defaultProps = {
  * @param state
  * @returns {{current}}
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     current: state.map.current,
     showCurrent: state.map.showCurrent,
