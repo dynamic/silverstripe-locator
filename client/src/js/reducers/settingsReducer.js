@@ -20,7 +20,7 @@ export default function reducer(state = defaultState, action) {
       }
 
       if (settings.clusters === null) {
-        settings.clusters = 'false';
+        settings.clusters = false;
       }
 
       return {
