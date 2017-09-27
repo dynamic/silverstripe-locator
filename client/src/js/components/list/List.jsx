@@ -19,7 +19,7 @@ import Location from 'components/list/Location';
  * some of the code related to virtualization came from:
  * https://github.com/bvaughn/tweets/blob/37d0139736346db16b9681d5b859a4e127964518/src/components/TweetList.js
  */
-class List extends Component {
+export class List extends Component {
   /**
    * Used to create the Map.
    * needed to allow use of this keyword in handler.
@@ -199,7 +199,7 @@ List.defaultProps = {
  * @param state
  * @returns {{current}}
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     current: state.map.current,
     search: state.search.address,
