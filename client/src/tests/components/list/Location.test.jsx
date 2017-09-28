@@ -17,7 +17,7 @@ const locations = [
     Website: 'http://example.com',
     Phone: '123-456-7777',
     Email: 'd@a.g',
-    Distance: 0,
+    Distance: -1,
     search: false,
     current: true,
   },
