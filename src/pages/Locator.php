@@ -80,7 +80,7 @@ class Locator extends Page
     public function getCMSFields()
     {
         // so it can easily be extended - concept taken from the blog module
-        $this->beforeUpdateCMSFields(function($fields) {
+        $this->beforeUpdateCMSFields(function ($fields) {
             // Settings
             $fields->addFieldsToTab('Root.Settings', array(
                 HeaderField::create('DisplayOptions', 'Display Options', 3),
