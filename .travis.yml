@@ -58,13 +58,16 @@ matrix:
         - LANG=JS
         - LINT=1
 
-
+  # Only because sqlite module doesn't seem to work for 4
   allow_failures:
     - php: 7.0
       env: DB=SQLITE
 
 before_script:
-  # only install composer stuff if PHP
+  # Removes xdebug (speeds up php tests, coverage is done with phpdbg instead)
+  - phpenv config-rm xdebug.ini
+
+  # Only install composer stuff if PHP
   - |
     if [[ $LANG == PHP ]]; then
       phpenv rehash
@@ -74,19 +77,19 @@ before_script:
       composer update --no-suggest --prefer-dist
     fi
 
-  #we need an extra package if it is PGSQL
+  # Needs an extra package if it is PGSQL
   - |
     if [[ $DB == PGSQL ]]; then
       composer require silverstripe/postgresql 2.0.x-dev
     fi
 
-  #we need an extra package if it is SQLITE
+  # Needs an extra package if it is SQLITE
   - |
     if [[ $DB == SQLITE ]]; then
       composer require silverstripe/sqlite3 2.1.x-dev
     fi
 
-#Execute tests with or without coverage
+# Execute tests with or without coverage
 script:
   # php without coverage and without linting
   - |
@@ -97,9 +100,11 @@ script:
   # php with coverage
   - |
     if [[ $LANG == PHP ]] && [[ $COVERAGE == 1 ]]; then
-      phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml && wget https://scrutinizer-ci.com/ocular.phar;
+      phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml && \
+      wget https://scrutinizer-ci.com/ocular.phar;
     fi
 
+  # php with linting
   - |
     if [[ $LANG == PHP ]] && [[ $LINT == 1 ]]; then
       composer run-script lint
@@ -117,6 +122,7 @@ script:
       npm run test:coverage;
     fi
 
+  # javascript with linting
   - |
     if [[ $LANG == JS ]] && [[ $LINT == 1 ]]; then
       npm run lint
@@ -128,7 +134,8 @@ after_success:
   # php with coverage
   - |
     if [[ $LANG == PHP ]] && [[ $COVERAGE == 1 ]]; then
-      bash <(curl -s https://codecov.io/bash) -f coverage.xml -t $CODECOV_TOKEN && travis_retry php ocular.phar code-coverage:upload --format=php-clover --access-token=$SCRUT_TOKEN coverage.xml;
+      bash <(curl -s https://codecov.io/bash) -f coverage.xml -t $CODECOV_TOKEN -F php
+      travis_retry php ocular.phar code-coverage:upload --format=php-clover --access-token=$SCRUT_TOKEN coverage.xml;
     fi
 
   #javascript with coverage
