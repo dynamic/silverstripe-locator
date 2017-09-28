@@ -8,11 +8,12 @@ addons:
       - tidy
 
 before_install:
-  # ony install node if javascript
+  # ony install node and update npm if javascript
   - |
     if [[ $LANG == JS ]]; then
       nvm install 6.10
       nvm use 6.10
+      npm i npm -g
     fi
 
 install:
