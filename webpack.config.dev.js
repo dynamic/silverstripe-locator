@@ -7,7 +7,7 @@ const Path = require('path');
 const paths = {
   srcJs: Path.resolve('client', 'src', 'js'),
   srcSass: Path.resolve('client', 'src', 'scss'),
-  dist: Path.resolve('client', 'dist'),
+  dist: Path.resolve(''),
 };
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
   },
   output: {
     path: paths.dist,
-    filename: Path.join('js', '[name].js'),
+    filename: Path.join('client', 'dist', 'js', '[name].js'),
   },
   devtool: 'source-map',
   resolve: {
@@ -86,7 +86,7 @@ module.exports = {
         test: /\.(png|gif|jpe?g|svg)$/,
         loader: 'file-loader',
         options: {
-          name: Path.join('images', '[name].[ext]'),
+          name: Path.join('client', 'dist', 'images', '[name].[ext]'),
         },
       },
     ],
@@ -102,6 +102,6 @@ module.exports = {
       // move any modules inside "node_modules" to inside the vendor dist file
       minChunks: module => module.context && module.context.indexOf('/node_modules/') > -1,
     }),
-    new ExtractTextPlugin({ filename: Path.join('css', 'main.css'), allChunks: true }),
+    new ExtractTextPlugin({ filename: Path.join('css', 'locator.css'), allChunks: true }),
   ],
 };

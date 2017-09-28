@@ -102,6 +102,6 @@ module.exports = {
       // move any modules inside "node_modules" to inside the vendor dist file
       minChunks: module => module.context && module.context.indexOf('/node_modules/') > -1,
     }),
-    new ExtractTextPlugin({ filename: Path.join('css', 'main.css'), allChunks: true }),
+    new ExtractTextPlugin({ filename: Path.join('css', 'locator.css'), allChunks: true }),
   ],
 };

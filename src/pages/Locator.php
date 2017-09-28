@@ -79,36 +79,36 @@ class Locator extends Page
      */
     public function getCMSFields()
     {
-        $fields = parent::getCMSFields();
+        // so it can easily be extended - concept taken from the blog module
+        $this->beforeUpdateCMSFields(function($fields) {
+            // Settings
+            $fields->addFieldsToTab('Root.Settings', array(
+                HeaderField::create('DisplayOptions', 'Display Options', 3),
+                OptionsetField::create('Unit', 'Unit of measure', array(
+                    'm' => 'Miles',
+                    'km' => 'Kilometers'
+                ), 'm'),
+                OptionsetField::create('Clusters', 'Use clusters?', array(
+                    'false' => 'No',
+                    'true' => 'Yes'
+                ), 'false'),
+            ));
 
-        // Settings
-        $fields->addFieldsToTab('Root.Settings', array(
-            HeaderField::create('DisplayOptions', 'Display Options', 3),
-            OptionsetField::create('Unit', 'Unit of measure', array(
-                'm' => 'Miles',
-                'km' => 'Kilometers'
-            ), 'm'),
-            DropdownField::create('Clusters', 'Use clusters?', array(
-                'false' => 'No',
-                'true' => 'Yes'
-            ), 'false'),
-        ));
+            // Filter categories
+            $config = GridFieldConfig_RelationEditor::create();
+            $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
+            $config->addComponent(new GridFieldAddExistingSearchButton());
+            $categories = $this->Categories();
+            $categoriesField = GridField::create('Categories', 'Categories', $categories, $config)
+                                        ->setDescription('only show locations from the selected category');
 
-        // Filter categories
-        $config = GridFieldConfig_RelationEditor::create();
-        $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
-        $config->addComponent(new GridFieldAddExistingSearchButton());
-        $categories = $this->Categories();
-        $categoriesField = GridField::create('Categories', 'Categories', $categories, $config)
-                                    ->setDescription('only show locations from the selected category');
-
-        // Filter
-        $fields->addFieldsToTab('Root.Filter', array(
-            HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
-            $categoriesField,
-        ));
-
-        return $fields;
+            // Filter
+            $fields->addFieldsToTab('Root.Filter', array(
+                HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
+                $categoriesField,
+            ));
+        });
+        return parent::getCMSFields();
     }
 
     /**

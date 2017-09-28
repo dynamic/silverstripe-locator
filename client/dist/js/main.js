@@ -1045,8 +1045,11 @@ exports.default = CategoryDropDown;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.MapContainer = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+exports.mapStateToProps = mapStateToProps;
 
 var _react = __webpack_require__(1);
 
@@ -1074,7 +1077,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var MapContainer = function (_Component) {
+var MapContainer = exports.MapContainer = function (_Component) {
   _inherits(MapContainer, _Component);
 
   function MapContainer(props) {
@@ -1247,7 +1250,7 @@ var Map = (0, _reactGoogleMaps.withGoogleMap)(function (props) {
       defaultCenter: { lat: 43.8483258, lng: -87.7709294 }
 
     },
-    props.clusters === 'true' ? _react2.default.createElement(
+    props.clusters === true ? _react2.default.createElement(
       _MarkerClusterer2.default,
       {
         averageCenter: true,
@@ -1272,8 +1275,11 @@ exports.default = Map;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.List = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+exports.mapStateToProps = mapStateToProps;
 
 var _react = __webpack_require__(1);
 
@@ -1301,7 +1307,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var List = function (_Component) {
+var List = exports.List = function (_Component) {
   _inherits(List, _Component);
 
   function List(props) {
@@ -1535,13 +1541,11 @@ var Location = function (_Component) {
   _createClass(Location, [{
     key: 'getDistance',
     value: function getDistance() {
-      var _props = this.props,
-          location = _props.location,
-          search = _props.search;
+      var location = this.props.location;
 
       var distance = location.Distance;
 
-      if (distance === 0 && !search) {
+      if (distance === -1) {
         return false;
       }
 
@@ -1579,15 +1583,15 @@ var Location = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _props2 = this.props,
-          location = _props2.location,
-          index = _props2.index,
-          current = _props2.current,
-          search = _props2.search,
-          template = _props2.template,
-          unit = _props2.unit,
-          _onClick = _props2.onClick,
-          style = _props2.style;
+      var _props = this.props,
+          location = _props.location,
+          index = _props.index,
+          current = _props.current,
+          search = _props.search,
+          template = _props.template,
+          unit = _props.unit,
+          _onClick = _props.onClick,
+          style = _props.style;
 
       var htmlToReactParser = new _htmlToReact.Parser();
 

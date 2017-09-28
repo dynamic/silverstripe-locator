@@ -28,10 +28,10 @@ class Location extends Component {
    * @return Boolean | String
    */
   getDistance() {
-    const { location, search } = this.props;
+    const { location } = this.props;
     const distance = location.Distance;
 
-    if (distance === 0 && !search) {
+    if (distance === -1) {
       return false;
     }
 

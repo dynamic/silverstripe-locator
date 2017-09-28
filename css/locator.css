@@ -721,7 +721,7 @@ select.form-control-lg:not([size]):not([multiple]) {
   padding: 5px;
   width: 25px;
   height: 25px;
-  background: url(../images/ajax-loader.gif) no-repeat scroll center/25px 25px;
+  background: url(../client/dist/images/ajax-loader.gif) no-repeat scroll center/25px 25px;
   margin: auto;
 }
 
@@ -731,4 +731,4 @@ select.form-control-lg:not([size]):not([multiple]) {
 }
 
 
-/*# sourceMappingURL=main.css.map*/
+/*# sourceMappingURL=locator.css.map*/
