@@ -3,6 +3,8 @@
 namespace Dynamic\Locator;
 
 use \Page;
+use SilverStripe\Control\Director;
+use SilverStripe\Core\Manifest\ModuleLoader;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HeaderField;
@@ -108,6 +110,7 @@ class Locator extends Page
                 $categoriesField,
             ));
         });
+
         return parent::getCMSFields();
     }
 
@@ -164,8 +167,8 @@ class Locator extends Page
     public function getCategories()
     {
         return $this->Categories()->filter(array(
-                'Locations.ID:GreaterThan' => 0
-            ));
+            'Locations.ID:GreaterThan' => 0
+        ));
     }
 
     /**
@@ -174,10 +177,16 @@ class Locator extends Page
      */
     public function getInfoWindowTemplate()
     {
-        $contents = json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(
-            Locator::class,
-            'infoWindowTemplate'
-        )));
+        $contents = json_encode(
+            file_get_contents(
+                $this->parseModuleResourceReference(
+                    Config::inst()->get(
+                        Locator::class,
+                        'infoWindowTemplate'
+                    )
+                )
+            )
+        );
 
         return str_replace('\n', '', $contents);
     }
@@ -188,12 +197,39 @@ class Locator extends Page
      */
     public function getListTemplate()
     {
-        $contents = json_encode(file_get_contents(__DIR__ . '/../../../' . Config::inst()->get(
-            Locator::class,
-            'listTemplate'
-        )));
+        $contents = json_encode(
+            file_get_contents(
+                $this->parseModuleResourceReference(
+                    Config::inst()->get(
+                        Locator::class,
+                        'listTemplate'
+                    )
+                )
+            )
+        );
 
         return str_replace('\n', '', $contents);
+    }
+
+    /**
+     * From SilverStripe/View/Requirements_Backend
+     *
+     * Modified to use the base folder
+     */
+    protected function parseModuleResourceReference($file)
+    {
+        // String of the form vendor/package:resource. Excludes "http://bla" as that's an absolute URL
+        if (preg_match('#([^\/\/][^ /]*\/[^ /]*) *: *([^ ]*)#', $file, $matches)) {
+            list(, $module, $resource) = $matches;
+            $moduleObj = ModuleLoader::getModule($module);
+            if ( !$moduleObj) {
+                throw new \InvalidArgumentException("Can't find module '$module'");
+            }
+
+            return Director::baseFolder() . '/' . $moduleObj->getRelativeResourcePath($resource);
+        }
+
+        return $file;
     }
 
     /**
@@ -212,11 +248,11 @@ class Locator extends Page
     ) {
         $locationClass = Config::inst()->get(Locator::class, 'location_class');
         $locations = $locationClass::get()->filter($filter)->exclude($exclude);
-        if (!empty($filterAny)) {
+        if ( !empty($filterAny)) {
             $locations = $locations->filterAny($filterAny);
         }
 
-        if (!empty($exclude)) {
+        if ( !empty($exclude)) {
             $locations = $locations->exclude($exclude);
         }
 

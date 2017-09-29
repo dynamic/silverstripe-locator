@@ -8,5 +8,5 @@ Dynamic\Locator\Location:
     - SilverStripe\Versioned\Versioned('Stage','Live')
 
 Dynamic\Locator\Locator:
-  infoWindowTemplate: 'locator/templates/Dynamic/Locator/infowindow-description.html'
-  listTemplate: 'locator/templates/Dynamic/Locator/location-list-description.html'
+  infoWindowTemplate: 'dynamic/silverstripe-locator:templates/Dynamic/Locator/infowindow-description.html'
+  listTemplate: 'dynamic/silverstripe-locator:templates/Dynamic/Locator/location-list-description.html'
