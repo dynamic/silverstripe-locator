@@ -12,8 +12,10 @@ use SilverStripe\Security\Member;
 /**
  * Class LocationTest
  */
-class LocationCategoryTest extends LocatorTest_Base
+class LocationCategoryTest extends SapphireTest
 {
+
+    protected static $fixture_file = '../fixtures.yml';
 
     /**
      *

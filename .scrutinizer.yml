@@ -14,7 +14,7 @@ tools:
       fixers: []
       enabled: false
       filter:
-            paths: [tests/*,code/*]
+            paths: [tests/*,src/*]
             excluded_paths: []
 coding_style:
   php:
@@ -28,4 +28,4 @@ checks:
         duplication: true
 
 filter:
-    paths: [tests/*,code/*]
+    paths: [tests/*,src/*]

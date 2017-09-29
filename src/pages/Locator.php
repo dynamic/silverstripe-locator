@@ -158,6 +158,9 @@ class Locator extends Page
         return Config::inst()->get(Locator::class, 'show_radius');
     }
 
+    /**
+     * @return mixed
+     */
     public function getCategories()
     {
         return $this->Categories()->filter(array(
