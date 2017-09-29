@@ -222,7 +222,7 @@ class Locator extends Page
         if (preg_match('#([^\/\/][^ /]*\/[^ /]*) *: *([^ ]*)#', $file, $matches)) {
             list(, $module, $resource) = $matches;
             $moduleObj = ModuleLoader::getModule($module);
-            if ( !$moduleObj) {
+            if (!$moduleObj) {
                 throw new \InvalidArgumentException("Can't find module '$module'");
             }
 
@@ -248,11 +248,11 @@ class Locator extends Page
     ) {
         $locationClass = Config::inst()->get(Locator::class, 'location_class');
         $locations = $locationClass::get()->filter($filter)->exclude($exclude);
-        if ( !empty($filterAny)) {
+        if (!empty($filterAny)) {
             $locations = $locations->filterAny($filterAny);
         }
 
-        if ( !empty($exclude)) {
+        if (!empty($exclude)) {
             $locations = $locations->exclude($exclude);
         }
 

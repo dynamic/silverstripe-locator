@@ -4,12 +4,15 @@
   <% else %>
     []
   <% end_if %>,
-  <% if $Categories %>"categories": [<% loop $Categories %>
+  "categories": <% if $Categories %>
+    [<% loop $Categories %>
     {
       "ID": $ID,
       "Name": "$Name"
-    }<% if not $Last %>,<% end_if %><% end_loop %>
-  ],<% end_if %>
+    }<% if not $Last %>,<% end_if %><% end_loop %>]
+  <% else %>
+    []
+  <% end_if %>,
   "unit": "$Unit",
   "limit": $Limit,
   "clusters": $Clusters,
