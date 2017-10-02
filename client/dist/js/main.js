@@ -1202,10 +1202,16 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(MapContainer);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.markers = markers;
+exports.Map = Map;
 
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(0);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactGoogleMaps = __webpack_require__(506);
 
@@ -1215,7 +1221,7 @@ var _MarkerClusterer2 = _interopRequireDefault(_MarkerClusterer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var markers = function markers(props) {
+function markers(props) {
   return props.markers.map(function (marker) {
     return _react2.default.createElement(
       _reactGoogleMaps.Marker,
@@ -1240,9 +1246,9 @@ var markers = function markers(props) {
       )
     );
   });
-};
+}
 
-var Map = (0, _reactGoogleMaps.withGoogleMap)(function (props) {
+function Map(props) {
   return _react2.default.createElement(
     _reactGoogleMaps.GoogleMap,
     {
@@ -1260,9 +1266,13 @@ var Map = (0, _reactGoogleMaps.withGoogleMap)(function (props) {
       markers(props)
     ) : markers(props)
   );
-});
+}
 
-exports.default = Map;
+Map.propTypes = {
+  clusters: _propTypes2.default.bool.isRequired
+};
+
+exports.default = (0, _reactGoogleMaps.withGoogleMap)(Map);
 
 /***/ }),
 
