@@ -29,12 +29,6 @@ install:
       npm install
     fi
 
-  # only install codecov node package if javascript and coverage
-  - |
-    if [[ $LANG == JS ]] && [[ $COVERAGE == 1 ]]; then
-      npm install codecov
-    fi
-
 env:
   global:
     - DB=MYSQL
@@ -141,12 +135,12 @@ after_success:
   # php with coverage
   - |
     if [[ $LANG == PHP ]] && [[ $COVERAGE == 1 ]]; then
-      bash <(curl -s https://codecov.io/bash) -f coverage.xml -t $CODECOV_TOKEN -F php
+      bash <(curl -s https://codecov.io/bash) -f coverage.xml -F php
       travis_retry php ocular.phar code-coverage:upload --format=php-clover --access-token=$SCRUT_TOKEN coverage.xml;
     fi
 
   #javascript with coverage
   - |
     if [[ $LANG == JS ]] && [[ $COVERAGE == 1 ]]; then
-      ./node_modules/.bin/codecov -F js
+      bash <(curl -s https://codecov.io/bash) -F js
     fi
