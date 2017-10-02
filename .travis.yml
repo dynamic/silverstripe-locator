@@ -7,6 +7,12 @@ addons:
     packages:
       - tidy
 
+# Caching so future tests go faster
+cache:
+  directories:
+    - node_modules
+    - $HOME/.composer/cache/files
+
 before_install:
   # ony install node and update npm if javascript
   - |
@@ -81,13 +87,13 @@ before_script:
   # Needs an extra package if it is PGSQL
   - |
     if [[ $DB == PGSQL ]]; then
-      composer require silverstripe/postgresql 2.0.x-dev
+      composer require silverstripe/postgresql 2.0.x-dev --prefer-dist
     fi
 
   # Needs an extra package if it is SQLITE
   - |
     if [[ $DB == SQLITE ]]; then
-      composer require silverstripe/sqlite3 2.1.x-dev
+      composer require silverstripe/sqlite3 2.1.x-dev --prefer-dist
     fi
 
 # Execute tests with or without coverage
