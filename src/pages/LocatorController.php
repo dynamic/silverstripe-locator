@@ -83,6 +83,8 @@ class LocatorController extends \PageController
             "Clusters" => $this->Clusters,
         ));
 
+        $this->extend('updateSettings', $data);
+
         return $data->renderWith('Dynamic/Locator/settings');
     }
 
