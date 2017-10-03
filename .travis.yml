@@ -63,6 +63,9 @@ matrix:
   allow_failures:
     - php: 7.0
       env: DB=SQLITE
+      # 
+    - php: 7.0
+      env: DB=PGSQL
 
 before_script:
   # Removes xdebug (speeds up php tests, coverage is done with phpdbg instead)
