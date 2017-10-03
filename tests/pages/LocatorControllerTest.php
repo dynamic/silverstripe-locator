@@ -48,5 +48,4 @@ class LocatorControllerTest extends FunctionalTest
 
         $this->assertNotEquals(null, json_decode($page->getBody()));
     }
-
 }
