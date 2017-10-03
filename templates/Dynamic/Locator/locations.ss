@@ -13,7 +13,7 @@
       "State": "$State",
       "PostalCode": "$PostalCode",
       "Country": "$Country",
-      "Distance": $Distance,
+      "Distance": <% if $Distance %>$Distance<% else %>-1<% end_if %>,
       "Lat": $Lat,
       "Lng": $Lng
     }<% if not $Last %>,<%end_if%><% end_loop %>

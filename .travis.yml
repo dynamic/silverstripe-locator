@@ -59,11 +59,9 @@ matrix:
         - LANG=JS
         - LINT=1
 
-  # Only because sqlite module doesn't seem to work for 4
   allow_failures:
     - php: 7.0
       env: DB=SQLITE
-      # 
     - php: 7.0
       env: DB=PGSQL
 
@@ -84,13 +82,13 @@ before_script:
   # Needs an extra package if it is PGSQL
   - |
     if [[ $DB == PGSQL ]]; then
-      composer require silverstripe/postgresql 2.0.x-dev --prefer-dist
+      composer require --no-update silverstripe/postgresql:2.0.x-dev --prefer-dist
     fi
 
   # Needs an extra package if it is SQLITE
   - |
     if [[ $DB == SQLITE ]]; then
-      composer require silverstripe/sqlite3 2.1.x-dev --prefer-dist
+      composer require --no-update silverstripe/sqlite3:2.0.x-dev --prefer-dist
     fi
 
 # Execute tests with or without coverage
