@@ -10,7 +10,7 @@
     "google maps",
     "location"
   ],
-  "type": "silverstripe-module",
+  "type": "silverstripe-vendormodule",
   "license": "BSD-3-Clause",
   "authors": [
     {
@@ -21,6 +21,7 @@
   ],
   "require": {
     "silverstripe/recipe-cms": "^1.0",
+    "silverstripe/vendor-plugin": "^1.0",
     "muskie9/data-to-arraylist": "^2.0",
     "dynamic/silverstripe-geocoder": "^1.0",
     "symbiote/silverstripe-gridfieldextensions": "^3.0"
@@ -45,7 +46,10 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "extra": {
-    "installer-name": "locator",
+    "expose": [
+      "client",
+      "css"
+    ],
     "branch-alias": {
       "dev-master": "3.0.x-dev"
     }
