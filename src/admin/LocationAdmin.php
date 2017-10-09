@@ -3,6 +3,9 @@
 namespace Dynamic\Locator;
 
 use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\Forms\Form;
+use SilverStripe\Dev\CsvBulkLoader;
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 
 /**
  * Class LocationAdmin
@@ -14,16 +17,16 @@ class LocationAdmin extends ModelAdmin
      * @var array
      */
     private static $managed_models = array(
-        'Dynamic\\Locator\\Location',
-        'Dynamic\\Locator\\LocationCategory',
+        Location::class,
+        LocationCategory::class,
     );
 
     /**
      * @var array
      */
     private static $model_importers = array(
-        'Dynamic\\Locator\\Location' => 'Dynamic\\Locator\\LocationCsvBulkLoader',
-        'Dynamic\\Locator\\LocationCategory' => 'SilverStripe\\Dev\\CsvBulkLoader',
+        Location::class => LocationCsvBulkLoader::class,
+        LocationCategory::class => CsvBulkLoader::class,
     );
 
     /**
@@ -40,7 +43,7 @@ class LocationAdmin extends ModelAdmin
      */
     public function getExportFields()
     {
-        if ($this->modelClass == 'Location') {
+        if ($this->modelClass == Location::class) {
             return array(
                 'Title' => 'Name',
                 'Address' => 'Address',
@@ -66,16 +69,16 @@ class LocationAdmin extends ModelAdmin
     /**
      * @param null $id
      * @param null $fields
-     * @return $this|Form
+     * @return Form
      */
     public function getEditForm($id = null, $fields = null)
     {
         $form = parent::getEditForm($id, $fields);
-        $class = $this->sanitiseClassName($this->modelClass);
-        if ($class == 'Location') {
+        if ($this->modelClass == Location::class) {
+            $class = $this->sanitiseClassName(Location::class);
             $gridField = $form->Fields()->fieldByName($class);
             $config = $gridField->getConfig();
-            $config->removeComponentsByType('GridFieldDeleteAction');
+            $config->removeComponentsByType(GridFieldDeleteAction::class);
         }
         return $form;
     }
