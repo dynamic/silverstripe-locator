@@ -3,8 +3,6 @@
 namespace Dynamic\Locator\Tests;
 
 use Dynamic\Locator\LocationCategory;
-use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Member;
