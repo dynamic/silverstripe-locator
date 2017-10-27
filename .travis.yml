@@ -1,33 +1,147 @@
 language: php
 
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - tidy
+
+# Caching so future tests go faster
+cache:
+  directories:
+    - node_modules
+    - $HOME/.composer/cache/files
+
+before_install:
+  # ony install node and update npm if javascript
+  - |
+    if [[ $LANG == JS ]]; then
+      nvm install 6.10
+      nvm use 6.10
+      npm i npm -g
+    fi
+
+install:
+  # only install node packages if javascript
+  - |
+    if [[ $LANG == JS ]]; then
+      npm install
+    fi
+
 env:
   global:
+    - DB=MYSQL
     - COMPOSER_ROOT_VERSION=4.0.x-dev
-    - CODECOV_TOKEN=
-    - SCRUT_TOKEN=
+    - COVERAGE=0
+    - LINT=0
+    - LANG=PHP
 
 matrix:
   include:
-    - php: 5.6
-      env: DB=MYSQL PHPCS_TEST=1 PHPUNIT_TEST=1
     - php: 7.0
-      env: DB=MYSQL PHPUNIT_TEST=1
-    - php: 7.1
-      env: DB=MYSQL PHPUNIT_COVERAGE_TEST=1
+      env: DB=SQLITE
+    - php: 7.0
+      env: DB=PGSQL
+    - php: 7.0
+      env: COVERAGE=1
+    - php: 7.0
+      env: LINT=1
+    - php: 5.6
+
+    # js stuff
+    - php: 7.0
+      env:
+        - LANG=JS
+        - COVERAGE=1
+    - php: 7.0
+      env:
+        - LANG=JS
+        - LINT=1
+
+  allow_failures:
+    - php: 7.0
+      env: DB=SQLITE
+    - php: 7.0
+      env: DB=PGSQL
 
 before_script:
-  # Init PHP
-  - phpenv rehash
+  # Removes xdebug (speeds up php tests, coverage is done with phpdbg instead)
   - phpenv config-rm xdebug.ini
-  - echo 'memory_limit = 2048M' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
-  # Install composer dependencies
-  - composer require --prefer-dist --no-update silverstripe-themes/simple:~3.2
-  - composer update --no-suggest --prefer-dist
+  # Only install composer stuff if PHP
+  - |
+    if [[ $LANG == PHP ]]; then
+      phpenv rehash
+      composer self-update || true
+      echo 'memory_limit = 2048M' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+      composer require --prefer-dist --no-update silverstripe-themes/simple:~3.2
+      composer update --no-suggest --prefer-dist
+    fi
 
+  # Needs an extra package if it is PGSQL
+  - |
+    if [[ $DB == PGSQL ]]; then
+      composer require --no-update silverstripe/postgresql:2.0.x-dev --prefer-dist
+    fi
+
+  # Needs an extra package if it is SQLITE
+  - |
+    if [[ $DB == SQLITE ]]; then
+      composer require --no-update silverstripe/sqlite3:2.0.x-dev --prefer-dist
+    fi
+
+# Execute tests with or without coverage
 script:
-  - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit; fi
-  - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml && wget https://scrutinizer-ci.com/ocular.phar; fi
+  # php without coverage and without linting
+  - |
+    if [[ $LANG == PHP ]] && [[ $COVERAGE == 0 ]] && [[ $LINT == 0 ]]; then
+      vendor/bin/phpunit
+    fi
 
+  # php with coverage
+  - |
+    if [[ $LANG == PHP ]] && [[ $COVERAGE == 1 ]]; then
+      phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml && \
+      wget https://scrutinizer-ci.com/ocular.phar;
+    fi
+
+  # php with linting
+  - |
+    if [[ $LANG == PHP ]] && [[ $LINT == 1 ]]; then
+      composer run-script lint
+    fi
+
+  # javascript without coverage
+  - |
+    if [[ $LANG == JS ]] && [[ $COVERAGE == 0 ]] && [[ $LINT == 0 ]]; then
+      npm run test;
+    fi
+
+  # javascript with coverage
+  - |
+    if [[ $LANG == JS ]] && [[ $COVERAGE == 1 ]]; then
+      npm run test:coverage;
+    fi
+
+  # javascript with linting
+  - |
+    if [[ $LANG == JS ]] && [[ $LINT == 1 ]]; then
+      npm run lint
+    fi
+
+# Upload code coverage when tests pass
 after_success:
-  - if [[ $PHPUNIT_COVERAGE_TEST ]]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml -t $CODECOV_TOKEN && travis_retry php ocular.phar code-coverage:upload --format=php-clover --access-token=$SCRUT_TOKEN coverage.xml; fi
+
+  # php with coverage
+  - |
+    if [[ $LANG == PHP ]] && [[ $COVERAGE == 1 ]]; then
+      bash <(curl -s https://codecov.io/bash) -f coverage.xml -F php
+      travis_retry php ocular.phar code-coverage:upload --format=php-clover --access-token=$SCRUT_TOKEN coverage.xml;
+    fi
+
+  #javascript with coverage
+  - |
+    if [[ $LANG == JS ]] && [[ $COVERAGE == 1 ]]; then
+      bash <(curl -s https://codecov.io/bash) -F js
+    fi

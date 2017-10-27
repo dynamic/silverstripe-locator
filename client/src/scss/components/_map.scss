@@ -1,0 +1,42 @@
+// =========
+// == Map ==
+// =========
+
+// loc-name is in general
+
+.map-container {
+  a {
+    color: #e76737;
+    text-decoration: none;
+
+    &:hover,
+    &:active {
+      text-decoration: underline;
+    }
+  }
+
+  .custom-marker {
+    width: 32px;
+    height: 37px;
+    color: #fff;
+    // background: url(../images/custom-marker.png) no-repeat;
+    padding: 3px;
+    cursor: pointer;
+  }
+}
+
+.marker-content {
+  margin: 2px;
+}
+
+.map {
+  float: right;
+  width: 100%;
+  height: 530px;
+}
+
+.gm-style .cluster img {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}

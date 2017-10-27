@@ -1,0 +1,100 @@
+{
+  "name": "locator",
+  "version": "0.0.1",
+  "description": "SilverStripe Locator Module. Show locations on a map. Search by geoposition.",
+  "main": "client/src/js/boot/index.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.prod.js -p --progress",
+    "build:dev": "webpack --config webpack.config.dev.js --progress",
+    "watch": "webpack --config webpack.config.dev.js --progress --watch",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage",
+    "test:coverage:watch": "jest --coverage --watchAll",
+    "lint": "eslint webpack.config.dev.js webpack.config.prod.js client/src/js"
+  },
+  "keywords": [
+    "locator",
+    "graphql",
+    "silverstripe",
+    "react",
+    "redux"
+  ],
+  "author": "Dynamic <dev@dynamicagency.com>",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "axios-mock-adapter": "^1.9.0",
+    "bootstrap": "^4.0.0-beta",
+    "es6-promise": "^4.0.5",
+    "handlebars": "^4.0.10",
+    "history": "^4.7.2",
+    "html-to-react": "^1.2.11",
+    "isomorphic-fetch": "^2.2.1",
+    "prop-types": "^15.5.10",
+    "querystring": "^0.2.0",
+    "react": "^15.5.4",
+    "react-document-title": "^2.0.2",
+    "react-dom": "^15.5.4",
+    "react-google-maps": "^8.2.0",
+    "react-redux": "^5.0.6",
+    "react-virtualized": "^9.10.1",
+    "redux": "^3.6.0",
+    "redux-promise-middleware": "^4.4.1",
+    "redux-thunk": "^2.1.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.4",
+    "babel-core": "^6.26.0",
+    "babel-jest": "^21.0.2",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "css-loader": "^0.28.7",
+    "enzyme": "^2.9.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.2",
+    "eslint-config-airbnb-base": "^12.0.0",
+    "eslint-import-resolver-node": "^0.3.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.3.0",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^0.11.1",
+    "jest": "^21.1.0",
+    "jest-cli": "^21.1.0",
+    "jest-enzyme": "^3.8.3",
+    "node-sass": "^4.5.3",
+    "postcss-loader": "^2.0.5",
+    "react-test-renderer": "^15.6.1",
+    "remote-redux-devtools": "^0.5.12",
+    "resolve-url-loader": "^2.0.2",
+    "sass-loader": "^6.0.5",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.6.0"
+  },
+  "browserslist": "> 1%",
+  "jest": {
+    "roots": [
+      "<rootDir>/client/src/",
+      "<rootDir>/client/tests/"
+    ],
+    "collectCoverageFrom": [
+      "**/client/src/**/*.{js,jsx}"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "client/src/js"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "env",
+      "react",
+      "stage-2"
+    ]
+  }
+}

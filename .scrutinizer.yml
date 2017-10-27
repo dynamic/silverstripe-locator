@@ -14,7 +14,7 @@ tools:
       fixers: []
       enabled: false
       filter:
-            paths: [tests/*,code/*]
+            paths: [tests/*,src/*]
             excluded_paths: []
 coding_style:
   php:
@@ -27,5 +27,11 @@ checks:
         code_rating: true
         duplication: true
 
+build:
+  nodes:
+    analysis:
+      tests:
+        override: [php-scrutinizer-run]
+
 filter:
-    paths: [tests/*,code/*]
+    paths: [tests/*,src/*]

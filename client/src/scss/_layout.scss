@@ -1,0 +1,39 @@
+// ====================
+// == General Layout ==
+// ====================
+.map-area {
+  @include make-row-no-gutter;
+  position: relative;
+
+  margin: 0;
+
+  @include media-breakpoint-up(sm) {
+    flex-direction: row-reverse;
+  }
+
+  .loc-list,
+  .map-container {
+    box-sizing: border-box;
+    @include make-col-ready-no-gutter;
+  }
+
+  .loc-list {
+    @include media-breakpoint-up(sm) {
+      @include make-col(4);
+    }
+
+    @include media-breakpoint-up(md) {
+      @include make-col(3);
+    }
+  }
+
+  .map-container {
+    @include media-breakpoint-up(sm) {
+      @include make-col(8);
+    }
+
+    @include media-breakpoint-up(md) {
+      @include make-col(9);
+    }
+  }
+}

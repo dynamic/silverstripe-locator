@@ -22,7 +22,7 @@ Displays a filterable list of locations on a map. Users can filter by address or
 
 With auto geocoding enabled in the CMS, the map will display the nearest 26 locations to the user.
 
-![screen shot](images/Locator.png)
+![screen shot](docs/_images/Locator.png)
  
 ## Documentation
 

@@ -1,0 +1,54 @@
+// =================
+// == Search Form ==
+// =================
+.locator-search {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+
+  .form-group,
+  input.form-control {
+    box-sizing: border-box;
+  }
+
+  .fieldset {
+    @include make-row;
+    @include make-col-ready;
+
+    &.actions {
+      justify-content: space-around;
+
+      .form-group {
+        @include media-breakpoint-up(sm) {
+          @include make-col(6);
+        }
+
+        @include media-breakpoint-up(md) {
+          @include make-col(4);
+        }
+      }
+    }
+
+    .form-group {
+      @include make-col-ready;
+    }
+
+    .address-input,
+    .radius-dropdown,
+    .address-input + .category-dropdown {
+      @include media-breakpoint-up(md) {
+        @include make-col(6);
+      }
+    }
+
+    select {
+      max-width: 100%;
+    }
+
+    input[type="submit"],
+    input[type="reset"] {
+      float: none;
+      width: 100%;
+    }
+  }
+}

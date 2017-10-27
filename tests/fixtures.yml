@@ -1,43 +1,21 @@
 SilverStripe\Security\Group:
-  locationcreate:
-    Title: Create Locations
-  locationedit:
-    Title: Edit Locations
-  locationdelete:
-    Title: Location Delete
+  administrators:
+    Title: Administrators
 SilverStripe\Security\Permission:
-  locationcreate:
-    Code: Location_CREATE
+  administrators:
+    Code: ADMIN
     Type: 1
-    GroupID: =>SilverStripe\Security\Group.locationcreate
-  locationedit:
-    Code: Location_EDIT
-    Type: 1
-    GroupID: =>SilverStripe\Security\Group.locationedit
-  locationdelete:
-    Code: Location_DELETE
-    Type: 1
-    GroupID: =>SilverStripe\Security\Group.locationdelete
+    Group: =>SilverStripe\Security\Group.administrators
 SilverStripe\Security\Member:
-  locationcreate:
-    FirstName: Create
-    Surname: Location
-    Email: create@test.com
-    Groups: =>SilverStripe\Security\Group.locationcreate
-  locationedit:
-    FirstName: Edit
-    Surname: Location
-    Email: edit@test.com
-    Groups: =>SilverStripe\Security\Group.locationedit
-  locationdelete:
-    FirstName: Delete
-    Surname: Location
-    Email: delete@test.com
-    Groups: =>SilverStripe\Security\Group.locationdelete
+  admin:
+    FirstName: Default
+    Surname: Admin
+    Email: admin@dynamicagency.com
+    Groups: =>SilverStripe\Security\Group.administrators
   default:
     FirstName: Default
-    Surname: Member
-    email: default@test.com
+    Surname: User
+    Email: user@dynamicagency.com
 Dynamic\Locator\LocationCategory:
   service:
     Name: Service

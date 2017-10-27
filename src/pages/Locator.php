@@ -2,6 +2,10 @@
 
 namespace Dynamic\Locator;
 
+use \Page;
+use SilverStripe\Control\Director;
+use SilverStripe\Core\Manifest\ModuleLoader;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\OptionsetField;
@@ -10,6 +14,7 @@ use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\View\ArrayData;
 use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
 
 /**
@@ -20,7 +25,7 @@ use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
  * @property string $Unit
  * @method Categories|ManyManyList $Categories
  */
-class Locator extends \Page
+class Locator extends Page
 {
     /**
      * @var string
@@ -38,10 +43,20 @@ class Locator extends \Page
     private static $description = 'Display locations on a map';
 
     /**
+     * @var bool
+     */
+    private static $show_radius = true;
+
+    private static $limit = -1;
+
+    private static $locationClass = Location::class;
+
+    /**
      * @var array
      */
     private static $db = array(
         'Unit' => 'Enum("m,km","m")',
+        'Clusters' => 'Enum("false,true","false")',
     );
 
     /**
@@ -66,29 +81,155 @@ class Locator extends \Page
      */
     public function getCMSFields()
     {
-        $fields = parent::getCMSFields();
+        // so it can easily be extended - concept taken from the blog module
+        $this->beforeUpdateCMSFields(function ($fields) {
+            // Settings
+            $fields->addFieldsToTab('Root.Settings', array(
+                HeaderField::create('DisplayOptions', 'Display Options', 3),
+                OptionsetField::create('Unit', 'Unit of measure', array(
+                    'm' => 'Miles',
+                    'km' => 'Kilometers'
+                ), 'm'),
+                OptionsetField::create('Clusters', 'Use clusters?', array(
+                    'false' => 'No',
+                    'true' => 'Yes'
+                ), 'false'),
+            ));
 
-        // Settings
-        $fields->addFieldsToTab('Root.Settings', array(
-            HeaderField::create('DisplayOptions', 'Display Options', 3),
-            OptionsetField::create('Unit', 'Unit of measure', array('m' => 'Miles', 'km' => 'Kilometers')),
+            // Filter categories
+            $config = GridFieldConfig_RelationEditor::create();
+            $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
+            $config->addComponent(new GridFieldAddExistingSearchButton());
+            $categories = $this->Categories();
+            $categoriesField = GridField::create('Categories', 'Categories', $categories, $config)
+                                        ->setDescription('only show locations from the selected category');
+
+            // Filter
+            $fields->addFieldsToTab('Root.Filter', array(
+                HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
+                $categoriesField,
+            ));
+        });
+
+        return parent::getCMSFields();
+    }
+
+    /**
+     * Gets the list of radius
+     *
+     * @return ArrayList
+     */
+    public function getRadii()
+    {
+        $radii = [
+            '0' => '25',
+            '1' => '50',
+            '2' => '75',
+            '3' => '100',
+        ];
+
+        $config_radii = Config::inst()->get(Locator::class, 'radius_array');
+        if ($config_radii) {
+            $radii = $config_radii;
+        }
+
+        $list = [];
+        foreach ($radii as $radius) {
+            $list[] = new ArrayData(array(
+                'Radius' => $radius,
+            ));
+        }
+
+        return new ArrayList($list);
+    }
+
+    /**
+     * Gets the limit of locations
+     * @return mixed
+     */
+    public function getLimit()
+    {
+        return Config::inst()->get(Locator::class, 'limit');
+    }
+
+    /**
+     * Gets if the radius drop down should be shown
+     * @return mixed
+     */
+    public function getShowRadius()
+    {
+        return Config::inst()->get(Locator::class, 'show_radius');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategories()
+    {
+        return $this->Categories()->filter(array(
+            'Locations.ID:GreaterThan' => 0
         ));
+    }
 
-        // Filter categories
-        $config = GridFieldConfig_RelationEditor::create();
-        $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
-        $config->addComponent(new GridFieldAddExistingSearchButton());
-        $categories = $this->Categories();
-        $categoriesField = GridField::create('Categories', 'Categories', $categories, $config)
-            ->setDescription('only show locations from the selected category');
+    /**
+     * Gets the info window template
+     * @return mixed
+     */
+    public function getInfoWindowTemplate()
+    {
+        $contents = json_encode(
+            file_get_contents(
+                $this->parseModuleResourceReference(
+                    Config::inst()->get(
+                        Locator::class,
+                        'infoWindowTemplate'
+                    )
+                )
+            )
+        );
 
-        // Filter
-        $fields->addFieldsToTab('Root.Filter', array(
-            HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
-            $categoriesField,
-        ));
+        return str_replace('\n', '', $contents);
+    }
 
-        return $fields;
+    /**
+     * Gets the template for locations in the list
+     * @return string
+     */
+    public function getListTemplate()
+    {
+        $contents = json_encode(
+            file_get_contents(
+                $this->parseModuleResourceReference(
+                    Config::inst()->get(
+                        Locator::class,
+                        'listTemplate'
+                    )
+                )
+            )
+        );
+
+        return str_replace('\n', '', $contents);
+    }
+
+    /**
+     * From SilverStripe/View/Requirements_Backend
+     *
+     * Modified to use the base folder
+     */
+    protected function parseModuleResourceReference($file)
+    {
+        // String of the form vendor/package:resource. Excludes "http://bla" as that's an absolute URL
+        if (preg_match('#([^\/\/][^ /]*\/[^ /]*) *: *([^ ]*)#', $file, $matches)) {
+            list(, $module, $resource) = $matches;
+            $moduleObj = ModuleLoader::getModule($module);
+            if (!$moduleObj) {
+                throw new \InvalidArgumentException("Can't find module '$module'");
+            }
+
+            return Director::baseFolder() . '/' . $moduleObj->getRelativeResourcePath($resource);
+        }
+
+        return $file;
     }
 
     /**
@@ -96,6 +237,7 @@ class Locator extends \Page
      * @param array $filterAny
      * @param array $exclude
      * @param null|callable $callback
+     *
      * @return DataList|ArrayList
      */
     public static function get_locations(
@@ -103,14 +245,13 @@ class Locator extends \Page
         $filterAny = [],
         $exclude = [],
         $callback = null
-    )
-    {
+    ) {
         $locationClass = Config::inst()->get(Locator::class, 'location_class');
         $locations = $locationClass::get()->filter($filter)->exclude($exclude);
-
         if (!empty($filterAny)) {
             $locations = $locations->filterAny($filterAny);
         }
+
         if (!empty($exclude)) {
             $locations = $locations->exclude($exclude);
         }
@@ -120,34 +261,5 @@ class Locator extends \Page
         }
 
         return $locations;
-    }
-
-    /**
-     * @return DataList
-     */
-    public static function get_all_categories()
-    {
-        return LocationCategory::get();
-    }
-
-    /**
-     * @return bool
-     */
-    public function getPageCategories()
-    {
-        return self::locator_categories_by_locator($this->ID);
-    }
-
-    /**
-     * @param int $id
-     * @return bool|
-     */
-    public static function locator_categories_by_locator($id = 0)
-    {
-        if ($id == 0) {
-            return false;
-        }
-
-        return Locator::get()->byID($id)->Categories();
     }
 }

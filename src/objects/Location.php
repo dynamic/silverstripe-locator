@@ -127,6 +127,7 @@ class Location extends DataObject implements PermissionProvider
      * custom labels for fields
      *
      * @param bool $includerelations
+     *
      * @return array|string
      */
     public function fieldLabels($includerelations = true)
@@ -137,6 +138,7 @@ class Location extends DataObject implements PermissionProvider
         $labels['Category.Name'] = 'Category';
         $labels['Category.ID'] = 'Category';
         $labels['Featured.NiceAsBoolean'] = 'Featured';
+
         return $labels;
     }
 
@@ -145,38 +147,37 @@ class Location extends DataObject implements PermissionProvider
      */
     public function getCMSFields()
     {
-        $fields = parent::getCMSFields();
+        // so it can easily be extended - concept taken from the blog module
+        $this->beforeUpdateCMSFields(function ($fields) {
+            $fields->removeByName(array(
+                'Import_ID',
+            ));
 
-        $fields->removeByName(array(
-            'Import_ID',
-        ));
+            $fields->dataFieldByName('Website')
+                   ->setAttribute('placeholder', 'http://');
 
-        $fields->dataFieldByName('Website')
-            ->setAttribute('placeholder', 'http://');
+            $fields->replaceField('Email', EmailField::create('Email'));
 
-        $fields->replaceField('Email', EmailField::create('Email'));
+            $fields->replaceField(
+                'CategoryID',
+                DropdownField::create('CategoryID', 'Category', LocationCategory::get()->map())->setEmptyString('')
+            );
 
-        $fields->replaceField(
-            'CategoryID',
-            DropdownField::create('CategoryID', 'Category', LocationCategory::get()->map())->setEmptyString('')
-        );
+            $featured = $fields->dataFieldByName('Featured')
+                               ->setDescription('Location will display near the top of the results list');
+            $fields->insertAfter(
+                $featured,
+                'CategoryID'
+            );
+        });
 
-        $featured = $fields->dataFieldByName('Featured')
-            ->setDescription('Location will display near the top of the results list');
-        $fields->insertAfter(
-            $featured,
-            'CategoryID'
-        );
-
-        // allow to be extended via DataExtension
-        $this->extend('updateLocationFields', $fields);
-
-        return $fields;
+        return parent::getCMSFields();
     }
 
     /**
      * @param null $member
      * @param array $context
+     *
      * @return bool
      */
     public function canView($member = null, $context = [])
@@ -187,6 +188,7 @@ class Location extends DataObject implements PermissionProvider
     /**
      * @param null $member
      * @param array $context
+     *
      * @return bool|int
      */
     public function canEdit($member = null, $context = [])
@@ -197,6 +199,7 @@ class Location extends DataObject implements PermissionProvider
     /**
      * @param null $member
      * @param array $context
+     *
      * @return bool|int
      */
     public function canDelete($member = null, $context = [])
@@ -207,6 +210,7 @@ class Location extends DataObject implements PermissionProvider
     /**
      * @param null $member
      * @param array $context
+     *
      * @return bool|int
      */
     public function canCreate($member = null, $context = [])
