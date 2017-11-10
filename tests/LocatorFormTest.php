@@ -14,7 +14,7 @@ class LocatorFormTest extends FunctionalTest
     /**
      * @var string
      */
-    protected static $fixture_file = 'locator/tests/fixtures.yml';
+    protected static $fixture_file = 'fixtures.yml';
 
     /**
      *

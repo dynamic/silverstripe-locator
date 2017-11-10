@@ -1,24 +1,72 @@
 # Change Log
 
+## [2.0.0-beta3](https://github.com/dynamic/silverstripe-locator/tree/2.0.0-beta3) (2017-06-30)
+[Full Changelog](https://github.com/dynamic/silverstripe-locator/compare/3.0.0-alpha1...2.0.0-beta3)
+
+**Implemented enhancements:**
+
+- Add a uniquenessID to customScript requirement in Locator\_Controller [\#163](https://github.com/dynamic/silverstripe-locator/issues/163)
+
+**Merged pull requests:**
+
+- UPDATE silverstripe-australia now symbiote [\#168](https://github.com/dynamic/silverstripe-locator/pull/168) ([muskie9](https://github.com/muskie9))
+- Update composer.json [\#167](https://github.com/dynamic/silverstripe-locator/pull/167) ([jsirish](https://github.com/jsirish))
+- Added a unique ID to custom script [\#164](https://github.com/dynamic/silverstripe-locator/pull/164) ([mak001](https://github.com/mak001))
+
+## [3.0.0-alpha1](https://github.com/dynamic/silverstripe-locator/tree/3.0.0-alpha1) (2017-06-08)
+[Full Changelog](https://github.com/dynamic/silverstripe-locator/compare/2.0.0-beta2...3.0.0-alpha1)
+
+**Merged pull requests:**
+
+- SilverStripe alpha7 updates [\#160](https://github.com/dynamic/silverstripe-locator/pull/160) ([jsirish](https://github.com/jsirish))
+
+## [2.0.0-beta2](https://github.com/dynamic/silverstripe-locator/tree/2.0.0-beta2) (2017-04-18)
+[Full Changelog](https://github.com/dynamic/silverstripe-locator/compare/2.0.0-beta1...2.0.0-beta2)
+
+**Closed issues:**
+
+- Locator - autoGeocode legacy code causing issues in non-Chrome browsers [\#155](https://github.com/dynamic/silverstripe-locator/issues/155)
+- 2.0 - ReadMe - badges are pointing to master and 1.1 [\#149](https://github.com/dynamic/silverstripe-locator/issues/149)
+
+**Merged pull requests:**
+
+- LocationAdmin - remove DeleteAction on Location [\#157](https://github.com/dynamic/silverstripe-locator/pull/157) ([jsirish](https://github.com/jsirish))
+- BUGFIX: Locator - remove autoGeocode references [\#156](https://github.com/dynamic/silverstripe-locator/pull/156) ([jsirish](https://github.com/jsirish))
+- README - 1.2 badges [\#152](https://github.com/dynamic/silverstripe-locator/pull/152) ([jsirish](https://github.com/jsirish))
+- README - update badges to branch 2.0 [\#150](https://github.com/dynamic/silverstripe-locator/pull/150) ([jsirish](https://github.com/jsirish))
+
 ## [2.0.0-beta1](https://github.com/dynamic/silverstripe-locator/tree/2.0.0-beta1) (2017-03-17)
 [Full Changelog](https://github.com/dynamic/silverstripe-locator/compare/2.0.0-alpha2...2.0.0-beta1)
 
 **Implemented enhancements:**
 
-- Location - add versioning [\#140](https://github.com/dynamic/silverstripe-locator/issues/140)
 - Map - option not to show locations on page load [\#129](https://github.com/dynamic/silverstripe-locator/issues/129)
+- Add "Find Me" button to manually do geocoding for location search [\#24](https://github.com/dynamic/silverstripe-locator/issues/24)
+- Location - add versioning [\#140](https://github.com/dynamic/silverstripe-locator/issues/140)
 - LocationSearchForm - Radius Dropdown [\#128](https://github.com/dynamic/silverstripe-locator/issues/128)
+- ENHANCEMENT radius query via ORM [\#106](https://github.com/dynamic/silverstripe-locator/issues/106)
+- Locator: CMS Design [\#96](https://github.com/dynamic/silverstripe-locator/issues/96)
+- Change Log [\#95](https://github.com/dynamic/silverstripe-locator/issues/95)
+- ENHANCEMENT - CONTRIBUTING.md file [\#91](https://github.com/dynamic/silverstripe-locator/issues/91)
+- ENHANCEMENT - LICENSE.md [\#89](https://github.com/dynamic/silverstripe-locator/issues/89)
+- ENHANCEMENT: Google Maps API Key [\#85](https://github.com/dynamic/silverstripe-locator/issues/85)
+- ENHANCEMENT use SilverStripe form to serve up the filter form [\#72](https://github.com/dynamic/silverstripe-locator/issues/72)
+- Locator page - allow multiple Locators on site, show different locations [\#57](https://github.com/dynamic/silverstripe-locator/issues/57)
 
 **Closed issues:**
 
-- BUG html template config referencing Locator not Locator\_Controller [\#136](https://github.com/dynamic/silverstripe-locator/issues/136)
 - LocationCategory - permission control [\#133](https://github.com/dynamic/silverstripe-locator/issues/133)
-- Updated third party JS [\#120](https://github.com/dynamic/silverstripe-locator/issues/120)
+- Updating the third party [\#120](https://github.com/dynamic/silverstripe-locator/issues/120)
+- location can't be unlinked from a page [\#43](https://github.com/dynamic/silverstripe-locator/issues/43)
+- BUG html template config referencing Locator not Locator\_Controller [\#136](https://github.com/dynamic/silverstripe-locator/issues/136)
+- REFACTOR use php to calculate result radius [\#107](https://github.com/dynamic/silverstripe-locator/issues/107)
 - REFACTOR onBeforeWrite\(\) to add defaults if needed [\#71](https://github.com/dynamic/silverstripe-locator/issues/71)
+- 3.2 compatibility  [\#68](https://github.com/dynamic/silverstripe-locator/issues/68)
 - ENHANCEMENT: Map - remove advanced map options [\#66](https://github.com/dynamic/silverstripe-locator/issues/66)
 
 **Merged pull requests:**
 
+- 2.0.0-beta1 changelog [\#148](https://github.com/dynamic/silverstripe-locator/pull/148) ([jsirish](https://github.com/jsirish))
 - ENHANCEMENT LocatorForm required fields [\#147](https://github.com/dynamic/silverstripe-locator/pull/147) ([muskie9](https://github.com/muskie9))
 - Composer - update Author [\#146](https://github.com/dynamic/silverstripe-locator/pull/146) ([jsirish](https://github.com/jsirish))
 - Locator - filter by radius [\#145](https://github.com/dynamic/silverstripe-locator/pull/145) ([jsirish](https://github.com/jsirish))
@@ -43,15 +91,6 @@
 
 ## [2.0.0-alpha1](https://github.com/dynamic/silverstripe-locator/tree/2.0.0-alpha1) (2016-10-10)
 [Full Changelog](https://github.com/dynamic/silverstripe-locator/compare/1.2.1...2.0.0-alpha1)
-
-**Implemented enhancements:**
-
-- ENHANCEMENT radius query via ORM [\#106](https://github.com/dynamic/silverstripe-locator/issues/106)
-- ENHANCEMENT use SilverStripe form to serve up the filter form [\#72](https://github.com/dynamic/silverstripe-locator/issues/72)
-
-**Closed issues:**
-
-- REFACTOR use php to calculate result radius [\#107](https://github.com/dynamic/silverstripe-locator/issues/107)
 
 **Merged pull requests:**
 
@@ -85,14 +124,9 @@
 
 **Implemented enhancements:**
 
-- Locator: CMS Design [\#96](https://github.com/dynamic/silverstripe-locator/issues/96)
-- ENHANCEMENT - CONTRIBUTING.md file [\#91](https://github.com/dynamic/silverstripe-locator/issues/91)
-- ENHANCEMENT - LICENSE.md [\#89](https://github.com/dynamic/silverstripe-locator/issues/89)
-- ENHANCEMENT: Google Maps API Key [\#85](https://github.com/dynamic/silverstripe-locator/issues/85)
 - Continuous Integration [\#82](https://github.com/dynamic/silverstripe-locator/issues/82)
 - ENHANCEMENT: Lock down map options [\#73](https://github.com/dynamic/silverstripe-locator/issues/73)
 - ENHANCEMENT - Search - do all filtering server side [\#65](https://github.com/dynamic/silverstripe-locator/issues/65)
-- Locator page - allow multiple Locators on site, show different locations [\#57](https://github.com/dynamic/silverstripe-locator/issues/57)
 - Location - CMS Fields layout [\#55](https://github.com/dynamic/silverstripe-locator/issues/55)
 - Locator - allow filter by LocationCategory [\#67](https://github.com/dynamic/silverstripe-locator/pull/67) ([jsirish](https://github.com/jsirish))
 - Location - CMS field layout [\#64](https://github.com/dynamic/silverstripe-locator/pull/64) ([jsirish](https://github.com/jsirish))
@@ -100,7 +134,6 @@
 **Closed issues:**
 
 - ENHANCEMENT - Documentation [\#93](https://github.com/dynamic/silverstripe-locator/issues/93)
-- 3.2 compatibility  [\#68](https://github.com/dynamic/silverstripe-locator/issues/68)
 - remove extra closing div in layout [\#62](https://github.com/dynamic/silverstripe-locator/issues/62)
 - Import/Export doesn't match [\#59](https://github.com/dynamic/silverstripe-locator/issues/59)
 
@@ -149,7 +182,7 @@
 - Add LocationTest and travis support [\#47](https://github.com/dynamic/silverstripe-locator/pull/47) ([muskie9](https://github.com/muskie9))
 
 ## [1.1.0](https://github.com/dynamic/silverstripe-locator/tree/1.1.0) (2014-10-24)
-[Full Changelog](https://github.com/dynamic/silverstripe-locator/compare/1.0.0...1.1.0)
+[Full Changelog](https://github.com/dynamic/silverstripe-locator/compare/3.1...1.1.0)
 
 **Closed issues:**
 
@@ -168,7 +201,6 @@
 - Option to show mi or km for distance [\#11](https://github.com/dynamic/silverstripe-locator/issues/11)
 - No Locations Indication in template [\#8](https://github.com/dynamic/silverstripe-locator/issues/8)
 - No Locations Indication in template [\#7](https://github.com/dynamic/silverstripe-locator/issues/7)
-- Default Templates [\#3](https://github.com/dynamic/silverstripe-locator/issues/3)
 
 **Merged pull requests:**
 
@@ -182,6 +214,13 @@
 - Update Locator to support greater template customization [\#20](https://github.com/dynamic/silverstripe-locator/pull/20) ([muskie9](https://github.com/muskie9))
 - Update getCMSFields to leverage extend\('updateCMSFields'\) [\#15](https://github.com/dynamic/silverstripe-locator/pull/15) ([muskie9](https://github.com/muskie9))
 - Removed absolute paths from init js [\#9](https://github.com/dynamic/silverstripe-locator/pull/9) ([tardinha](https://github.com/tardinha))
+
+## [3.1](https://github.com/dynamic/silverstripe-locator/tree/3.1) (2013-11-17)
+[Full Changelog](https://github.com/dynamic/silverstripe-locator/compare/1.0.0...3.1)
+
+**Closed issues:**
+
+- Default Templates [\#3](https://github.com/dynamic/silverstripe-locator/issues/3)
 
 ## [1.0.0](https://github.com/dynamic/silverstripe-locator/tree/1.0.0) (2013-05-07)
 **Closed issues:**

@@ -30,6 +30,9 @@
     "phpunit/PHPUnit": "^5.7",
     "squizlabs/php_codesniffer": "*"
   },
+  "config": {
+    "process-timeout": 600
+  },
   "suggest": {
     "unclecheese/betterbuttons": "Adds new form actions and buttons to GridField detail form for usability enhancements.",
     "unclecheese/bootstrap-forms": "Allows the creation of forms compatible with the Twitter Bootstrap CSS framework in SilverStripe."
