@@ -2,6 +2,10 @@
 
 namespace Dynamic\Locator;
 
+use SilverStripe\Config\Middleware\DeltaMiddleware;
+use SilverStripe\Control\Director;
+use SilverStripe\Core\Manifest\ModuleLoader;
+use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\OptionsetField;
@@ -10,6 +14,7 @@ use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\View\ArrayData;
 use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
 
 /**
@@ -96,6 +101,7 @@ class Locator extends \Page
      * @param array $filterAny
      * @param array $exclude
      * @param null|callable $callback
+     *
      * @return DataList|ArrayList
      */
     public static function get_locations(
@@ -103,8 +109,7 @@ class Locator extends \Page
         $filterAny = [],
         $exclude = [],
         $callback = null
-    )
-    {
+    ) {
         $locationClass = Config::inst()->get(Locator::class, 'location_class');
         $locations = $locationClass::get()->filter($filter)->exclude($exclude);
 
@@ -140,6 +145,7 @@ class Locator extends \Page
 
     /**
      * @param int $id
+     *
      * @return bool|
      */
     public static function locator_categories_by_locator($id = 0)
@@ -149,5 +155,97 @@ class Locator extends \Page
         }
 
         return Locator::get()->byID($id)->Categories();
+    }
+
+    /**
+     * Gets the list of radii
+     *
+     * @return ArrayList
+     */
+    public function getRadii()
+    {
+        $radii = [
+            '0' => '25',
+            '1' => '50',
+            '2' => '75',
+            '3' => '100',
+        ];
+        $config_radii = Config::inst()->get(Locator::class, 'radii');
+        if ($config_radii) {
+            $radii = $config_radii;
+        }
+
+        return $radii;
+    }
+
+    public function getRadiiArrayList()
+    {
+        $list = [];
+
+        foreach ($this->getRadii() as $radius) {
+            $list[] = new ArrayData(array(
+                'Radius' => $radius,
+            ));
+        }
+
+        return new ArrayList($list);
+    }
+
+    /**
+     * Gets the limit of locations
+     * @return mixed
+     */
+    public function getLimit()
+    {
+        return Config::inst()->get(Locator::class, 'limit');
+    }
+
+    /**
+     * Gets if the radius drop down should be shown
+     * @return mixed
+     */
+    public function getShowRadius()
+    {
+        return Config::inst()->get(Locator::class, 'show_radius');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategories()
+    {
+        return $this->Categories()->filter(array(
+            'Locations.ID:GreaterThan' => 0
+        ));
+    }
+
+    /**
+     * Gets the path of the info window template
+     *
+     * @return string
+     */
+    public function getInfoWindowTemplate()
+    {
+        return ModuleResourceLoader::singleton()->resolveURL(
+            Config::inst()->get(
+                Locator::class,
+                'infoWindowTemplate'
+            )
+        );
+    }
+
+    /**
+     * Gets the path of the list template
+     *
+     * @return string
+     */
+    public function getListTemplate()
+    {
+        return ModuleResourceLoader::singleton()->resolveURL(
+            Config::inst()->get(
+                Locator::class,
+                'listTemplate'
+            )
+        );
     }
 }
