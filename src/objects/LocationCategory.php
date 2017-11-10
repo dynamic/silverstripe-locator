@@ -4,6 +4,7 @@ namespace Dynamic\Locator;
 
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
+use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Permission;
@@ -72,9 +73,9 @@ class LocationCategory extends DataObject
         if ($this->ID) {
             // Locations
             $config = GridFieldConfig_RelationEditor::create();
-            $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
+            $config->removeComponentsByType(GridFieldAddExistingAutocompleter::class);
             $config->addComponent(new GridFieldAddExistingAutocompleter());
-            $config->removeComponentsByType('GridFieldAddNewButton');
+            $config->removeComponentsByType(GridFieldAddNewButton::class);
             $locations = $this->Locations();
             $locationField = GridField::create('Locations', 'Locations', $locations, $config);
 

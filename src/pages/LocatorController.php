@@ -257,10 +257,10 @@ class LocatorController extends \PageController
             $locations = $locations->sort('Distance');
         }
 
-        if (Config::inst()->get(LocatorForm::class, 'show_radius')) {
+        if (Config::inst()->get(Locator::class, 'show_radius')) {
             if ($radius = (int)$request->getVar('Radius')) {
                 $locations = $locations->filterByCallback(function ($location) use (&$radius) {
-                    return $location->distance <= $radius;
+                    return $location->Distance <= $radius;
                 });
             }
         }

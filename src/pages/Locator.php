@@ -2,11 +2,9 @@
 
 namespace Dynamic\Locator;
 
-use SilverStripe\Config\Middleware\DeltaMiddleware;
-use SilverStripe\Control\Director;
-use SilverStripe\Core\Manifest\ModuleLoader;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\GridField\GridField;
@@ -81,7 +79,7 @@ class Locator extends \Page
 
         // Filter categories
         $config = GridFieldConfig_RelationEditor::create();
-        $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
+        $config->removeComponentsByType(GridFieldAddExistingAutocompleter::class);
         $config->addComponent(new GridFieldAddExistingSearchButton());
         $categories = $this->Categories();
         $categoriesField = GridField::create('Categories', 'Categories', $categories, $config)
