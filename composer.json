@@ -45,7 +45,8 @@
   "extra": {
     "expose": [
       "thirdparty",
-      "css"
+      "css",
+      "client"
     ],
     "branch-alias": {
       "dev-master": "3.0.x-dev"
