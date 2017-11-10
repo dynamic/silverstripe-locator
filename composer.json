@@ -10,7 +10,7 @@
     "google maps",
     "location"
   ],
-  "type": "silverstripe-module",
+  "type": "silverstripe-vendormodule",
   "license": "BSD-3-Clause",
   "authors": [
     {
@@ -20,11 +20,15 @@
     }
   ],
   "require": {
-    "silverstripe/framework": "^4.0",
-    "silverstripe/cms": "^4.0",
+    "silverstripe/recipe-cms": "^1.0",
+    "silverstripe/vendor-plugin": "^1.0",
     "muskie9/data-to-arraylist": "^2.0",
     "dynamic/silverstripe-geocoder": "^1.0",
     "symbiote/silverstripe-gridfieldextensions": "^3.0"
+  },
+  "require-dev": {
+    "phpunit/PHPUnit": "^5.7",
+    "squizlabs/php_codesniffer": "*"
   },
   "suggest": {
     "unclecheese/betterbuttons": "Adds new form actions and buttons to GridField detail form for usability enhancements.",
@@ -39,7 +43,10 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "extra": {
-    "installer-name": "locator",
+    "expose": [
+      "thirdparty",
+      "css"
+    ],
     "branch-alias": {
       "dev-master": "3.0.x-dev"
     }
