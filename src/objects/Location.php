@@ -35,6 +35,11 @@ class Location extends DataObject implements PermissionProvider
     private static $plural_name = 'Locations';
 
     /**
+     * @var bool
+     */
+    private static $versioned_gridfield_extensions = true;
+
+    /**
      * @var array
      */
     private static $db = array(

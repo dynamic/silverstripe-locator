@@ -12,3 +12,12 @@ Dynamic\Locator\Locator:
   listTemplate: 'dynamic/silverstripe-locator: client/location-list-description.html'
   limit: 50
   show_radius: true
+
+---
+Name: modules-locator
+After: modules-other
+Before: modules-framework
+---
+SilverStripe\Core\Manifest\ModuleManifest:
+  module_priority:
+    - dynamic/silverstripe-locator
