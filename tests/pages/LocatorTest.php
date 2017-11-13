@@ -12,6 +12,7 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
+use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\View\ViewableData;
 
@@ -81,6 +82,65 @@ class LocatorTest extends FunctionalTest
 
         $this->assertEquals(Locator::locator_categories_by_locator($newLocator->ID)->count(), 0);
 
+    }
+
+    /**
+     *
+     */
+    public function testGetRadii()
+    {
+        /** @var Locator $locator */
+        $locator = Injector::inst()->create(Locator::class);
+        $radii = [
+            '0' => '5',
+            '1' => '10',
+            '2' => '15',
+            '3' => '100',
+        ];
+        Config::modify()->set(Locator::class, 'radii', $radii);
+        $this->assertEquals($radii, $locator->getRadii());
+    }
+
+    /**
+     *
+     */
+    public function testGetRadiiArrayList()
+    {
+        /** @var Locator $locator */
+        $locator = Injector::inst()->create(Locator::class);
+        $this->assertInstanceOf(ArrayList::class, $locator->getRadiiArrayList());
+    }
+
+    /**
+     *
+     */
+    public function testGetLimit()
+    {
+        /** @var Locator $locator */
+        $locator = Injector::inst()->create(Locator::class);
+        $this->assertEquals(50, $locator->getLimit());
+    }
+
+    /**
+     *
+     */
+    public function testGetShowRadius()
+    {
+        /** @var Locator $locator */
+        $locator = Injector::inst()->create(Locator::class);
+        $this->assertTrue($locator->getShowRadius());
+    }
+
+    /**
+     *
+     */
+    public function testGetCategories()
+    {
+        /** @var Locator $locator */
+        $locator = $this->objFromFixture(Locator::class, 'locator1');
+
+        $categories = $locator->getCategories()->toArray();
+        $this->assertEquals(1, count($categories));
     }
 
     /**
