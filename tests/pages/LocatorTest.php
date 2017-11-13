@@ -23,14 +23,15 @@ class LocatorTest extends FunctionalTest
     /**
      * @var string
      */
-    protected static $fixture_file = 'fixtures.yml';
+    protected static $fixture_file = '../fixtures.yml';
 
     /**
      *
      */
     public function testGetCMSFields()
     {
-        $locator = singleton(Locator::class);
+        /** @var Locator $locator */
+        $locator = Injector::inst()->create(Locator::class);
         $this->assertInstanceOf(FieldList::class, $locator->getCMSFields());
     }
 
@@ -85,56 +86,26 @@ class LocatorTest extends FunctionalTest
     /**
      *
      */
-    public function testInit()
+    public function testGetInfoWindowTemplate()
     {
+        /** @var Locator $object */
+        $object = Injector::inst()->create(Locator::class);
+        $template = $object->getInfoWindowTemplate();
+        // get rid of cache ending
+        $template = preg_replace('/\?.*$/', '', $template);
+        $this->assertStringEndsWith('client/infowindow-description.html', $template);
     }
 
     /**
      *
      */
-    public function testIndex()
-    {
-        $locator = $this->objFromFixture(Locator::class, 'locator1');
-        $controller = LocatorController::create($locator);
-        $this->assertInstanceOf(ViewableData::class, $controller->index($controller->request));
-    }
-
-    /**
-     *
-     */
-    public function testXml()
-    {
-        $locator = $this->objFromFixture(Locator::class, 'locator1');
-        $controller = LocatorController::create($locator);
-        $this->assertInstanceOf(DBHTMLText::class, $controller->xml($controller->request));
-    }
-
-    /**
-     *
-     */
-    public function testLocationSearch()
-    {
-        $locator = $this->objFromFixture(Locator::class, 'locator1');
-        $object = LocatorController::create($locator);
-        $form = $object->LocationSearch();
-        $this->assertInstanceOf(Form::class, $form);
-
-        $category = $this->objFromFixture(LocationCategory::class, 'service');
-        $category2 = $this->objFromFixture(LocationCategory::class, 'manufacturing');
-        $locator->Categories()->add($category);
-        $locator->Categories()->add($category2);
-
-        $form = $object->LocationSearch();
-        $fields = $form->Fields();
-        $this->assertInstanceOf(FieldList::class, $fields);
-    }
-
     public function testGetListTemplate()
     {
         /** @var Locator $object */
         $object = Injector::inst()->create(Locator::class);
-        $list = $object->getListTemplate();
-
-        $this->assertStringEndsWith('client/location-list-description.html', $list);
+        $template = $object->getListTemplate();
+        // get rid of cache ending
+        $template = preg_replace('/\?.*$/', '', $template);
+        $this->assertStringEndsWith('client/location-list-description.html', $template);
     }
 }
