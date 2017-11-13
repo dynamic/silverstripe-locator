@@ -54,7 +54,6 @@ class LocatorTest extends FunctionalTest
      */
     public function testGetAllCategories()
     {
-
         $this->assertEquals(Locator::get_all_categories()->count(), 4);
     }
 
@@ -65,6 +64,15 @@ class LocatorTest extends FunctionalTest
     {
         $locator = $this->objFromFixture(Locator::class, 'locator1');
         $this->assertEquals($locator->getPageCategories()->count(), 2);
+    }
+
+    /**
+     *
+     */
+    public function testLocator_categories_by_locator()
+    {
+        $categories = Locator::locator_categories_by_locator(0);
+        $this->assertFalse($categories);
     }
 
     /**
