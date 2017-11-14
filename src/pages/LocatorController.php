@@ -81,17 +81,17 @@ class LocatorController extends \PageController
     {
         parent::init();
 
+        // google maps api key
+        $key = Config::inst()->get(GoogleGeocoder::class, 'geocoder_api_key');
+        Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
+
         // prevent init of map if no query
         $request = Controller::curr()->getRequest();
 
         if ($this->getTrigger($request)) {
-            // google maps api key
-            $key = Config::inst()->get(GoogleGeocoder::class, 'geocoder_api_key');
-
             $locations = $this->getLocations();
 
             if ($locations) {
-                Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
 
                 $featuredInList = ($locations->filter('Featured', true)->count() > 0);
                 $defaultCoords = $this->getAddressSearchCoords() ? $this->getAddressSearchCoords() : '';
