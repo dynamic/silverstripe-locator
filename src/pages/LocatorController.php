@@ -2,6 +2,7 @@
 
 namespace Dynamic\Locator;
 
+use Dynamic\SilverStripeGeocoder\AddressDataExtension;
 use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 use muskie9\DataToArrayList\ORM\DataToArrayListHelper;
 use SilverStripe\Control\Controller;
@@ -229,8 +230,9 @@ class LocatorController extends \PageController
         }
         $filter = $this->config()->get('base_filter');
 
-        if ($request->getVar('CategoryID')) {
-            $filter['CategoryID'] = $request->getVar('CategoryID');
+        $categoryVar = Config::inst()->get(Locator::class, 'category_var');
+        if ($request->getVar($categoryVar)) {
+            $filter['CategoryID'] = $request->getVar($categoryVar);
         } else {
             if ($this->getPageCategories()->exists()) {
                 foreach ($this->getPageCategories() as $category) {
@@ -257,8 +259,10 @@ class LocatorController extends \PageController
             $locations = $locations->sort('Distance');
         }
 
-        if (Config::inst()->get(Locator::class, 'show_radius')) {
-            if ($radius = (int)$request->getVar('Radius')) {
+        if ($this->getShowRadius()) {
+            $radiusVar = Config::inst()->get(Locator::class, 'radius_var');
+
+            if ($radius = (int)$request->getVar($radiusVar)) {
                 $locations = $locations->filterByCallback(function ($location) use (&$radius) {
                     return $location->Distance <= $radius;
                 });
@@ -268,7 +272,7 @@ class LocatorController extends \PageController
         //allow for returning list to be set as
         $this->extend('updateListType', $locations);
 
-        $limit = Config::inst()->get(LocatorController::class, 'limit');
+        $limit = $this->getLimit();
         if ($limit > 0) {
             $locations = $locations->limit($limit);
         }
@@ -299,11 +303,12 @@ class LocatorController extends \PageController
      */
     public function getAddressSearchCoords()
     {
-        if (!$this->request->getVar('Address')) {
+        $addressVar = Config::inst()->get(AddressDataExtension::class, 'address_var');
+        if (!$this->request->getVar($addressVar)) {
             return false;
         }
         if (class_exists(GoogleGeocoder::class)) {
-            $geocoder = new GoogleGeocoder($this->request->getVar('Address'));
+            $geocoder = new GoogleGeocoder($this->request->getVar($addressVar));
             $response = $geocoder->getResult();
             $lat = $response->getLatitude();
             $lng = $response->getLongitude();

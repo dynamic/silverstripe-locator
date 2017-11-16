@@ -12,6 +12,8 @@ Dynamic\Locator\Locator:
   listTemplate: 'dynamic/silverstripe-locator: client/location-list-description.html'
   limit: 50
   show_radius: true
+  radius_var: 'Radius'
+  category_var: 'CategoryID'
 
 ---
 Name: modules-locator
