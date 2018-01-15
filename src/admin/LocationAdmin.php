@@ -3,6 +3,8 @@
 namespace Dynamic\Locator;
 
 use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\Dev\CsvBulkLoader;
+use SilverStripe\Forms\Form;
 
 /**
  * Class LocationAdmin
@@ -14,16 +16,16 @@ class LocationAdmin extends ModelAdmin
      * @var array
      */
     private static $managed_models = array(
-        'Dynamic\\Locator\\Location',
-        'Dynamic\\Locator\\LocationCategory',
+        Location::class,
+        LocationCategory::class,
     );
 
     /**
      * @var array
      */
     private static $model_importers = array(
-        'Dynamic\\Locator\\Location' => 'Dynamic\\Locator\\LocationCsvBulkLoader',
-        'Dynamic\\Locator\\LocationCategory' => 'SilverStripe\\Dev\\CsvBulkLoader',
+        Location::class => LocationCsvBulkLoader::class,
+        LocationCategory::class => CsvBulkLoader::class,
     );
 
     /**

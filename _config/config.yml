@@ -6,3 +6,20 @@ Dynamic\Locator\Location:
     - Dynamic\SilverStripeGeocoder\DistanceDataExtension
     - Dynamic\SilverStripeGeocoder\AddressDataExtension
     - SilverStripe\Versioned\Versioned('Stage','Live')
+
+Dynamic\Locator\Locator:
+  infoWindowTemplate: 'dynamic/silverstripe-locator: client/infowindow-description.html'
+  listTemplate: 'dynamic/silverstripe-locator: client/location-list-description.html'
+  limit: 50
+  show_radius: true
+  radius_var: 'Radius'
+  category_var: 'CategoryID'
+
+---
+Name: modules-locator
+After: modules-other
+Before: modules-framework
+---
+SilverStripe\Core\Manifest\ModuleManifest:
+  module_priority:
+    - dynamic/silverstripe-locator

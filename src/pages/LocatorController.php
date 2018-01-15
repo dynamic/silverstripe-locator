@@ -2,12 +2,14 @@
 
 namespace Dynamic\Locator;
 
+use Dynamic\SilverStripeGeocoder\AddressDataExtension;
 use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 use muskie9\DataToArrayList\ORM\DataToArrayListHelper;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
+use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 use SilverStripe\Control\HTTPRequest;
 
@@ -21,6 +23,7 @@ class LocatorController extends \PageController
      */
     private static $allowed_actions = array(
         'xml',
+        'json',
     );
 
     /**
@@ -42,24 +45,9 @@ class LocatorController extends \PageController
     private static $base_filter_any = [];
 
     /**
-     * @var string
-     */
-    private static $list_template_path = 'locator/templates/location-list-description.html';
-
-    /**
-     * @var string
-     */
-    private static $info_window_template_path = 'locator/templates/infowindow-description.html';
-
-    /**
      * @var bool
      */
     private static $bootstrapify = true;
-
-    /**
-     * @var int
-     */
-    private static $limit = 50;
 
     /**
      * ID of map container
@@ -94,21 +82,17 @@ class LocatorController extends \PageController
     {
         parent::init();
 
+        // google maps api key
+        $key = Config::inst()->get(GoogleGeocoder::class, 'geocoder_api_key');
+        Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
+
         // prevent init of map if no query
         $request = Controller::curr()->getRequest();
 
         if ($this->getTrigger($request)) {
-            // google maps api key
-            $key = Config::inst()->get(GoogleGeocoder::class, 'geocoder_api_key');
-
             $locations = $this->getLocations();
 
             if ($locations) {
-                Requirements::css('locator/css/map.css');
-                Requirements::javascript('silverstripe-admin/thirdparty/jquery/jquery.js');
-                Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
-                Requirements::javascript('locator/thirdparty/jquery-store-locator-plugin/assets/js/libs/handlebars.min.js');
-                Requirements::javascript('locator/thirdparty/jquery-store-locator-plugin/assets/js/plugins/storeLocator/jquery.storelocator.js');
 
                 $featuredInList = ($locations->filter('Featured', true)->count() > 0);
                 $defaultCoords = $this->getAddressSearchCoords() ? $this->getAddressSearchCoords() : '';
@@ -119,11 +103,13 @@ class LocatorController extends \PageController
 
                 // map config based on user input in Settings tab
                 $limit = Config::inst()->get(LocatorController::class, 'limit');
-                if ($limit < 1) $limit = -1;
+                if ($limit < 1) {
+                    $limit = -1;
+                }
                 $load = 'fullMapStart: true, storeLimit: ' . $limit . ', maxDistance: true,';
 
-                $listTemplatePath = Config::inst()->get(LocatorController::class, 'list_template_path');
-                $infowindowTemplatePath = Config::inst()->get(LocatorController::class, 'info_window_template_path');
+                $listTemplatePath = $this->getListTemplate();
+                $infowindowTemplatePath = $this->getInfoWindowTemplate();
 
                 $kilometer = ($this->data()->Unit == 'km') ? "lengthUnit: 'km'" : "lengthUnit: 'm'";
 
@@ -166,13 +152,14 @@ class LocatorController extends \PageController
 						}
                     });
                 });
-            ");
+            ", 'jquery-locator');
             }
         }
     }
 
     /**
      * @param HTTPRequest $request
+     *
      * @return \SilverStripe\View\ViewableData_Customised
      */
     public function index(HTTPRequest $request)
@@ -189,20 +176,33 @@ class LocatorController extends \PageController
     }
 
     /**
-     * @param HTTPRequest $request
+     * Renders locations in xml format
+     *
      * @return \SilverStripe\ORM\FieldType\DBHTMLText
      */
-    public function xml(HTTPRequest $request)
+    public function xml()
     {
-        if ($this->getTrigger($request)) {
-            $locations = $this->getLocations();
-        } else {
-            $locations = ArrayList::create();
-        }
+        $this->getResponse()->addHeader("Content-Type", "application/xml");
+        $data = new ArrayData(array(
+            "Locations" => $this->getLocations(),
+        ));
 
-        return $this->customise(array(
-            'Locations' => $locations,
-        ))->renderWith('LocationXML');
+        return $data->renderWith('Dynamic/Locator/Data/XML');
+    }
+
+    /**
+     * Renders locations in json format
+     *
+     * @return \SilverStripe\ORM\FieldType\DBHTMLText
+     */
+    public function json()
+    {
+        $this->getResponse()->addHeader("Content-Type", "application/json");
+        $data = new ArrayData(array(
+            "Locations" => $this->getLocations(),
+        ));
+
+        return $data->renderWith('Dynamic/Locator/Data/JSON');
     }
 
     /**
@@ -213,11 +213,13 @@ class LocatorController extends \PageController
         if (!$this->locations) {
             $this->setLocations($this->request);
         }
+
         return $this->locations;
     }
 
     /**
      * @param HTTPRequest|null $request
+     *
      * @return $this
      */
     public function setLocations(HTTPRequest $request = null)
@@ -228,8 +230,9 @@ class LocatorController extends \PageController
         }
         $filter = $this->config()->get('base_filter');
 
-        if ($request->getVar('CategoryID')) {
-            $filter['CategoryID'] = $request->getVar('CategoryID');
+        $categoryVar = Config::inst()->get(Locator::class, 'category_var');
+        if ($request->getVar($categoryVar)) {
+            $filter['CategoryID'] = $request->getVar($categoryVar);
         } else {
             if ($this->getPageCategories()->exists()) {
                 foreach ($this->getPageCategories() as $category) {
@@ -252,14 +255,16 @@ class LocatorController extends \PageController
         //allow for adjusting list post possible distance calculation
         $this->extend('updateLocationList', $locations);
 
-        if ($locations->canSortBy('distance')) {
-            $locations = $locations->sort('distance');
+        if ($locations->canSortBy('Distance')) {
+            $locations = $locations->sort('Distance');
         }
 
-        if (Config::inst()->get(LocatorForm::class, 'show_radius')) {
-            if ($radius = (int)$request->getVar('Radius')) {
+        if ($this->getShowRadius()) {
+            $radiusVar = Config::inst()->get(Locator::class, 'radius_var');
+
+            if ($radius = (int)$request->getVar($radiusVar)) {
                 $locations = $locations->filterByCallback(function ($location) use (&$radius) {
-                    return $location->distance <= $radius;
+                    return $location->Distance <= $radius;
                 });
             }
         }
@@ -267,18 +272,20 @@ class LocatorController extends \PageController
         //allow for returning list to be set as
         $this->extend('updateListType', $locations);
 
-        $limit = Config::inst()->get(LocatorController::class, 'limit');
+        $limit = $this->getLimit();
         if ($limit > 0) {
             $locations = $locations->limit($limit);
         }
 
         $this->locations = $locations;
+
         return $this;
 
     }
 
     /**
      * @param HTTPRequest $request
+     *
      * @return bool
      */
     public function getTrigger(HTTPRequest $request = null)
@@ -287,6 +294,7 @@ class LocatorController extends \PageController
             $request = $this->getRequest();
         }
         $trigger = $request->getVar(Config::inst()->get(LocatorController::class, 'query_trigger'));
+
         return isset($trigger);
     }
 
@@ -295,11 +303,12 @@ class LocatorController extends \PageController
      */
     public function getAddressSearchCoords()
     {
-        if (!$this->request->getVar('Address')) {
+        $addressVar = Config::inst()->get(AddressDataExtension::class, 'address_var');
+        if (!$this->request->getVar($addressVar)) {
             return false;
         }
         if (class_exists(GoogleGeocoder::class)) {
-            $geocoder = new GoogleGeocoder($this->request->getVar('Address'));
+            $geocoder = new GoogleGeocoder($this->request->getVar($addressVar));
             $response = $geocoder->getResult();
             $lat = $response->getLatitude();
             $lng = $response->getLongitude();

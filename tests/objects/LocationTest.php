@@ -6,6 +6,7 @@ use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\SapphireTest;
 use Dynamic\Locator\Location;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Member;
 
 /**
@@ -16,14 +17,14 @@ class LocationTest extends SapphireTest
     /**
      * @var string
      */
-    protected static $fixture_file = 'fixtures.yml';
+    protected static $fixture_file = '../fixtures.yml';
 
     /**
      *
      */
     public function testGetCoords()
     {
-        $location = $this->objFromFixture('Dynamic\\Locator\\Location', 'dynamic');
+        $location = $this->objFromFixture(Location::class, 'dynamic');
         $coords = ((int)$location->Lat != 0 && (int)$location->Lng != 0) ? 'true' : 'false';
         $this->assertEquals($coords, $location->getCoords());
     }
@@ -67,7 +68,7 @@ class LocationTest extends SapphireTest
     {
         $object = new Location();
         $fieldset = $object->getCMSFields();
-        $this->assertTrue(is_a($fieldset, 'SilverStripe\\Forms\\FieldList'));
+        $this->assertinstanceOf(FieldList::class, $fieldset);
     }
 
     /**

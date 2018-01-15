@@ -17,20 +17,6 @@ use SilverStripe\Control\Controller;
  */
 class LocatorForm extends Form
 {
-    /**
-     * @var bool
-     */
-    private static $show_radius = true;
-
-    /**
-     * @var array
-     */
-    private static $radius_array = [
-        '25' => '25',
-        '50' => '50',
-        '75' => '75',
-        '100' => '100',
-    ];
 
     /**
      * LocatorForm constructor.
@@ -64,8 +50,8 @@ class LocatorForm extends Form
             $fields->push($categoriesField);
         }
 
-        if (Config::inst()->get(LocatorForm::class, 'show_radius')) {
-            $radiusArray = Config::inst()->get(LocatorForm::class, 'radius_array');
+        if ($controller->getShowRadius()) {
+            $radiusArray = $controller->getRadii();
             $this->extend('overrideRadiusArray', $radiusArray);
             $fields->push(DropdownField::create('Radius', '', $radiusArray)
                 ->setEmptyString('radius')
