@@ -69,29 +69,29 @@ class Locator extends \Page
      */
     public function getCMSFields()
     {
-        $fields = parent::getCMSFields();
+        $this->beforeUpdateCMSFields(function ($fields) {
+            // Settings
+            $fields->addFieldsToTab('Root.Settings', array(
+                HeaderField::create('DisplayOptions', 'Display Options', 3),
+                OptionsetField::create('Unit', 'Unit of measure', array('m' => 'Miles', 'km' => 'Kilometers')),
+            ));
 
-        // Settings
-        $fields->addFieldsToTab('Root.Settings', array(
-            HeaderField::create('DisplayOptions', 'Display Options', 3),
-            OptionsetField::create('Unit', 'Unit of measure', array('m' => 'Miles', 'km' => 'Kilometers')),
-        ));
+            // Filter categories
+            $config = GridFieldConfig_RelationEditor::create();
+            $config->removeComponentsByType(GridFieldAddExistingAutocompleter::class);
+            $config->addComponent(new GridFieldAddExistingSearchButton());
+            $categories = $this->Categories();
+            $categoriesField = GridField::create('Categories', 'Categories', $categories, $config)
+                ->setDescription('only show locations from the selected category');
 
-        // Filter categories
-        $config = GridFieldConfig_RelationEditor::create();
-        $config->removeComponentsByType(GridFieldAddExistingAutocompleter::class);
-        $config->addComponent(new GridFieldAddExistingSearchButton());
-        $categories = $this->Categories();
-        $categoriesField = GridField::create('Categories', 'Categories', $categories, $config)
-            ->setDescription('only show locations from the selected category');
+            // Filter
+            $fields->addFieldsToTab('Root.Filter', array(
+                HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
+                $categoriesField,
+            ));
+        });
 
-        // Filter
-        $fields->addFieldsToTab('Root.Filter', array(
-            HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
-            $categoriesField,
-        ));
-
-        return $fields;
+        return parent::getCMSFields();
     }
 
     /**

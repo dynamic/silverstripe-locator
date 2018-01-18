@@ -2,7 +2,7 @@
 
 namespace Dynamic\Locator;
 
-use Dynamic\SilverStripeGeocoder\AddressDataExtension;
+use Dynamic\SilverStripeGeocoder\DistanceDataExtension;
 use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 use muskie9\DataToArrayList\ORM\DataToArrayListHelper;
 use SilverStripe\Control\Controller;
@@ -139,7 +139,8 @@ class LocatorController extends \PageController
                         slideMap: false,
                         distanceAlert: -1,
                         " . $kilometer . ",
-                        " . $defaultCoords . "
+                        defaultLat: {$defaultCoords->getField("Lat")},
+                        defaultLng: {$defaultCoords->getField("Lng")},
                         mapID: '" . $map_id . "',
                         locationList: '" . $list_class . "',
                         mapSettings: {
@@ -185,6 +186,7 @@ class LocatorController extends \PageController
         $this->getResponse()->addHeader("Content-Type", "application/xml");
         $data = new ArrayData(array(
             "Locations" => $this->getLocations(),
+            "AddressCoords" => $this->getAddressSearchCoords(),
         ));
 
         return $data->renderWith('Dynamic/Locator/Data/XML');
@@ -200,6 +202,7 @@ class LocatorController extends \PageController
         $this->getResponse()->addHeader("Content-Type", "application/json");
         $data = new ArrayData(array(
             "Locations" => $this->getLocations(),
+            "AddressCoords" => $this->getAddressSearchCoords(),
         ));
 
         return $data->renderWith('Dynamic/Locator/Data/JSON');
@@ -299,11 +302,11 @@ class LocatorController extends \PageController
     }
 
     /**
-     * @return bool|string
+     * @return ArrayData|boolean
      */
     public function getAddressSearchCoords()
     {
-        $addressVar = Config::inst()->get(AddressDataExtension::class, 'address_var');
+        $addressVar = Config::inst()->get(DistanceDataExtension::class, 'address_var');
         if (!$this->request->getVar($addressVar)) {
             return false;
         }
@@ -313,7 +316,10 @@ class LocatorController extends \PageController
             $lat = $response->getLatitude();
             $lng = $response->getLongitude();
 
-            return "defaultLat: {$lat}, defaultLng: {$lng},";
+            return new ArrayData([
+                "Lat" => $lat,
+                "Lng" => $lng,
+            ]);
         }
 
     }
