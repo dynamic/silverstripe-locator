@@ -17,5 +17,9 @@
       "Lat": $Lat,
       "Lng": $Lng
     }<% if not $Last %>,<%end_if%><% end_loop %>
-  ]
+  ]<% if $AddressCoords %>,
+  "center": {
+    "Lat": $AddressCoords.Lat,
+    "Lng": $AddressCoords.Lng
+  }<% end_if %>
 }
