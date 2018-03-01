@@ -51,12 +51,9 @@ class Location extends DataObject implements PermissionProvider
         'Import_ID' => 'Int',
     );
 
-    /**
-     * @var array
-     */
-    private static $has_one = array(
-        'Category' => LocationCategory::class,
-    );
+    private static $many_many = [
+        'Categories' => LocationCategory::class,
+    ];
 
     /**
      * @var string
@@ -113,7 +110,6 @@ class Location extends DataObject implements PermissionProvider
         'State',
         'PostalCode',
         'Country',
-        'Category.Name',
         'Featured.NiceAsBoolean',
         'Coords',
     );
