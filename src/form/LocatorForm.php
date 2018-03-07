@@ -81,4 +81,16 @@ class LocatorForm extends Form
         $this->extend('updateRequiredFields', $validator);
         return $validator;
     }
+
+    /**
+     * @return FieldList
+     */
+    public function Fields()
+    {
+        $fields = parent::Fields();
+
+        $this->extend('updateLocatorFormFields', $fields);
+
+        return $fields;
+    }
 }
