@@ -157,11 +157,6 @@ class Location extends DataObject implements PermissionProvider
 
         $fields->replaceField('Email', EmailField::create('Email'));
 
-        $fields->replaceField(
-            'CategoryID',
-            DropdownField::create('CategoryID', 'Category', LocationCategory::get()->map())->setEmptyString('')
-        );
-
         $featured = $fields->dataFieldByName('Featured')
             ->setDescription('Location will display near the top of the results list');
         $fields->insertAfter(

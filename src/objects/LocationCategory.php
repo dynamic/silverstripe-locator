@@ -13,7 +13,7 @@ use SilverStripe\Security\Permission;
  * Class LocationCategory
  *
  * @property string $Name
- * @method Locations|HasManyList $Locations
+ * @method Locations|ManyManyList $Locations
  * @method Locators|ManyManyList $Locators
  */
 class LocationCategory extends DataObject

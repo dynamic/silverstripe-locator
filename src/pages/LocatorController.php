@@ -235,11 +235,11 @@ class LocatorController extends \PageController
 
         $categoryVar = Config::inst()->get(Locator::class, 'category_var');
         if ($request->getVar($categoryVar)) {
-            $filter['CategoryID'] = $request->getVar($categoryVar);
+            $filter['Categories.ID'] = $request->getVar($categoryVar);
         } else {
             if ($this->getPageCategories()->exists()) {
                 foreach ($this->getPageCategories() as $category) {
-                    $filter['CategoryID'][] = $category->ID;
+                    $filter['Categories.ID'][] = $category->ID;
                 }
             }
         }

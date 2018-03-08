@@ -33,16 +33,23 @@ class LocationCategoriesTask extends BuildTask
      */
     public function run($request)
     {
+        /** @var DataObject $class */
         $class = ($request->getVar('locationclass')) ? $request->getVar('locationclass') : Location::class;
+        $class::add_extension(LocationCategoryExtension::class);
+
         $ct = 0;
 
         $convert = function (DataObject $location) use (&$ct) {
-            echo $location->getField('CategoryID') . '<br />';
+            $location->Categories()->add($location->Category());
+            $location->write();
+            $ct++;
         };
 
         foreach ($this->iterateLocations($class) as $location) {
             $convert($location);
         }
+
+        echo "{$ct} categories converted";
     }
 
     /**
