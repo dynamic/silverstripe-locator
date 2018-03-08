@@ -40,7 +40,7 @@ class LocationCategory extends DataObject
      */
     private static $belogs_many_many = array(
         'Locators' => Locator::class,
-        'Locations' => Location::class,
+        'LocationSet' => Location::class,
     );
 
     /**

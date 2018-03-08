@@ -94,7 +94,6 @@ class Location extends DataObject implements PermissionProvider
         'Website',
         'Phone',
         'Email',
-        'Category.ID',
         'Featured',
     );
 
