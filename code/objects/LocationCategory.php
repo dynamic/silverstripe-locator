@@ -47,25 +47,19 @@ class LocationCategory extends DataObject
 
     public function getCMSFields()
     {
+        $this->beforeUpdateCMSFields(function ($fields) {
+
+            if ($locations = $fields->dataFieldByName('Locations')) {
+                $config = $locations->getConfig();
+                // Locations
+                $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
+                $config->addComponent(new GridFieldAddExistingSearchButton());
+                $config->removeComponentsByType('GridFieldAddNewButton');
+            }
+
+        });
+
         $fields = parent::getCMSFields();
-
-        $fields->removeByName([
-            'Locations',
-        ]);
-
-        if ($this->ID) {
-            // Locations
-            $config = GridFieldConfig_RelationEditor::create();
-            $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
-            $config->addComponent(new GridFieldAddExistingSearchButton());
-            $config->removeComponentsByType('GridFieldAddNewButton');
-            $locations = $this->Locations();
-            $locationField = GridField::create('Locations', 'Locations', $locations, $config);
-
-            $fields->addFieldsToTab('Root.Locations', array(
-                $locationField,
-            ));
-        }
 
         return $fields;
     }
