@@ -3,6 +3,7 @@
 namespace Dynamic\Locator;
 
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\EmailField;
@@ -19,8 +20,8 @@ use SilverStripe\Security\Permission;
  * @property string $Email
  * @property string $EmailAddress
  * @property int $Import_ID
- * @property int $CategoryID
- * @method LocationCategory $Category
+ *
+ * @method ManyManyList Categories
  */
 class Location extends DataObject implements PermissionProvider
 {

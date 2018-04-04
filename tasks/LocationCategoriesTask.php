@@ -3,6 +3,7 @@
 namespace Dynamic\Locator\Tasks;
 
 use Dynamic\Locator\Location;
+use Dynamic\Locator\LocationCategory;
 use SilverStripe\Dev\BuildTask;
 use SilverStripe\ORM\DataObject;
 
@@ -37,19 +38,35 @@ class LocationCategoriesTask extends BuildTask
         $class = ($request->getVar('locationclass')) ? $request->getVar('locationclass') : Location::class;
         $class::add_extension(LocationCategoryExtension::class);
 
-        $ct = 0;
 
-        $convert = function (DataObject $location) use (&$ct) {
-            $location->Categories()->add($location->Category());
-            $location->write();
-            $ct++;
+        $categories = [];
+
+        $convert = function (DataObject $location) use (&$categories) {
+            /** @var Location $location */
+            // skip if no category
+            if ($location->CategoryID > 0) {
+                $categories[$location->CategoryID][] = $location->ID;
+            }
         };
 
         foreach ($this->iterateLocations($class) as $location) {
             $convert($location);
         }
 
-        echo "{$ct} categories converted";
+        $catCt = 0;
+        $locCT = 0;
+
+        foreach ($categories as $categoryID => $locations) {
+            /** @var LocationCategory $category */
+            $category = LocationCategory::get()->byID($categoryID);
+            $category->Locations()->addMany($locations);
+
+            $catCt++;
+            $locCT += count($locations);
+        }
+
+        echo "{$catCt} categories converted<br />";
+        echo "{$locCT} location relations converted<br />";
     }
 
     /**

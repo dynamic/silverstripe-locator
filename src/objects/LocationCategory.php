@@ -7,14 +7,15 @@ use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Security\Permission;
 
 /**
  * Class LocationCategory
  *
  * @property string $Name
- * @method Locations|ManyManyList $Locations
- * @method Locators|ManyManyList $Locators
+ * @method Locations|ManyManyList LocationSet()
+ * @method Locators|ManyManyList Locators()
  */
 class LocationCategory extends DataObject
 {
@@ -38,7 +39,7 @@ class LocationCategory extends DataObject
     /**
      * @var array
      */
-    private static $belogs_many_many = array(
+    private static $belongs_many_many = array(
         'Locators' => Locator::class,
         'LocationSet' => Location::class,
     );
@@ -62,6 +63,7 @@ class LocationCategory extends DataObject
 
         $fields->removeByName([
             'Locations',
+            'LocationSet',
         ]);
 
         if ($this->ID) {
@@ -79,6 +81,14 @@ class LocationCategory extends DataObject
         }
 
         return $fields;
+    }
+
+    /**
+     * For backwards compatability
+     * @return Locations|ManyManyList
+     */
+    public function Locations() {
+        return $this->LocationSet();
     }
 
     /**
