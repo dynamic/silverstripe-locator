@@ -11,6 +11,7 @@ use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\RequiredFields;
 use SilverStripe\Control\Controller;
+use SilverStripe\ORM\ArrayLib;
 
 /**
  * Class LocatorForm
@@ -51,9 +52,9 @@ class LocatorForm extends Form
         }
 
         if ($controller->getShowRadius()) {
-            $radiusArray = $controller->getRadii();
+            $radiusArray = array_values($controller->getRadii());
             $this->extend('overrideRadiusArray', $radiusArray);
-            $fields->push(DropdownField::create('Radius', '', $radiusArray)
+            $fields->push(DropdownField::create('Radius', '', ArrayLib::valuekey($radiusArray))
                 ->setEmptyString('radius')
             );
         }
@@ -80,5 +81,17 @@ class LocatorForm extends Form
         }
         $this->extend('updateRequiredFields', $validator);
         return $validator;
+    }
+
+    /**
+     * @return FieldList
+     */
+    public function Fields()
+    {
+        $fields = parent::Fields();
+
+        $this->extend('updateLocatorFormFields', $fields);
+
+        return $fields;
     }
 }
