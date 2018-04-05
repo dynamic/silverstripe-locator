@@ -5,6 +5,7 @@ SilverStripe\Security\Group:
     Title: Edit Locations
   locationdelete:
     Title: Location Delete
+
 SilverStripe\Security\Permission:
   locationcreate:
     Code: Location_CREATE
@@ -18,6 +19,7 @@ SilverStripe\Security\Permission:
     Code: Location_DELETE
     Type: 1
     GroupID: =>SilverStripe\Security\Group.locationdelete
+
 SilverStripe\Security\Member:
   locationcreate:
     FirstName: Create
@@ -38,6 +40,7 @@ SilverStripe\Security\Member:
     FirstName: Default
     Surname: Member
     email: default@test.com
+
 Dynamic\Locator\LocationCategory:
   service:
     Name: Service
@@ -47,10 +50,12 @@ Dynamic\Locator\LocationCategory:
     Name: Entertainment
   technology:
     Name: Technology
+
 Dynamic\Locator\Locator:
   locator1:
     Title: Locator
     Categories: =>Dynamic\Locator\LocationCategory.service,=>Dynamic\Locator\LocationCategory.technology
+
 Dynamic\Locator\Location:
   dynamic:
     Title: Dynamic, Inc.
@@ -63,14 +68,14 @@ Dynamic\Locator\Location:
     State: WI
     PostalCode:
     Country: US
-    Category: =>Dynamic\Locator\LocationCategory.service
+    Categories: =>Dynamic\Locator\LocationCategory.service
   silverstripe:
     Title: Silverstripe
     Featured: true
     Website: http://silverstripe.org
     Phone: 555-555-5555
     Email: solutions@silverstripe.com
-    Category: =>Dynamic\Locator\LocationCategory.service
+    Categories: =>Dynamic\Locator\LocationCategory.service
   3sheeps:
     Title: 3 Sheeps Brewing
     Featured: false
@@ -82,7 +87,7 @@ Dynamic\Locator\Location:
     State: WI
     PostalCode:
     Country: US
-    Category: =>Dynamic\Locator\LocationCategory.entertainment
+    Categories: =>Dynamic\Locator\LocationCategory.entertainment
   Lambeau:
     Title: Lambeau Field
     Featured: true
@@ -92,4 +97,4 @@ Dynamic\Locator\Location:
     State: WI
     PostalCode:
     Country: US
-    Category: =>Dynamic\Locator\LocationCategory.entertainment
+    Categories: =>Dynamic\Locator\LocationCategory.entertainment

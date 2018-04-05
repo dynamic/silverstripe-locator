@@ -67,6 +67,9 @@ class LocationCategoriesTask extends BuildTask
 
         echo "{$catCt} categories converted<br />";
         echo "{$locCT} location relations converted<br />";
+
+        $time = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
+        echo "Process Time: {$time} seconds";
     }
 
     /**

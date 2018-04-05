@@ -212,7 +212,9 @@ class Locator extends \Page
      */
     public function getCategories()
     {
-        return $this->Categories();
+        return $this->Categories()->filter([
+            'LocationSet.ID:GreaterThan' => 0,
+        ]);
     }
 
     /**

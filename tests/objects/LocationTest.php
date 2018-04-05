@@ -49,7 +49,7 @@ class LocationTest extends SapphireTest
             'Country' => 'Country',
             'Lat' => 'Lat',
             'Lng' => 'Lng',
-            'Category' => 'Category',
+            'Categories' => 'Categories',
             'Category.Name' => 'Category',
             'Category.ID' => 'Category',
             'Featured.NiceAsBoolean' => 'Featured',
