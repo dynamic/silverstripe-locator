@@ -17,8 +17,9 @@ Dynamic\Locator\Locator:
 
 ---
 Name: modules-locator
-After: modules-other
-Before: modules-framework
+After:
+  - modules-other
+  - modules-framework
 ---
 SilverStripe\Core\Manifest\ModuleManifest:
   module_priority:

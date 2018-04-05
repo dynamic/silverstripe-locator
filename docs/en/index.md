@@ -10,3 +10,4 @@ See [Importing Locations](userguide/import.md) for information on importing Loca
 
 - [Setup](developerguide/setup.md)
 - [Customizing](developerguide/customizing.md)
+- [Extending](developerguide/extending.md)
