@@ -18,7 +18,6 @@ class LocationCsvBulkLoader extends CsvBulkLoader
         'Name' => 'Title',
         'City' => 'Suburb',
         'EmailAddress' => 'Email',
-        'Category' => 'Category.Name',
         'Import_ID' => 'Import_ID',
     );
 
@@ -32,12 +31,13 @@ class LocationCsvBulkLoader extends CsvBulkLoader
     /**
      * @var array
      */
+    /*
     public $relationCallbacks = array(
        'Category.Name' => array(
            'relationname' => 'Category',
            'callback' => 'getCategoryByName',
         ),
-    );
+    );*/
 
     /**
      * @param $obj

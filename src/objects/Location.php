@@ -3,6 +3,7 @@
 namespace Dynamic\Locator;
 
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\EmailField;
@@ -19,8 +20,8 @@ use SilverStripe\Security\Permission;
  * @property string $Email
  * @property string $EmailAddress
  * @property int $Import_ID
- * @property int $CategoryID
- * @method LocationCategory $Category
+ *
+ * @method ManyManyList Categories
  */
 class Location extends DataObject implements PermissionProvider
 {
@@ -51,12 +52,9 @@ class Location extends DataObject implements PermissionProvider
         'Import_ID' => 'Int',
     );
 
-    /**
-     * @var array
-     */
-    private static $has_one = array(
-        'Category' => LocationCategory::class,
-    );
+    private static $many_many = [
+        'Categories' => LocationCategory::class,
+    ];
 
     /**
      * @var string
@@ -97,7 +95,6 @@ class Location extends DataObject implements PermissionProvider
         'Website',
         'Phone',
         'Email',
-        'Category.ID',
         'Featured',
     );
 
@@ -113,7 +110,6 @@ class Location extends DataObject implements PermissionProvider
         'State',
         'PostalCode',
         'Country',
-        'Category.Name',
         'Featured.NiceAsBoolean',
         'Coords',
     );
@@ -160,11 +156,6 @@ class Location extends DataObject implements PermissionProvider
             ->setAttribute('placeholder', 'http://');
 
         $fields->replaceField('Email', EmailField::create('Email'));
-
-        $fields->replaceField(
-            'CategoryID',
-            DropdownField::create('CategoryID', 'Category', LocationCategory::get()->map())->setEmptyString('')
-        );
 
         $featured = $fields->dataFieldByName('Featured')
             ->setDescription('Location will display near the top of the results list');
