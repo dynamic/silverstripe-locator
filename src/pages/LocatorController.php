@@ -81,7 +81,6 @@ class LocatorController extends \PageController
     public function init()
     {
         parent::init();
-
         // google maps api key
         $key = Config::inst()->get(GoogleGeocoder::class, 'geocoder_api_key');
         Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
@@ -126,30 +125,34 @@ class LocatorController extends \PageController
                 $map_id = Config::inst()->get(LocatorController::class, 'map_container');
                 $list_class = Config::inst()->get(LocatorController::class, 'list_container');
 
+                $mapStyle = file_get_contents($this->getMapStyle());
+
                 // init map
                 Requirements::customScript("
                 $(function(){
                     $('#map-container').storeLocator({
-                        " . $load . "
-                        dataLocation: '" . $link . "',
-                        listTemplatePath: '" . $listTemplatePath . "',
-                        infowindowTemplatePath: '" . $infowindowTemplatePath . "',
+                        {$load}
+                        dataLocation: '{$link}',
+                        listTemplatePath: '{$listTemplatePath}',
+                        infowindowTemplatePath: '{$infowindowTemplatePath}',
+                        markerImg: '{$this->getMarkerIcon()}',
                         originMarker: true,
-                        " . $featured . ",
+                        {$featured},
                         slideMap: false,
                         distanceAlert: -1,
-                        " . $kilometer . ",
+                        {$kilometer},
                         defaultLat: {$defaultCoords->getField("Lat")},
                         defaultLng: {$defaultCoords->getField("Lng")},
-                        mapID: '" . $map_id . "',
-                        locationList: '" . $list_class . "',
+                        mapID: '{$map_id}',
+                        locationList: '{$list_class}',
                         mapSettings: {
 							zoom: 12,
 							mapTypeId: google.maps.MapTypeId.ROADMAP,
 							disableDoubleClickZoom: true,
 							scrollwheel: false,
 							navigationControl: false,
-							draggable: false
+							draggable: false,
+							styles: {$mapStyle}
 						}
                     });
                 });
