@@ -9,18 +9,18 @@ class LocationAdmin extends ModelAdmin
     /**
      * @var array
      */
-    private static $managed_models = array(
+    private static $managed_models = [
         'Location',
         'LocationCategory',
-    );
+    ];
 
     /**
      * @var array
      */
-    private static $model_importers = array(
+    private static $model_importers = [
         'Location' => 'LocationCsvBulkLoader',
         'LocationCategory' => 'CsvBulkLoader',
-    );
+    ];
 
     /**
      * @var string
@@ -37,7 +37,7 @@ class LocationAdmin extends ModelAdmin
     public function getExportFields()
     {
         if ($this->modelClass == 'Location') {
-            return array(
+            $fields = [
                 'Title' => 'Name',
                 'Address' => 'Address',
                 'Suburb' => 'City',
@@ -53,10 +53,16 @@ class LocationAdmin extends ModelAdmin
                 'Featured' => 'Featured',
                 'Lat' => 'Lat',
                 'Lng' => 'Lng',
-            );
+            ];
         }
 
-        return parent::getExportFields();
+        if (!isset($fields)) {
+            $fields = parent::getExportFields();
+        }
+
+        $this->extend('updateGetExportFields', $fields);
+
+        return $fields;
     }
 
     /**
