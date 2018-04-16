@@ -125,7 +125,17 @@ class LocatorController extends \PageController
                 $map_id = Config::inst()->get(LocatorController::class, 'map_container');
                 $list_class = Config::inst()->get(LocatorController::class, 'list_container');
 
-                $mapStyle = file_get_contents($this->getMapStyle());
+                $mapStyle = '';
+                if ($stylePath = $this->getMapStyle()) {
+                    if ($style = file_get_contents($stylePath)) {
+                        $mapStyle = "styles: {$style}";
+                    }
+                };
+
+                $markerImage = '';
+                if ($imagePath = $this->getMarkerIcon()) {
+                    $markerImage = "markerImg: '{$imagePath},'";
+                }
 
                 // init map
                 Requirements::customScript("
@@ -135,7 +145,7 @@ class LocatorController extends \PageController
                         dataLocation: '{$link}',
                         listTemplatePath: '{$listTemplatePath}',
                         infowindowTemplatePath: '{$infowindowTemplatePath}',
-                        markerImg: '{$this->getMarkerIcon()}',
+                        {$markerImage},
                         originMarker: true,
                         {$featured},
                         slideMap: false,
@@ -152,7 +162,7 @@ class LocatorController extends \PageController
 							scrollwheel: false,
 							navigationControl: false,
 							draggable: false,
-							styles: {$mapStyle}
+							{$mapStyle}
 						}
                     });
                 });
