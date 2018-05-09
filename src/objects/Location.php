@@ -19,6 +19,7 @@ use SilverStripe\Security\Permission;
  * @property string $Phone
  * @property string $Email
  * @property string $EmailAddress
+ * @property string $Fax
  * @property int $Import_ID
  *
  * @method ManyManyList Categories
