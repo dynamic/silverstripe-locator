@@ -19,6 +19,7 @@ use SilverStripe\Security\Permission;
  * @property string $Phone
  * @property string $Email
  * @property string $EmailAddress
+ * @property string $Fax
  * @property int $Import_ID
  *
  * @method ManyManyList Categories
@@ -49,6 +50,7 @@ class Location extends DataObject implements PermissionProvider
         'Website' => 'Varchar(255)',
         'Phone' => 'Varchar(40)',
         'Email' => 'Varchar(255)',
+        'Fax' => 'Varchar(45)',
         'Import_ID' => 'Int',
     );
 
