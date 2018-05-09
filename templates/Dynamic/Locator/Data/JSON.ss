@@ -6,6 +6,7 @@
       "Featured": $Featured,
       "Website": "$Website",
       "Phone": "$Phone",
+      "Fax": "$Fax",
       "Email": "$Email",
       "Address": "$Address",
       "Address2": "$Address2",

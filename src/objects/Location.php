@@ -49,6 +49,7 @@ class Location extends DataObject implements PermissionProvider
         'Website' => 'Varchar(255)',
         'Phone' => 'Varchar(40)',
         'Email' => 'Varchar(255)',
+        'Fax' => 'Varchar(45)',
         'Import_ID' => 'Int',
     );
 
