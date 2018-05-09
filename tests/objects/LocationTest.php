@@ -42,6 +42,7 @@ class LocationTest extends SapphireTest
             'Website' => 'Website',
             'Phone' => 'Phone',
             'Email' => 'Email',
+            'Fax' => 'Fax',
             'Address' => 'Address',
             'City' => 'City',
             'State' => 'State',
