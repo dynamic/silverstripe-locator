@@ -126,7 +126,7 @@ class LocatorController extends \PageController
                 $list_class = Config::inst()->get(LocatorController::class, 'list_container');
 
                 $mapStyle = '';
-                if ($stylePath = $this->getMapStyle()) {
+                if ($stylePath = $this->getMapStyleJSONPath()) {
                     if ($style = file_get_contents($stylePath)) {
                         $mapStyle = "styles: {$style}";
                     }

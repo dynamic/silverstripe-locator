@@ -256,6 +256,10 @@ class Locator extends \Page
         return AddressDataExtension::getMapStyleJSON();
     }
 
+    public function getMapStyleJSONPath() {
+        return AddressDataExtension::getMapStyleJSONPath();
+    }
+
     /**
      * @return null|string
      */
