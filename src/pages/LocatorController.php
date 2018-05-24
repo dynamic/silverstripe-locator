@@ -6,12 +6,12 @@ use Dynamic\SilverStripeGeocoder\DistanceDataExtension;
 use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 use muskie9\DataToArrayList\ORM\DataToArrayListHelper;
 use SilverStripe\Control\Controller;
+use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
-use SilverStripe\Control\HTTPRequest;
 
 /**
  * Class LocatorController
@@ -95,7 +95,12 @@ class LocatorController extends \PageController
             if ($locations) {
 
                 $featuredInList = ($locations->filter('Featured', true)->count() > 0);
-                $defaultCoords = $this->getAddressSearchCoords() ? $this->getAddressSearchCoords() : '';
+                $defaultCoords = $this->getAddressSearchCoords() ?
+                    $this->getAddressSearchCoords() :
+                    new ArrayData([
+                        "Lat" => 0,
+                        "Lng" => 0,
+                    ]);
 
                 $featured = $featuredInList
                     ? 'featuredLocations: true'
