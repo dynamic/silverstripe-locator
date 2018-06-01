@@ -2,6 +2,7 @@
 
 namespace Dynamic\Locator;
 
+use Dynamic\SilverStripeGeocoder\AddressDataExtension;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
@@ -245,5 +246,25 @@ class Locator extends \Page
                 'listTemplate'
             )
         );
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getMapStyle()
+    {
+        return AddressDataExtension::getMapStyleJSON();
+    }
+
+    public function getMapStyleJSONPath() {
+        return AddressDataExtension::getMapStyleJSONPath();
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getMarkerIcon()
+    {
+        return AddressDataExtension::getIconImage();
     }
 }

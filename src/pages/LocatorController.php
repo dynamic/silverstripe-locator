@@ -81,7 +81,6 @@ class LocatorController extends \PageController
     public function init()
     {
         parent::init();
-
         // google maps api key
         $key = Config::inst()->get(GoogleGeocoder::class, 'geocoder_api_key');
         Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
@@ -131,30 +130,44 @@ class LocatorController extends \PageController
                 $map_id = Config::inst()->get(LocatorController::class, 'map_container');
                 $list_class = Config::inst()->get(LocatorController::class, 'list_container');
 
+                $mapStyle = '';
+                if ($stylePath = $this->getMapStyleJSONPath()) {
+                    if ($style = file_get_contents($stylePath)) {
+                        $mapStyle = "styles: {$style}";
+                    }
+                };
+
+                $markerImage = '';
+                if ($imagePath = $this->getMarkerIcon()) {
+                    $markerImage = "markerImg: '{$imagePath},'";
+                }
+
                 // init map
                 Requirements::customScript("
                 $(function(){
                     $('#map-container').storeLocator({
-                        " . $load . "
-                        dataLocation: '" . $link . "',
-                        listTemplatePath: '" . $listTemplatePath . "',
-                        infowindowTemplatePath: '" . $infowindowTemplatePath . "',
+                        {$load}
+                        dataLocation: '{$link}',
+                        listTemplatePath: '{$listTemplatePath}',
+                        infowindowTemplatePath: '{$infowindowTemplatePath}',
+                        {$markerImage},
                         originMarker: true,
-                        " . $featured . ",
+                        {$featured},
                         slideMap: false,
                         distanceAlert: -1,
-                        " . $kilometer . ",
+                        {$kilometer},
                         defaultLat: {$defaultCoords->getField("Lat")},
                         defaultLng: {$defaultCoords->getField("Lng")},
-                        mapID: '" . $map_id . "',
-                        locationList: '" . $list_class . "',
+                        mapID: '{$map_id}',
+                        locationList: '{$list_class}',
                         mapSettings: {
 							zoom: 12,
 							mapTypeId: google.maps.MapTypeId.ROADMAP,
 							disableDoubleClickZoom: true,
 							scrollwheel: false,
 							navigationControl: false,
-							draggable: false
+							draggable: false,
+							{$mapStyle}
 						}
                     });
                 });
