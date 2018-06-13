@@ -142,12 +142,12 @@ class LocatorTest extends FunctionalTest
     /**
      *
      */
-    public function testGetCategories()
+    public function testGetUsedCategories()
     {
         /** @var Locator $locator */
         $locator = $this->objFromFixture(Locator::class, 'locator1');
 
-        $categories = $locator->getCategories()->toArray();
+        $categories = $locator->getUsedCategories()->toArray();
         $this->assertEquals(1, count($categories));
     }
 
