@@ -153,7 +153,7 @@ class Locator extends \Page
             return false;
         }
 
-        return Locator::get()->byID($id)->Categories();
+        return Locator::get()->byID($id)->getUsedCategories();
     }
 
     /**
@@ -211,7 +211,7 @@ class Locator extends \Page
     /**
      * @return mixed
      */
-    public function getCategories()
+    public function getUsedCategories()
     {
         return $this->Categories()->filter([
             'LocationSet.ID:GreaterThan' => 0,
