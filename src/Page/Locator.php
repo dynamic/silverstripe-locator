@@ -3,16 +3,16 @@
 namespace Dynamic\Locator;
 
 use Dynamic\SilverStripeGeocoder\AddressDataExtension;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\OptionsetField;
-use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
-use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\ArrayList;
-use SilverStripe\Core\Config\Config;
+use SilverStripe\ORM\DataList;
 use SilverStripe\View\ArrayData;
 use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
 
@@ -61,11 +61,6 @@ class Locator extends \Page
     private static $table_name = 'Locator';
 
     /**
-     * @var string
-     */
-    private static $location_class = Location::class;
-
-    /**
      * @return FieldList
      */
     public function getCMSFields()
@@ -93,37 +88,6 @@ class Locator extends \Page
         });
 
         return parent::getCMSFields();
-    }
-
-    /**
-     * @param array $filter
-     * @param array $filterAny
-     * @param array $exclude
-     * @param null|callable $callback
-     *
-     * @return DataList|ArrayList
-     */
-    public static function get_locations(
-        $filter = [],
-        $filterAny = [],
-        $exclude = [],
-        $callback = null
-    ) {
-        $locationClass = Config::inst()->get(Locator::class, 'location_class');
-        $locations = $locationClass::get()->filter($filter)->exclude($exclude);
-
-        if (!empty($filterAny)) {
-            $locations = $locations->filterAny($filterAny);
-        }
-        if (!empty($exclude)) {
-            $locations = $locations->exclude($exclude);
-        }
-
-        if ($callback !== null && is_callable($callback)) {
-            $locations->filterByCallback($callback);
-        }
-
-        return $locations;
     }
 
     /**
@@ -177,6 +141,9 @@ class Locator extends \Page
         return $radii;
     }
 
+    /**
+     * @return \SilverStripe\ORM\ArrayList
+     */
     public function getRadiiArrayList()
     {
         $list = [];
@@ -256,7 +223,11 @@ class Locator extends \Page
         return AddressDataExtension::getMapStyleJSON();
     }
 
-    public function getMapStyleJSONPath() {
+    /**
+     * @return bool|string
+     */
+    public function getMapStyleJSONPath()
+    {
         return AddressDataExtension::getMapStyleJSONPath();
     }
 

@@ -1,0 +1,7 @@
+---
+Name: locator-routes
+---
+SilverStripe\Control\Director:
+  rules:
+    LocatorAPI:
+      Controller: 'Dynamic\Locator\Control\APIController'

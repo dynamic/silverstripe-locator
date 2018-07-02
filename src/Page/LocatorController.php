@@ -2,6 +2,7 @@
 
 namespace Dynamic\Locator;
 
+use Dynamic\Locator\Control\APIController;
 use Dynamic\SilverStripeGeocoder\DistanceDataExtension;
 use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 use muskie9\DataToArrayList\ORM\DataToArrayListHelper;
@@ -18,31 +19,6 @@ use SilverStripe\View\Requirements;
  */
 class LocatorController extends \PageController
 {
-    /**
-     * @var array
-     */
-    private static $allowed_actions = array(
-        'xml',
-        'json',
-    );
-
-    /**
-     * @var array
-     */
-    private static $base_filter = [];
-
-    /**
-     * @var array
-     */
-    private static $base_exclude = [
-        'Lat' => 0,
-        'Lng' => 0,
-    ];
-
-    /**
-     * @var array
-     */
-    private static $base_filter_any = [];
 
     /**
      * @var bool
@@ -69,11 +45,6 @@ class LocatorController extends \PageController
      * @var string
      */
     private static $query_trigger = 'action_doFilterLocations';
-
-    /**
-     * @var DataList|ArrayList
-     */
-    protected $locations;
 
     /**
      * Set Requirements based on input from CMS
@@ -124,7 +95,7 @@ class LocatorController extends \PageController
                 if (count($vars)) {
                     $url .= '?' . http_build_query($vars);
                 }
-                $link = Controller::join_links($this->Link(), 'xml.xml', $url);
+                $link = Controller::join_links(APIController::getRoute(), 'xml.xml', $url);
 
                 // containers
                 $map_id = Config::inst()->get(LocatorController::class, 'map_container');
