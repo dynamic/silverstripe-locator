@@ -95,8 +95,8 @@ class LocatorController extends \PageController
                 if (count($vars)) {
                     $url .= '?' . http_build_query($vars);
                 }
-                $link = Controller::join_links(APIController::getRoute(), 'xml.xml', $url);
-
+                $link = Controller::join_links(APIController::create()->Link(), 'xml.xml', $url);
+                
                 // containers
                 $map_id = Config::inst()->get(LocatorController::class, 'map_container');
                 $list_class = Config::inst()->get(LocatorController::class, 'list_container');
@@ -166,116 +166,6 @@ class LocatorController extends \PageController
     }
 
     /**
-     * Renders locations in xml format
-     *
-     * @return \SilverStripe\ORM\FieldType\DBHTMLText
-     */
-    public function xml()
-    {
-        $this->getResponse()->addHeader("Content-Type", "application/xml");
-        $data = new ArrayData(array(
-            "Locations" => $this->getLocations(),
-            "AddressCoords" => $this->getAddressSearchCoords(),
-        ));
-
-        return $data->renderWith('Dynamic/Locator/Data/XML');
-    }
-
-    /**
-     * Renders locations in json format
-     *
-     * @return \SilverStripe\ORM\FieldType\DBHTMLText
-     */
-    public function json()
-    {
-        $this->getResponse()->addHeader("Content-Type", "application/json");
-        $data = new ArrayData(array(
-            "Locations" => $this->getLocations(),
-            "AddressCoords" => $this->getAddressSearchCoords(),
-        ));
-
-        return $data->renderWith('Dynamic/Locator/Data/JSON');
-    }
-
-    /**
-     * @return ArrayList|DataList
-     */
-    public function getLocations()
-    {
-        if (!$this->locations) {
-            $this->setLocations($this->request);
-        }
-
-        return $this->locations;
-    }
-
-    /**
-     * @param HTTPRequest|null $request
-     *
-     * @return $this
-     */
-    public function setLocations(HTTPRequest $request = null)
-    {
-
-        if ($request === null) {
-            $request = $this->request;
-        }
-        $filter = $this->config()->get('base_filter');
-
-        $categoryVar = Config::inst()->get(Locator::class, 'category_var');
-        if ($request->getVar($categoryVar)) {
-            $filter['Categories.ID'] = $request->getVar($categoryVar);
-        } else {
-            if ($this->getPageCategories()->exists()) {
-                foreach ($this->getPageCategories() as $category) {
-                    $filter['Categories.ID'][] = $category->ID;
-                }
-            }
-        }
-
-        $this->extend('updateLocatorFilter', $filter, $request);
-
-        $filterAny = $this->config()->get('base_filter_any');
-        $this->extend('updateLocatorFilterAny', $filterAny, $request);
-
-        $exclude = $this->config()->get('base_exclude');
-        $this->extend('updateLocatorExclude', $exclude, $request);
-
-        $locations = Locator::get_locations($filter, $filterAny, $exclude);
-        $locations = DataToArrayListHelper::to_array_list($locations);
-
-        //allow for adjusting list post possible distance calculation
-        $this->extend('updateLocationList', $locations);
-
-        if ($locations->canSortBy('Distance')) {
-            $locations = $locations->sort('Distance');
-        }
-
-        if ($this->getShowRadius()) {
-            $radiusVar = Config::inst()->get(Locator::class, 'radius_var');
-
-            if ($radius = (int)$request->getVar($radiusVar)) {
-                $locations = $locations->filterByCallback(function ($location) use (&$radius) {
-                    return $location->Distance <= $radius;
-                });
-            }
-        }
-
-        //allow for returning list to be set as
-        $this->extend('updateListType', $locations);
-
-        $limit = $this->getLimit();
-        if ($limit > 0) {
-            $locations = $locations->limit($limit);
-        }
-
-        $this->locations = $locations;
-
-        return $this;
-
-    }
-
-    /**
      * @param HTTPRequest $request
      *
      * @return bool
@@ -288,29 +178,6 @@ class LocatorController extends \PageController
         $trigger = $request->getVar(Config::inst()->get(LocatorController::class, 'query_trigger'));
 
         return isset($trigger);
-    }
-
-    /**
-     * @return ArrayData|boolean
-     */
-    public function getAddressSearchCoords()
-    {
-        $addressVar = Config::inst()->get(DistanceDataExtension::class, 'address_var');
-        if (!$this->request->getVar($addressVar)) {
-            return false;
-        }
-        if (class_exists(GoogleGeocoder::class)) {
-            $geocoder = new GoogleGeocoder($this->request->getVar($addressVar));
-            $response = $geocoder->getResult();
-            $lat = $response->getLatitude();
-            $lng = $response->getLongitude();
-
-            return new ArrayData([
-                "Lat" => $lat,
-                "Lng" => $lng,
-            ]);
-        }
-
     }
 
     /**

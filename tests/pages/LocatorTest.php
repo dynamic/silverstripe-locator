@@ -39,19 +39,6 @@ class LocatorTest extends FunctionalTest
     /**
      *
      */
-    public function testLocations()
-    {
-        $filter = Config::inst()->get(LocatorController::class, 'base_filter');
-        $filterAny = Config::inst()->get(LocatorController::class, 'base_filter_any');
-        $exclude = Config::inst()->get(LocatorController::class, 'base_exclude');
-        $locations = Locator::get_locations($filter, $filterAny, $exclude);
-        $locations2 = Location::get()->filter($filter)->filterAny($filterAny)->exclude($exclude);
-        $this->assertEquals($locations->count(), $locations2->count());
-    }
-
-    /**
-     *
-     */
     public function testGetAllCategories()
     {
         $this->assertEquals(Locator::get_all_categories()->count(), 4);
@@ -117,16 +104,6 @@ class LocatorTest extends FunctionalTest
         /** @var Locator $locator */
         $locator = Injector::inst()->create(Locator::class);
         $this->assertInstanceOf(ArrayList::class, $locator->getRadiiArrayList());
-    }
-
-    /**
-     *
-     */
-    public function testGetLimit()
-    {
-        /** @var Locator $locator */
-        $locator = Injector::inst()->create(Locator::class);
-        $this->assertEquals(50, $locator->getLimit());
     }
 
     /**

@@ -228,13 +228,14 @@ class APIController extends Controller
         $limitVar = $this->config()->get('limit_var');
         $requestedLimit = $request->getVar($limitVar);
         $maxLimit = $this->config()->get('limit');
+        $limit = $maxLimit;
 
-        if ($requestedLimit && $maxLimit < $requestedLimit) {
-            $this->extend('updateLimit', $maxLimit);
-            return $maxLimit;
+        if ($requestedLimit && $requestedLimit < $maxLimit) {
+            $limit = $requestedLimit;
         }
-        $this->extend('updateLimit', $requestedLimit);
-        return $requestedLimit;
+
+        $this->extend('updateLimit', $limit, $request);
+        return $limit;
     }
 
     /**
@@ -264,8 +265,17 @@ class APIController extends Controller
     }
 
     /**
+     * @param string|null $action
+     * @return string
+     */
+    public function Link($action = null)
+    {
+        return Controller::join_links(static::getRoute(), $action);
+    }
+
+    /**
      * Gets the current route of the controller.
-     * 
+     *
      * @return int|string
      */
     public static function getRoute()
