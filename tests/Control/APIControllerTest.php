@@ -5,6 +5,7 @@ namespace Dynamic\Locator\Tests\Control;
 use DOMDocument;
 use Dynamic\Locator\Control\APIController;
 use Dynamic\Locator\Location;
+use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\Session;
 use SilverStripe\Core\Config\Config;
@@ -105,7 +106,7 @@ class APIControllerTest extends FunctionalTest
         $this->assertEquals($locations->count(), $controller->getLocationList($this->createRequest(array(
             'Limit' => 2,
         )))->count());
-        
+
         $this->assertEquals($locationsB->count(), $controller->getLocationList($this->createRequest(array(
             'Limit' => -50,
         )))->count());
@@ -193,6 +194,42 @@ class APIControllerTest extends FunctionalTest
                 'Limit' => 25,
             ))
         ));
+    }
+
+    /**
+     *
+     */
+    public function testLink()
+    {
+        /** @var APIController $controller */
+        $controller = APIController::create();
+
+        Director::config()->set('rules', array(
+            'api' => APIController::class,
+        ));
+        
+        $this->assertEquals('api/action', $controller->Link('action'));
+    }
+
+    /**
+     *
+     */
+    public function testGetRoute()
+    {
+        Director::config()->set('rules', array());
+        $this->assertEquals('', APIController::getRoute());
+
+        Director::config()->set('rules', array(
+            'api' => APIController::class,
+        ));
+        $this->assertEquals('api', APIController::getRoute());
+
+        Director::config()->set('rules', array(
+            'api' => array(
+                'Controller' => APIController::class,
+            ),
+        ));
+        $this->assertEquals('api', APIController::getRoute());
     }
 
     /**
