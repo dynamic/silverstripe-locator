@@ -4,8 +4,10 @@ namespace Dynamic\Locator\Tests\Control;
 
 use DOMDocument;
 use Dynamic\Locator\Control\APIController;
+use Dynamic\Locator\Location;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\Session;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\View\ViewableData;
 
@@ -67,6 +69,46 @@ class APIControllerTest extends FunctionalTest
         $json = json_decode($page->getBody());
         // if it is null its not valid
         $this->assertNotNull($json);
+    }
+
+    /**
+     *
+     */
+    public function testGetLocations()
+    {
+        /** @var APIController $controller */
+        $controller = APIController::create();
+
+        $filter = Config::inst()->get(APIController::class, 'base_filter');
+        $filterAny = Config::inst()->get(APIController::class, 'base_filter_any');
+        $exclude = Config::inst()->get(APIController::class, 'base_exclude');
+
+        $locations = Location::get()->filter($filter)->filterAny($filterAny)->exclude($exclude);
+        $this->assertEquals($locations->count(), $controller->getLocationList($this->createRequest())->count());
+    }
+
+    /**
+     *
+     */
+    public function testGetLocationList()
+    {
+        /** @var APIController $controller */
+        $controller = APIController::create();
+
+        $filter = Config::inst()->get(APIController::class, 'base_filter');
+        $filterAny = Config::inst()->get(APIController::class, 'base_filter_any');
+        $exclude = Config::inst()->get(APIController::class, 'base_exclude');
+
+        $locations = Location::get()->filter($filter)->filterAny($filterAny)->exclude($exclude);
+        $locationsB = $locations->limit(2);
+
+        $this->assertEquals($locations->count(), $controller->getLocationList($this->createRequest(array(
+            'Limit' => 2,
+        )))->count());
+        
+        $this->assertEquals($locationsB->count(), $controller->getLocationList($this->createRequest(array(
+            'Limit' => -50,
+        )))->count());
     }
 
     /**
