@@ -95,12 +95,17 @@ class APIController extends Controller
     }
 
     /**
+     * @param HTTPRequest|null $request
      * @return ArrayList|DataList
      */
-    public function getLocations()
+    public function getLocations(HTTPRequest $request = null)
     {
+        if ($request === null) {
+            $request = $this->getRequest();
+        }
+
         if (!$this->locations) {
-            $this->setLocations($this->getRequest());
+            $this->setLocations($request);
         }
 
         return $this->locations;

@@ -10,6 +10,7 @@ use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\HeaderField;
+use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
@@ -22,6 +23,9 @@ use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
  * @property bool $AutoGeocode
  * @property bool $ModalWindow
  * @property string $Unit
+ * @property float $DefaultLat
+ * @property float $DefaultLng
+ *
  * @method Categories|ManyManyList $Categories
  */
 class Locator extends \Page
@@ -45,6 +49,8 @@ class Locator extends \Page
      * @var array
      */
     private static $db = array(
+        'DefaultLat' => 'Decimal(10,7)',
+        'DefaultLng' => 'Decimal(10,7)',
         'Unit' => 'Enum("m,km","m")',
     );
 
@@ -70,6 +76,12 @@ class Locator extends \Page
             $fields->addFieldsToTab('Root.Settings', array(
                 HeaderField::create('DisplayOptions', 'Display Options', 3),
                 OptionsetField::create('Unit', 'Unit of measure', array('m' => 'Miles', 'km' => 'Kilometers')),
+                NumericField::create('DefaultLat')
+                    ->setTitle('Default Latitude')
+                    ->setScale(7),
+                NumericField::create('DefaultLng')
+                    ->setTitle('Default Longitude')
+                    ->setScale(7),
             ));
 
             // Filter categories

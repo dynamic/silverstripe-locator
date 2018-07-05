@@ -16,6 +16,9 @@ use SilverStripe\View\Requirements;
 
 /**
  * Class LocatorController
+ * @package Dynamic\Locator
+ *
+ * @mixin \Dynamic\Locator\Locator
  */
 class LocatorController extends \PageController
 {
@@ -60,16 +63,17 @@ class LocatorController extends \PageController
         $request = Controller::curr()->getRequest();
 
         if ($this->getTrigger($request)) {
-            $locations = $this->getLocations();
+            $apiController = APIController::create();
+            $locations = $apiController->getLocations($this->getRequest());
 
             if ($locations) {
 
                 $featuredInList = ($locations->filter('Featured', true)->count() > 0);
-                $defaultCoords = $this->getAddressSearchCoords() ?
-                    $this->getAddressSearchCoords() :
+                $defaultCoords = $apiController->getAddressSearchCoords($this->getRequest()) ?
+                    $apiController->getAddressSearchCoords($this->getRequest()) :
                     new ArrayData([
-                        "Lat" => 0,
-                        "Lng" => 0,
+                        "Lat" => $this->DefaultLat,
+                        "Lng" => $this->DefaultLat,
                     ]);
 
                 $featured = $featuredInList
@@ -77,7 +81,7 @@ class LocatorController extends \PageController
                     : 'featuredLocations: false';
 
                 // map config based on user input in Settings tab
-                $limit = Config::inst()->get(LocatorController::class, 'limit');
+                $limit = Config::inst()->get(APIController::class, 'limit');
                 if ($limit < 1) {
                     $limit = -1;
                 }
@@ -96,7 +100,7 @@ class LocatorController extends \PageController
                     $url .= '?' . http_build_query($vars);
                 }
                 $link = Controller::join_links(APIController::create()->Link(), 'xml.xml', $url);
-                
+
                 // containers
                 $map_id = Config::inst()->get(LocatorController::class, 'map_container');
                 $list_class = Config::inst()->get(LocatorController::class, 'list_container');
@@ -110,7 +114,7 @@ class LocatorController extends \PageController
 
                 $markerImage = '';
                 if ($imagePath = $this->getMarkerIcon()) {
-                    $markerImage = "markerImg: '{$imagePath},'";
+                    $markerImage = "markerImg: '{$imagePath}',";
                 }
 
                 // init map
@@ -121,7 +125,7 @@ class LocatorController extends \PageController
                         dataLocation: '{$link}',
                         listTemplatePath: '{$listTemplatePath}',
                         infowindowTemplatePath: '{$infowindowTemplatePath}',
-                        {$markerImage},
+                        {$markerImage}
                         originMarker: true,
                         {$featured},
                         slideMap: false,
@@ -155,7 +159,7 @@ class LocatorController extends \PageController
     public function index(HTTPRequest $request)
     {
         if ($this->getTrigger($request)) {
-            $locations = $this->getLocations();
+            $locations = APIController::create()->getLocations($this->getRequest());
         } else {
             $locations = ArrayList::create();
         }
