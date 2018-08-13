@@ -57,7 +57,9 @@ class LocationTest extends SapphireTest
             'Import_ID' => 'Import_ID',
             'Version' => 'Version',
             'Versions' => 'Versions',
-            'Address2' => 'Address2'
+            'Address2' => 'Address2',
+            'LinkTracking' => 'Link Tracking',
+            'FileTracking' => 'File Tracking',
         );
         $this->assertEquals($expected, $labels);
     }
