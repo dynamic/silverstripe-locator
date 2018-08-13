@@ -20,7 +20,7 @@
     }
   ],
   "require": {
-    "silverstripe/recipe-cms": "^1.0",
+    "silverstripe/recipe-cms": "^1.0 || ^4.0",
     "silverstripe/vendor-plugin": "^1.0",
     "muskie9/data-to-arraylist": "^2.0",
     "dynamic/silverstripe-geocoder": "^1.0",
