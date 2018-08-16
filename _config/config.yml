@@ -10,10 +10,13 @@ Dynamic\Locator\Location:
 Dynamic\Locator\Locator:
   infoWindowTemplate: 'dynamic/silverstripe-locator: client/infowindow-description.html'
   listTemplate: 'dynamic/silverstripe-locator: client/location-list-description.html'
-  limit: 50
   show_radius: true
+
+Dynamic\Locator\Control\APIController:
   radius_var: 'Radius'
   category_var: 'CategoryID'
+  limit_var: 'Limit'
+  limit: 50
 
 ---
 Name: modules-locator

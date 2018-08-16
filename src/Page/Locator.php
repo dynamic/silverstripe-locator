@@ -3,16 +3,17 @@
 namespace Dynamic\Locator;
 
 use Dynamic\SilverStripeGeocoder\AddressDataExtension;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
-use SilverStripe\Forms\HeaderField;
-use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
-use SilverStripe\ORM\DataList;
+use SilverStripe\Forms\HeaderField;
+use SilverStripe\Forms\NumericField;
+use SilverStripe\Forms\OptionsetField;
 use SilverStripe\ORM\ArrayList;
-use SilverStripe\Core\Config\Config;
+use SilverStripe\ORM\DataList;
 use SilverStripe\View\ArrayData;
 use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
 
@@ -22,6 +23,9 @@ use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
  * @property bool $AutoGeocode
  * @property bool $ModalWindow
  * @property string $Unit
+ * @property float $DefaultLat
+ * @property float $DefaultLng
+ *
  * @method Categories|ManyManyList $Categories
  */
 class Locator extends \Page
@@ -45,6 +49,8 @@ class Locator extends \Page
      * @var array
      */
     private static $db = array(
+        'DefaultLat' => 'Decimal(10,7)',
+        'DefaultLng' => 'Decimal(10,7)',
         'Unit' => 'Enum("m,km","m")',
     );
 
@@ -61,11 +67,6 @@ class Locator extends \Page
     private static $table_name = 'Locator';
 
     /**
-     * @var string
-     */
-    private static $location_class = Location::class;
-
-    /**
      * @return FieldList
      */
     public function getCMSFields()
@@ -75,6 +76,12 @@ class Locator extends \Page
             $fields->addFieldsToTab('Root.Settings', array(
                 HeaderField::create('DisplayOptions', 'Display Options', 3),
                 OptionsetField::create('Unit', 'Unit of measure', array('m' => 'Miles', 'km' => 'Kilometers')),
+                NumericField::create('DefaultLat')
+                    ->setTitle('Default Latitude')
+                    ->setScale(7),
+                NumericField::create('DefaultLng')
+                    ->setTitle('Default Longitude')
+                    ->setScale(7),
             ));
 
             // Filter categories
@@ -93,37 +100,6 @@ class Locator extends \Page
         });
 
         return parent::getCMSFields();
-    }
-
-    /**
-     * @param array $filter
-     * @param array $filterAny
-     * @param array $exclude
-     * @param null|callable $callback
-     *
-     * @return DataList|ArrayList
-     */
-    public static function get_locations(
-        $filter = [],
-        $filterAny = [],
-        $exclude = [],
-        $callback = null
-    ) {
-        $locationClass = Config::inst()->get(Locator::class, 'location_class');
-        $locations = $locationClass::get()->filter($filter)->exclude($exclude);
-
-        if (!empty($filterAny)) {
-            $locations = $locations->filterAny($filterAny);
-        }
-        if (!empty($exclude)) {
-            $locations = $locations->exclude($exclude);
-        }
-
-        if ($callback !== null && is_callable($callback)) {
-            $locations->filterByCallback($callback);
-        }
-
-        return $locations;
     }
 
     /**
@@ -177,6 +153,9 @@ class Locator extends \Page
         return $radii;
     }
 
+    /**
+     * @return \SilverStripe\ORM\ArrayList
+     */
     public function getRadiiArrayList()
     {
         $list = [];
@@ -256,7 +235,11 @@ class Locator extends \Page
         return AddressDataExtension::getMapStyleJSON();
     }
 
-    public function getMapStyleJSONPath() {
+    /**
+     * @return bool|string
+     */
+    public function getMapStyleJSONPath()
+    {
         return AddressDataExtension::getMapStyleJSONPath();
     }
 

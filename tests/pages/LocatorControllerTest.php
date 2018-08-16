@@ -31,51 +31,6 @@ class LocatorControllerTest extends FunctionalTest
     /**
      *
      */
-    public function testIndex()
-    {
-        $locator = $this->objFromFixture(Locator::class, 'locator1');
-        $controller = LocatorController::create($locator);
-        $this->assertInstanceOf(ViewableData::class, $controller->index($controller->getRequest()));
-    }
-
-    /**
-     *
-     */
-    public function testXml()
-    {
-        /** @var Locator $locator */
-        $locator = $this->objFromFixture(Locator::class, 'locator1');
-        $page = $this->get($locator->Link('xml'));
-
-        $this->assertEquals(200, $page->getStatusCode());
-        $this->assertEquals('application/xml', $page->getHeader('content-type'));
-
-        $dom = new DOMDocument();
-        // true if it loads, false if it doesn't
-        $valid = $dom->loadXML($page->getBody());
-        $this->assertTrue($valid);
-    }
-
-    /**
-     *
-     */
-    public function testJson()
-    {
-        /** @var Locator $locator */
-        $locator = $this->objFromFixture(Locator::class, 'locator1');
-        $page = $this->get($locator->Link('json'));
-
-        $this->assertEquals(200, $page->getStatusCode());
-        $this->assertEquals('application/json', $page->getHeader('content-type'));
-
-        $json = json_decode($page->getBody());
-        // if it is null its not valid
-        $this->assertNotNull($json);
-    }
-
-    /**
-     *
-     */
     public function testLocationSearch()
     {
         $locator = $this->objFromFixture(Locator::class, 'locator1');
