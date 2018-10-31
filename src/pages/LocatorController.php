@@ -21,10 +21,10 @@ class LocatorController extends \PageController
     /**
      * @var array
      */
-    private static $allowed_actions = array(
+    private static $allowed_actions = [
         'xml',
         'json',
-    );
+    ];
 
     /**
      * @var array
@@ -133,13 +133,13 @@ class LocatorController extends \PageController
                 $mapStyle = '';
                 if ($stylePath = $this->getMapStyleJSONPath()) {
                     if ($style = file_get_contents($stylePath)) {
-                        $mapStyle = "styles: {$style}";
+                        $mapStyle = "styles: {$style},";
                     }
                 };
 
                 $markerImage = '';
                 if ($imagePath = $this->getMarkerIcon()) {
-                    $markerImage = "markerImg: '{$imagePath},'";
+                    $markerImage = "markerImg: '{$imagePath}',";
                 }
 
                 // init map
@@ -150,7 +150,7 @@ class LocatorController extends \PageController
                         dataLocation: '{$link}',
                         listTemplatePath: '{$listTemplatePath}',
                         infowindowTemplatePath: '{$infowindowTemplatePath}',
-                        {$markerImage},
+                        {$markerImage}
                         originMarker: true,
                         {$featured},
                         slideMap: false,
@@ -161,13 +161,13 @@ class LocatorController extends \PageController
                         mapID: '{$map_id}',
                         locationList: '{$list_class}',
                         mapSettings: {
+                            {$mapStyle}
 							zoom: 12,
 							mapTypeId: google.maps.MapTypeId.ROADMAP,
 							disableDoubleClickZoom: true,
 							scrollwheel: false,
 							navigationControl: false,
-							draggable: false,
-							{$mapStyle}
+							draggable: false
 						}
                     });
                 });
@@ -179,51 +179,16 @@ class LocatorController extends \PageController
     /**
      * @param HTTPRequest $request
      *
-     * @return \SilverStripe\View\ViewableData_Customised
+     * @return bool
      */
-    public function index(HTTPRequest $request)
+    public function getTrigger(HTTPRequest $request = null)
     {
-        if ($this->getTrigger($request)) {
-            $locations = $this->getLocations();
-        } else {
-            $locations = ArrayList::create();
+        if ($request === null) {
+            $request = $this->getRequest();
         }
+        $trigger = $request->getVar(Config::inst()->get(LocatorController::class, 'query_trigger'));
 
-        return $this->customise(array(
-            'Locations' => $locations,
-        ));
-    }
-
-    /**
-     * Renders locations in xml format
-     *
-     * @return \SilverStripe\ORM\FieldType\DBHTMLText
-     */
-    public function xml()
-    {
-        $this->getResponse()->addHeader("Content-Type", "application/xml");
-        $data = new ArrayData(array(
-            "Locations" => $this->getLocations(),
-            "AddressCoords" => $this->getAddressSearchCoords(),
-        ));
-
-        return $data->renderWith('Dynamic/Locator/Data/XML');
-    }
-
-    /**
-     * Renders locations in json format
-     *
-     * @return \SilverStripe\ORM\FieldType\DBHTMLText
-     */
-    public function json()
-    {
-        $this->getResponse()->addHeader("Content-Type", "application/json");
-        $data = new ArrayData(array(
-            "Locations" => $this->getLocations(),
-            "AddressCoords" => $this->getAddressSearchCoords(),
-        ));
-
-        return $data->renderWith('Dynamic/Locator/Data/JSON');
+        return isset($trigger);
     }
 
     /**
@@ -305,21 +270,6 @@ class LocatorController extends \PageController
     }
 
     /**
-     * @param HTTPRequest $request
-     *
-     * @return bool
-     */
-    public function getTrigger(HTTPRequest $request = null)
-    {
-        if ($request === null) {
-            $request = $this->getRequest();
-        }
-        $trigger = $request->getVar(Config::inst()->get(LocatorController::class, 'query_trigger'));
-
-        return isset($trigger);
-    }
-
-    /**
      * @return ArrayData|boolean
      */
     public function getAddressSearchCoords()
@@ -340,6 +290,56 @@ class LocatorController extends \PageController
             ]);
         }
 
+    }
+
+    /**
+     * @param HTTPRequest $request
+     *
+     * @return \SilverStripe\View\ViewableData_Customised
+     */
+    public function index(HTTPRequest $request)
+    {
+        if ($this->getTrigger($request)) {
+            $locations = $this->getLocations();
+        } else {
+            $locations = ArrayList::create();
+        }
+
+        return $this->customise(array(
+            'Locations' => $locations,
+        ));
+    }
+
+    /**
+     * Renders locations in xml format
+     *
+     * @return \SilverStripe\ORM\FieldType\DBHTMLText
+     */
+    public function xml()
+    {
+        $this->getResponse()->addHeader("Content-Type", "application/xml");
+        $data = new ArrayData(array(
+            "Locations" => $this->getLocations(),
+            "AddressCoords" => $this->getAddressSearchCoords(),
+        ));
+
+        return $data->renderWith('Dynamic/Locator/Data/XML');
+    }
+
+    /**
+     * Renders locations in json format
+     *
+     * @return \SilverStripe\ORM\FieldType\DBHTMLText
+     */
+    public function json()
+    {
+        $this->getResponse()->addHeader("Content-Type", "application/json");
+        $data = new ArrayData(array(
+            "Locations" => $this->getLocations(),
+            "AddressCoords" => $this->getAddressSearchCoords(),
+        ));
+
+        return $data->renderWith('Dynamic/Locator/Data/JSON');
     }
 
     /**
