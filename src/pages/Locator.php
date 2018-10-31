@@ -169,7 +169,7 @@ class Locator extends \Page
             '2' => '75',
             '3' => '100',
         ];
-        $config_radii = Config::inst()->get(Locator::class, 'radii');
+        $config_radii = $this->config()->get('radii');
         if ($config_radii) {
             $radii = $config_radii;
         }
@@ -196,7 +196,7 @@ class Locator extends \Page
      */
     public function getLimit()
     {
-        return Config::inst()->get(Locator::class, 'limit');
+        return $this->config()->get('limit');
     }
 
     /**
@@ -205,7 +205,7 @@ class Locator extends \Page
      */
     public function getShowRadius()
     {
-        return Config::inst()->get(Locator::class, 'show_radius');
+        return $this->config()->get('show_radius');
     }
 
     /**
