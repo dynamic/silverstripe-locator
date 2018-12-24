@@ -64,6 +64,8 @@ class LocationCategory extends DataObject
         $fields->removeByName([
             'Locations',
             'LocationSet',
+            'LinkTracking',
+            'FileTracking',
         ]);
 
         if ($this->ID) {

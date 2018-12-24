@@ -152,6 +152,8 @@ class Location extends DataObject implements PermissionProvider
 
         $fields->removeByName(array(
             'Import_ID',
+            'LinkTracking',
+            'FileTracking',
         ));
 
         $fields->dataFieldByName('Website')
