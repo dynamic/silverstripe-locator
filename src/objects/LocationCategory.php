@@ -59,28 +59,30 @@ class LocationCategory extends DataObject
      */
     public function getCMSFields()
     {
+        $this->beforeUpdateCMSFields(function ($fields) {
+            $fields->removeByName([
+                'Locations',
+                'LocationSet',
+                'LinkTracking',
+                'FileTracking',
+            ]);
+
+            if ($this->ID) {
+                // Locations
+                $config = GridFieldConfig_RelationEditor::create();
+                $config->removeComponentsByType(GridFieldAddExistingAutocompleter::class);
+                $config->addComponent(new GridFieldAddExistingAutocompleter());
+                $config->removeComponentsByType(GridFieldAddNewButton::class);
+                $locations = $this->Locations();
+                $locationField = GridField::create('Locations', 'Locations', $locations, $config);
+
+                $fields->addFieldsToTab('Root.Locations', array(
+                    $locationField,
+                ));
+            }
+        });
+
         $fields = parent::getCMSFields();
-
-        $fields->removeByName([
-            'Locations',
-            'LocationSet',
-            'LinkTracking',
-            'FileTracking',
-        ]);
-
-        if ($this->ID) {
-            // Locations
-            $config = GridFieldConfig_RelationEditor::create();
-            $config->removeComponentsByType(GridFieldAddExistingAutocompleter::class);
-            $config->addComponent(new GridFieldAddExistingAutocompleter());
-            $config->removeComponentsByType(GridFieldAddNewButton::class);
-            $locations = $this->Locations();
-            $locationField = GridField::create('Locations', 'Locations', $locations, $config);
-
-            $fields->addFieldsToTab('Root.Locations', array(
-                $locationField,
-            ));
-        }
 
         return $fields;
     }
