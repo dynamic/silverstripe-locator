@@ -148,25 +148,27 @@ class Location extends DataObject implements PermissionProvider
      */
     public function getCMSFields()
     {
+        $this->beforeUpdateCMSFields(function ($fields) {
+            $fields->removeByName(array(
+                'Import_ID',
+                'LinkTracking',
+                'FileTracking',
+            ));
+
+            $fields->dataFieldByName('Website')
+                ->setAttribute('placeholder', 'http://');
+
+            $fields->replaceField('Email', EmailField::create('Email'));
+
+            $featured = $fields->dataFieldByName('Featured')
+                ->setDescription('Location will display near the top of the results list');
+            $fields->insertAfter(
+                $featured,
+                'CategoryID'
+            );
+        });
+
         $fields = parent::getCMSFields();
-
-        $fields->removeByName(array(
-            'Import_ID',
-            'LinkTracking',
-            'FileTracking',
-        ));
-
-        $fields->dataFieldByName('Website')
-            ->setAttribute('placeholder', 'http://');
-
-        $fields->replaceField('Email', EmailField::create('Email'));
-
-        $featured = $fields->dataFieldByName('Featured')
-            ->setDescription('Location will display near the top of the results list');
-        $fields->insertAfter(
-            $featured,
-            'CategoryID'
-        );
 
         // allow to be extended via DataExtension
         $this->extend('updateLocationFields', $fields);
