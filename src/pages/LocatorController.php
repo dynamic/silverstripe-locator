@@ -82,7 +82,7 @@ class LocatorController extends \PageController
     {
         parent::init();
         // google maps api key
-        $key = Config::inst()->get(Locator::class, 'locator_api_key');
+        $key = Config::inst()->get(GoogleGeocoder::class, 'map_api_key');
         Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
 
         // prevent init of map if no query
