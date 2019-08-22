@@ -82,5 +82,4 @@ class LocationCategoriesTask extends BuildTask
             yield $location;
         }
     }
-
 }

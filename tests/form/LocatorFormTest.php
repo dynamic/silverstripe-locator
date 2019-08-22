@@ -40,5 +40,4 @@ class LocatorFormTest extends FunctionalTest
 
         $this->assertEquals(['Foo'], $form->getValidator()->getRequired());
     }
-
 }

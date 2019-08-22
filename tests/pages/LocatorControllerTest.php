@@ -92,5 +92,4 @@ class LocatorControllerTest extends FunctionalTest
         $fields = $form->Fields();
         $this->assertInstanceOf(FieldList::class, $fields);
     }
-
 }

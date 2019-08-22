@@ -91,7 +91,8 @@ class LocationCategory extends DataObject
      * For backwards compatability
      * @return Locations|ManyManyList
      */
-    public function Locations() {
+    public function Locations()
+    {
         return $this->LocationSet();
     }
 

@@ -7,7 +7,7 @@ use SilverStripe\Dev\BuildTask;
 class EmailAddressTask extends BuildTask
 {
     protected $title = 'Email Address Task'; // title of the script
-    protected $description = "Convert depreciated 'Email Address' field to new 'Email' field."; // description of what it does
+    protected $description = "Convert depreciated 'Email Address' field to new 'Email' field.";
 
     public function run($request)
     {
