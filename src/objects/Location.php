@@ -163,8 +163,8 @@ class Location extends DataObject implements PermissionProvider
             $featured = $fields->dataFieldByName('Featured')
                 ->setDescription('Location will display near the top of the results list');
             $fields->insertAfter(
-                $featured,
-                'CategoryID'
+                'Fax',
+                $featured
             );
         });
 
