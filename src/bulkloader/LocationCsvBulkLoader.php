@@ -2,8 +2,8 @@
 
 namespace Dynamic\Locator;
 
-use SilverStripe\Dev\CsvBulkLoader,
-    SilverStripe\Core\Convert;
+use SilverStripe\Dev\CsvBulkLoader;
+use SilverStripe\Core\Convert;
 
 /**
  * Class LocationCsvBulkLoader
@@ -57,5 +57,4 @@ class LocationCsvBulkLoader extends CsvBulkLoader
 
         return $category;
     }
-
 }

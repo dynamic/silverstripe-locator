@@ -51,7 +51,9 @@ class LocationPublishTask extends BuildTask
      */
     public function publishLocations($class)
     {
-        if (!isset($class) || !class_exists($class) || !$class instanceof Location) $class = 'Location';
+        if (!isset($class) || !class_exists($class) || !$class instanceof Location) {
+            $class = 'Location';
+        }
         $ct = 0;
         $publish = function ($location) use (&$ct) {
             if (!$location->isPublished()) {

@@ -55,8 +55,7 @@ class LocatorForm extends Form
             $radiusArray = array_values($controller->getRadii());
             $this->extend('overrideRadiusArray', $radiusArray);
             $fields->push(DropdownField::create('Radius', '', ArrayLib::valuekey($radiusArray))
-                ->setEmptyString('radius')
-            );
+                ->setEmptyString('radius'));
         }
 
         $actions = FieldList::create(
@@ -76,7 +75,9 @@ class LocatorForm extends Form
     {
         $validator = parent::getValidator();
         if (empty($validator)) {
-            if (!$this->validator instanceof RequiredFields) $this->setValidator(RequiredFields::create('Address'));
+            if (!$this->validator instanceof RequiredFields) {
+                $this->setValidator(RequiredFields::create('Address'));
+            }
             $validator = $this->validator;
         }
         $this->extend('updateRequiredFields', $validator);

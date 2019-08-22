@@ -92,7 +92,6 @@ class LocatorController extends \PageController
             $locations = $this->getLocations();
 
             if ($locations) {
-
                 $featuredInList = ($locations->filter('Featured', true)->count() > 0);
                 $defaultCoords = $this->getAddressSearchCoords() ?
                     $this->getAddressSearchCoords() :
@@ -266,7 +265,6 @@ class LocatorController extends \PageController
         $this->locations = $locations;
 
         return $this;
-
     }
 
     /**
@@ -289,7 +287,6 @@ class LocatorController extends \PageController
                 "Lng" => $lng,
             ]);
         }
-
     }
 
     /**

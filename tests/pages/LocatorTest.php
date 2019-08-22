@@ -89,7 +89,6 @@ class LocatorTest extends FunctionalTest
         $newLocator->write();
 
         $this->assertEquals(Locator::locator_categories_by_locator($newLocator->ID)->count(), 0);
-
     }
 
     /**
