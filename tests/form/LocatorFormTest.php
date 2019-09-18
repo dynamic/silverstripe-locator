@@ -40,4 +40,18 @@ class LocatorFormTest extends FunctionalTest
 
         $this->assertEquals(['Foo'], $form->getValidator()->getRequired());
     }
+
+
+    public function testFields()
+    {
+        $form = LocatorForm::create(LocatorController::create(Locator::get()->first()), 'LocatorForm');
+        $this->assertInstanceOf(FieldList::class, $form->Fields());
+    }
+
+
+    public function testActions()
+    {
+        $form = LocatorForm::create(LocatorController::create(Locator::get()->first()), 'LocatorForm');
+        $this->assertInstanceOf(FieldList::class, $form->Actions());
+    }
 }

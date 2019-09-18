@@ -90,9 +90,17 @@ class LocatorForm extends Form
     public function Fields()
     {
         $fields = parent::Fields();
-
         $this->extend('updateLocatorFormFields', $fields);
-
         return $fields;
+    }
+
+    /**
+     * @return \SilverStripe\Forms\FieldList
+     */
+    public function Actions()
+    {
+        $actions = parent::Actions();
+        $this->extend('updateLocatorActions', $actions);
+        return $actions;
     }
 }
