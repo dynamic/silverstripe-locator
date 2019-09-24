@@ -9,6 +9,7 @@ use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Security\Permission;
+use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
 
 /**
  * Class LocationCategory
@@ -63,6 +64,7 @@ class LocationCategory extends DataObject
             $fields->removeByName([
                 'Locations',
                 'LocationSet',
+                'Locators',
                 'LinkTracking',
                 'FileTracking',
             ]);
@@ -70,13 +72,17 @@ class LocationCategory extends DataObject
             if ($this->ID) {
                 // Locations
                 $config = GridFieldConfig_RelationEditor::create();
-                $config->removeComponentsByType(GridFieldAddExistingAutocompleter::class);
-                $config->addComponent(new GridFieldAddExistingAutocompleter());
-                $config->removeComponentsByType(GridFieldAddNewButton::class);
+                $config->removeComponentsByType([
+                    GridFieldAddExistingAutocompleter::class,
+                    GridFieldAddNewButton::class
+                ])
+                    ->addComponents([
+                        new GridFieldAddExistingSearchButton(),
+                    ]);
                 $locations = $this->Locations();
                 $locationField = GridField::create('Locations', 'Locations', $locations, $config);
 
-                $fields->addFieldsToTab('Root.Locations', array(
+                $fields->addFieldsToTab('Root.Main', array(
                     $locationField,
                 ));
             }

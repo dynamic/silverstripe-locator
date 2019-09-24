@@ -42,26 +42,34 @@ class LocationAdmin extends ModelAdmin
      */
     public function getExportFields()
     {
-        if ($this->modelClass == 'Location') {
-            return array(
+        if ($this->modelClass == Location::class) {
+            $fields = [
                 'Title' => 'Name',
                 'Address' => 'Address',
+                'Address2' => 'Address2',
                 'City' => 'City',
                 'State' => 'State',
                 'PostalCode' => 'PostalCode',
-                'Country' => 'Country',
-                'Website' => 'Website',
+                'CountryCode' => 'Country',
                 'Phone' => 'Phone',
                 'Fax' => 'Fax',
                 'Email' => 'Email',
-                'ShowInLocator' => 'ShowInLocator',
+                'Website' => 'Website',
                 'Featured' => 'Featured',
+                'CategoryList' => 'Categories',
                 'Lat' => 'Lat',
                 'Lng' => 'Lng',
-            );
+                'Import_ID' => 'Import_ID',
+            ];
         }
 
-        return parent::getExportFields();
+        if (!isset($fields)) {
+            $fields = parent::getExportFields();
+        }
+
+        $this->extend('updateGetExportFields', $fields);
+
+        return $fields;
     }
 
     /**
@@ -73,7 +81,7 @@ class LocationAdmin extends ModelAdmin
     {
         $form = parent::getEditForm($id, $fields);
         $class = $this->sanitiseClassName($this->modelClass);
-        if ($class == 'Location') {
+        if ($class == Location::class) {
             $gridField = $form->Fields()->fieldByName($class);
             $config = $gridField->getConfig();
             $config->removeComponentsByType('GridFieldDeleteAction');
