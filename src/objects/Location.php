@@ -2,6 +2,7 @@
 
 namespace Dynamic\Locator;
 
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Security\PermissionProvider;
@@ -9,6 +10,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\EmailField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Security\Permission;
+use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
 
 /**
  * Class Location
@@ -35,11 +37,6 @@ class Location extends DataObject implements PermissionProvider
      * @var string
      */
     private static $plural_name = 'Locations';
-
-    /**
-     * @var bool
-     */
-    private static $versioned_gridfield_extensions = true;
 
     /**
      * @var array
@@ -108,12 +105,20 @@ class Location extends DataObject implements PermissionProvider
     private static $summary_fields = array(
         'Title',
         'Address',
+        'Address2',
         'City',
         'State',
         'PostalCode',
-        'Country',
-        'Featured.NiceAsBoolean',
-        'Coords',
+        'CountryCode',
+        'Phone' => 'Phone',
+        'Fax' => 'Fax',
+        'Email' => 'Email',
+        'Website' => 'Website',
+        'Featured',
+        'CategoryList',
+        'Lat',
+        'Lng',
+        'Import_ID',
     );
 
     /**
@@ -127,6 +132,29 @@ class Location extends DataObject implements PermissionProvider
     }
 
     /**
+     * @return string
+     */
+    public function getCategoryList()
+    {
+        if ($this->Categories()->count()) {
+            return implode(', ', $this->Categories()->column('Name'));
+        }
+
+        return '';
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getCountryCode()
+    {
+        if ($this->Country) {
+            return strtoupper($this->Country);
+        }
+        return false;
+    }
+
+    /**
      * custom labels for fields
      *
      * @param bool $includerelations
@@ -136,9 +164,9 @@ class Location extends DataObject implements PermissionProvider
     {
         $labels = parent::fieldLabels($includerelations);
         $labels['Title'] = 'Name';
+        $labels['Address2'] = 'Address 2';
         $labels['PostalCode'] = 'Postal Code';
-        $labels['Category.Name'] = 'Category';
-        $labels['Category.ID'] = 'Category';
+        $labels['Categories.Name'] = 'Categories';
         $labels['Featured.NiceAsBoolean'] = 'Featured';
         return $labels;
     }
@@ -166,6 +194,17 @@ class Location extends DataObject implements PermissionProvider
                 'Fax',
                 $featured
             );
+
+            if ($this->ID) {
+                $categories = $fields->dataFieldByName('Categories');
+                $config = $categories->getConfig();
+                $config->removeComponentsByType([
+                    GridFieldAddExistingAutocompleter::class
+                ])
+                    ->addComponents([
+                        new GridFieldAddExistingSearchButton()
+                    ]);
+            }
         });
 
         $fields = parent::getCMSFields();
