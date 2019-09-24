@@ -37,7 +37,7 @@ class LocationCsvBulkLoader extends CsvBulkLoader
      */
     public function getEscape($val)
     {
-        return preg_replace( "/\r|\n/", "", $val );
+        return preg_replace("/\r|\n/", "", $val);
     }
 
     /**

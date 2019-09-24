@@ -136,18 +136,11 @@ class Location extends DataObject implements PermissionProvider
      */
     public function getCategoryList()
     {
-        $list = '';
-        $i = 1;
-
-        foreach ($this->Categories() as $category) {
-            $list .= $category->Name;
-            if ($i < $this->Categories()->count()) {
-                $list .= ', ';
-            }
-            $i++;
+        if($this->Categories()->count()) {
+            return implode(', ', $this->Categories()->column('Name'));
         }
 
-        return $list;
+        return '';
     }
 
     /**
