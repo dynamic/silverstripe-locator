@@ -136,7 +136,7 @@ class Location extends DataObject implements PermissionProvider
      */
     public function getCategoryList()
     {
-        if($this->Categories()->count()) {
+        if ($this->Categories()->count()) {
             return implode(', ', $this->Categories()->column('Name'));
         }
 
