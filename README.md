@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/dynamic/silverstripe-locator.svg?branch=master)](https://travis-ci.org/dynamic/silverstripe-locator)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/build.png?b=master)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/build-status/master)
 [![codecov.io](https://codecov.io/github/dynamic/silverstripe-locator/coverage.svg?branch=master)](https://codecov.io/github/dynamic/silverstripe-locator?branch=master)
 
@@ -22,7 +21,7 @@ SilverStripe Locator displays a filterable map of locations. You can choose whet
  
 ## License
 
-See [License](license.md)
+See [License](LICENSE.md)
 
 ## Installation
 
