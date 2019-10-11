@@ -144,6 +144,18 @@ class Location extends DataObject implements PermissionProvider
     }
 
     /**
+     * @return mixed
+     */
+    public function getWebsite()
+    {
+        $website = $this->getField('Website');
+        if ($website && strpos($website, '//') === false && strpos($website, '.') >= 0) {
+            return '//' . $website;
+        }
+        return $website;
+    }
+
+    /**
      * @return bool|string
      */
     public function getCountryCode()
