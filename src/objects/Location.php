@@ -41,7 +41,7 @@ class Location extends DataObject implements PermissionProvider
     /**
      * @var array
      */
-    private static $db = array(
+    private static $db = [
         'Title' => 'Varchar(255)',
         'Featured' => 'Boolean',
         'Website' => 'Varchar(255)',
@@ -49,7 +49,7 @@ class Location extends DataObject implements PermissionProvider
         'Email' => 'Varchar(255)',
         'Fax' => 'Varchar(45)',
         'Import_ID' => 'Int',
-    );
+    ];
 
     private static $many_many = [
         'Categories' => LocationCategory::class,
@@ -63,9 +63,9 @@ class Location extends DataObject implements PermissionProvider
     /**
      * @var array
      */
-    private static $casting = array(
+    private static $casting = [
         'distance' => 'Decimal(9,3)',
-    );
+    ];
 
     /**
      * @var string
@@ -84,7 +84,7 @@ class Location extends DataObject implements PermissionProvider
      *
      * @var array
      */
-    private static $searchable_fields = array(
+    private static $searchable_fields = [
         'Title',
         'Address',
         'City',
@@ -95,14 +95,14 @@ class Location extends DataObject implements PermissionProvider
         'Phone',
         'Email',
         'Featured',
-    );
+    ];
 
     /**
      * columns for grid field
      *
      * @var array
      */
-    private static $summary_fields = array(
+    private static $summary_fields = [
         'Title',
         'Address',
         'Address2',
@@ -119,7 +119,7 @@ class Location extends DataObject implements PermissionProvider
         'Lat',
         'Lng',
         'Import_ID',
-    );
+    ];
 
     /**
      * Coords status for $summary_fields
@@ -151,6 +151,7 @@ class Location extends DataObject implements PermissionProvider
         if ($this->Country) {
             return strtoupper($this->Country);
         }
+
         return false;
     }
 
@@ -168,6 +169,7 @@ class Location extends DataObject implements PermissionProvider
         $labels['PostalCode'] = 'Postal Code';
         $labels['Categories.Name'] = 'Categories';
         $labels['Featured.NiceAsBoolean'] = 'Featured';
+
         return $labels;
     }
 
@@ -177,11 +179,11 @@ class Location extends DataObject implements PermissionProvider
     public function getCMSFields()
     {
         $this->beforeUpdateCMSFields(function ($fields) {
-            $fields->removeByName(array(
+            $fields->removeByName([
                 'Import_ID',
                 'LinkTracking',
                 'FileTracking',
-            ));
+            ]);
 
             $fields->dataFieldByName('Website')
                 ->setAttribute('placeholder', 'http://');
@@ -199,10 +201,10 @@ class Location extends DataObject implements PermissionProvider
                 $categories = $fields->dataFieldByName('Categories');
                 $config = $categories->getConfig();
                 $config->removeComponentsByType([
-                    GridFieldAddExistingAutocompleter::class
+                    GridFieldAddExistingAutocompleter::class,
                 ])
                     ->addComponents([
-                        new GridFieldAddExistingSearchButton()
+                        new GridFieldAddExistingSearchButton(),
                     ]);
             }
         });
@@ -260,10 +262,22 @@ class Location extends DataObject implements PermissionProvider
      */
     public function providePermissions()
     {
-        return array(
+        return [
             'Location_EDIT' => 'Edit a Location',
             'Location_DELETE' => 'Delete a Location',
             'Location_CREATE' => 'Create a Location',
-        );
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebsiteURL()
+    {
+        $url = $this->Website;
+
+        $this->extend('updateWebsiteURL', $url);
+
+        return $url;
     }
 }
