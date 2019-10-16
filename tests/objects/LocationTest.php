@@ -2,11 +2,15 @@
 
 namespace Dynamic\Locator\Tests;
 
+use Dynamic\Locator\Tests\Extension\LocationExtension;
+use Dynamic\Locator\Tests\Model\ExtendedLocation;
 use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
 use Dynamic\Locator\Location;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 
 /**
@@ -18,6 +22,22 @@ class LocationTest extends SapphireTest
      * @var string
      */
     protected static $fixture_file = '../fixtures.yml';
+
+    /**
+     * @var array
+     */
+    protected static $extra_dataobjects = [
+        ExtendedLocation::class,
+    ];
+
+    /**
+     * @var array
+     */
+    protected static $required_extensions = [
+        ExtendedLocation::class => [
+            LocationExtension::class,
+        ],
+    ];
 
     /**
      *
@@ -38,7 +58,7 @@ class LocationTest extends SapphireTest
         // Link and File tracking display as "Tracking" in SS 4.2 & 4.3, "Tracking" in 4.4
         $location = $this->objFromFixture(Location::class, 'dynamic');
         $labels = $location->FieldLabels();
-        $expected = array(
+        $expected = [
             'Title' => 'Name',
             'Featured' => 'Featured',
             'Website' => 'Website',
@@ -62,7 +82,7 @@ class LocationTest extends SapphireTest
             'Address2' => 'Address2',
             'LinkTracking' => 'Link tracking',
             'FileTracking' => 'File tracking',
-        );
+        ];
         $this->assertEquals($expected, $labels);
     }
 
@@ -175,11 +195,29 @@ class LocationTest extends SapphireTest
     public function testProvidePermissions()
     {
         $object = Location::create();
-        $expected = array(
+        $expected = [
             'Location_EDIT' => 'Edit a Location',
             'Location_DELETE' => 'Delete a Location',
             'Location_CREATE' => 'Create a Location',
-        );
+        ];
         $this->assertEquals($expected, $object->providePermissions());
+    }
+
+    /**
+     *
+     */
+    public function testUpdateWebsiteURL()
+    {
+        $location = $this->objFromFixture(Location::class, 'dynamic');
+
+        // Create unsaved raw duplicate
+        $map = $location->toMap();
+        unset($map['Created']);
+        /** @var static $clone */
+        $clone = Injector::inst()->create(ExtendedLocation::class, $map);
+        $clone->ID = 0;
+
+        $this->assertEquals('http://www.dynamicagency.com', $location->getWebsiteURL());
+        $this->assertEquals('foo', $clone->getWebsiteURL());
     }
 }
