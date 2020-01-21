@@ -215,7 +215,7 @@ class LocatorController extends \PageController
         }
         $filter = $this->config()->get('base_filter');
 
-        $categoryVar = Config::inst()->get(Locator::class, 'category_var');
+        $categoryVar = $this->data()->config()->get('category_var');
         if ($request->getVar($categoryVar)) {
             $filter['Categories.ID'] = $request->getVar($categoryVar);
         } else {
@@ -234,7 +234,8 @@ class LocatorController extends \PageController
         $exclude = $this->config()->get('base_exclude');
         $this->extend('updateLocatorExclude', $exclude, $request);
 
-        $locations = Locator::get_locations($filter, $filterAny, $exclude);
+        $class = $this->data()->ClassName;
+        $locations = $class::get_locations($filter, $filterAny, $exclude);
         $locations = DataToArrayListHelper::to_array_list($locations);
 
         //allow for adjusting list post possible distance calculation
@@ -245,7 +246,7 @@ class LocatorController extends \PageController
         }
 
         if ($this->getShowRadius()) {
-            $radiusVar = Config::inst()->get(Locator::class, 'radius_var');
+            $radiusVar = $this->data()->config()->get( 'radius_var');
 
             if ($radius = (int)$request->getVar($radiusVar)) {
                 $locations = $locations->filterByCallback(function ($location) use (&$radius) {
