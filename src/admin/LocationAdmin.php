@@ -5,11 +5,14 @@ namespace Dynamic\Locator;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Dev\CsvBulkLoader;
 use SilverStripe\Forms\Form;
+use SilverStripe\Security\Permission;
+use SilverStripe\Security\PermissionProvider;
+use SilverStripe\Security\Security;
 
 /**
  * Class LocationAdmin
  */
-class LocationAdmin extends ModelAdmin
+class LocationAdmin extends ModelAdmin implements PermissionProvider
 {
 
     /**
@@ -36,6 +39,13 @@ class LocationAdmin extends ModelAdmin
      * @var string
      */
     private static $url_segment = 'locator';
+
+    private static $tree_class = Location::class;
+
+    /**
+     * @var string
+     */
+    private static $required_permission_codes = 'CMS_ACCESS_LocatorAdmin';
 
     /**
      * @return array
@@ -87,5 +97,33 @@ class LocationAdmin extends ModelAdmin
             $config->removeComponentsByType('GridFieldDeleteAction');
         }
         return $form;
+    }
+
+    public function providePermissions()
+    {
+        return array(
+            "CMS_ACCESS_LocatorAdmin" => array(
+                'name' => "Access to 'Locator' section",
+                'category' => 'CMS Access'
+            )
+        );
+    }
+
+    /**
+     * @param null $member
+     * @return bool
+     */
+    public function canView($member = null)
+    {
+        if (!$member && $member !== false) {
+            $member = Security::getCurrentUser();
+        }
+
+        if (Permission::checkMember($member, 'CMS_ACCESS_LocatorAdmin')) {
+            return true;
+        }
+
+        // Default permissions
+        //return parent::canView($member);
     }
 }
