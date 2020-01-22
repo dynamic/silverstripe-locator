@@ -2,7 +2,6 @@
 
 namespace Dynamic\Locator\Tests;
 
-use \DOMDocument;
 use Dynamic\Locator\LocationCategory;
 use Dynamic\Locator\Locator;
 use Dynamic\Locator\LocatorController;
@@ -50,7 +49,7 @@ class LocatorControllerTest extends FunctionalTest
         $this->assertEquals(200, $page->getStatusCode());
         $this->assertEquals('application/xml', $page->getHeader('content-type'));
 
-        $dom = new DOMDocument();
+        $dom = new \DOMDocument();
         // true if it loads, false if it doesn't
         $valid = $dom->loadXML($page->getBody());
         $this->assertTrue($valid);
