@@ -87,8 +87,7 @@ class Locator extends \Page
                 CheckboxField::create('ResultsOnLoad', 'Show results on page load')
                     ->setDescription('For larger collections of locations, it is
                         recommended to only show a limited amount of results after a location
-                        search.'
-                    )
+                        search.')
             ));
 
             // Filter categories
