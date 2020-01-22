@@ -4,6 +4,7 @@ namespace Dynamic\Locator;
 
 use Dynamic\SilverStripeGeocoder\AddressDataExtension;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\Forms\HeaderField;
@@ -46,6 +47,7 @@ class Locator extends \Page
      */
     private static $db = array(
         'Unit' => 'Enum("m,km","m")',
+        'ResultsOnLoad' => 'Boolean',
     );
 
     /**
@@ -54,6 +56,13 @@ class Locator extends \Page
     private static $many_many = array(
         'Categories' => LocationCategory::class,
     );
+
+    /**
+     * @var array
+     */
+    private static $defaults = [
+        'ResultsOnLoad' => 0,
+    ];
 
     /**
      * @var string
@@ -75,6 +84,11 @@ class Locator extends \Page
             $fields->addFieldsToTab('Root.Settings', array(
                 HeaderField::create('DisplayOptions', 'Display Options', 3),
                 OptionsetField::create('Unit', 'Unit of measure', array('m' => 'Miles', 'km' => 'Kilometers')),
+                CheckboxField::create('ResultsOnLoad', 'Show results on page load')
+                    ->setDescription('For larger collections of locations, it is
+                        recommended to only show a limited amount of results after a location
+                        search.'
+                    )
             ));
 
             // Filter categories
