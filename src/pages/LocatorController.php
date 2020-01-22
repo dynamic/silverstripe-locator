@@ -246,7 +246,7 @@ class LocatorController extends \PageController
         }
 
         if ($this->getShowRadius()) {
-            $radiusVar = $this->data()->config()->get( 'radius_var');
+            $radiusVar = $this->data()->config()->get('radius_var');
 
             if ($radius = (int)$request->getVar($radiusVar)) {
                 $locations = $locations->filterByCallback(function ($location) use (&$radius) {
