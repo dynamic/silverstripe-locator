@@ -109,7 +109,7 @@ class Locator extends \Page
         $exclude = [],
         $callback = null
     ) {
-        $locationClass = Config::inst()->get(Locator::class, 'location_class');
+        $locationClass = Config::inst()->get(static::class, 'location_class');
         $locations = $locationClass::get()->filter($filter)->exclude($exclude);
 
         if (!empty($filterAny)) {
@@ -153,7 +153,7 @@ class Locator extends \Page
             return false;
         }
 
-        return Locator::get()->byID($id)->getUsedCategories();
+        return static::get()->byID($id)->getUsedCategories();
     }
 
     /**
@@ -227,7 +227,7 @@ class Locator extends \Page
     {
         return ModuleResourceLoader::singleton()->resolveURL(
             Config::inst()->get(
-                Locator::class,
+                static::class,
                 'infoWindowTemplate'
             )
         );
@@ -242,7 +242,7 @@ class Locator extends \Page
     {
         return ModuleResourceLoader::singleton()->resolveURL(
             Config::inst()->get(
-                Locator::class,
+                static::class,
                 'listTemplate'
             )
         );
