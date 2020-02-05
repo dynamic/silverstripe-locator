@@ -15,6 +15,8 @@ use SilverStripe\View\Requirements;
 
 /**
  * Class LocatorController
+ *
+ * @mixin Locator
  */
 class LocatorController extends \PageController
 {
@@ -81,98 +83,97 @@ class LocatorController extends \PageController
     public function init()
     {
         parent::init();
+
+        // prevent init of map if no query
+        $request = Controller::curr()->getRequest();
+        if (!$this->getTrigger($request)) {
+            return;
+        }
+
+        $locations = $this->getLocations();
+
+        // prevent init of map if there are no locations
+        if (!$locations) {
+            return;
+        }
+
         // google maps api key
         $key = Config::inst()->get(GoogleGeocoder::class, 'map_api_key');
         Requirements::javascript('https://maps.google.com/maps/api/js?key=' . $key);
 
-        // prevent init of map if no query
-        $request = Controller::curr()->getRequest();
+        $mapSettings = [
+            'fullMapStart' => true,
+            'maxDistance' => true,
+            'storeLimit' => -1,
+            'originMarker' => true,
+            'slideMap' => false,
+            'distanceAlert' => -1,
+            'featuredLocations' => false,
+            'defaultLat' => 0,
+            'defaultLng' => 0,
+            'mapSettings' => [
+                'zoom' => 12,
+                'mapTypeId' => 'google.maps.MapTypeId.ROADMAP',
+                'disableDoubleClickZoom' => true,
+                'scrollwheel' => false,
+                'navigationControl' => false,
+                'draggable' => false
+            ],
+        ];
 
-        if ($this->getTrigger($request)) {
-            $locations = $this->getLocations();
+        $mapSettings['listTemplatePath'] = $this->getListTemplate();
+        $mapSettings['infowindowTemplatePath'] = $this->getInfoWindowTemplate();
+        $mapSettings['lengthUnit'] = $this->data()->Unit == 'km' ? 'km' : 'm';
+        $mapSettings['mapID'] = Config::inst()->get(LocatorController::class, 'map_container');
+        $mapSettings['locationList'] = Config::inst()->get(LocatorController::class, 'list_container');
 
-            if ($locations) {
-                $featuredInList = ($locations->filter('Featured', true)->count() > 0);
-                $defaultCoords = $this->getAddressSearchCoords() ?
-                    $this->getAddressSearchCoords() :
-                    new ArrayData([
-                        "Lat" => 0,
-                        "Lng" => 0,
-                    ]);
+        if ($locations->filter('Featured', true)->count() > 0) {
+            $mapSettings['featuredLocations'] = true;
+        }
 
-                $featured = $featuredInList
-                    ? 'featuredLocations: true'
-                    : 'featuredLocations: false';
+        // map config based on user input in Settings tab
+        $limit = Config::inst()->get(LocatorController::class, 'limit');
+        if (0 < $limit) {
+            $mapSettings['storeLimit'] = $limit;
+        }
 
-                // map config based on user input in Settings tab
-                $limit = Config::inst()->get(LocatorController::class, 'limit');
-                if ($limit < 1) {
-                    $limit = -1;
-                }
-                $load = 'fullMapStart: true, storeLimit: ' . $limit . ', maxDistance: true,';
+        if ($coords = $this->getAddressSearchCoords()) {
+            $mapSettings['defaultLat'] = $coords->getField("Lat");
+            $mapSettings['defaultLat'] = $coords->getField("Lng");
+        }
 
-                $listTemplatePath = $this->getListTemplate();
-                $infowindowTemplatePath = $this->getInfoWindowTemplate();
+        // pass GET variables to xml action
+        $vars = $this->request->getVars();
+        unset($vars['url']);
+        $url = '';
+        if (count($vars)) {
+            $url .= '?' . http_build_query($vars);
+        }
+        $mapSettings['dataLocation'] = Controller::join_links($this->Link(), 'xml.xml', $url);
 
-                $kilometer = ($this->data()->Unit == 'km') ? "lengthUnit: 'km'" : "lengthUnit: 'm'";
-
-                // pass GET variables to xml action
-                $vars = $this->request->getVars();
-                unset($vars['url']);
-                $url = '';
-                if (count($vars)) {
-                    $url .= '?' . http_build_query($vars);
-                }
-                $link = Controller::join_links($this->Link(), 'xml.xml', $url);
-
-                // containers
-                $map_id = Config::inst()->get(LocatorController::class, 'map_container');
-                $list_class = Config::inst()->get(LocatorController::class, 'list_container');
-
-                $mapStyle = '';
-                if ($stylePath = $this->getMapStyleJSONPath()) {
-                    if ($style = file_get_contents($stylePath)) {
-                        $mapStyle = "styles: {$style},";
-                    }
-                };
-
-                $markerImage = '';
-                if ($imagePath = $this->getMarkerIcon()) {
-                    $markerImage = "markerImg: '{$imagePath}',";
-                }
-
-                // init map
-                Requirements::customScript("
-                $(function(){
-                    $('#map-container').storeLocator({
-                        {$load}
-                        dataLocation: '{$link}',
-                        listTemplatePath: '{$listTemplatePath}',
-                        infowindowTemplatePath: '{$infowindowTemplatePath}',
-                        {$markerImage}
-                        originMarker: true,
-                        {$featured},
-                        slideMap: false,
-                        distanceAlert: -1,
-                        {$kilometer},
-                        defaultLat: {$defaultCoords->getField("Lat")},
-                        defaultLng: {$defaultCoords->getField("Lng")},
-                        mapID: '{$map_id}',
-                        locationList: '{$list_class}',
-                        mapSettings: {
-                            {$mapStyle}
-							zoom: 12,
-							mapTypeId: google.maps.MapTypeId.ROADMAP,
-							disableDoubleClickZoom: true,
-							scrollwheel: false,
-							navigationControl: false,
-							draggable: false
-						}
-                    });
-                });
-            ", 'jquery-locator');
+        if ($stylePath = $this->getMapStyleJSONPath()) {
+            if ($style = file_get_contents($stylePath)) {
+                $mapSettings['mapSettings']['styles'] = json_decode($style);
             }
         }
+
+        if ($imagePath = $this->getMarkerIcon()) {
+            $mapSettings['markerImg'] = $imagePath;
+        }
+
+        $this->extend('modifyMapSettings', $mapSettings);
+
+        $encoded = json_encode($mapSettings, JSON_UNESCAPED_SLASHES);
+        // mapTypeId is a javascript object
+        $encoded = preg_replace('/("mapTypeId"\s*:\s*)"(.+?)"/i', '$1$2', $encoded);
+
+        $this->extend('modifyMapSettingsEncoded', $encoded);
+        // init map
+        Requirements::customScript("
+                $(function(){
+                    $('#map-container').storeLocator({$encoded});
+                });
+            ", 'jquery-locator');
     }
 
     /**
