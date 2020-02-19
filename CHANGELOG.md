@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.1](https://github.com/dynamic/silverstripe-locator/tree/3.1.1) (2020-02-19)
+
+[Full Changelog](https://github.com/dynamic/silverstripe-locator/compare/3.1.0...3.1.1)
+
+**Merged pull requests:**
+
+- Changed how the map script was generated [\#222](https://github.com/dynamic/silverstripe-locator/pull/222) ([mak001](https://github.com/mak001))
+
 ## [3.1.0](https://github.com/dynamic/silverstripe-locator/tree/3.1.0) (2020-01-29)
 
 [Full Changelog](https://github.com/dynamic/silverstripe-locator/compare/3.0.5...3.1.0)
@@ -296,6 +304,7 @@
 **Merged pull requests:**
 
 - REFACTOR permission checks and tests [\#102](https://github.com/dynamic/silverstripe-locator/pull/102) ([muskie9](https://github.com/muskie9))
+- REFACTOR docblocks [\#100](https://github.com/dynamic/silverstripe-locator/pull/100) ([muskie9](https://github.com/muskie9))
 - REFACTOR various class names and method call names [\#99](https://github.com/dynamic/silverstripe-locator/pull/99) ([muskie9](https://github.com/muskie9))
 
 ## [1.2.0](https://github.com/dynamic/silverstripe-locator/tree/1.2.0) (2016-04-11)
@@ -317,7 +326,6 @@
 
 **Merged pull requests:**
 
-- REFACTOR docblocks [\#100](https://github.com/dynamic/silverstripe-locator/pull/100) ([muskie9](https://github.com/muskie9))
 - Locator - CMS Design [\#97](https://github.com/dynamic/silverstripe-locator/pull/97) ([jsirish](https://github.com/jsirish))
 - Documentation [\#94](https://github.com/dynamic/silverstripe-locator/pull/94) ([jsirish](https://github.com/jsirish))
 - CONTRIBUTING.md [\#92](https://github.com/dynamic/silverstripe-locator/pull/92) ([jsirish](https://github.com/jsirish))
