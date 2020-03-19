@@ -28,7 +28,7 @@ class EmailAddressTask extends BuildTask
      */
     public function run($request)
     {
-        Config::inst()->update('DataObject', 'validation_enabled', false);
+        Config::modify()->set('DataObject', 'validation_enabled', false);
 
         $ct = 0;
         $updateEmail = function ($location) use (&$ct) {
@@ -38,7 +38,7 @@ class EmailAddressTask extends BuildTask
                 ++$ct;
             }
         };
-        
+
         Location::get()->each($updateEmail);
         Config::modify()->set('DataObject', 'validation_enabled', true);
 
