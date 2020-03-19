@@ -1,30 +1,26 @@
 <?php
 
-namespace Dynamic\Locator\Tests;
+namespace Dynamic\Locator\Tests\Page;
 
 use Dynamic\Locator\Location;
-use Dynamic\Locator\LocationCategory;
-use Dynamic\Locator\Locator;
-use Dynamic\Locator\LocatorController;
-use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
+use Dynamic\Locator\Page\Locator;
+use Dynamic\Locator\Page\LocatorController;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\Form;
 use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\FieldType\DBHTMLText;
-use SilverStripe\View\ViewableData;
 
 /**
  * Class LocatorTest
+ * @package Dynamic\Locator\Tests\Page
  */
 class LocatorTest extends FunctionalTest
 {
     /**
      * @var string
      */
-    protected static $fixture_file = '../fixtures.yml';
+    protected static $fixture_file = 'locatorfixture.yml';
 
     /**
      *

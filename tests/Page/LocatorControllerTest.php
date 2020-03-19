@@ -1,10 +1,10 @@
 <?php
 
-namespace Dynamic\Locator\Tests;
+namespace Dynamic\Locator\Tests\Page;
 
-use Dynamic\Locator\LocationCategory;
-use Dynamic\Locator\Locator;
-use Dynamic\Locator\LocatorController;
+use Dynamic\Locator\Model\LocationCategory;
+use Dynamic\Locator\Page\Locator;
+use Dynamic\Locator\Page\LocatorController;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
@@ -20,7 +20,7 @@ class LocatorControllerTest extends FunctionalTest
     /**
      * @var string
      */
-    protected static $fixture_file = '../fixtures.yml';
+    protected static $fixture_file = 'locatorcontrollerfixture.yml';
 
     /**
      * @var bool

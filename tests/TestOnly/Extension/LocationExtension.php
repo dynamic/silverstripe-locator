@@ -1,6 +1,6 @@
 <?php
 
-namespace Dynamic\Locator\Tests\Extension;
+namespace Dynamic\Locator\Tests\TestOnly\Extension;
 
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\DataExtension;
