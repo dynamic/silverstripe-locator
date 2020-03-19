@@ -29,6 +29,9 @@ class LocatorControllerTest extends FunctionalTest
      */
     protected static $use_draft_site = true;
 
+    /**
+     *
+     */
     protected function setUp()
     {
         parent::setUp();
