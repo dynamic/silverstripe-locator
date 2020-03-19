@@ -25,6 +25,16 @@ class LocatorTest extends FunctionalTest
     /**
      *
      */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        Config::modify()->set(Locator::class, 'location_class', Location::class);
+    }
+
+    /**
+     *
+     */
     public function testGetCMSFields()
     {
         /** @var Locator $locator */

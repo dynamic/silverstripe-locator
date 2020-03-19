@@ -13,7 +13,6 @@ class LocationExtension extends DataExtension implements TestOnly
 {
     /**
      * @param $url
-     * @return string
      */
     public function updateWebsiteURL(&$url)
     {
