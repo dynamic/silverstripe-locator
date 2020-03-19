@@ -2,7 +2,7 @@
 
 namespace Dynamic\Locator\Tasks;
 
-use Dynamic\Locator\Location;
+use Dynamic\Locator\Model\Location;
 use SilverStripe\Control\Director;
 use SilverStripe\Dev\BuildTask;
 
@@ -35,7 +35,7 @@ class LocationPublishTask extends BuildTask
 
     /**
      * @param string $class
-     * @return Generator
+     * @return \Generator
      */
     protected function iterateLocations($class)
     {

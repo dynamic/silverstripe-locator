@@ -1,9 +1,8 @@
 <?php
 
-namespace Dynamic\Locator;
+namespace Dynamic\Locator\Form;
 
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Dev\Debug;
+use Dynamic\Locator\Page\Locator;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
@@ -15,10 +14,10 @@ use SilverStripe\ORM\ArrayLib;
 
 /**
  * Class LocatorForm
+ * @package Dynamic\Locator\Form
  */
 class LocatorForm extends Form
 {
-
     /**
      * LocatorForm constructor.
      * @param Controller $controller

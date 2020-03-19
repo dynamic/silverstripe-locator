@@ -1,7 +1,8 @@
 <?php
 
-namespace Dynamic\Locator;
+namespace Dynamic\Locator\Page;
 
+use Dynamic\Locator\Model\LocationCategory;
 use Dynamic\SilverStripeGeocoder\AddressDataExtension;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\FieldList;
@@ -63,7 +64,7 @@ class Locator extends \Page
     /**
      * @var string
      */
-    private static $location_class = Location::class;
+    private static $location_class = LocationPage::class;
 
     /**
      * @return FieldList

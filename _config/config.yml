@@ -7,7 +7,13 @@ Dynamic\Locator\Location:
     - Dynamic\SilverStripeGeocoder\AddressDataExtension
     - SilverStripe\Versioned\Versioned('Stage','Live')
 
-Dynamic\Locator\Locator:
+Dynamic\Locator\Page\LocationPage:
+  extensions:
+    - Dynamic\SilverStripeGeocoder\DistanceDataExtension
+    - Dynamic\SilverStripeGeocoder\AddressDataExtension
+    - SilverStripe\Versioned\Versioned('Stage','Live')
+
+Dynamic\Locator\Page\PageLocator:
   infoWindowTemplate: 'dynamic/silverstripe-locator: client/infowindow-description.html'
   listTemplate: 'dynamic/silverstripe-locator: client/location-list-description.html'
   limit: 50

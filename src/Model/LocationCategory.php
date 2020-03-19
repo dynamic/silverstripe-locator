@@ -1,7 +1,10 @@
 <?php
 
-namespace Dynamic\Locator;
+namespace Dynamic\Locator\Model;
 
+use Dynamic\Locator\Location;
+use Dynamic\Locator\Page\Locator;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
@@ -15,8 +18,8 @@ use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
  * Class LocationCategory
  *
  * @property string $Name
- * @method Locations|ManyManyList LocationSet()
- * @method Locators|ManyManyList Locators()
+ * @method ManyManyList LocationSet()
+ * @method ManyManyList Locators()
  */
 class LocationCategory extends DataObject
 {
@@ -33,17 +36,17 @@ class LocationCategory extends DataObject
     /**
      * @var array
      */
-    private static $db = array(
+    private static $db = [
         'Name' => 'Varchar(100)',
-    );
+    ];
 
     /**
      * @var array
      */
-    private static $belongs_many_many = array(
+    private static $belongs_many_many = [
         'Locators' => Locator::class,
         'LocationSet' => Location::class,
-    );
+    ];
 
     /**
      * @var string
@@ -60,7 +63,7 @@ class LocationCategory extends DataObject
      */
     public function getCMSFields()
     {
-        $this->beforeUpdateCMSFields(function ($fields) {
+        $this->beforeUpdateCMSFields(function (FieldList $fields) {
             $fields->removeByName([
                 'Locations',
                 'LocationSet',
@@ -74,7 +77,7 @@ class LocationCategory extends DataObject
                 $config = GridFieldConfig_RelationEditor::create();
                 $config->removeComponentsByType([
                     GridFieldAddExistingAutocompleter::class,
-                    GridFieldAddNewButton::class
+                    GridFieldAddNewButton::class,
                 ])
                     ->addComponents([
                         new GridFieldAddExistingSearchButton(),
@@ -82,9 +85,9 @@ class LocationCategory extends DataObject
                 $locations = $this->Locations();
                 $locationField = GridField::create('Locations', 'Locations', $locations, $config);
 
-                $fields->addFieldsToTab('Root.Main', array(
+                $fields->addFieldsToTab('Root.Main', [
                     $locationField,
-                ));
+                ]);
             }
         });
 
@@ -95,7 +98,7 @@ class LocationCategory extends DataObject
 
     /**
      * For backwards compatability
-     * @return Locations|ManyManyList
+     * @return ManyManyList
      */
     public function Locations()
     {

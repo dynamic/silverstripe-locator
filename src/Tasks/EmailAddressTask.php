@@ -2,6 +2,8 @@
 
 namespace Dynamic\Locator\Tasks;
 
+use Dynamic\Locator\Model\Location;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\BuildTask;
 
 class EmailAddressTask extends BuildTask
