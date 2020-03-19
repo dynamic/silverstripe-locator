@@ -45,7 +45,6 @@ class LocationPage extends \Page implements PermissionProvider
      * @var array
      */
     private static $db = [
-        'Title' => 'Varchar(255)',
         'Featured' => 'Boolean',
         'Website' => 'Varchar(255)',
         'Phone' => 'Varchar(40)',

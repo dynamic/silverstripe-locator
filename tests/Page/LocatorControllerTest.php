@@ -2,9 +2,11 @@
 
 namespace Dynamic\Locator\Tests\Page;
 
+use Dynamic\Locator\Location;
 use Dynamic\Locator\Model\LocationCategory;
 use Dynamic\Locator\Page\Locator;
 use Dynamic\Locator\Page\LocatorController;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
@@ -26,6 +28,13 @@ class LocatorControllerTest extends FunctionalTest
      * @var bool
      */
     protected static $use_draft_site = true;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        Config::modify()->set(Locator::class, 'location_class', Location::class);
+    }
 
     /**
      *
