@@ -104,12 +104,7 @@ class Locator extends \Page
      *
      * @return DataList|ArrayList
      */
-    public static function get_locations(
-        $filter = [],
-        $filterAny = [],
-        $exclude = [],
-        $callback = null
-    )
+    public static function get_locations($filter = [], $filterAny = [], $exclude = [], $callback = null)
     {
         $locationClass = Config::inst()->get(static::class, 'location_class');
         $locations = $locationClass::get()->filter($filter)->exclude($exclude);
