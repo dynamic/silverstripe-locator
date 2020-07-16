@@ -125,6 +125,16 @@ class LocationPage extends \Page implements PermissionProvider
     ];
 
     /**
+     * @var bool
+     */
+    private static $show_in_sitetree = false;
+
+    /**
+     * @var array 
+     */
+    private static $allowed_children = [];
+
+    /**
      * Coords status for $summary_fields
      *
      * @return string

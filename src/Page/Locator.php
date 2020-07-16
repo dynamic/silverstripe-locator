@@ -11,6 +11,7 @@ use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\Lumberjack\Model\Lumberjack;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\Core\Config\Config;
@@ -65,6 +66,20 @@ class Locator extends \Page
      * @var string
      */
     private static $location_class = LocationPage::class;
+
+    /**
+     * @var string[]
+     */
+    private static $extensions = [
+        Lumberjack::class,
+    ];
+
+    /**
+     * @var string[]
+     */
+    private static $allowed_children = [
+        LocationPage::class,
+    ];
 
     /**
      * @return FieldList
@@ -269,5 +284,13 @@ class Locator extends \Page
     public function getMarkerIcon()
     {
         return AddressDataExtension::getIconImage();
+    }
+
+    /**
+     * @return string
+     */
+    public function getLumberjackTitle()
+    {
+        return _t(__CLASS__ . '.LumberjackTitle', 'Locations');
     }
 }
