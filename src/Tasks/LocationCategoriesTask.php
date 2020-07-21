@@ -2,8 +2,8 @@
 
 namespace Dynamic\Locator\Tasks;
 
-use Dynamic\Locator\Location;
-use Dynamic\Locator\LocationCategory;
+use Dynamic\Locator\Model\Location;
+use Dynamic\Locator\Model\LocationCategory;
 use SilverStripe\Dev\BuildTask;
 use SilverStripe\ORM\DataObject;
 
@@ -74,7 +74,7 @@ class LocationCategoriesTask extends BuildTask
 
     /**
      * @param string $class
-     * @return Generator
+     * @return \Generator
      */
     protected function iterateLocations($class)
     {

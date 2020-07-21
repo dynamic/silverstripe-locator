@@ -1,7 +1,8 @@
 <?php
 
-namespace Dynamic\Locator;
+namespace Dynamic\Locator\Page;
 
+use Dynamic\Locator\Form\LocatorForm;
 use Dynamic\SilverStripeGeocoder\DistanceDataExtension;
 use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
 use muskie9\DataToArrayList\ORM\DataToArrayListHelper;
@@ -117,7 +118,7 @@ class LocatorController extends \PageController
                 'disableDoubleClickZoom' => true,
                 'scrollwheel' => false,
                 'navigationControl' => false,
-                'draggable' => false
+                'draggable' => false,
             ],
         ];
 
@@ -304,9 +305,9 @@ class LocatorController extends \PageController
             $locations = ArrayList::create();
         }
 
-        return $this->customise(array(
+        return $this->customise([
             'Locations' => $locations,
-        ));
+        ]);
     }
 
     /**
@@ -317,10 +318,10 @@ class LocatorController extends \PageController
     public function xml()
     {
         $this->getResponse()->addHeader("Content-Type", "application/xml");
-        $data = new ArrayData(array(
+        $data = new ArrayData([
             "Locations" => $this->getLocations(),
             "AddressCoords" => $this->getAddressSearchCoords(),
-        ));
+        ]);
 
         return $data->renderWith('Dynamic/Locator/Data/XML');
     }
@@ -333,10 +334,10 @@ class LocatorController extends \PageController
     public function json()
     {
         $this->getResponse()->addHeader("Content-Type", "application/json");
-        $data = new ArrayData(array(
+        $data = new ArrayData([
             "Locations" => $this->getLocations(),
             "AddressCoords" => $this->getAddressSearchCoords(),
-        ));
+        ]);
 
         return $data->renderWith('Dynamic/Locator/Data/JSON');
     }
@@ -352,10 +353,8 @@ class LocatorController extends \PageController
     {
 
         $form = LocatorForm::create($this, 'LocationSearch');
-        if (class_exists(BootstrapForm::class) && $this->config()->get('bootstrapify')) {
-            $form->Fields()->bootstrapify();
-            $form->Actions()->bootstrapify();
-        }
+
+        $this->extend('updateLocationSearch', $form);
 
         return $form
             ->setFormMethod('GET')

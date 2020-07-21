@@ -1,0 +1,14 @@
+Dynamic\Locator\Model\LocationCategory:
+  service:
+    Name: Service
+  manufacturing:
+    Name: Manufacturing
+  entertainment:
+    Name: Entertainment
+  technology:
+    Name: Technology
+
+Dynamic\Locator\Page\Locator:
+  locator1:
+    Title: Locator
+    Categories: =>Dynamic\Locator\Model\LocationCategory.service,=>Dynamic\Locator\Model\LocationCategory.technology

@@ -1,0 +1,57 @@
+Dynamic\Locator\Model\LocationCategory:
+  service:
+    Name: Service
+  manufacturing:
+    Name: Manufacturing
+  entertainment:
+    Name: Entertainment
+  technology:
+    Name: Technology
+
+Dynamic\Locator\Page\Locator:
+  locator1:
+    Title: Locator
+    Categories: =>Dynamic\Locator\Model\LocationCategory.service,=>Dynamic\Locator\Model\LocationCategory.technology
+
+Dynamic\Locator\Location:
+  dynamic:
+    Title: Dynamic, Inc.
+    Featured: true
+    Website: "http://www.dynamicagency.com"
+    Phone: 920-459-8889
+    Email: dev@dy.ag
+    Address: 1526 S. 12th St
+    City: Sheboygan
+    State: WI
+    PostalCode:
+    Country: US
+    Categories: =>Dynamic\Locator\Model\LocationCategory.service
+  silverstripe:
+    Title: Silverstripe
+    Featured: true
+    Website: http://silverstripe.org
+    Phone: 555-555-5555
+    Email: solutions@silverstripe.com
+    Categories: =>Dynamic\Locator\Model\LocationCategory.service
+  3sheeps:
+    Title: 3 Sheeps Brewing
+    Featured: false
+    Website: http://www.3sheepsbrewing.com
+    Phone: 555-555-5556
+    ShowInLocator: false
+    Address: 1327 Huron Ave
+    City: Sheboygan
+    State: WI
+    PostalCode:
+    Country: US
+    Categories: =>Dynamic\Locator\Model\LocationCategory.entertainment
+  Lambeau:
+    Title: Lambeau Field
+    Featured: true
+    Website: https://en.wikipedia.org/wiki/Lambeau_Field
+    Address: 1265 Lombardi Avenue
+    City: Green Bay
+    State: WI
+    PostalCode:
+    Country: US
+    Categories: =>Dynamic\Locator\Model\LocationCategory.entertainment

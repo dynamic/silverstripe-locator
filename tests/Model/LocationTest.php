@@ -1,27 +1,25 @@
 <?php
 
-namespace Dynamic\Locator\Tests;
+namespace Dynamic\Locator\Tests\Model;
 
-use Dynamic\Locator\Tests\Extension\LocationExtension;
-use Dynamic\Locator\Tests\Model\ExtendedLocation;
-use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
-use SilverStripe\Core\Config\Config;
+use Dynamic\Locator\Tests\TestOnly\Extension\LocationExtension;
+use Dynamic\Locator\Tests\TestOnlyModel\ExtendedLocation;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
 use Dynamic\Locator\Location;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 
 /**
  * Class LocationTest
+ * @package Dynamic\Locator\Tests\Model
  */
 class LocationTest extends SapphireTest
 {
     /**
      * @var string
      */
-    protected static $fixture_file = '../fixtures.yml';
+    protected static $fixture_file = 'locationfixture.yml';
 
     /**
      * @var array

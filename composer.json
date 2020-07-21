@@ -1,74 +1,78 @@
 {
-    "name": "dynamic/silverstripe-locator",
-    "description": "SilverStripe Locator Module. Show locations on a map. Search by geoposition.",
-    "keywords": [
-        "silverstripe",
-        "map",
-        "locator",
-        "dynamic",
-        "geocode",
-        "google maps",
-        "location"
-    ],
-    "type": "silverstripe-vendormodule",
-    "license": "BSD-3-Clause",
-    "authors": [
-        {
-            "name": "Dynamic",
-            "email": "dev@dynamicagency.com",
-            "homepage": "http://www.dynamicagency.com"
-        }
-    ],
-    "require": {
-        "silverstripe/recipe-cms": "^4.0",
-        "silverstripe/vendor-plugin": "^1.0",
-        "muskie9/data-to-arraylist": "^2.0",
-        "dynamic/silverstripe-geocoder": "^1.0",
-        "symbiote/silverstripe-gridfieldextensions": "^3.0",
-        "colymba/gridfield-bulk-editing-tools": "^3.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^5.7",
-        "squizlabs/php_codesniffer": "^3.0",
-        "phpmd/phpmd": "^2.6",
-        "sebastian/phpcpd": "^3.0",
-        "phploc/phploc": "^4.0",
-        "pdepend/pdepend": "^2.5",
-        "theseer/phpdox": "^0.11.0"
-    },
-    "config": {
-        "process-timeout": 600
-    },
-    "autoload": {
-        "psr-4": {
-            "Dynamic\\Locator\\": "src/",
-            "Dynamic\\Locator\\Tests\\": "tests/"
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "extra": {
-        "expose": [
-            "thirdparty",
-            "css",
-            "client"
-        ],
-        "branch-alias": {
-            "dev-master": "4.x-dev"
-        },
-        "project-files-installed": [
-            "app/.htaccess",
-            "app/_config.php",
-            "app/_config/mysite.yml",
-            "app/src/Page.php",
-            "app/src/PageController.php"
-        ],
-        "public-files-installed": [
-            ".htaccess",
-            "index.php",
-            "install-frameworkmissing.html",
-            "install.php",
-            "web.config"
-        ]
+  "name": "dynamic/silverstripe-locator",
+  "description": "SilverStripe Locator Module. Show locations on a map. Search by geoposition.",
+  "keywords": [
+    "silverstripe",
+    "map",
+    "locator",
+    "dynamic",
+    "geocode",
+    "google maps",
+    "location"
+  ],
+  "type": "silverstripe-vendormodule",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Dynamic",
+      "email": "dev@dynamicagency.com",
+      "homepage": "http://www.dynamicagency.com"
     }
+  ],
+  "require": {
+    "colymba/gridfield-bulk-editing-tools": "^3.0",
+    "dynamic/silverstripe-geocoder": "^1.0",
+    "ext-dom": "*",
+    "ext-json": "*",
+    "littlegiant/silverstripe-catalogmanager": "^5.2",
+    "muskie9/data-to-arraylist": "^2.0",
+    "silverstripe/lumberjack": "^2.0",
+    "silverstripe/recipe-cms": "^4.0",
+    "silverstripe/vendor-plugin": "^1.0",
+    "symbiote/silverstripe-gridfieldextensions": "^3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.7",
+    "squizlabs/php_codesniffer": "^3.0",
+    "phpmd/phpmd": "^2.6",
+    "sebastian/phpcpd": "^3.0",
+    "phploc/phploc": "^4.0",
+    "pdepend/pdepend": "^2.5",
+    "theseer/phpdox": "^0.11.0"
+  },
+  "config": {
+    "process-timeout": 600
+  },
+  "autoload": {
+    "psr-4": {
+      "Dynamic\\Locator\\": "src/",
+      "Dynamic\\Locator\\Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "extra": {
+    "expose": [
+      "thirdparty",
+      "css",
+      "client"
+    ],
+    "branch-alias": {
+      "dev-master": "4.x-dev"
+    },
+    "project-files-installed": [
+      "app/.htaccess",
+      "app/_config.php",
+      "app/_config/mysite.yml",
+      "app/src/Page.php",
+      "app/src/PageController.php"
+    ],
+    "public-files-installed": [
+      ".htaccess",
+      "index.php",
+      "install-frameworkmissing.html",
+      "install.php",
+      "web.config"
+    ]
+  }
 }

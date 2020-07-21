@@ -1,7 +1,8 @@
 <?php
 
-namespace Dynamic\Locator;
+namespace Dynamic\Locator\Page;
 
+use Dynamic\Locator\Model\LocationCategory;
 use Dynamic\SilverStripeGeocoder\AddressDataExtension;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\FieldList;
@@ -10,6 +11,7 @@ use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\Lumberjack\Model\Lumberjack;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\Core\Config\Config;
@@ -44,16 +46,16 @@ class Locator extends \Page
     /**
      * @var array
      */
-    private static $db = array(
+    private static $db = [
         'Unit' => 'Enum("m,km","m")',
-    );
+    ];
 
     /**
      * @var array
      */
-    private static $many_many = array(
+    private static $many_many = [
         'Categories' => LocationCategory::class,
-    );
+    ];
 
     /**
      * @var string
@@ -63,7 +65,21 @@ class Locator extends \Page
     /**
      * @var string
      */
-    private static $location_class = Location::class;
+    private static $location_class = LocationPage::class;
+
+    /**
+     * @var string[]
+     */
+    private static $extensions = [
+        Lumberjack::class,
+    ];
+
+    /**
+     * @var string[]
+     */
+    private static $allowed_children = [
+        LocationPage::class,
+    ];
 
     /**
      * @return FieldList
@@ -72,10 +88,10 @@ class Locator extends \Page
     {
         $this->beforeUpdateCMSFields(function ($fields) {
             // Settings
-            $fields->addFieldsToTab('Root.Settings', array(
+            $fields->addFieldsToTab('Root.Settings', [
                 HeaderField::create('DisplayOptions', 'Display Options', 3),
-                OptionsetField::create('Unit', 'Unit of measure', array('m' => 'Miles', 'km' => 'Kilometers')),
-            ));
+                OptionsetField::create('Unit', 'Unit of measure', ['m' => 'Miles', 'km' => 'Kilometers']),
+            ]);
 
             // Filter categories
             $config = GridFieldConfig_RelationEditor::create();
@@ -86,10 +102,10 @@ class Locator extends \Page
                 ->setDescription('only show locations from the selected category');
 
             // Filter
-            $fields->addFieldsToTab('Root.Filter', array(
+            $fields->addFieldsToTab('Root.Filter', [
                 HeaderField::create('CategoryOptionsHeader', 'Location Filtering', 3),
                 $categoriesField,
-            ));
+            ]);
         });
 
         return parent::getCMSFields();
@@ -103,12 +119,8 @@ class Locator extends \Page
      *
      * @return DataList|ArrayList
      */
-    public static function get_locations(
-        $filter = [],
-        $filterAny = [],
-        $exclude = [],
-        $callback = null
-    ) {
+    public static function get_locations($filter = [], $filterAny = [], $exclude = [], $callback = null)
+    {
         $locationClass = Config::inst()->get(static::class, 'location_class');
         $locations = $locationClass::get()->filter($filter)->exclude($exclude);
 
@@ -153,7 +165,12 @@ class Locator extends \Page
             return false;
         }
 
-        return static::get()->byID($id)->getUsedCategories();
+        /** @var Locator $locator */
+        if ($locator = static::get()->byID($id)) {
+            return $locator->getUsedCategories();
+        }
+
+        return false;
     }
 
     /**
@@ -182,9 +199,9 @@ class Locator extends \Page
         $list = [];
 
         foreach ($this->getRadii() as $radius) {
-            $list[] = new ArrayData(array(
+            $list[] = new ArrayData([
                 'Radius' => $radius,
-            ));
+            ]);
         }
 
         return new ArrayList($list);
@@ -267,5 +284,13 @@ class Locator extends \Page
     public function getMarkerIcon()
     {
         return AddressDataExtension::getIconImage();
+    }
+
+    /**
+     * @return string
+     */
+    public function getLumberjackTitle()
+    {
+        return _t(__CLASS__ . '.LumberjackTitle', 'Locations');
     }
 }

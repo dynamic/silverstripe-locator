@@ -1,14 +1,17 @@
 <?php
 
-namespace Dynamic\Locator;
+namespace Dynamic\Locator\Page;
 
+use Dynamic\Locator\Model\LocationCategory;
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
-use SilverStripe\ORM\DataObject;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\EmailField;
-use SilverStripe\Forms\DropdownField;
 use SilverStripe\Security\Permission;
 use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
 
@@ -26,7 +29,7 @@ use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
  *
  * @method ManyManyList Categories
  */
-class Location extends DataObject implements PermissionProvider
+class LocationPage extends \Page implements PermissionProvider
 {
     /**
      * @var string
@@ -42,13 +45,13 @@ class Location extends DataObject implements PermissionProvider
      * @var array
      */
     private static $db = [
-        'Title' => 'Varchar(255)',
         'Featured' => 'Boolean',
         'Website' => 'Varchar(255)',
         'Phone' => 'Varchar(40)',
         'Email' => 'Varchar(255)',
         'Fax' => 'Varchar(45)',
         'Import_ID' => 'Int',
+        'LegacyObjectID' => 'Int',
     ];
 
     private static $many_many = [
@@ -58,13 +61,20 @@ class Location extends DataObject implements PermissionProvider
     /**
      * @var string
      */
-    private static $table_name = 'Location';
+    private static $table_name = 'LocationPage';
 
     /**
      * @var array
      */
     private static $casting = [
         'distance' => 'Decimal(9,3)',
+    ];
+
+    /**
+     * @var int[]
+     */
+    private static $defaults = [
+        'ShowInMenus' => 0,
     ];
 
     /**
@@ -122,6 +132,16 @@ class Location extends DataObject implements PermissionProvider
     ];
 
     /**
+     * @var bool
+     */
+    private static $show_in_sitetree = false;
+
+    /**
+     * @var array
+     */
+    private static $allowed_children = [];
+
+    /**
      * Coords status for $summary_fields
      *
      * @return string
@@ -164,6 +184,7 @@ class Location extends DataObject implements PermissionProvider
     public function fieldLabels($includerelations = true)
     {
         $labels = parent::fieldLabels($includerelations);
+
         $labels['Title'] = 'Name';
         $labels['Address2'] = 'Address 2';
         $labels['PostalCode'] = 'Postal Code';
@@ -178,43 +199,48 @@ class Location extends DataObject implements PermissionProvider
      */
     public function getCMSFields()
     {
-        $this->beforeUpdateCMSFields(function ($fields) {
-            $fields->removeByName([
-                'Import_ID',
-                'LinkTracking',
-                'FileTracking',
-            ]);
-
-            $fields->dataFieldByName('Website')
-                ->setAttribute('placeholder', 'http://');
-
-            $fields->replaceField('Email', EmailField::create('Email'));
-
-            $featured = $fields->dataFieldByName('Featured')
-                ->setDescription('Location will display near the top of the results list');
-            $fields->insertAfter(
-                'Fax',
-                $featured
+        $this->beforeUpdateCMSFields(function (FieldList $fields) {
+            $fields->addFieldsToTab(
+                'Root.Main',
+                [
+                    CheckboxField::create('Featured')
+                        ->setTitle('Featured'),
+                ],
+                'Content'
             );
 
-            if ($this->ID) {
-                $categories = $fields->dataFieldByName('Categories');
-                $config = $categories->getConfig();
-                $config->removeComponentsByType([
+            if ($this->exists()) {
+                $fields->addFieldToTab(
+                    'Root.Categories',
+                    GridField::create(
+                        'Categories',
+                        'Categories',
+                        $this->Categories(),
+                        $catConfig = GridFieldConfig_RelationEditor::create()
+                    )
+                );
+
+                $catConfig->removeComponentsByType([
                     GridFieldAddExistingAutocompleter::class,
-                ])
-                    ->addComponents([
-                        new GridFieldAddExistingSearchButton(),
-                    ]);
+                ])->addComponents([
+                    new GridFieldAddExistingSearchButton()
+                ]);
             }
+
+            $fields->addFieldsToTab('Root.Contact', [
+                TextField::create('Website')
+                    ->setTitle('Website')
+                    ->setDescription('Include the http/https (example: https://google.com)'),
+                TextField::create('Phone')
+                    ->setTitle('Phone'),
+                EmailField::create('Email')
+                    ->setTitle('Email'),
+                TextField::create('Fax')
+                    ->setTitle('Fax'),
+            ]);
         });
 
-        $fields = parent::getCMSFields();
-
-        // allow to be extended via DataExtension
-        $this->extend('updateLocationFields', $fields);
-
-        return $fields;
+        return parent::getCMSFields();
     }
 
     /**
@@ -275,6 +301,10 @@ class Location extends DataObject implements PermissionProvider
     public function getWebsiteURL()
     {
         $url = $this->Website;
+
+        if ($url && !preg_match('/^(http|https):\/\//', $url)) {
+            $url = 'http://' . $url;
+        }
 
         $this->extend('updateWebsiteURL', $url);
 

@@ -2,7 +2,7 @@
 
 namespace Dynamic\Locator\Tasks;
 
-use Dynamic\Locator\LocationCategory;
+use Dynamic\Locator\Model\LocationCategory;
 use SilverStripe\ORM\DataExtension;
 
 /**

@@ -1,9 +1,9 @@
 <?php
 
-namespace Dynamic\Locator\Tests\Model;
+namespace Dynamic\Locator\Tests\TestOnlyModel;
 
 use Dynamic\Locator\Location;
-use Dynamic\Locator\Tests\Extension\LocationExtension;
+use Dynamic\Locator\Tests\TestOnly\Extension\LocationExtension;
 use SilverStripe\Dev\TestOnly;
 
 /**
