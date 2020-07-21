@@ -71,6 +71,13 @@ class LocationPage extends \Page implements PermissionProvider
     ];
 
     /**
+     * @var int[] 
+     */
+    private static $defaults = [
+        'ShowInMenus' => 0,
+    ];
+
+    /**
      * @var string
      */
     private static $default_sort = 'Title';
@@ -130,7 +137,7 @@ class LocationPage extends \Page implements PermissionProvider
     private static $show_in_sitetree = false;
 
     /**
-     * @var array 
+     * @var array
      */
     private static $allowed_children = [];
 
@@ -198,15 +205,6 @@ class LocationPage extends \Page implements PermissionProvider
                 [
                     CheckboxField::create('Featured')
                         ->setTitle('Featured'),
-                    TextField::create('Website')
-                        ->setTitle('Website')
-                        ->setDescription('Include the http/https (example: https://google.com)'),
-                    TextField::create('Phone')
-                        ->setTitle('Phone'),
-                    EmailField::create('Email')
-                        ->setTitle('Email'),
-                    TextField::create('Fax')
-                        ->setTitle('Fax'),
                 ],
                 'Content'
             );
@@ -228,6 +226,18 @@ class LocationPage extends \Page implements PermissionProvider
                     new GridFieldAddExistingSearchButton()
                 ]);
             }
+
+            $fields->addFieldsToTab('Root.Contact', [
+                TextField::create('Website')
+                    ->setTitle('Website')
+                    ->setDescription('Include the http/https (example: https://google.com)'),
+                TextField::create('Phone')
+                    ->setTitle('Phone'),
+                EmailField::create('Email')
+                    ->setTitle('Email'),
+                TextField::create('Fax')
+                    ->setTitle('Fax'),
+            ]);
         });
 
         return parent::getCMSFields();
@@ -291,6 +301,10 @@ class LocationPage extends \Page implements PermissionProvider
     public function getWebsiteURL()
     {
         $url = $this->Website;
+
+        if ($url && !preg_match('/^(http|https):\/\//', $url)) {
+            $url = 'http://' . $url;
+        }
 
         $this->extend('updateWebsiteURL', $url);
 
