@@ -29,7 +29,7 @@ use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
  *
  * @method ManyManyList Categories
  */
-class LocationPage extends Page implements PermissionProvider
+class LocationPage extends \Page implements PermissionProvider
 {
     /**
      * @var string
