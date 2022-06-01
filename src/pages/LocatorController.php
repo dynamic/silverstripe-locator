@@ -66,13 +66,6 @@ class LocatorController extends \PageController
     private static $list_container = 'loc-list';
 
     /**
-     * GET variable which, if isset, will trigger storeLocator init and return XML
-     *
-     * @var string
-     */
-    private static $query_trigger = 'action_doFilterLocations';
-
-    /**
      * @var DataList|ArrayList
      */
     protected $locations;
@@ -186,9 +179,7 @@ class LocatorController extends \PageController
         if ($request === null) {
             $request = $this->getRequest();
         }
-        $trigger = $request->getVar(Config::inst()->get(LocatorController::class, 'query_trigger'));
-
-        return isset($trigger);
+        return !empty($this->getRequest()->getVars()) || $this->data()->ResultsOnLoad;
     }
 
     /**
