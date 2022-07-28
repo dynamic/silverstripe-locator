@@ -47,6 +47,43 @@ Dynamic\SilverStripeGeocoder\DistanceDataExtension:
   unit_var: 'Unit'
 ```
 
+#### Zoom, Minimum Zoom, and Maximum Zoom
+To control zoom levels the following can be used:
+```yaml
+Dynamic\Locator\Page\LocatorController:
+  zoom: 11
+```
+
+There are also options for min and max zoom. 
+The minimum zoom is how far the map can zoom out, and the maximum zoom is how far the map can zoom in.
+```yaml
+Dynamic\Locator\Page\LocatorController:
+  min_zoom: 6
+  max_zoom: 18
+```
+A minimum zoom of 0 will allow the user to zoom to see the whole world.
+
+#### Double Click Zoom
+The following will allow zooming to be done with a double click.
+```yaml
+Dynamic\Locator\Page\LocatorController:
+  disable_double_click_zoom: false
+```
+
+#### Zoom With Scrollwheel
+By default zooming with the mouse scroll wheel is disabled. It can be enabled with the following:
+```yaml
+Dynamic\Locator\Page\LocatorController:
+  scrollwheel: true
+```
+
+#### draggable
+To make the map move on drag the following can be added:
+```yaml
+Dynamic\Locator\Page\LocatorController:
+  draggable: true
+```
+
 ### Extenison Points
 
 #### Locator Form
