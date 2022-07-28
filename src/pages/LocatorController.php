@@ -66,6 +66,47 @@ class LocatorController extends \PageController
     private static $list_container = 'loc-list';
 
     /**
+     * The zoom level of the map
+     * @var int
+     */
+    private static $zoom = 12;
+
+    /**
+     * The minimum zoom level the map can have
+     * @var int
+     */
+    private static $min_zoom = 6;
+
+    /**
+     * The maximum zoom level the map can have
+     * @var int
+     */
+    private static $max_zoom = 18;
+
+    /**
+     * If double clicking the map should not zoom
+     * @var bool
+     */
+    private static $disable_double_click_zoom = true;
+
+    /**
+     * If the map should disable zoom by scrollwheel
+     * @var bool
+     */
+    private static $scrollwheel = false;
+
+    /**
+     * If the map should show naviagtion controls
+     * @var bool
+     */
+    private static $navigation_control = false;
+
+    /**
+     * @var bool
+     */
+    private static $draggable = false;
+
+    /**
      * @var DataList|ArrayList
      */
     protected $locations;
@@ -105,12 +146,14 @@ class LocatorController extends \PageController
             'defaultLat' => 0,
             'defaultLng' => 0,
             'mapSettings' => [
-                'zoom' => 12,
+                'zoom' => Config::inst()->get(LocatorController::class, 'zoom'),
+                'minZoom' => Config::inst()->get(LocatorController::class, 'min_zoom'),
+                'maxZoom' => Config::inst()->get(LocatorController::class, 'max_zoom'),
                 'mapTypeId' => 'google.maps.MapTypeId.ROADMAP',
-                'disableDoubleClickZoom' => true,
-                'scrollwheel' => false,
-                'navigationControl' => false,
-                'draggable' => false
+                'disableDoubleClickZoom' => Config::inst()->get(LocatorController::class, 'disable_double_click_zoom'),
+                'scrollwheel' => Config::inst()->get(LocatorController::class, 'scrollwheel'),
+                'navigationControl' => Config::inst()->get(LocatorController::class, 'navigation_control'),
+                'draggable' => Config::inst()->get(LocatorController::class, 'draggable'),
             ],
         ];
 
