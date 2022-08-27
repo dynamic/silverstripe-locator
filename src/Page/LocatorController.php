@@ -282,8 +282,10 @@ class LocatorController extends \PageController
         if (class_exists(GoogleGeocoder::class)) {
             $geocoder = new GoogleGeocoder($this->request->getVar($addressVar));
             $response = $geocoder->getResult();
-            $lat = $response->getLatitude();
-            $lng = $response->getLongitude();
+            $dumper = new \Geocoder\Dumper\GeoArray();
+            $result = $dumper->dump($response);
+            $lat = $this->owner->Lat = $result['geometry']['coordinates'][0];
+            $lng = $this->owner->Lng = $result['geometry']['coordinates'][1];
 
             return new ArrayData([
                 "Lat" => $lat,
