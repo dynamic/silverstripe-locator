@@ -41,6 +41,11 @@
     "theseer/phpdox": "^0.11.0"
   },
   "config": {
+    "allow-plugins": {
+      "composer/installers": true,
+      "silverstripe/vendor-plugin": true,
+      "silverstripe/recipe-plugin": true
+    },
     "process-timeout": 600
   },
   "autoload": {
