@@ -16,20 +16,20 @@ class LocationCsvBulkLoader extends CsvBulkLoader
     /**
      * @var array
      */
-    public $columnMap = array(
+    public $columnMap = [
         'Name' => 'Title',
         'EmailAddress' => 'Email',
         'Categories' => '->getCategoryByName',
         'Import_ID' => 'Import_ID',
         'Country' => '->getCountryByName',
-    );
+    ];
 
     /**
      * @var array
      */
-    public $duplicateChecks = array(
-        'Import_ID' => 'Import_ID'
-    );
+    public $duplicateChecks = [
+        'Import_ID' => 'Import_ID',
+    ];
 
     /**
      * @param $val
@@ -49,10 +49,15 @@ class LocationCsvBulkLoader extends CsvBulkLoader
     public static function getCategoryByName(&$obj, $val, $record)
     {
         $val = Convert::raw2sql($val);
+
+        if ($val == '') {
+            return;
+        }
+
         $parts = explode(', ', $val);
 
         foreach ($parts as $part) {
-            $category = LocationCategory::get()->filter(array('Name' => $part))->first();
+            $category = LocationCategory::get()->filter(['Name' => $part])->first();
             if (!$category) {
                 $category = LocationCategory::create();
                 $category->Name = $part;
