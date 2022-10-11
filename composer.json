@@ -32,10 +32,15 @@
       "squizlabs/php_codesniffer": "^3.0",
       "phpmd/phpmd": "^2.6"
     },
-    "config": {
-        "process-timeout": 600
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true,
+      "silverstripe/recipe-plugin": true,
+      "silverstripe/vendor-plugin": true
     },
-    "autoload": {
+    "process-timeout": 600
+  },
+  "autoload": {
         "psr-4": {
             "Dynamic\\Locator\\": "src/",
             "Dynamic\\Locator\\Tests\\": "tests/"
