@@ -1,6 +1,8 @@
 {
   "name": "dynamic/silverstripe-locator",
   "description": "SilverStripe Locator Module. Show locations on a map. Search by geoposition.",
+  "license": "BSD-3-Clause",
+  "type": "silverstripe-vendormodule",
   "keywords": [
     "silverstripe",
     "map",
@@ -10,8 +12,6 @@
     "google maps",
     "location"
   ],
-  "type": "silverstripe-vendormodule",
-  "license": "BSD-3-Clause",
   "authors": [
     {
       "name": "Dynamic",
@@ -31,6 +31,17 @@
   "require-dev": {
     "silverstripe/recipe-testing": "^2"
   },
+  "suggest": {
+    "axllent/silverstripe-bootstrap-forms": "Add CSS classes to Silverstripe forms to play nicer with Twitter Bootstrap"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "Dynamic\\Locator\\": "src/",
+      "Dynamic\\Locator\\Tests\\": "tests/"
+    }
+  },
   "config": {
     "allow-plugins": {
       "composer/installers": true,
@@ -39,14 +50,6 @@
     },
     "process-timeout": 600
   },
-  "autoload": {
-    "psr-4": {
-      "Dynamic\\Locator\\": "src/",
-      "Dynamic\\Locator\\Tests\\": "tests/"
-    }
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "extra": {
     "expose": [
       "thirdparty",
