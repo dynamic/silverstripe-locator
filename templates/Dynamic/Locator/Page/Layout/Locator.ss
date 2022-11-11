@@ -1,26 +1,31 @@
 <% require css('dynamic/silverstripe-locator: css/map.css') %>
-
-<div class="content-container unit size3of4 lastUnit">
-	<h1>$Title</h1>
-	<% if $Content %><div class="typography">$Content</div><% end_if %>
-    <div class="form-container">
-		$LocationSearch
+<div class="col-sm-9">
+    <div class="element-area main-element-area">
+        $ElementalArea
     </div>
-	<% if $getTrigger %>
-		<% if $Locations %>
-            <div id="map-container">
-                <div id="map"></div>
-                <div class="loc-list">
+
+</div>
+<div class="col-sm-12">
+    <div class="form-container">
+        $LocationSearch
+    </div>
+</div>
+<div class="col-sm-12">
+    <% if $getTrigger %>
+        <% if $Locations %>
+            <div id="map-container" class="row">
+                <div id="map" class="col-md-8 order-md-last"></div>
+                <div class="loc-list col-md-4 order-md-first">
                     <ul id="list">
                     </ul>
                 </div>
             </div>
-		<% else %>
+        <% else %>
             <div id="no-locals">
                 <p>No locations match your search criteria. Please refine your search and try again.</p>
             </div>
-		<% end_if %>
-	<% end_if %>
+        <% end_if %>
+    <% end_if %>
 </div>
 
 <% require javascript('silverstripe/admin: thirdparty/jquery/jquery.js') %>
