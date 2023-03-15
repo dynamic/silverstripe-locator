@@ -2,8 +2,8 @@
 
 namespace Dynamic\Locator\Bulkloader;
 
+use Dynamic\Locator\Location;
 use Dynamic\Locator\Model\LocationCategory;
-use phpDocumentor\Reflection\Location;
 use SilverStripe\Dev\CsvBulkLoader;
 use SilverStripe\Core\Convert;
 use SilverStripe\i18n\Data\Intl\IntlLocales;
