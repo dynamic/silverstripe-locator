@@ -9,8 +9,14 @@ Dynamic\Locator\Location:
 
 Dynamic\Locator\Page\LocationPage:
   extensions:
+    - LittleGiant\CatalogManager\Extensions\CatalogPageExtension
     - Dynamic\SilverStripeGeocoder\DistanceDataExtension
     - Dynamic\SilverStripeGeocoder\AddressDataExtension
+  parent_classes:
+    - Dynamic\Locator\Page\Locator
+  sort_column: false
+  automatic_live_sort: false
+  show_in_sitetree: false
 
 Dynamic\Locator\Page\Locator:
   infoWindowTemplate: 'dynamic/silverstripe-locator: client/infowindow-description.html'
@@ -19,6 +25,8 @@ Dynamic\Locator\Page\Locator:
   show_radius: true
   radius_var: 'Radius'
   category_var: 'CategoryID'
+  extensions:
+    - SilverStripe\Lumberjack\Model\Lumberjack
 
 ---
 Name: modules-locator
