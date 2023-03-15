@@ -1,75 +1,13 @@
-# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
+name: CI
 
 on:
   push:
-    branches: [ '**' ]
   pull_request:
-    branches: [ '**' ]
-
-name: "CI"
+  workflow_dispatch:
 
 jobs:
-  tests:
-    name: "Tests"
-
-    runs-on: "ubuntu-latest"
-
-    env:
-      php_extensions: ctype, dom, fileinfo, hash, intl, mbstring, session, simplexml, tokenizer, xml, pdo, mysqli, gd, zip
-
-    services:
-      mysql:
-        image: "mysql:5.7"
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: true
-          MYSQL_ROOT_PASSWORD:
-          MYSQL_DATABASE: test_db
-        ports:
-          - 3306/tcp
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version:
-          - "7.4"
-          - "8.0"
-          - "8.1"
-
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v2"
-
-      - name: "Install PHP with extensions"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          php-version: "${{ matrix.php-version }}"
-          extensions: "${{ env.php_extensions }}"
-          coverage: "xdebug"
-
-      - name: "Start mysql service"
-        run: "sudo /etc/init.d/mysql start"
-
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v1"
-        with:
-          path: "~/.composer/cache"
-          key: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}"
-          restore-keys: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
-
-      - name: "Install dependencies with composer"
-        run: "composer install --no-ansi --no-interaction --no-progress"
-
-      - name: "Run tests with phpunit/phpunit"
-        env:
-          SS_DATABASE_PORT: ${{ job.services.mysql.ports['3306'] }}
-        run: "vendor/bin/phpunit --coverage-clover=coverage.xml"
-
-      - name: "Upload coverage results to CodeCov"
-        uses: codecov/codecov-action@v1
-        with:
-          files: ./coverage.xml # optional
-          flags: unittests # optional
-
-      - name: "Run tests with squizlabs/php_codesniffer"
-        run: "vendor/bin/phpcs -s --report=summary --standard=phpcs.xml.dist --extensions=php,inc --ignore=autoload.php --ignore=vendor/ src/ tests/"
+  ci:
+    name: CI
+    uses: silverstripe/gha-ci/.github/workflows/ci.yml@v1
+    with:
+      phpcoverage: true
