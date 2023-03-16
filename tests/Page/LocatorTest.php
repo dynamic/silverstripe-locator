@@ -78,7 +78,7 @@ class LocatorTest extends FunctionalTest
     public function testLocator_categories_by_locator()
     {
         $categories = Locator::locator_categories_by_locator(0);
-        $this->assertFalse($categories);
+        $this->assertEquals(0, $categories->count());
     }
 
     /**
