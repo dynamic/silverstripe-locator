@@ -189,7 +189,9 @@ class Locator extends \Page
 
         /** @var Locator $locator */
         if ($locator = static::get()->byID($id)) {
-            return $locator->getUsedCategories();
+            if ($locator->Categories()->exists()) {
+                return $locator->Categories();
+            }
         }
 
         return ArrayList::create();
@@ -249,12 +251,12 @@ class Locator extends \Page
 
     /**
      * @return mixed
+     *
+     * @deprecated call the Categories() relation on the locator instead
      */
     public function getUsedCategories()
     {
-        return $this->Categories()->filter([
-            'LocationSet.ID:GreaterThan' => 0,
-        ]);
+        return $this->Categories();
     }
 
     /**
