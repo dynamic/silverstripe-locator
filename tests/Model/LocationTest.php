@@ -6,7 +6,7 @@ use Dynamic\Locator\Tests\TestOnly\Extension\LocationExtension;
 use Dynamic\Locator\Tests\TestOnlyModel\ExtendedLocation;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
-use Dynamic\Locator\Location;
+use Dynamic\Locator\Model\Location;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Member;
 
@@ -215,7 +215,7 @@ class LocationTest extends SapphireTest
         $clone = Injector::inst()->create(ExtendedLocation::class, $map);
         $clone->ID = 0;
 
-        $this->assertEquals('http://www.dynamicagency.com', $location->getWebsiteURL());
+        $this->assertEquals('https://www.dynamicagency.com', $location->getWebsiteURL());
         $this->assertEquals('foo', $clone->getWebsiteURL());
     }
 }
