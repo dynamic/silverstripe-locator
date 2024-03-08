@@ -40,7 +40,7 @@ With auto geocoding enabled in the CMS, the map will display the nearest 26 loca
 See the [docs/en](docs/en/index.md) folder.
 
 ## Maintainers
- *  [Dynamic](http://www.dynamicagency.com) (<dev@dynamicagency.com>)
+ *  [Dynamic](https://www.dynamicagency.com) (<dev@dynamicagency.com>)
  
 ## Bugtracker
 Bugs are tracked in the issues section of this repository. Before submitting an issue please read over 
