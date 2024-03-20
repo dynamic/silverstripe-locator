@@ -23,7 +23,7 @@
         "silverstripe/recipe-cms": "^4.0",
         "silverstripe/vendor-plugin": "^1.0",
         "muskie9/data-to-arraylist": "^2.0",
-        "dynamic/silverstripe-geocoder": "^1.0",
+        "dynamic/silverstripe-geocoder": "^2.0",
         "symbiote/silverstripe-gridfieldextensions": "^3.0",
         "colymba/gridfield-bulk-editing-tools": "^3.0"
     },
