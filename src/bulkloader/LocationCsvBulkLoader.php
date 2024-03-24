@@ -2,7 +2,7 @@
 
 namespace Dynamic\Locator\Bulkloader;
 
-use Dynamic\Locator\Location;
+use Dynamic\Locator\Model\Location;
 use Dynamic\Locator\Model\LocationCategory;
 use SilverStripe\Dev\CsvBulkLoader;
 use SilverStripe\Core\Convert;

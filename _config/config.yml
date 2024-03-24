@@ -1,7 +1,7 @@
 ---
 Name: locator
 ---
-Dynamic\Locator\Location:
+Dynamic\Locator\Model\Location:
   extensions:
     - Dynamic\SilverStripeGeocoder\DistanceDataExtension
     - Dynamic\SilverStripeGeocoder\AddressDataExtension
