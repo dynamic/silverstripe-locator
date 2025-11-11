@@ -1,0 +1,1158 @@
+name: CI
+on:
+  workflow_call:
+    inputs:
+      # extra jobs must be multi-line string, as there's no support for `type: array` for inputs
+      extra_jobs:
+        type: string
+        required: false
+        default: ''
+      composer_require_extra:
+        type: string
+        required: false
+        default: ''
+      composer_install:
+        type: boolean
+        required: false
+        default: false
+      dynamic_matrix:
+        type: boolean
+        default: true
+      simple_matrix:
+        type: boolean
+        default: false
+      endtoend:
+        type: boolean
+        default: true
+      phpcoverage:
+        type: boolean
+        default: false
+      phpcoverage_force_off:
+        type: boolean
+        default: false
+      phplinting:
+        type: boolean
+        default: true
+      phpunit:
+        type: boolean
+        default: true
+      phpunit_skip_suites:
+        type: string
+        required: false
+        default: ''
+      js:
+        type: boolean
+        default: true
+      doclinting:
+        type: boolean
+        default: true
+      preserve_vendor_tests:
+        type: boolean
+        default: false
+        description: Whether tests in the vendor folder should be preserved.
+
+permissions: {}
+
+jobs:
+
+  # Writes various github variables to the console for debugging purposes
+  context:
+    name: Context
+    runs-on: ubuntu-latest
+    env:
+      # Put this through an env variable to prevent possible string substitution injection via pull-request branch name
+      GITHUB_BASE_REF: ${{ github.base_ref }}
+      GITHUB_HEAD_REF: ${{ github.head_ref }}
+      GITHUB_REF: ${{ github.ref }}
+      GITHUB_REF_NAME: ${{ github.ref_name }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+      GITHUB_EVENT_NAME: ${{ github.event_name }}
+    steps:
+      - name: Context
+        run: |
+          # https://docs.github.com/en/actions/learn-github-actions/contexts#context-availability
+          # github.base_ref - The target branch of the pull request in a workflow run.
+          echo "github.base_ref: $GITHUB_BASE_REF"
+          # github.head_ref - The source branch of the pull request in a workflow run.
+          echo "github.head_ref: $GITHUB_HEAD_REF"
+          # github.ref - The branch or tag ref that triggered the workflow run.
+          # For branches this is the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
+          echo "github.ref: $GITHUB_REF"
+          # github.ref_name - The branch or tag name that triggered the workflow run - same as github.ref though without the leading refs/[heads|tags]/
+          echo "github.ref_name: $GITHUB_REF_NAME"
+          # gitbub.repository - The owner and repository name. For example, Codertocat/Hello-World
+          # On forked repos, this will show <account_of_fork>/<repo>
+          echo "github.repository: $GITHUB_REPOSITORY"
+          # The repository owner's username. For example, octocat
+          echo "github.repository_owner: $GITHUB_REPOSITORY_OWNER"
+          # github.event_name - The event that triggered the workflow
+          echo "github.event_name: $GITHUB_EVENT_NAME"
+
+  # Generates a dynamic matrix of jobs to run tests on based on the inputs provided
+  genmatrix:
+    name: Generate matrix
+    runs-on: ubuntu-latest
+
+    # gha-generate-matrix script.php will sanitise matrix outputs so they're safe to use within bash
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
+
+    permissions:
+      contents: read
+      pull-requests: read
+
+    steps:
+      - name: Generate matrix
+        id: generate-matrix
+        uses: silverstripe/gha-generate-matrix@v1
+        with:
+          composer_install: ${{ inputs.composer_install }}
+          extra_jobs: ${{ inputs.extra_jobs }}
+          dynamic_matrix: ${{ inputs.dynamic_matrix }}
+          simple_matrix: ${{ inputs.simple_matrix }}
+          endtoend: ${{ inputs.endtoend }}
+          phpcoverage: ${{ inputs.phpcoverage }}
+          phpcoverage_force_off: ${{ inputs.phpcoverage_force_off }}
+          phplinting: ${{ inputs.phplinting }}
+          phpunit: ${{ inputs.phpunit }}
+          phpunit_skip_suites: ${{ inputs.phpunit_skip_suites }}
+          js: ${{ inputs.js }}
+          doclinting: ${{ inputs.doclinting }}
+
+  # For each job in the matrix, setup an environment and run the tests
+  tests:
+    needs: genmatrix
+
+    strategy:
+      # set fail-fast to false prevent one matrix job from cancelling other matrix jobs
+      # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategyfail-fast
+      fail-fast: false
+      matrix: ${{fromJson(needs.genmatrix.outputs.matrix)}}
+
+    runs-on: ubuntu-latest
+
+    services:
+      # It takes around 9 seconds per extra database added, so this is something that could be optimised later
+      # to only add the database that's required for the job
+      mysql57:
+        image: mysql:5.7
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: SS_mysite
+        ports:
+          - 3357:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
+      mysql80:
+        image: mysql:8.0
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: SS_mysite
+        ports:
+          - 3380:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
+      mysql84:
+        image: mysql:8.4
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: SS_mysite
+        ports:
+          - 3384:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=10
+        ports:
+          - 5432:5432
+      mariadb:
+        image: mariadb:11.4
+        env:
+          MARIADB_HOST: 127.0.0.1
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: SS_mysite
+        ports:
+          - 3311:3306
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=10s --health-timeout=5s --health-retries=10
+
+    env:
+      artifacts_name: ${{ matrix.name }}
+
+    name: ${{ matrix.name }}
+
+    outputs:
+      latest_local_sha: ${{ steps.output-sha.outputs.latest_local_sha }}
+
+    permissions:
+      contents: read
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+
+      - name: Install PHP
+        # SHA will need to be updated to support new php version when they are released
+        uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v2.31.1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: curl, dom, gd, intl, json, ldap, mbstring, mysql, tidy, xdebug, zip
+          tools: composer:v2
+          coverage: xdebug
+          # While this should be the correct way to allow forks in composer.json repositories
+          # in practice there are still many sporadic "Could not authenticate against github.com" errors
+          # there's 1,000 requests per hour limit when using this token, likely it get exceeded
+          # fairly easily when using a fork with multiple jobs in a matrix
+          #env:
+          # COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure PHP
+        env:
+          INSTALL_IN_MEMORY_CACHE_EXTS: ${{ matrix.install_in_memory_cache_exts }}
+        run: |
+          # Set memory limit and disable xdebug if not running phpcoverage
+          if [[ -z $(which php) ]]; then
+            echo "PHP not installed, skipping" && exit 0
+          fi
+
+          # github linux runners have 7GB of RAM
+          # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
+          # Set a high memory limit, particularly for php coverage tests
+          PHP_MEMORY_LIMIT=6G
+          # Assign less memory for behat tests so that chrome has plenty of memory available
+          if [[ "${{ matrix.endtoend }}" == "true" ]]; then
+            PHP_MEMORY_LIMIT=4G
+          fi
+          echo "PHP_MEMORY_LIMIT is $PHP_MEMORY_LIMIT"
+
+          sudo sh -c "echo 'memory_limit = $PHP_MEMORY_LIMIT' >> /etc/php/${{ matrix.php }}/cli/php.ini"
+          if [[ -f /etc/php/${{ matrix.php }}/apache2/php.ini ]]; then
+            sudo sh -c "echo 'memory_limit = $PHP_MEMORY_LIMIT' >> /etc/php/${{ matrix.php }}/apache2/php.ini"
+          fi
+
+          # Disable xdebug which greatly slow down unit testing
+          # Note: omitting xdebug from shivammathur/setup-php still results in xdebug being installed and enabled
+          if [[ "${{ matrix.phpcoverage }}" != "true" ]]; then
+            sudo sh -c "echo ';zend_extension=xdebug.so' > /etc/php/${{ matrix.php }}/mods-available/xdebug.ini"
+          fi
+
+          # Remove php8.x-psr extension which may be pre-installed with ubuntu
+          # The extension adds a PHP PsrExt namespace aliased to Psr and the implementation of
+          # PsrExt\Log\LoggerInterface::emergency() has a signature that conflicts with Monolog\Logger::emergency()
+          match=$(sudo dpkg --get-selections | grep php | grep psr) || true
+          if [[ "$match" =~ ^(php[0-9\.]+\-psr) ]]; then
+            extension=${BASH_REMATCH[1]};
+            sudo apt remove "$extension"
+            echo "Removed PHP extension $extension"
+          fi
+
+          if [[ $INSTALL_IN_MEMORY_CACHE_EXTS == 'true' ]]; then
+            sudo apt-get install php${{ matrix.php }}-memcached
+            sudo sh -c "echo 'apc.enable_cli=On' >> /etc/php/${{ matrix.php }}/cli/php.ini"
+            echo 'Installed in-memory cache extensions and set APCu to be enabled'
+            echo 'Note that Redis will be added as a composer dependency'
+          fi
+
+          echo "PHP has been configured"
+
+      - name: Install additional requirements 
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          # These are used by aws-cli, which is pre-installed in github actions, used for silverstripe/dynamodb
+          AWS_ACCESS_KEY_ID: myaccesskey
+          AWS_SECRET_ACCESS_KEY: mysecret
+          AWS_DEFAULT_REGION: ap-southeast-2
+        run: |
+          if [[ "${{ matrix.endtoend }}" == "true" ]]; then
+            # ppa:ondrej/php appears to be already added, though ppa:ondrej/apache2 is not
+            sudo add-apt-repository -y ppa:ondrej/apache2
+
+            # Run apt update allowing for a change in the "Label" field which has happened at least once after the
+            # maintainer changed the label field, causing apt to exit with status code of 100
+            # See https://manpages.debian.org/unstable/apt/apt-get.8.en.html under the `--allow-releaseinfo-change` heading
+            sudo apt update --allow-releaseinfo-change-label
+
+            # The requirements from libnss3-dev onwards are for chrome-testing to run properly
+            sudo apt install -y software-properties-common libapache2-mod-php${{ matrix.php }} libnss3-dev libgdk-pixbuf2.0-dev libgtk-3-dev libxss-dev
+
+            # ubuntu-latest comes with a current version of google-chrome-stable and chromedriver
+            # however we want to use the https://developer.chrome.com/blog/chrome-for-testing/ to match
+            # what a docker based local developer machine would be using
+            sudo apt remove -y google-chrome-stable chromedriver
+
+            # remove old symlink - note /usr/bin/google-chrome-stable is removed by apt remove above
+            sudo rm /usr/bin/chromedriver
+
+            # Get last known version of chrome + chromedriver that doesn't differ from actual user experience
+            # Install chrome
+            wget https://storage.googleapis.com/chrome-for-testing-public/126.0.6478.182/linux64/chrome-linux64.zip
+            unzip chrome-linux64.zip
+            sudo ln -s $(pwd)/chrome-linux64/chrome /usr/bin/chrome
+
+            # Install chromedriver
+            wget https://storage.googleapis.com/chrome-for-testing-public/126.0.6478.182/linux64/chromedriver-linux64.zip
+            unzip chromedriver-linux64.zip
+            sudo ln -s $(pwd)/chromedriver-linux64/chromedriver /usr/bin/chromedriver
+
+            # Setup symlink to google-chrome for the benefit of gha-run-tests
+            sudo ln -s /usr/bin/chrome /usr/bin/google-chrome
+
+            # Verify things are working correctly
+            echo "Chrome version is: $(google-chrome --version)"
+            echo "Chromedriver version is: $(chromedriver --version)"
+
+            # Remove temporary files
+            rm chrome-linux64.zip
+            rm chromedriver-linux64.zip
+          fi
+          if [[ $GITHUB_REPOSITORY =~ /(silverstripe-spellcheck|recipe-authoring-tools)$ ]] || [[ "${{ matrix.phpunit_suite }}" == "recipe-authoring-tools" ]]; then
+            # Need to update again otherwise apt will have issues finding dpkg-dev and libdpkg-perl
+            sudo apt update
+            sudo apt install -y hunspell libhunspell-dev hunspell-en-us
+          fi
+          if [[ $GITHUB_REPOSITORY =~ /(silverstripe-dynamodb)$ ]] && [[ ${{ matrix.phpunit }} == "true" ]]; then
+            # Update to newer version of java otherwise will be incompatible version of runtime
+            # when trying to run dynamodb
+            # java openjdk 11 is pre-installed - it uses a 'Temurin' distribution
+            # https://adoptium.net/temurin/releases/
+            # openjdk version "11.0.22" 2024-01-16
+            # OpenJDK Runtime Environment Temurin-11.0.22+7 (build 11.0.22+7)
+            # OpenJDK 64-Bit Server VM Temurin-11.0.22+7 (build 11.0.22+7, mixed mode)
+            echo "Pre-installed version of java"
+            java -version
+            # remove the link to the old version of java
+            if [[ -f /usr/bin/java ]]; then
+              sudo rm /usr/bin/java
+            fi
+            # Install manually rather than using apt install openjdk-21-jre-headless
+            # because for whatever reason the old temurin version will reappear on /usr/bin/java
+            # if you attempt to install with apt
+            wget https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.2%2B13/OpenJDK21U-jre_x64_linux_hotspot_21.0.2_13.tar.gz
+            if [[ $(shasum -a 256 OpenJDK21U-jre_x64_linux_hotspot_21.0.2_13.tar.gz | cut -d " " -f 1) != "51141204fe01a9f9dd74eab621d5eca7511eac67315c9975dbde5f2625bdca55" ]]; then
+              echo "shasum for OpenJDK21U-jre_x64_linux_hotspot_21.0.2_13.tar.gz did not match"
+              exit 1
+            fi
+            if [[ -d _java ]]; then
+              echo "Unexpected _java dir found"
+              exit 1
+            fi
+            mkdir _java
+            mv OpenJDK21U-jre_x64_linux_hotspot_21.0.2_13.tar.gz _java
+            cd _java
+            tar -xvzf OpenJDK21U-jre_x64_linux_hotspot_21.0.2_13.tar.gz
+            sudo ln -s $(pwd)/jdk-21.0.2+13-jre/bin/java /usr/bin/java
+            echo "New version of java"
+            java -version
+            cd -
+
+            # install dynamodb
+            # https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html
+            mkdir _dynamodb
+            cd _dynamodb
+            wget https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_latest.tar.gz
+            wget https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_latest.tar.gz.sha256
+            if [[ $(shasum -a 256 dynamodb_local_latest.tar.gz) != $(cat dynamodb_local_latest.tar.gz.sha256) ]]; then
+              echo "shasum for dynamodb_local_latest.tar.gz does not match"
+              exit 1
+            fi
+            tar -xvzf dynamodb_local_latest.tar.gz
+
+            # run dynamo db as background process
+            $(java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar) &
+            for i in {1..20}; do
+              JAR_RUNNING=0
+              if [[ $(ps -aux | grep DynamoDBLocal.jar) =~ DynamoDBLocal_lib ]]; then
+                JAR_RUNNING=1
+              fi
+              # ping port 8000 - connection will quickly by auto closed by dynamodb
+              PORT_8000_RESPONDING=0
+              if [[ $JAR_RUNNING == 1 ]]; then
+                # telnet is preinstalled on github actions
+                if [[ $(telnet 127.0.0.1 8000) =~ 'Connected to 127.0.0.1' ]]; then
+                  PORT_8000_RESPONDING=1
+                fi
+              fi
+              if [[ $JAR_RUNNING == 0 ]] || [[ $PORT_8000_RESPONDING == 0 ]]; then
+                if [[ $i == 20 ]]; then
+                  echo "dynamodb failed to start"
+                  exit 1
+                fi
+                echo "Waiting for dynamodb to start"
+                sleep 1
+              else
+                echo "dynamodb has started"
+                break
+              fi
+            done
+
+            # create dynamodb table
+            # aws-cli comes pre-installed in github actions
+            aws dynamodb create-table --table-name mysession --attribute-definitions AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 --endpoint-url http://localhost:8000
+            # list tables to console for easier debugging
+            aws dynamodb list-tables --endpoint-url http://localhost:8000
+            
+            cd -
+          fi
+
+      - name: Configure apache - endtoend test
+        if: ${{ matrix.endtoend == 'true' }}
+        run: |
+          # apache2 is installed and running by default in ubuntu
+          # update dir.conf to use index.php as the primary index doc
+          # using an intermediate file instead of variable to prevent the following issue:
+          # echo "$DIR_CONF" > /etc/apache2/mods-enabled/dir.conf: Permission denied
+          cat << EOF > __dir.conf
+          <IfModule mod_dir.c>
+            DirectoryIndex index.php index.html index.cgi index.pl index.xhtml index.htm
+          </IfModule>
+          EOF
+          sudo cp __dir.conf /etc/apache2/mods-enabled/dir.conf
+          rm __dir.conf
+          # create a 000-default.conf file with the pwd as the DocumentRoot
+          cat << EOF > __000-default.conf
+          <VirtualHost *:80>
+            ServerAdmin webmaster@localhost
+            DocumentRoot $(pwd)
+            <Directory $(pwd)>
+              AllowOverride All
+              Require all granted
+            </Directory>
+            LogLevel notice
+            ErrorLog ${APACHE_LOG_DIR}/error.log
+            CustomLog ${APACHE_LOG_DIR}/access.log combined
+          </VirtualHost>
+          EOF
+          sudo cp __000-default.conf /etc/apache2/sites-enabled/000-default.conf
+          rm __000-default.conf
+          sudo a2enmod rewrite
+          # run apache as 'runner:docker' instead of 'www-data:www-data'
+          sudo sh -c "echo 'export APACHE_RUN_USER=runner' >> /etc/apache2/envvars"
+          sudo sh -c "echo 'export APACHE_RUN_GROUP=docker' >> /etc/apache2/envvars"
+          sudo systemctl restart apache2
+          echo "Apache has been configured"
+
+      # This is shared between runs, not just jobs. It means the first time the repo runs the job it'll
+      # need to download requirements for the first time, after that it will be plenty quick
+      # https://docs.github.com/en/actions/advanced-guides/caching-dependencies-to-speed-up-workflows
+      - name: Enable shared composer cache
+        uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # @v4.2.1
+        with:
+          path: ~/.cache/composer
+          key: shared-composer-cache
+
+      # Update composer.json and install dependencies such as Databases binaries to run the tests
+      # Note that SQLite3 doesn't need to be installed because it is bundle in the GitHub docker image.
+      - name: Composer
+        env:
+          INPUTS_COMPOSER_REQUIRE_EXTRA: ${{ inputs.composer_require_extra }}
+          MATRIX_COMPOSER_REQUIRE_EXTRA: ${{ matrix.composer_require_extra }}
+          INSTALL_IN_MEMORY_CACHE_EXTS: ${{ matrix.install_in_memory_cache_exts }}
+          PARENT_BRANCH: ${{ matrix.parent_branch }}
+          # https://docs.github.com/en/actions/learn-github-actions/contexts#context-availability
+          # github.base_ref is only available on pull-requests events is the target branch - is is NOT prefixed with refs/heads/
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+          # github.ref_name is used for regular branch builds on events push - it is NOT prefixed with refs/heads/
+          # github.ref_name is also the tag on tag events - it is NOT prefixed with refs/tags/
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          BRANCH_OR_TAG=$GITHUB_REF_NAME
+          if [[ $GITHUB_BASE_REF != "" ]]; then
+            BRANCH_OR_TAG=$GITHUB_BASE_REF
+          fi
+          # This extracts the version from common branch naming conventions
+          # pulls/x/mybranch style is used on push events to creative-commoners account
+          # 4 => 4
+          # 4.10 => 4.10
+          # pulls/4/mybranch => 4
+          # pulls/4.10/mybranch => 4.10
+          if [[ $BRANCH_OR_TAG =~ ^([1-9]+)$ ]] || \
+             [[ $BRANCH_OR_TAG =~ ^([0-9]+\.[0-9]+)$ ]] || \
+             [[ $BRANCH_OR_TAG =~ ^([1-9]+)-release$ ]] || \
+             [[ $BRANCH_OR_TAG =~ ^([0-9]+\.[0-9]+)-release$ ]] || \
+             [[ $BRANCH_OR_TAG =~ ^([0-9]+\.[0-9]+)\.[0-9]+$ ]] || \
+             [[ $BRANCH_OR_TAG =~ ^pulls/([1-9]+)/.+$ ]] || \
+             [[ $BRANCH_OR_TAG =~ ^pulls/([0-9]+\.[0-9]+)/.+$ ]]; \
+          then
+            export COMPOSER_ROOT_VERSION="${BASH_REMATCH[1]}.x-dev"
+          elif [[ $BRANCH_OR_TAG =~ ^[0-9]\.[0-9]+\.[0-9]+ ]]; then
+            export COMPOSER_ROOT_VERSION="${BRANCH_OR_TAG}"
+          else
+            # e.g. push event to branch called myaccount-patch-1
+            CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+            if [[ $PARENT_BRANCH != "" ]]; then
+              if [[ $PARENT_BRANCH =~ ^([1-9]+)$ ]] || [[ $PARENT_BRANCH =~ ^([0-9]+\.[0-9]+)$ ]]; then
+                export COMPOSER_ROOT_VERSION="${PARENT_BRANCH}.x-dev"
+              else
+                export COMPOSER_ROOT_VERSION="dev-${PARENT_BRANCH}"
+              fi
+            else
+              export COMPOSER_ROOT_VERSION="dev-${CURRENT_BRANCH}"
+            fi
+          fi
+          echo "BRANCH_OR_TAG is $BRANCH_OR_TAG"
+          echo "COMPOSER_ROOT_VERSION is $COMPOSER_ROOT_VERSION"
+
+          # a) Ensure composer.json has prefer-stable true and minimum-stability dev
+          # b) Update preferred-install to source for recipes and some modules that run
+          #    other unit-tests in other modules
+          php -r '
+            $j = json_decode(file_get_contents("composer.json"));
+            $j->{"prefer-stable"} = true;
+            $j->{"minimum-stability"} = "dev";
+            if (empty($j->config)) {
+              $j->config = new stdClass();
+            }
+            if (empty($j->config->{"preferred-install"})) {
+              $j->config->{"preferred-install"} = new stdClass();
+            }
+            $j->config->{"preferred-install"}->{"silverstripe/*"} = "source";
+            $j->config->{"preferred-install"}->{"creative-commoners/*"} = "source";
+            $j->config->{"preferred-install"}->{"symbiote/*"} = "source";
+            $j->config->{"preferred-install"}->{"dnadesign/*"} = "source";
+            $j->config->{"preferred-install"}->{"bringyourownideas/*"} = "source";
+            $j->config->{"preferred-install"}->{"colymba/*"} = "source";
+            $j->config->{"preferred-install"}->{"cwp/*"} = "source";
+            $j->config->{"preferred-install"}->{"tractorcow/*"} = "source";
+            $j->config->{"preferred-install"}->{"*"} = "dist";
+            file_put_contents("composer.json", json_encode($j, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
+          '
+
+          if [[ "${{ inputs.composer_install }}" == "true" ]]; then
+            if ! [[ -f composer.lock ]]; then
+              echo "composer_install input is true but there is no composer.lock file. Exiting."
+              exit 1
+            fi
+            composer install --prefer-source --no-interaction --no-progress
+            # Useful to see composer.json when diagnosing new bugs
+            cat composer.json
+          else
+            # If using phpunit9, ensure sminnee phpunit5 modules do not get installed
+            php -r '
+              $j = json_decode(file_get_contents("composer.json"));
+              $pu = $j->{"require-dev"}->{"phpunit/phpunit"} ?? "";
+              $rt = $j->{"require-dev"}->{"silverstripe/recipe-testing"} ?? "";
+              if ($pu == "^9" || $pu == "^9.5" || $rt == "^2" || $rt == "^3") {
+                if (!property_exists($j, "replace")) {
+                  $j->replace = new stdClass();
+                }
+                $j->replace->{"sminnee/phpunit"} = "*";
+                $j->replace->{"sminnee/phpunit-mock-objects"} = "*";
+                file_put_contents("composer.json", json_encode($j, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
+              }
+            '
+
+            # Required for any module/recipe that runs silverstripe/assets unit tests
+            # Should technically be defined as composer_require_extra on individual modules, though easier just doing here
+            # 1.6.10 is for --prefer-lowest and is the minimum version with php 8.1 support
+            composer require mikey179/vfsstream:^1.6.11 --dev --no-update
+
+            if [[ "${{ matrix.db }}" == "pgsql" ]] && ! [[ $GITHUB_REPOSITORY =~ /silverstripe-postgresql$ ]]; then
+              composer require "silverstripe/postgresql:^2 || ^3" --no-update
+            fi
+            if [[ "${{ matrix.db }}" == "sqlite3" ]] && ! [[ $GITHUB_REPOSITORY =~ /silverstripe-sqlite3$ ]]; then
+              composer require "silverstripe/sqlite3:^2 || ^3" --no-update
+            fi
+            if [[ "${{ matrix.endtoend }}" == "true" ]] && ! [[ $GITHUB_REPOSITORY =~ /recipe-testing$ ]]; then
+              composer require "silverstripe/recipe-testing:^2 || ^3 || ^4" --dev --no-update
+            fi
+            if [[ $INSTALL_IN_MEMORY_CACHE_EXTS == 'true' ]]; then
+                composer require predis/predis --no-update
+            fi
+
+            # Require silverstripe/installer for non-recipes and all but a few modules
+            # Note: this block needs to be above COMPOSER_REQUIRE_EXTRA to allow that to override what is set here
+            if [[ "${{ matrix.installer_version }}" != "" ]]; then
+              composer require silverstripe/installer:${{ matrix.installer_version }} --no-update
+            fi
+
+            if [[ $INPUTS_COMPOSER_REQUIRE_EXTRA != "" ]]; then
+              # $INPUTS_COMPOSER_REQUIRE_EXTRA is explicitly not wrapped in double quotes below
+              # so that multiple requirements separated by spaces will work
+              composer require $INPUTS_COMPOSER_REQUIRE_EXTRA --no-update
+            fi
+            if [[ $MATRIX_COMPOSER_REQUIRE_EXTRA != "" ]]; then
+              # $MATRIX_COMPOSER_REQUIRE_EXTRA is explicitly not wrapped in double quotes below
+              # so that multiple requirements separated by spaces will work
+              composer require $MATRIX_COMPOSER_REQUIRE_EXTRA --no-update
+            fi
+
+            # a) Prevent installation of silverstripe/vendor-plugin < 1.5.2 which contains a bugfix
+            #    which is required for --prefer-lowest to install
+            #    https://github.com/silverstripe/vendor-plugin/pull/49
+            # b) Prevent installation of silverstripe/behat-extension < 4.12.0/5.3.0 which contains a new
+            #    is_ci config option - trying to set this option without support will cause a fatal error
+            # c) Set version of PHP to make it easier to copy paste composer.json to local dev environment
+            php -r '
+              $j = json_decode(file_get_contents("composer.json"));
+              if (empty($j->conflict)) {
+                $j->conflict = new stdClass();
+              }
+              $j->conflict->{"silverstripe/vendor-plugin"} = "<1.5.2";
+              $j->conflict->{"silverstripe/behat-extension"} = "<4.12.0 || <5.3.0 >=5";
+              if (empty($j->config->platform)) {
+                $j->config->platform = new stdClass();
+              }
+              $j->config->platform->php = "${{ matrix.php }}";
+              file_put_contents("composer.json", json_encode($j, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
+            '
+
+            # Ensure that the branch-alias dev-master branch of tractorcow/silverstripe-fluent isn't
+            # used instead of 7.x-dev when running kitchen-sink
+            if [[ $GITHUB_REPOSITORY =~ /recipe-kitchen-sink$ ]]; then
+              php -r '
+                $j = json_decode(file_get_contents("composer.json"));
+                if (empty($j->conflict)) {
+                  $j->conflict = new stdClass();
+                }
+                $j->conflict->{"tractorcow/silverstripe-fluent"} = "dev-master";
+                file_put_contents("composer.json", json_encode($j, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
+              '
+            fi
+
+            # Enable plugins
+            composer config allow-plugins.composer/installers true
+            composer config allow-plugins.silverstripe/recipe-plugin true
+            composer config allow-plugins.silverstripe/vendor-plugin true
+            composer config allow-plugins.phpstan/extension-installer true
+
+            # If --prefer-lowest is set, then use the lowest possible version of silverstripe/installer
+            if [[ "${{ matrix.composer_args }}" =~ --prefer-lowest ]] && [[ "${{ matrix.installer_version }}" != "" ]]; then
+
+              # First remove the version of silverstripe/installer in composer.json
+              # This version was originally worked out in gha-generate-matrix
+              composer remove silverstripe/installer --no-update
+
+              # Next require the lowest possible version of silverstripe/installer
+              # Due to a limitation of composer, we have to use --no-install rather than --no-update to
+              # resolve the lowest version. This will create a composer.lock file which we don't actually want
+              echo "Running composer require silverstripe/installer --quiet --prefer-lowest --no-install"
+              composer require silverstripe/installer --quiet --prefer-lowest --no-install
+              rm composer.lock
+
+              # It will have used a ^ caret view e.g. ^5.1 rather than 5.1.x-dev.
+              # We'll extract the version from composer.json and manually update it to use .x-dev instead
+              # Note that using prefer-stable:false does NOT automatically use .x-dev, you're likely to end
+              # up with an @beta version instead
+              php -r '
+                $j = json_decode(file_get_contents("composer.json"));
+                $v = $j->require->{"silverstripe/installer"};
+                if (strpos($v, "^") === 0) {
+                  $v = str_replace("^", "", $v) . ".x-dev";
+                  # Remove @beta, @rc, or @alpha if they are there
+                  $v = preg_replace("/@(alpha|beta|rc)/i", "", $v);
+                }
+                $j->require->{"silverstripe/installer"} = $v;
+                $c = json_encode($j, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
+                file_put_contents("composer.json", $c);
+              '
+            fi
+
+            # matrix.composer_args sometimes includes `--prefer-lowest` which is only supported by `composer update`, not `composer install`
+            # Modules do not have composer.lock files, so `composer update` is the same speed as `composer install`
+            # `|| :` prevents an exit code on a failed composer update from halting the workflow
+            composer update --no-interaction --no-progress ${{ matrix.composer_args }} 2> __update_attempt.txt || :
+
+            if ! [[ $(cat __update_attempt.txt) =~ Problem ]]; then
+              # Succesfully ran composer update and installed everything
+              rm __update_attempt.txt
+              # Useful to see generated composer.json when diagnosing new bugs
+              cat composer.json
+            elif ! [[ $(cat __update_attempt.txt) =~ 'Root composer.json requires silverstripe/installer' ]] || \
+              [[ $INPUTS_COMPOSER_REQUIRE_EXTRA =~ silverstripe/installer ]] || \
+              [[ $MATRIX_COMPOSER_REQUIRE_EXTRA =~ silverstripe/installer ]] || \
+              ! [[ "${{ matrix.installer_version }}" =~ ^[1-9]\.[0-9]+\.x\-dev$ ]]
+            then
+              # Failed to run composer update and will not attempt requiring different versions of silverstripe/installer
+              cat composer.json
+              cat __update_attempt.txt
+              # Using exit code 2 as it's the same code that composer uses when it fails
+              exit 2
+            elif [[ "${{ matrix.installer_version }}" =~ ^([1-9])\.([0-9]+)\.x\-dev$ ]]; then
+              # gha-generate-matrix will not always provide a compatibile version of silverstripe/installer due to
+              # limitations of knowing what versions of silverstripe/installer the pushed code is compatible with
+              # In this scenario we will usually end up with the latest minor x.dev version of silverstripe installer
+              # If it initially failed on composer update, try some earlier versions of silverstripe/installer
+              echo "Could not run composer update with version of silverstripe/installer, attempting earlier versions"
+              MAJOR=${BASH_REMATCH[1]}
+              MINOR=${BASH_REMATCH[2]}
+              SUCCESSFULLY_REQUIRED='false'
+              for MI in $(( MINOR - 1 )) $(( MINOR - 2 )); do
+                if [[ $SUCCESSFULLY_REQUIRED == 'false' ]]; then
+                  # Test if $MI is a negative number
+                  if [[ $MI =~ - ]]; then
+                    cat composer.json
+                    if [[ -f _require_attempt.txt ]]; then
+                      cat __require_attempt.txt
+                    else
+                      cat __update_attempt.txt
+                    fi
+                    echo 'Have run out of silverstripe/installer versions to attempt to require'
+                    exit 2
+                  else
+                    VERSION="$MAJOR.$MI.x-dev"
+                    echo "Attempting to require silverstripe/installer $VERSION"
+                    composer require silverstripe/installer:$VERSION 2> __require_attempt.txt || :
+                    if ! [[ $(cat __require_attempt.txt) =~ Problem ]]; then
+                      SUCCESSFULLY_REQUIRED='true'
+                      echo "Succesfully required silverstripe/installer $VERSION"
+                      rm __require_attempt.txt
+                      cat composer.json
+                    else
+                      echo "Failed to require silverstripe/installer $VERSION"
+                    fi
+                  fi
+                fi
+              done
+              if [[ $SUCCESSFULLY_REQUIRED == 'false' ]]; then
+                cat composer.json
+                cat __require_attempt.txt
+                exit 2
+              fi
+              rm __update_attempt.txt
+            else
+              # composer update failed for other reasons
+              cat composer.json
+              cat __update_attempt.txt
+              exit 2
+            fi
+          fi
+
+          # Useful to see what was installed
+          composer show
+
+          # Remove vendor unit tests files that were installed because of the use of --prefer-source
+          # Some older silverstripe vendor modules may still have the phpunit5 setUp() signatures without :void which when loaded will throw fatal PHP errors.
+          # We cannot simply get rid of the 'tests' folders because behat requires vendor/silverstripe/[framework|cms]/tests/behat/serve-bootstrap.php
+          # Recipes are excluded because the unit tests they run are in the required modules, and there's an assumption they'll require a compatible minor branch of the module
+
+          if [[ "${{ inputs.preserve_vendor_tests }}" == "false" ]] && ! [[ $GITHUB_REPOSITORY =~ /(recipe|silverstripe-installer) ]]; then
+            echo "Repositiory is a not a recipe, removing unecessary vendor silverstripe unit tests"
+            # Make an exception for 'ExtendTest.php' which is a misnamed TestOnly non-test class
+            php -r '
+              $a = [
+                "silverstripe",
+                "cwp",
+                "symbiote",
+                "dnadesign",
+                "tractorcow",
+                "bringyourownideas",
+                "colymba"
+              ];
+              foreach ($a as $v) {
+                $d = "vendor/$v";
+                if (!is_dir($d)) {
+                  continue;
+                }
+                foreach (explode("\n", shell_exec("find $d | grep \/tests\/ | grep [a-zA-Z0-9]Test.php")) as $f) {
+                  if (preg_match("#ExtendTest\.php#", $f)) {
+                    continue;
+                  }
+                  if (is_file($f)) {
+                    unlink($f);
+                  }
+                }
+              }
+            '
+            # Also remove a few other file that don't match the *Test.php convention and extends SapphireTest
+            if [[ -f vendor/silverstripe/assets/tests/php/FilenameParsing/FileIDHelperTester.php ]]; then
+              rm vendor/silverstripe/assets/tests/php/FilenameParsing/FileIDHelperTester.php
+            fi
+            if [[ -f vendor/silverstripe/framework/tests/php/Forms/NullableFieldTests.php ]]; then
+              rm vendor/silverstripe/framework/tests/php/Forms/NullableFieldTests.php
+            fi
+            if [[ -f vendor/silverstripe/graphql/tests/Middleware/MiddlewareProcessTestBase.php ]]; then
+              rm vendor/silverstripe/graphql/tests/Middleware/MiddlewareProcessTestBase.php
+            fi
+            # Rebuild composer classloader
+            composer dumpautoload -o
+          fi
+
+      - name: Final preparation
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          NEEDS_FULL_SETUP: ${{ matrix.needs_full_setup }}
+        run: |
+          # Function to wait for MySQL/MariaDB to be ready
+          wait_for_mysql() {
+            local host=$1
+            local port=$2
+            local max_attempts=30
+            local attempt=1
+            
+            echo "Waiting for MySQL/MariaDB on ${host}:${port} to be ready..."
+            
+            while [ $attempt -le $max_attempts ]; do
+              if mysqladmin ping --host=$host --port=$port --user=root --password=root --silent 2>/dev/null; then
+                echo "MySQL/MariaDB is ready after $attempt attempts!"
+                return 0
+              fi
+              
+              echo "Attempt $attempt/$max_attempts: MySQL/MariaDB not ready yet, waiting..."
+              sleep 2
+              attempt=$((attempt + 1))
+            done
+            
+            echo "ERROR: MySQL/MariaDB failed to become ready after $max_attempts attempts"
+            return 1
+          }
+
+          # Artifacts directory must be created after composer install as it would remove the artifacts directory
+          # This seems a bit strange, if you need to add an artifact at an earlier stage then revalidate that
+          # composer install does actually remove the artifact directory
+          mkdir artifacts
+
+          if [[ $NEEDS_FULL_SETUP == 'false' ]]; then
+            echo "skipping .env, database, and other full site setup steps"
+          else
+            # Add .env file and create artifacts directory
+            # Note: the wonky indentation is intentional so there is no space at the start of
+            # each newline in the .env file
+            if [[ "${{ matrix.db }}" =~ mysql ]]; then
+              if [[ "${{ matrix.db }}" == "mysql57pdo" ]]; then
+                # Wait for MySQL to be ready before attempting connection
+                wait_for_mysql "127.0.0.1" "3357"
+                echo "mysql version":
+                mysql --host=127.0.0.1 --port=3357 --user=root --password=root --execute="SELECT VERSION();" || true
+                cat << EOF > .env
+          SS_DATABASE_CLASS="MySQLPDODatabase"
+          SS_DATABASE_PORT="3357"
+          EOF
+              else
+                MYSQL_PORT=3357
+                if [[ "${{ matrix.db }}" == "mysql80" ]]; then
+                  MYSQL_PORT=3380
+                elif [[ "${{ matrix.db }}" == "mysql84" ]]; then
+                  MYSQL_PORT=3384
+                fi
+                # Wait for MySQL to be ready before attempting connection
+                wait_for_mysql "127.0.0.1" "$MYSQL_PORT"
+                echo "mysql version":
+                mysql --host=127.0.0.1 --user=root --password=root --port=$MYSQL_PORT --execute="SELECT VERSION();" || true
+                cat << EOF > .env
+          SS_DATABASE_CLASS="MySQLDatabase"
+          SS_DATABASE_PORT="${MYSQL_PORT}"
+          EOF
+              fi
+              cat << EOF >> .env
+          SS_DATABASE_SERVER="127.0.0.1"
+          SS_DATABASE_USERNAME="root"
+          SS_DATABASE_PASSWORD="root"
+          EOF
+            elif [[ "${{ matrix.db }}" =~ pgsql ]]; then
+              cat << EOF > .env
+          SS_DATABASE_CLASS="PostgreSQLDatabase"
+          SS_DATABASE_SERVER="localhost"
+          SS_DATABASE_PORT="5432"
+          SS_DATABASE_USERNAME="postgres"
+          SS_DATABASE_PASSWORD="postgres"
+          EOF
+            elif [[ "${{ matrix.db }}" =~ sqlite3 ]]; then
+              cat << EOF > .env
+          SS_DATABASE_CLASS="SQLite3Database"
+          SS_DATABASE_USERNAME="root"
+          SS_DATABASE_PASSWORD=""
+          SS_SQLITE_DATABASE_PATH=":memory:"
+          EOF
+            elif [[ "${{ matrix.db }}" =~ mariadb ]]; then
+              # Wait for MariaDB to be ready before attempting connection
+              wait_for_mysql "127.0.0.1" "3311"
+              echo "mariadb version":
+              mysql --host=127.0.0.1 --port=3311 --user=root --password=root --execute="SELECT VERSION();" || true
+              cat << EOF > .env
+          SS_DATABASE_SERVER="127.0.0.1"
+          SS_DATABASE_PORT="3311"
+          SS_DATABASE_USERNAME="root"
+          SS_DATABASE_PASSWORD="root"
+          EOF
+            fi
+            cat << EOF >> .env
+          SS_ENVIRONMENT_TYPE="dev"
+          SS_DATABASE_NAME="SS_mysite"
+          SS_DEFAULT_ADMIN_USERNAME="admin"
+          SS_DEFAULT_ADMIN_PASSWORD="password"
+          SS_TRUSTED_PROXY_IPS="*"
+          SS_MFA_SECRET_KEY="1234567894175b99966561e1efe237e4"
+          SS_BASE_URL="http://localhost"
+          EOF
+
+            if [[ $GITHUB_REPOSITORY =~ /(silverstripe-dynamodb)$ ]]; then
+              cat << EOF >> .env
+          AWS_DYNAMODB_ENDPOINT="http://localhost:8000"
+          AWS_DYNAMODB_SESSION_TABLE=mysession
+          AWS_ACCESS_KEY=myaccesskey
+          AWS_SECRET_KEY=mysecret
+          AWS_REGION_NAME=ap-southeast-2
+          EOF
+            fi
+
+            # debug
+            echo ".env is"
+            cat .env
+
+            # silverstripe logging
+            if [[ -d "./app/_config/" ]]; then
+              cat << EOF >> app/_config/my-logger.yml
+          ---
+          Name: error-logging
+          After: '*'
+          ---
+          SilverStripe\Core\Injector\Injector:
+            Psr\Log\LoggerInterface.errorhandler:
+              calls:
+                LogFileHandler: [ pushHandler, [ '%\$LogFileHandler' ] ]
+            LogFileHandler:
+              class: Monolog\Handler\StreamHandler
+              constructor:
+                - "$GITHUB_WORKSPACE/silverstripe.log"
+                - "debug"
+          EOF
+            fi
+
+            # run dev/build flush to help debug any issues (though it's not strictly required here)
+            # normal module
+            if [[ -f vendor/bin/sake ]]; then
+              vendor/bin/sake dev/build flush=1
+            fi
+            # framework module
+            if [[ -f sake ]]; then
+              ./sake dev/build flush=1
+            fi
+
+            # Delete the silverstripe-cache dir - it will automatically recreate when needed
+            # There were issues with a unit test getting the following issue
+            # Identifier name 'SilverStripe_CampaignAdmin_Tests_AddToCampaignValidatorTest_TestObject' is too long
+            # Likely because the /tmp/silverstripe-cache-php7.4.xyz... dir being out of sync with TestOnly objects
+            rm -rf $(find /tmp -maxdepth 1 | grep silverstripe-cache)
+          fi
+
+      - name: Debug
+        run: |
+          echo "matrix.phpunit: ${{ matrix.phpunit }}"
+
+      - name: Run tests
+        uses: silverstripe/gha-run-tests@v1
+        with:
+          phpunit: ${{ matrix.phpunit }}
+          phpunit_suite: ${{ matrix.phpunit_suite }}
+          phpunit_fail_on_warning: false
+          phplinting: ${{ matrix.phplinting }}
+          phpcoverage: ${{ matrix.phpcoverage }}
+          endtoend: ${{ matrix.endtoend }}
+          endtoend_suite: ${{ matrix.endtoend_suite }}
+          endtoend_config: ${{ matrix.endtoend_config }}
+          endtoend_tags: ${{ matrix.endtoend_tags }}
+          js: ${{ matrix.js }}
+          doclinting: ${{ matrix.doclinting }}
+
+      - name: Output latest SHA
+        id: output-sha
+        run: |
+          LATEST_LOCAL_SHA=$(git rev-parse HEAD)
+          echo "LATEST_LOCAL_SHA is $LATEST_LOCAL_SHA"
+          echo "latest_local_sha=$LATEST_LOCAL_SHA" >> $GITHUB_OUTPUT
+
+      - name: Copy artifacts
+        if: always()
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+        run: |
+          if ! [[ -d artifacts ]]; then
+            mkdir artifacts
+          fi
+          # Copy selected files to the artifacts dir
+          if [[ -f composer.json ]]; then
+            cp composer.json artifacts/
+          fi
+          if [[ -f composer.lock ]]; then
+            cp composer.lock artifacts/
+          fi
+          if [[ "${{ matrix.endtoend }}" == "true" ]] && [[ -f __behat.yml ]]; then
+            cp __behat.yml artifacts/
+          fi
+          if [[ -f ${APACHE_LOG_DIR}/error.log ]]; then
+            cp ${APACHE_LOG_DIR}/error.log artifacts/
+          fi
+          if [[ -f ${APACHE_LOG_DIR}/access.log ]]; then
+            cp ${APACHE_LOG_DIR}/access.log artifacts/
+          fi
+          if [[ -f $GITHUB_WORKSPACE/silverstripe.log ]]; then
+            cp $GITHUB_WORKSPACE/silverstripe.log artifacts/
+          fi
+
+      # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # @v4.4.3
+        if: always()
+        with:
+          name: ${{ env.artifacts_name }}
+          path: artifacts
+
+      - name: Delete temporary files
+        if: always()
+        run: |
+          # deleting the _dynamodb dir while java is running DynamoDBLocal.jar does not seem to matter
+          if [[ -d _dynamodb ]]; then
+            echo "Deleting temporary _dynamodb directory"
+            rm -rf _dynamodb
+          fi
+          if [[ -d _java ]]; then
+            echo "Deleting temporary _java directory"
+            rm -rf _java
+          fi
+
+  checkgovernance:
+    name: Check governance
+    runs-on: ubuntu-latest
+    needs: 'genmatrix'
+    if: ${{ github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    outputs:
+      can_tag: ${{ steps.check-governance.outputs.can_tag }}
+    env:
+      GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      GITHUB_REF_NAME: ${{ github.ref_name }}
+      MATRICES: ${{ needs.genmatrix.outputs.matrix }}
+    steps:
+
+      - name: Check governance
+        id: check-governance
+        run: |
+          CAN_TAG=0
+
+          # If we own it, then we can tag it
+          if [[ $GITHUB_REPOSITORY_OWNER == "silverstripe" ]]; then
+            echo "Repository is in the silverstripe organisation"
+            CAN_TAG=1
+          fi
+
+          # If we don't own it, we can only tag it if it's a supported module
+          if [[ $CAN_TAG == "0" ]]; then
+            # The installer version is the same for all generated matrices in a given run
+            CMS_VERSION=$(echo $MATRICES | jq -r '.include[0].installer_version')
+            # If the installer version wasn't an expected semver constraint, we're doing something weird
+            if ! [[ $CMS_VERSION =~ ^([0-9]+)(\.[0-9]+)?\.(x-dev$|[0-9]+(-(alpha|rc|beta)[0-9]+)?$) ]]; then
+              echo "Unexpected installer version '$CMS_VERSION' - couldn't check supported modules list"
+            else
+              CMS_MAJOR=${BASH_REMATCH[1]}
+              # We don't really care if this is a "valid" branch per se (that is checked in gaugerelease)
+              # we just need enough information to get what will be the major release portion of the branch name.
+              if ! [[ $GITHUB_REF_NAME =~ ^[0-9]+ ]]; then
+                echo "Current branch '$GITHUB_REF_NAME' doesn't start with a number"
+              else
+                BRANCH_MAJOR=${BASH_REMATCH[0]}
+                echo "Checking for supported modules in CMS $CMS_MAJOR against branch major $BRANCH_MAJOR"
+                curl -s -o __modules.json https://raw.githubusercontent.com/silverstripe/supported-modules/main/repositories.json
+                # If we can't parse the JSON at all, $MODULES will be an empty string and that means we couldn't fetch the file.
+                MODULES=$(jq -e '.' __modules.json) || true
+                if [[ $MODULES == "" ]]; then
+                  # If there is some error getting the file (e.g. 404 if $CMS_MAJOR is some value we don't have a file for),
+                  # the error will be in the __modules.json file - importantly, not in JSON format.
+                  echo "Cannot parse supported-modules JSON. Aborting. The content we tried to parse was:"
+                  cat __modules.json
+                  # We need to echo a new line here because for some reason without it the next echo is sometimes
+                  # appended to the last line of the cat
+                  echo ""
+                else
+                  SUPPORTED_BRANCHES=$(jq -r --arg repo ${GITHUB_REPOSITORY} --arg cmsmajor ${CMS_MAJOR}  '.[] | map(select(.github == $repo))[].majorVersionMapping | .[$cmsmajor]' __modules.json)
+                  if [[ $SUPPORTED_BRANCHES == "null" ]]; then
+                    # Check if this repository has a mapping against arbitrary CMS majors.
+                    # This is represented by a major version mapping of "*" to either an empty array, or an array with the current branch in it.
+                    SUPPORTED_BRANCHES=$(jq -r --arg repo ${GITHUB_REPOSITORY}  '.[] | map(select(.github == $repo))[].majorVersionMapping | select(has("*"))[]' __modules.json)
+                    if [[ $SUPPORTED_BRANCHES == "[]" || $(echo '["5"]' | jq -r --arg branch ${BRANCH_MAJOR} 'index($branch)') != "null" ]]; then
+                      echo "Repository is supported"
+                      CAN_TAG=1
+                    else
+                      echo "Not a supported module or branch"
+                    fi
+                  else
+                    # We have an array of branches - check if the branch major is included
+                    SUPPORTED_BRANCH=$(echo $SUPPORTED_BRANCHES | grep -Po "$BRANCH_MAJOR" | head -n 1)
+                    if [[ $SUPPORTED_BRANCH == "" ]]; then
+                      echo "Not a supported module or branch"
+                    else
+                      echo "Repository is supported"
+                      CAN_TAG=1
+                    fi
+                  fi
+                fi
+              fi
+            fi
+          fi
+
+          echo "can_tag output is $CAN_TAG"
+          echo "can_tag=$CAN_TAG" >> $GITHUB_OUTPUT
+
+  dispatchtagpatchrelase:
+    name: Dispatch tag patch release
+    runs-on: ubuntu-latest
+    needs: [tests, checkgovernance]
+    if: ${{ (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && needs.checkgovernance.outputs.can_tag == '1' }}
+    permissions:
+      actions: write
+    env:
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      BRANCH: ${{ github.ref_name }}
+    steps:
+
+      - name: Dispatch tag patch release
+        shell: bash
+        id: dispatch-tag-patch-release
+        run: |
+          # Check if the workflow currently exists. Without this, if the workflow USED to exist but was deleted,
+          # the response code for dispatching the workflow would be 422 instead of 404 so we can't rely on that.
+          # https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#list-repository-workflows
+          RESP_CODE=$(curl -w %{http_code} -s -L -o __response.json \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows
+          )
+          if [[ $RESP_CODE != "200" ]]; then
+            echo "Failed to get list of workflows - HTTP response code was $RESP_CODE"
+            cat __response.json
+            exit 1
+          fi
+
+          FOUND_WORKFLOW=0
+          WORKFLOWS=$(jq -r '.workflows[] | select(.state == "active") | .path' __response.json)
+          while IFS= read -r WORKFLOW_PATH; do
+            if [[ "$WORKFLOW_PATH" == ".github/workflows/tag-patch-release.yml" ]]; then
+              echo "Found tag-patch-release.yml"
+              FOUND_WORKFLOW=1
+              break
+            fi
+          done <<< "$WORKFLOWS"
+
+          if [[ $FOUND_WORKFLOW == 0 ]]; then
+            echo "tag-patch-release.yml not present."
+            exit 0
+          fi
+
+          # https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
+          RESP_CODE=$(curl -w %{http_code} -s -L -o __response.json \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ github.token }}"\
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/tag-patch-release.yml/dispatches \
+            -d "{\"ref\":\"$BRANCH\",\"inputs\":{\"latest_local_sha\":\"${{ needs.tests.outputs.latest_local_sha }}\"}}"
+          )
+          if [[ $RESP_CODE != "204" ]]; then
+            echo "Failed to dispatch workflow - HTTP response code was $RESP_CODE"
+            cat __response.json
+            exit 1
+          fi
+
+      - name: Delete temporary files
+        shell: bash
+        if: always()
+        run: |
+          if [[ -f __response.json ]]; then
+            rm __response.json
+          fi

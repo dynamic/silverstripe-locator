@@ -8,6 +8,6 @@ on:
 jobs:
   ci:
     name: CI
-    uses: silverstripe/gha-ci/.github/workflows/ci.yml@v1
+    uses: ./.github/workflows/ci-tests.yml
     with:
       phpcoverage: true
