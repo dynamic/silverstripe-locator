@@ -172,7 +172,7 @@ class Locator extends \Page
     /**
      * @return ArrayList|ManyManyList
      */
-    public function getPageCategories(): ArrayList|ManyManyList
+    public function getPageCategories()
     {
         return self::locator_categories_by_locator($this->ID);
     }
@@ -181,7 +181,7 @@ class Locator extends \Page
      * @param int $id
      * @return ManyManyList|ArrayList
      */
-    public static function locator_categories_by_locator($id = 0): ArrayList|ManyManyList
+    public static function locator_categories_by_locator($id = 0)
     {
         if ($id == 0) {
             return ArrayList::create();
