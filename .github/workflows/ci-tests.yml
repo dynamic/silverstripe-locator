@@ -259,7 +259,7 @@ jobs:
 
           echo "PHP has been configured"
 
-      - name: Install additional requirements 
+      - name: Install additional requirements
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           # These are used by aws-cli, which is pre-installed in github actions, used for silverstripe/dynamodb
@@ -394,7 +394,7 @@ jobs:
             aws dynamodb create-table --table-name mysession --attribute-definitions AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 --endpoint-url http://localhost:8000
             # list tables to console for easier debugging
             aws dynamodb list-tables --endpoint-url http://localhost:8000
-            
+
             cd -
           fi
 
@@ -784,20 +784,20 @@ jobs:
             local port=$2
             local max_attempts=30
             local attempt=1
-            
+
             echo "Waiting for MySQL/MariaDB on ${host}:${port} to be ready..."
-            
+
             while [ $attempt -le $max_attempts ]; do
               if mysqladmin ping --host=$host --port=$port --user=root --password=root --silent 2>/dev/null; then
                 echo "MySQL/MariaDB is ready after $attempt attempts!"
                 return 0
               fi
-              
+
               echo "Attempt $attempt/$max_attempts: MySQL/MariaDB not ready yet, waiting..."
               sleep 2
               attempt=$((attempt + 1))
             done
-            
+
             echo "ERROR: MySQL/MariaDB failed to become ready after $max_attempts attempts"
             return 1
           }
