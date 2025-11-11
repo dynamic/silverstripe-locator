@@ -1,11 +1,7 @@
 # SilverStripe Locator
 
-[![Sponsors](https://img.shields.io/badge/Sponsor-Dynamic-ff69b4?logo=github-sponsors&logoColor=white)](https://github.com/sponsors/dynamic)
-
 [![Build Status](https://travis-ci.org/dynamic/silverstripe-locator.svg?branch=master)](https://travis-ci.org/dynamic/silverstripe-locator)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/badges/build.png?b=master)](https://scrutinizer-ci.com/g/dynamic/silverstripe-locator/build-status/master)
-[![codecov.io](https://codecov.io/github/dynamic/silverstripe-locator/coverage.svg?branch=master)](https://codecov.io/github/dynamic/silverstripe-locator?branch=master)
+[![Sponsors](https://img.shields.io/badge/Sponsor-Dynamic-ff69b4?logo=github-sponsors&logoColor=white)](https://github.com/sponsors/dynamic)
 
 [![Latest Stable Version](https://poser.pugx.org/dynamic/silverstripe-locator/v/stable)](https://packagist.org/packages/dynamic/silverstripe-locator)
 [![Total Downloads](https://poser.pugx.org/dynamic/silverstripe-locator/downloads)](https://packagist.org/packages/dynamic/silverstripe-locator)
