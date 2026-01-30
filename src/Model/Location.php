@@ -1,6 +1,6 @@
 <?php
 
-namespace Dynamic\Locator\Model;
+namespace Dynamic\Locator;
 
 use Dynamic\Locator\Model\LocationCategory;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;

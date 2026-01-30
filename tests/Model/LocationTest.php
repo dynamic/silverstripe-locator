@@ -6,7 +6,7 @@ use Dynamic\Locator\Tests\TestOnly\Extension\LocationExtension;
 use Dynamic\Locator\Tests\TestOnlyModel\ExtendedLocation;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
-use Dynamic\Locator\Model\Location;
+use Dynamic\Locator\Location;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Member;
 

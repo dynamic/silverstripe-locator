@@ -13,7 +13,7 @@ Dynamic\Locator\Page\Locator:
     Title: Locator
     Categories: =>Dynamic\Locator\Model\LocationCategory.service,=>Dynamic\Locator\Model\LocationCategory.technology
 
-Dynamic\Locator\Model\Location:
+Dynamic\Locator\Location:
   dynamic:
     Title: Dynamic, Inc.
     Featured: true

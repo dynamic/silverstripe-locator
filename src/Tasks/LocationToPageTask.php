@@ -2,7 +2,7 @@
 
 namespace Dynamic\Locator\Tasks;
 
-use Dynamic\Locator\Model\Location;
+use Dynamic\Locator\Location;
 use Dynamic\Locator\Page\LocationPage;
 use Dynamic\Locator\Page\Locator;
 use SilverStripe\Core\Injector\Injector;

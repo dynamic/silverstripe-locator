@@ -2,7 +2,7 @@
 
 namespace Dynamic\Locator\Tests\Page;
 
-use Dynamic\Locator\Model\Location;
+use Dynamic\Locator\Location;
 use Dynamic\Locator\Model\LocationCategory;
 use Dynamic\Locator\Page\Locator;
 use Dynamic\Locator\Page\LocatorController;
