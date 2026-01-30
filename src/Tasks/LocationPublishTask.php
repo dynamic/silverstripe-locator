@@ -2,7 +2,7 @@
 
 namespace Dynamic\Locator\Tasks;
 
-use Dynamic\Locator\Model\Location;
+use Dynamic\Locator\Location;
 use SilverStripe\Control\Director;
 use SilverStripe\Dev\BuildTask;
 

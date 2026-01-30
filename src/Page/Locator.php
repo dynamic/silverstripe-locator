@@ -26,8 +26,6 @@ use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
  * @property bool $AutoGeocode
  * @property bool $ModalWindow
  * @property string $Unit
- * @property bool $ShowResultsDefault
- * @property bool $ShowFormDefault
  * @method Categories|ManyManyList $Categories
  */
 class Locator extends \Page
@@ -52,8 +50,6 @@ class Locator extends \Page
      */
     private static $db = [
         'Unit' => 'Enum("m,km","m")',
-        'ShowResultsDefault' => 'Boolean',
-        'ShowFormDefault' => 'Boolean',
     ];
 
     /**
@@ -91,8 +87,6 @@ class Locator extends \Page
      * @var array
      */
     private static $defaults = [
-        'ShowResultsDefault' => false,
-        'ShowFormDefault' => true,
         'ShowInMenus' => false,
     ];
 
@@ -106,14 +100,6 @@ class Locator extends \Page
             $fields->addFieldsToTab('Root.Settings', [
                 HeaderField::create('DisplayOptions', 'Display Options', 3),
                 OptionsetField::create('Unit', 'Unit of measure', ['m' => 'Miles', 'km' => 'Kilometers']),
-                DropdownField::create('ShowResultsDefault')
-                    ->setTitle('Show results by default')
-                    ->setDescription('This will display results if no filters are applied to the locator')
-                    ->setSource([false => 'No', true => 'Yes']),
-                DropdownField::create('ShowFormDefault')
-                    ->setTitle('Show filter form by default')
-                    ->setDescription('This will display the filter form for the locator')
-                    ->setSource([false => 'No', true => 'Yes']),
             ]);
 
             // Filter categories

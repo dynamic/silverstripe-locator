@@ -34,7 +34,8 @@
     "symbiote/silverstripe-gridfieldextensions": "^4.0"
   },
   "require-dev": {
-    "silverstripe/recipe-testing": "^3"
+    "silverstripe/recipe-testing": "^3",
+    "squizlabs/php_codesniffer": "^3.7"
   },
   "suggest": {
     "axllent/silverstripe-bootstrap-forms": "Add CSS classes to Silverstripe forms to play nicer with Twitter Bootstrap"
