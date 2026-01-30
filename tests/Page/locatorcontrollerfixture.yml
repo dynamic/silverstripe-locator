@@ -11,4 +11,5 @@ Dynamic\Locator\Model\LocationCategory:
 Dynamic\Locator\Page\Locator:
   locator1:
     Title: Locator
+    URLSegment: locator
     Categories: =>Dynamic\Locator\Model\LocationCategory.service,=>Dynamic\Locator\Model\LocationCategory.technology
