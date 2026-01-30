@@ -78,6 +78,22 @@ class LocatorController extends \PageController
     protected $locations;
 
     /**
+     * @return bool
+     */
+    protected function getShowResultsDefault(): bool
+    {
+        return $this->data()->ShowResultsDefault ?? false;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function getShowFormDefault(): bool
+    {
+        return $this->data()->ShowFormDefault ?? true;
+    }
+
+    /**
      * Set Requirements based on input from CMS
      */
     public function init()
@@ -86,7 +102,7 @@ class LocatorController extends \PageController
 
         // prevent init of map if no query
         $request = Controller::curr()->getRequest();
-        if (!$this->getTrigger($request) && !$this->ShowResultsDefault) {
+        if (!$this->getTrigger($request) && !$this->getShowResultsDefault()) {
             return;
         }
 
@@ -299,7 +315,7 @@ class LocatorController extends \PageController
      */
     public function index(HTTPRequest $request)
     {
-        if ($this->getTrigger($request) || $this->ShowResultsDefault) {
+        if ($this->getTrigger($request) || $this->getShowResultsDefault()) {
             $locations = $this->getLocations();
         } else {
             $locations = ArrayList::create();
@@ -351,7 +367,7 @@ class LocatorController extends \PageController
      */
     public function LocationSearch(): ?LocatorForm
     {
-        if (!$this->ShowFormDefault) {
+        if (!$this->getShowFormDefault()) {
             return null;
         }
 
