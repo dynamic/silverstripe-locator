@@ -29,7 +29,6 @@
     "colymba/gridfield-bulk-editing-tools": "^4.0 || ^5.0",
     "dynamic/silverstripe-geocoder": "^3.0",
     "littlegiant/silverstripe-catalogmanager": "^6.0",
-    "muskie9/data-to-arraylist": "^2.0 || ^3.0",
     "silverstripe/lumberjack": "^3.0",
     "silverstripe/recipe-cms": "^5.0",
     "symbiote/silverstripe-gridfieldextensions": "^4.0"
