@@ -2,6 +2,7 @@
   "name": "dynamic/silverstripe-locator",
   "description": "SilverStripe Locator Module. Show locations on a map. Search by geoposition.",
   "license": "BSD-3-Clause",
+  "version": "5.0.0",
   "type": "silverstripe-vendormodule",
   "keywords": [
     "silverstripe",
