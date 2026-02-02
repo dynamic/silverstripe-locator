@@ -1,4 +1,5 @@
 <% require css('dynamic/silverstripe-locator: css/map.css') %>
+<% require javascript('https://code.jquery.com/jquery-3.7.1.min.js') %>
 <div class="col-sm-9">
     <div class="element-area main-element-area">
         $ElementalArea
@@ -28,6 +29,5 @@
     <% end_if %>
 </div>
 
-<% require javascript('silverstripe/admin: thirdparty/jquery/jquery.js') %>
 <% require javascript('dynamic/silverstripe-locator: thirdparty/jquery-store-locator-plugin/assets/js/libs/handlebars.min.js') %>
 <% require javascript('dynamic/silverstripe-locator: thirdparty/jquery-store-locator-plugin/assets/js/plugins/storeLocator/jquery.storelocator.js') %>
