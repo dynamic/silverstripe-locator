@@ -28,6 +28,5 @@
     <% end_if %>
 </div>
 
-<% require javascript('silverstripe/admin: thirdparty/jquery/jquery.js') %>
 <% require javascript('dynamic/silverstripe-locator: thirdparty/jquery-store-locator-plugin/assets/js/libs/handlebars.min.js') %>
 <% require javascript('dynamic/silverstripe-locator: thirdparty/jquery-store-locator-plugin/assets/js/plugins/storeLocator/jquery.storelocator.js') %>
