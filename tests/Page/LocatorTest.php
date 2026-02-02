@@ -2,7 +2,7 @@
 
 namespace Dynamic\Locator\Tests\Page;
 
-use Dynamic\Locator\Location;
+use Dynamic\Locator\Model\Location;
 use Dynamic\Locator\Page\Locator;
 use Dynamic\Locator\Page\LocatorController;
 use SilverStripe\Core\Config\Config;
@@ -69,7 +69,7 @@ class LocatorTest extends FunctionalTest
     public function testGetPageCategories()
     {
         $locator = $this->objFromFixture(Locator::class, 'locator1');
-        $this->assertEquals($locator->getPageCategories()->count(), 1);
+        $this->assertEquals($locator->getPageCategories()->count(), 2);
     }
 
     /**
@@ -78,7 +78,7 @@ class LocatorTest extends FunctionalTest
     public function testLocator_categories_by_locator()
     {
         $categories = Locator::locator_categories_by_locator(0);
-        $this->assertFalse($categories);
+        $this->assertEquals(0, $categories->count());
     }
 
     /**
@@ -88,7 +88,7 @@ class LocatorTest extends FunctionalTest
     {
 
         $locator = $this->objFromFixture(Locator::class, 'locator1');
-        $this->assertEquals(Locator::locator_categories_by_locator($locator->ID)->count(), 1);
+        $this->assertEquals(Locator::locator_categories_by_locator($locator->ID)->count(), 2);
 
         $newLocator = Locator::create();
         $newLocator->Title = 'Locator 2';
@@ -153,7 +153,7 @@ class LocatorTest extends FunctionalTest
         $locator = $this->objFromFixture(Locator::class, 'locator1');
 
         $categories = $locator->getUsedCategories()->toArray();
-        $this->assertEquals(1, count($categories));
+        $this->assertEquals(2, count($categories));
     }
 
     /**

@@ -28,8 +28,7 @@ class LocatorForm extends Form
 
         $fields = FieldList::create(
             TextField::create('Address')
-                ->setTitle('')
-                ->setAttribute('placeholder', 'address or zip code')
+                ->setTitle('Address or Postal Code')
         );
 
         $pageCategories = Locator::locator_categories_by_locator($controller->data()->ID);
@@ -44,8 +43,8 @@ class LocatorForm extends Form
 
         if ($categories) {
             $categoriesField = DropdownField::create('CategoryID')
-                ->setTitle('')
-                ->setEmptyString('all categories')
+                ->setTitle('Category')
+                ->setEmptyString('All Categories')
                 ->setSource($categories->map());
             $fields->push($categoriesField);
         }
@@ -53,8 +52,8 @@ class LocatorForm extends Form
         if ($controller->getShowRadius()) {
             $radiusArray = array_values($controller->getRadii());
             $this->extend('overrideRadiusArray', $radiusArray);
-            $fields->push(DropdownField::create('Radius', '', ArrayLib::valuekey($radiusArray))
-                ->setEmptyString('radius'));
+            $fields->push(DropdownField::create('Radius', 'Search Radius', ArrayLib::valuekey($radiusArray))
+                ->setEmptyString('Radius'));
         }
 
         $actions = FieldList::create(

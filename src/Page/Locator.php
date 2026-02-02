@@ -5,6 +5,7 @@ namespace Dynamic\Locator\Page;
 use Dynamic\Locator\Model\LocationCategory;
 use Dynamic\SilverStripeGeocoder\AddressDataExtension;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\Forms\HeaderField;
@@ -15,6 +16,7 @@ use SilverStripe\Lumberjack\Model\Lumberjack;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\ORM\ManyManyList;
 use SilverStripe\View\ArrayData;
 use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
 
@@ -24,6 +26,8 @@ use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
  * @property bool $AutoGeocode
  * @property bool $ModalWindow
  * @property string $Unit
+ * @property bool $ShowResultsDefault
+ * @property bool $ShowFormDefault
  * @method Categories|ManyManyList $Categories
  */
 class Locator extends \Page
@@ -48,6 +52,8 @@ class Locator extends \Page
      */
     private static $db = [
         'Unit' => 'Enum("m,km","m")',
+        'ShowResultsDefault' => 'Boolean',
+        'ShowFormDefault' => 'Boolean',
     ];
 
     /**
@@ -82,6 +88,15 @@ class Locator extends \Page
     ];
 
     /**
+     * @var array
+     */
+    private static $defaults = [
+        'ShowResultsDefault' => false,
+        'ShowFormDefault' => true,
+        'ShowInMenus' => false,
+    ];
+
+    /**
      * @return FieldList
      */
     public function getCMSFields()
@@ -91,6 +106,14 @@ class Locator extends \Page
             $fields->addFieldsToTab('Root.Settings', [
                 HeaderField::create('DisplayOptions', 'Display Options', 3),
                 OptionsetField::create('Unit', 'Unit of measure', ['m' => 'Miles', 'km' => 'Kilometers']),
+                DropdownField::create('ShowResultsDefault')
+                    ->setTitle('Show results by default')
+                    ->setDescription('This will display results if no filters are applied to the locator')
+                    ->setSource([false => 'No', true => 'Yes']),
+                DropdownField::create('ShowFormDefault')
+                    ->setTitle('Show filter form by default')
+                    ->setDescription('This will display the filter form for the locator')
+                    ->setSource([false => 'No', true => 'Yes']),
             ]);
 
             // Filter categories
@@ -147,7 +170,7 @@ class Locator extends \Page
     }
 
     /**
-     * @return bool
+     * @return ArrayList|ManyManyList
      */
     public function getPageCategories()
     {
@@ -156,21 +179,22 @@ class Locator extends \Page
 
     /**
      * @param int $id
-     *
-     * @return bool|
+     * @return ManyManyList|ArrayList
      */
     public static function locator_categories_by_locator($id = 0)
     {
         if ($id == 0) {
-            return false;
+            return ArrayList::create();
         }
 
         /** @var Locator $locator */
         if ($locator = static::get()->byID($id)) {
-            return $locator->getUsedCategories();
+            if ($locator->Categories()->exists()) {
+                return $locator->Categories();
+            }
         }
 
-        return false;
+        return ArrayList::create();
     }
 
     /**
@@ -227,12 +251,12 @@ class Locator extends \Page
 
     /**
      * @return mixed
+     *
+     * @deprecated call the Categories() relation on the locator instead
      */
     public function getUsedCategories()
     {
-        return $this->Categories()->filter([
-            'LocationSet.ID:GreaterThan' => 0,
-        ]);
+        return $this->Categories();
     }
 
     /**

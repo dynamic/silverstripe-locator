@@ -87,7 +87,7 @@ class LocatorController extends \PageController
 
         // prevent init of map if no query
         $request = Controller::curr()->getRequest();
-        if (!$this->getTrigger($request)) {
+        if (!$this->getTrigger($request) && !$this->ShowResultsDefault) {
             return;
         }
 
@@ -282,8 +282,8 @@ class LocatorController extends \PageController
         if (class_exists(GoogleGeocoder::class)) {
             $geocoder = new GoogleGeocoder($this->request->getVar($addressVar));
             $response = $geocoder->getResult();
-            $lat = $response->getLatitude();
-            $lng = $response->getLongitude();
+            $lat = $this->owner->Lat = $response->getCoordinates()->getLatitude();
+            $lng = $this->owner->Lng = $response->getCoordinates()->getLongitude();
 
             return new ArrayData([
                 "Lat" => $lat,
@@ -299,7 +299,7 @@ class LocatorController extends \PageController
      */
     public function index(HTTPRequest $request)
     {
-        if ($this->getTrigger($request)) {
+        if ($this->getTrigger($request) || $this->ShowResultsDefault) {
             $locations = $this->getLocations();
         } else {
             $locations = ArrayList::create();
@@ -347,10 +347,13 @@ class LocatorController extends \PageController
      *
      * Search form for locations, updates map and results list via AJAX
      *
-     * @return \SilverStripe\Forms\Form
+     * @return LocatorForm|null
      */
-    public function LocationSearch()
+    public function LocationSearch(): ?LocatorForm
     {
+        if (!$this->ShowFormDefault) {
+            return null;
+        }
 
         $form = LocatorForm::create($this, 'LocationSearch');
 

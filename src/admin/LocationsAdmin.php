@@ -3,12 +3,15 @@
 namespace Dynamic\Locator\Admin;
 
 use Dynamic\Locator\Bulkloader\LocationCsvBulkLoader;
+use Dynamic\Locator\Bulkloader\LocationPageCsvBulkLoader;
 use Dynamic\Locator\Model\LocationCategory;
 use Dynamic\Locator\Page\LocationPage;
 use LittleGiant\CatalogManager\ModelAdmin\CatalogPageAdmin;
 use SilverStripe\Dev\CsvBulkLoader;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldExportButton;
+use SilverStripe\Forms\GridField\GridFieldImportButton;
 
 /**
  * Class LocationAdmin
@@ -29,6 +32,7 @@ class LocationsAdmin extends CatalogPageAdmin
      * @var array
      */
     private static $model_importers = [
+        LocationPage::class => LocationPageCsvBulkLoader::class,
         LocationCategory::class => CsvBulkLoader::class,
     ];
 
@@ -89,8 +93,20 @@ class LocationsAdmin extends CatalogPageAdmin
         if ($this->modelClass == LocationPage::class) {
             /** @var GridField $gridField */
             if ($gridField = $form->Fields()->fieldByName($this->sanitiseClassName($this->modelClass))) {
+                $exportButton = new GridFieldExportButton('buttons-before-left');
+                $exportButton->setExportColumns($this->getExportFields());
                 $gridField->getConfig()
+                    ->addComponent($exportButton)
                     ->removeComponentsByType('GridFieldDeleteAction');
+            }
+
+            if ($this->showImportForm) {
+                $fieldConfig = $gridField->getConfig();
+                $fieldConfig->addComponent(
+                    GridFieldImportButton::create('buttons-before-left')
+                        ->setImportForm($this->ImportForm())
+                        ->setModalTitle(_t('SilverStripe\\Admin\\ModelAdmin.IMPORT', 'Import from CSV'))
+                );
             }
         }
 

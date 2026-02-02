@@ -2,8 +2,9 @@
 
 namespace Dynamic\Locator\Bulkloader;
 
-use Dynamic\Locator\Model\Location;
 use Dynamic\Locator\Model\LocationCategory;
+use Dynamic\Locator\Page\LocationPage;
+use Dynamic\Locator\Page\Locator;
 use SilverStripe\Dev\CsvBulkLoader;
 use SilverStripe\Core\Convert;
 use SilverStripe\i18n\Data\Intl\IntlLocales;
@@ -12,7 +13,7 @@ use SilverStripe\i18n\Data\Intl\IntlLocales;
  * Class LocationCsvBulkLoader
  * @package Dynamic\Locator
  */
-class LocationCsvBulkLoader extends CsvBulkLoader
+class LocationPageCsvBulkLoader extends CsvBulkLoader
 {
 
     /**
@@ -50,17 +51,18 @@ class LocationCsvBulkLoader extends CsvBulkLoader
      */
     public static function getCategoryByName(&$obj, $val, $record)
     {
-        $val = Convert::raw2sql($val);
-        $parts = explode(', ', $val);
+        if ($val = Convert::raw2sql($val)) {
+            $parts = explode(', ', $val);
 
-        foreach ($parts as $part) {
-            $category = LocationCategory::get()->filter(array('Name' => $part))->first();
-            if (!$category) {
-                $category = LocationCategory::create();
-                $category->Name = $part;
-                $category->write();
+            foreach ($parts as $part) {
+                $category = LocationCategory::get()->filter(array('Name' => $part))->first();
+                if (!$category) {
+                    $category = LocationCategory::create();
+                    $category->Name = $part;
+                    $category->write();
+                }
+                $obj->Categories()->add($category);
             }
-            $obj->Categories()->add($category);
         }
     }
 
@@ -97,7 +99,8 @@ class LocationCsvBulkLoader extends CsvBulkLoader
     {
         $objID = parent::processRecord($record, $columnMap, $results, $preview = false);
 
-        $location = Location::get()->byID($objID);
+        $location = LocationPage::get()->byID($objID);
+        $location->ParentID = Locator::get()->first()->ID;
         $location->publishSingle();
     }
 }

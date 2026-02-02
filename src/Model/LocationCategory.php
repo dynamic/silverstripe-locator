@@ -2,7 +2,7 @@
 
 namespace Dynamic\Locator\Model;
 
-use Dynamic\Locator\Location;
+use Dynamic\Locator\Model\Location;
 use Dynamic\Locator\Page\Locator;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;

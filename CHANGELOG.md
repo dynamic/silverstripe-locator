@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.0.1](https://github.com/dynamic/silverstripe-locator/tree/4.0.1) (2023-03-15)
+* REFACTOR calculate coordinates with geocoder 4 by @jsirish in https://github.com/dynamic/silverstripe-locator/pull/230
+* BUGFIX update Geocoder coordinates fetch by @jsirish in https://github.com/dynamic/silverstripe-locator/pull/233
+* BUGFIX coords vars by @jsirish in https://github.com/dynamic/silverstripe-locator/pull/234
+* REFACTOR default Bootstrap template initial by @jsirish in https://github.com/dynamic/silverstripe-locator/pull/235
+* BUGFIX LocationCSVBulkLoader incorrect namespace by @jsirish in https://github.com/dynamic/silverstripe-locator/pull/236
+
+
+**Full Changelog**: https://github.com/dynamic/silverstripe-locator/compare/4.0.0...4.0.1
+
 ## [3.1.1](https://github.com/dynamic/silverstripe-locator/tree/3.1.1) (2020-02-19)
 
 [Full Changelog](https://github.com/dynamic/silverstripe-locator/compare/3.1.0...3.1.1)
