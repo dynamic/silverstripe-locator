@@ -1,4 +1,5 @@
 <% require css('dynamic/silverstripe-locator: css/map.css') %>
+<% require javascript('https://code.jquery.com/jquery-3.7.1.min.js') %>
 <div class="col-sm-9">
     <div class="element-area main-element-area">
         $ElementalArea
