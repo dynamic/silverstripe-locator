@@ -5,7 +5,6 @@ namespace Dynamic\Locator\Page;
 use Dynamic\Locator\Form\LocatorForm;
 use Dynamic\SilverStripeGeocoder\DistanceDataExtension;
 use Dynamic\SilverStripeGeocoder\GoogleGeocoder;
-use muskie9\DataToArrayList\ORM\DataToArrayListHelper;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Config;
@@ -238,7 +237,7 @@ class LocatorController extends \PageController
 
         $class = $this->data()->ClassName;
         $locations = $class::get_locations($filter, $filterAny, $exclude);
-        $locations = DataToArrayListHelper::to_array_list($locations);
+        $locations = ArrayList::create($locations->toArray());
 
         //allow for adjusting list post possible distance calculation
         $this->extend('updateLocationList', $locations);

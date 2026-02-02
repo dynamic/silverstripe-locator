@@ -9,5 +9,3 @@ jobs:
   ci:
     name: CI
     uses: silverstripe/gha-ci/.github/workflows/ci.yml@v1
-    with:
-      phpcoverage: false
