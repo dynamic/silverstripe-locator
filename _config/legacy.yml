@@ -3,4 +3,6 @@ name: locatorlegacy
 ---
 SilverStripe\ORM\DatabaseAdmin:
   classname_value_remapping:
+    Dynamic\Locator\Model\Location: Dynamic\Locator\Location
+    Dynamic\Locator\Model\LocationCategory: Dynamic\Locator\Model\LocationCategory
     Dynamic\Locator\Locator: Dynamic\Locator\Page\Locator
