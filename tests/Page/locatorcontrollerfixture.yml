@@ -11,4 +11,16 @@ Dynamic\Locator\Model\LocationCategory:
 Dynamic\Locator\Page\Locator:
   locator1:
     Title: Locator
+    ShowResultsDefault: true
     Categories: =>Dynamic\Locator\Model\LocationCategory.service,=>Dynamic\Locator\Model\LocationCategory.technology
+
+Dynamic\Locator\Model\Location:
+  dynamic:
+    Title: Dynamic, Inc.
+    Address: 1526 S. 12th St
+    City: Sheboygan
+    State: WI
+    Country: US
+    Lat: 43.7508
+    Lng: -87.7145
+    Categories: =>Dynamic\Locator\Model\LocationCategory.service

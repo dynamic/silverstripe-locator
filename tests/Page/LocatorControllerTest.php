@@ -6,6 +6,7 @@ use Dynamic\Locator\Model\Location;
 use Dynamic\Locator\Model\LocationCategory;
 use Dynamic\Locator\Page\Locator;
 use Dynamic\Locator\Page\LocatorController;
+use Dynamic\Locator\Tests\TestOnly\Extension\LocatorControllerExtension;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Forms\FieldList;
@@ -28,6 +29,15 @@ class LocatorControllerTest extends FunctionalTest
      * @var bool
      */
     protected static $use_draft_site = true;
+
+    /**
+     * @var array
+     */
+    protected static $required_extensions = [
+        LocatorController::class => [
+            LocatorControllerExtension::class,
+        ],
+    ];
 
     /**
      *
@@ -102,5 +112,31 @@ class LocatorControllerTest extends FunctionalTest
         $form = $object->LocationSearch();
         $fields = $form->Fields();
         $this->assertInstanceOf(FieldList::class, $fields);
+    }
+
+    /**
+     *
+     */
+    public function testMapSettingsDistanceUnits()
+    {
+        $locator = $this->objFromFixture(Locator::class, 'locator1');
+
+        $locator->Unit = 'm';
+        $locator->write();
+        LocatorControllerExtension::$mapSettings = [];
+        $this->get($locator->Link());
+
+        $this->assertSame('m', LocatorControllerExtension::$mapSettings['lengthUnit']);
+        $this->assertSame('mi', LocatorControllerExtension::$mapSettings['mileLang']);
+        $this->assertSame('mi', LocatorControllerExtension::$mapSettings['milesLang']);
+
+        $locator->Unit = 'km';
+        $locator->write();
+        LocatorControllerExtension::$mapSettings = [];
+        $this->get($locator->Link());
+
+        $this->assertSame('km', LocatorControllerExtension::$mapSettings['lengthUnit']);
+        $this->assertSame('km', LocatorControllerExtension::$mapSettings['kilometerLang']);
+        $this->assertSame('km', LocatorControllerExtension::$mapSettings['kilometersLang']);
     }
 }
