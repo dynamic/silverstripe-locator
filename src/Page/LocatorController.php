@@ -125,8 +125,11 @@ class LocatorController extends \PageController
         $mapSettings['listTemplatePath'] = $this->getListTemplate();
         $mapSettings['infowindowTemplatePath'] = $this->getInfoWindowTemplate();
         $mapSettings['lengthUnit'] = $this->data()->getLengthUnit();
-        $mapSettings['mileLang'] = $this->data()->getDistanceUnit();
-        $mapSettings['milesLang'] = $this->data()->getDistanceUnit();
+        // abbreviate distance labels so miles read "mi", not "m" (meters)
+        $mapSettings['mileLang'] = 'mi';
+        $mapSettings['milesLang'] = 'mi';
+        $mapSettings['kilometerLang'] = 'km';
+        $mapSettings['kilometersLang'] = 'km';
         $mapSettings['mapID'] = Config::inst()->get(LocatorController::class, 'map_container');
         $mapSettings['locationList'] = Config::inst()->get(LocatorController::class, 'list_container');
 
