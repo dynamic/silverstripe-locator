@@ -7,11 +7,14 @@ use Dynamic\Locator\Model\LocationCategory;
 use Dynamic\Locator\Page\Locator;
 use Dynamic\Locator\Page\LocatorController;
 use Dynamic\Locator\Tests\TestOnly\Extension\LocatorControllerExtension;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\Session;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\View\ViewableData;
+use SilverStripe\View\Requirements;
 
 /**
  * Class LocatorControllerTest
@@ -123,20 +126,44 @@ class LocatorControllerTest extends FunctionalTest
 
         $locator->Unit = 'm';
         $locator->write();
-        LocatorControllerExtension::$mapSettings = [];
-        $this->get($locator->Link());
+        $mapSettings = $this->getMapSettings($locator);
 
-        $this->assertSame('m', LocatorControllerExtension::$mapSettings['lengthUnit']);
-        $this->assertSame('mi', LocatorControllerExtension::$mapSettings['mileLang']);
-        $this->assertSame('mi', LocatorControllerExtension::$mapSettings['milesLang']);
+        $this->assertSame('m', $mapSettings['lengthUnit']);
+        $this->assertSame('mi', $mapSettings['mileLang']);
+        $this->assertSame('mi', $mapSettings['milesLang']);
 
         $locator->Unit = 'km';
         $locator->write();
-        LocatorControllerExtension::$mapSettings = [];
-        $this->get($locator->Link());
+        $mapSettings = $this->getMapSettings($locator);
 
-        $this->assertSame('km', LocatorControllerExtension::$mapSettings['lengthUnit']);
-        $this->assertSame('km', LocatorControllerExtension::$mapSettings['kilometerLang']);
-        $this->assertSame('km', LocatorControllerExtension::$mapSettings['kilometersLang']);
+        $this->assertSame('km', $mapSettings['lengthUnit']);
+        $this->assertSame('km', $mapSettings['kilometerLang']);
+        $this->assertSame('km', $mapSettings['kilometersLang']);
+    }
+
+    /**
+     * @param Locator $locator
+     *
+     * @return array
+     */
+    private function getMapSettings(Locator $locator)
+    {
+        LocatorControllerExtension::$mapSettings = [];
+        Requirements::clear();
+
+        $controller = LocatorController::create($locator);
+        $request = new HTTPRequest('GET', $locator->Link());
+        $request->setSession(new Session([]));
+        $controller->setRequest($request);
+        $controller->pushCurrent();
+
+        try {
+            $controller->doInit();
+        } finally {
+            $controller->popCurrent();
+            Requirements::clear();
+        }
+
+        return LocatorControllerExtension::$mapSettings;
     }
 }
