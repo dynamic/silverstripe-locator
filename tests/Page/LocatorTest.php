@@ -147,6 +147,23 @@ class LocatorTest extends FunctionalTest
     /**
      *
      */
+    public function testDistanceUnits()
+    {
+        /** @var Locator $locator */
+        $locator = Injector::inst()->create(Locator::class);
+
+        $locator->Unit = 'm';
+        $this->assertSame('mi', $locator->getDistanceUnit());
+        $this->assertSame('m', $locator->getLengthUnit());
+
+        $locator->Unit = 'km';
+        $this->assertSame('km', $locator->getDistanceUnit());
+        $this->assertSame('km', $locator->getLengthUnit());
+    }
+
+    /**
+     *
+     */
     public function testGetUsedCategories()
     {
         /** @var Locator $locator */

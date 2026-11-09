@@ -105,7 +105,7 @@ class Locator extends \Page
             // Settings
             $fields->addFieldsToTab('Root.Settings', [
                 HeaderField::create('DisplayOptions', 'Display Options', 3),
-                OptionsetField::create('Unit', 'Unit of measure', ['m' => 'Miles', 'km' => 'Kilometers']),
+                OptionsetField::create('Unit', 'Unit of measure', ['m' => 'Miles (mi)', 'km' => 'Kilometers (km)']),
                 DropdownField::create('ShowResultsDefault')
                     ->setTitle('Show results by default')
                     ->setDescription('This will display results if no filters are applied to the locator')
@@ -247,6 +247,26 @@ class Locator extends \Page
     public function getShowRadius()
     {
         return $this->config()->get('show_radius');
+    }
+
+    /**
+     * Gets the unit abbreviation displayed to users.
+     *
+     * @return string
+     */
+    public function getDistanceUnit()
+    {
+        return $this->Unit === 'km' ? 'km' : 'mi';
+    }
+
+    /**
+     * Gets the unit value expected by the store locator plugin.
+     *
+     * @return string
+     */
+    public function getLengthUnit()
+    {
+        return $this->Unit === 'km' ? 'km' : 'm';
     }
 
     /**

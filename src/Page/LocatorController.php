@@ -124,7 +124,9 @@ class LocatorController extends \PageController
 
         $mapSettings['listTemplatePath'] = $this->getListTemplate();
         $mapSettings['infowindowTemplatePath'] = $this->getInfoWindowTemplate();
-        $mapSettings['lengthUnit'] = $this->data()->Unit == 'km' ? 'km' : 'm';
+        $mapSettings['lengthUnit'] = $this->data()->getLengthUnit();
+        $mapSettings['mileLang'] = $this->data()->getDistanceUnit();
+        $mapSettings['milesLang'] = $this->data()->getDistanceUnit();
         $mapSettings['mapID'] = Config::inst()->get(LocatorController::class, 'map_container');
         $mapSettings['locationList'] = Config::inst()->get(LocatorController::class, 'list_container');
 
